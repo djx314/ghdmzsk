@@ -1,4 +1,4 @@
-package p01
+package a01
 
 object Runner {
   val item01 = Item("Item01")

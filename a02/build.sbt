@@ -1,3 +1,3 @@
 Settings.settings
 
-name := "p02"
+name := "a02"

@@ -2,7 +2,7 @@ Settings.settings
 
 val rootFile = file(".")
 
-val p01 = project in rootFile / "p01"
-val p02 = project in rootFile / "p02"
-val p03 = project in rootFile / "p03"
+val a01 = project in rootFile / "a01"
+val a02 = project in rootFile / "a02"
+val a03 = project in rootFile / "a03"
 
