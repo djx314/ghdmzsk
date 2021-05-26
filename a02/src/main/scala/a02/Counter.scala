@@ -6,18 +6,18 @@ trait Number1 {
   def method1(number2: Number2): Any
 }
 case class Number1S(tail: Number1, head: Item) extends Number1 {
-  def method1(number2: Number2): Any = number2.method2(this)
+  override def method1(number2: Number2): Any = number2.method2(tail, head)
 }
 case object Number1T extends Number1 {
-  def method1(number2: Number2): Any = number2
+  override def method1(number2: Number2): Any = number2
 }
 
 trait Number2 {
-  def method2(number1: Number1S): Any
+  def method2(number1: Number1, item1: Item): Any
 }
 case class Number2S(tail: Number2, head: Item) extends Number2 {
-  def method2(number1: Number1S): Any = number1.tail.method1(tail)
+  override def method2(number1: Number1, item1: Item): Any = number1.method1(tail)
 }
 case object Number2T extends Number2 {
-  def method2(number1: Number1S): Any = number1
+  override def method2(number1: Number1, item1: Item): Any = Number1S(number1, item1)
 }

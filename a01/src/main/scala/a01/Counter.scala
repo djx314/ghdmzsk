@@ -10,8 +10,8 @@ trait Number2 {
   def method1(number1: Number1): Number1
 }
 case class Number2S(tail: Number2, head: Item) extends Number2 {
-  def method1(number1: Number1): Number1 = Number1S(tail.method1(number1), head)
+  override def method1(number1: Number1): Number1 = Number1S(tail.method1(number1), head)
 }
 case object Number2T extends Number2 {
-  def method1(number1: Number1): Number1 = number1
+  override def method1(number1: Number1): Number1 = number1
 }
