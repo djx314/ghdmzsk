@@ -1,4 +1,4 @@
-package b02
+package b04
 
 object Runner {
   def number1gen(n: Int): Number1 = {
