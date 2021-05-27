@@ -15,6 +15,6 @@ object Runner {
     Number1S(Number1S(Number1S(Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04), item05), item06), item07)
 
   def main(args: Array[String]): Unit = {
-    assert(number2.method1(number1) == number3)
+    assert(Counter.count(number1, number2) == number3)
   }
 }
