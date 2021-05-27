@@ -13,14 +13,14 @@ object Runner {
   val item10 = Item2("Item10")
 
   val number1 = Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04)
-  lazy val number2: Number2 =
+  val number2: Number2 =
     Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(number3, item05), item06), item07), item08), item09), item10)
   lazy val number3: Number2 = Number2T(() => number2)
 
   val number4               = Number1S(Number1S(Number1S(Number1T, item01), item02), item02)
   lazy val number5: Number2 = Number2T(() => number5)
 
-  lazy val number6: Number2 = Number2S(Number2S(number7, item05), item06)
+  val number6: Number2      = Number2S(Number2S(number7, item05), item06)
   lazy val number7: Number2 = Number2T(() => number6)
 
   def main(args: Array[String]): Unit = {
