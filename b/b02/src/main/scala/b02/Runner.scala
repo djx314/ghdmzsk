@@ -5,12 +5,6 @@ object Runner {
   val item02 = Item("Item02")
   val item03 = Item("Item03")
   val item04 = Item("Item04")
-  val item05 = Item("Item05")
-  val item06 = Item("Item06")
-  val item07 = Item("Item07")
-  val item08 = Item("Item08")
-  val item09 = Item("Item09")
-  val item10 = Item("Item10")
 
   val number1: Number1      = Number1S(Number1S(Number1S(Number1S(number2, item01), item02), item03), item04)
   lazy val number2: Number1 = Number1T(() => number1)
