@@ -58,11 +58,23 @@ object Runner {
   val number19 = number3gen(234)
   val number20 = number4gen(0)
 
+  val number21 = number1gen(200)
+  val number22 = number2gen(28)
+  val number23 = number3gen(200)
+  val number24 = number4gen(28)
+
+  val number25 = number1gen(200)
+  val number26 = number2gen(28)
+  val number27 = number3gen(140)
+  val number28 = number4gen(40)
+
   def main(args: Array[String]): Unit = {
     assert(number1.method1(number2, number3) == number4)
     assert(number5.method1(number6, number7) == number8)
     assert(number9.method1(number10, number11) == number12)
     assert(number13.method1(number14, number15) == number16)
     assert(number17.method1(number18, number19) == number20)
+    assert(number21.method1(number22, number23) == number24)
+    assert(number25.method1(number26, number27) == number28)
   }
 }
