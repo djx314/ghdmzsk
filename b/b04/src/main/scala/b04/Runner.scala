@@ -6,7 +6,7 @@ object Runner {
       case i if i > 0 => Number1S(number1s(i - 1), Item1(s"Item${i}"))
       case 0          => Number1T(() => number1Tail)
     }
-    def number1Tail: Number1 = number1s(n)
+    lazy val number1Tail: Number1 = number1s(n)
     number1Tail
   }
 

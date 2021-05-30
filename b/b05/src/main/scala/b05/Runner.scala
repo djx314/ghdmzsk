@@ -11,7 +11,7 @@ object Runner {
       case i if i > 0 => Number2S(number2s(i - 1), Item2(s"Item${i}"))
       case 0          => Number2T(() => number2Tail)
     }
-    def number2Tail: Number2 = number2s(n)
+    lazy val number2Tail: Number2 = number2s(n)
     number2Tail
   }
 
@@ -20,7 +20,7 @@ object Runner {
       case i if i > 0 => Number3S(number3s(i - 1), Item3(s"Item${i}"))
       case 0          => Number3T(() => number3Tail)
     }
-    def number3Tail: Number3 = number3s(n)
+    lazy val number3Tail: Number3 = number3s(n)
     def fetchT(number3: Number3): Number3 = number3 match {
       case Number3S(t, _) => fetchT(t)
       case s: Number3T    => s
