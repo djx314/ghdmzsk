@@ -12,19 +12,19 @@ object Runner {
 
   def number2gen(n: Int): Number2 = {
     def number2s(f: Int): Number2 = f match {
-      case i if i > 0 => Number2S(number2s(i - 1), Item2(s"Item${i}"))
+      case i if i > 0 => Number2S(number2s(i - 1))
       case 0          => Number2T(() => number2Tail)
     }
     def number2Tail: Number2 = number2s(n)
     def fetchT(n: Number2): Number2 = n match {
-      case Number2S(tail, _) => fetchT(tail)
-      case s: Number2T       => s
+      case Number2S(tail) => fetchT(tail)
+      case s: Number2T    => s
     }
     fetchT(number2Tail)
   }
 
   def number3gen(n: Int): Number3 = n match {
-    case i if i > 0 => Number3S(number3gen(i - 1), Item3(s"Item${i}"))
+    case i if i > 0 => Number3S(number3gen(i - 1))
     case 0          => Number3T
   }
 
