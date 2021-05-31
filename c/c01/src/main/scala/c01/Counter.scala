@@ -27,13 +27,13 @@ trait Number3
 case class N3Top_1(tail: Number3)
 case class N3Top_2(tail: Number3)
 case class N3Middle_1(tail: Number3) {
-  def method3(top: Number3): Number4 = top.method3(N3Middle_2(tail))
+  def method3(bottom: Number3): Number4 = top.method3(N3Middle_2(tail))
 }
 case class N3Middle_2(tail: Number3) {
-  def method3(top: Number3): Number4 = top.method3(N3Middle_3(tail))
+  def method3(bottom: Number3): Number4 = top.method3(N3Middle_3(tail))
 }
 case class N3Middle_3(tail: Number3) {
-  def method3(top: Number3): Number4 = top.method3(N3Middle_1(tail))
+  def method3(bottom: Number3): Number4 = top.method3(N3Middle_1(tail))
 }
 case object N3Bottom_1 {
   def method3(top: Number3): Number4 = Number4S(N3Bottom_2.method3(top))
