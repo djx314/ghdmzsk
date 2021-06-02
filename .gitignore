@@ -1,6 +1,10 @@
-*target
-*.idea
+*target/
+*.idea/
 /sbt
 /sbt.bat
 /sbt-launch.jar
-/.bsp
+/sbt1.bat
+.bsp/
+.metals/
+.vscode/
+*.bloop/
