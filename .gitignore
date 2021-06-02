@@ -3,8 +3,8 @@
 /sbt
 /sbt.bat
 /sbt-launch.jar
-/sbt1.bat
 .bsp/
 .metals/
 .vscode/
 *.bloop/
+.sbt/
