@@ -1,4 +1,4 @@
-package c01
+package c02
 
 case class Item1(name: String)
 case class Item2(name: String)
