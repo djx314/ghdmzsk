@@ -46,7 +46,7 @@ case class MiddleNumber2(tail: Number3) extends Number3 {
 }
 
 case object BottomNumber0 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = Number5Positive(number1.method1(TopNumber1(BottomNumber2)))
+  override def method2(number1: Number1): Number5                   = number1.method1(TopNumber1(BottomNumber2))
   override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber2(number4).method2(number1)
 }
 case object BottomNumber1 extends Number2 with Number3 {
