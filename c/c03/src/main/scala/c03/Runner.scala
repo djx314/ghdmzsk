@@ -2,7 +2,7 @@ package c03
 
 object Runner {
   def number1FromInt(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1Positive(number1FromInt(n - 1))
+    case n1 if n1 > 0 => Number1Positive(number1FromInt(n1 - 1))
     case 0            => Number1Zero
   }
   def number5FromInt(n: Int): Number5 = n match {
@@ -48,5 +48,9 @@ object Runner {
     assert(number1FromInt(19682).method1(BottomNumber2) == number5FromInt(8))
     assert(number1FromInt(19683).method1(BottomNumber2) == number5FromInt(9))
     assert(number1FromInt(19684).method1(BottomNumber2) == number5FromInt(9))
+
+    assert(number1FromInt(59048).method1(BottomNumber2) == number5FromInt(9))
+    assert(number1FromInt(59049).method1(BottomNumber2) == number5FromInt(10))
+    assert(number1FromInt(59050).method1(BottomNumber2) == number5FromInt(10))
   }
 }

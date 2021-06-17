@@ -2,7 +2,7 @@ package c02
 
 object Runner {
   def number1FromInt(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1Positive(number1FromInt(n - 1))
+    case n1 if n1 > 0 => Number1Positive(number1FromInt(n1 - 1))
     case 0            => Number1Zero
   }
   def number5FromInt(n: Int): Number5 = n match {
