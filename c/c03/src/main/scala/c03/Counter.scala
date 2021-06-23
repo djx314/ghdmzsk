@@ -25,9 +25,6 @@ trait Number4 {
   def method5(number3: Number3, number1: Number1): Number5
 }
 
-case class TopNumber0(tail: Number3) extends Number2 {
-  override def method2(number1: Number1): Number5 = tail.method3(YBottomNumber0, number1)
-}
 case class TopNumber1(tail: Number3) extends Number2 {
   override def method2(number1: Number1): Number5 = tail.method3(YBottomNumber1, number1)
 }
@@ -81,10 +78,6 @@ case class YMiddleNumber2(tail: Number4) extends Number4 {
   override def method5(number3: Number3, number1: Number1): Number5 = tail.method5(MiddleNumber0(number3), number1)
 }
 
-case object YBottomNumber0 extends Number4 {
-  override def method4(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber0(number3))
-  override def method5(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber1(number3))
-}
 case object YBottomNumber1 extends Number4 {
   override def method4(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber1(number3))
   override def method5(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber2(number3))
