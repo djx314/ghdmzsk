@@ -9,7 +9,7 @@ case class Number1Positive(tail: Number1) extends Number1 {
 }
 
 case object Number1Zero extends Number1 {
-  def method1(number2: Number2): Number5 = Number5Positive(Number5Zero)
+  def method1(number2: Number2): Number5 = Number5Zero
 }
 
 trait Number2 {
@@ -43,15 +43,15 @@ case class MiddleNumber2(tail: Number3) extends Number3 {
 }
 
 case object BottomNumber0 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = Number5Positive(BottomNumber1.method2(number1))
+  override def method2(number1: Number1): Number5                   = number1.method1(BottomNumber1)
   override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber0(number4).method2(number1)
 }
 case object BottomNumber1 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = Number5Positive(BottomNumber2.method2(number1))
+  override def method2(number1: Number1): Number5                   = number1.method1(BottomNumber2)
   override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber1(number4).method2(number1)
 }
 case object BottomNumber2 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = number1.method1(TopNumber1(BottomNumber0))
+  override def method2(number1: Number1): Number5                   = Number5Positive(number1.method1(TopNumber1(BottomNumber0)))
   override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber2(number4).method2(number1)
 }
 
@@ -79,11 +79,11 @@ case class YMiddleNumber2(tail: Number4) extends Number4 {
 }
 
 case object YBottomNumber1 extends Number4 {
-  override def method4(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber1(number3).method2(number1))
-  override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber2(number3).method2(number1))
+  override def method4(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber1(number3))
+  override def method5(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber2(number3))
 }
 case object YBottomNumber2 extends Number4 {
-  override def method4(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber2(number3).method2(number1))
+  override def method4(number3: Number3, number1: Number1): Number5 = number1.method1(TopNumber2(number3))
   override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(number1.method1(TopNumber1(MiddleNumber0(number3))))
 }
 
