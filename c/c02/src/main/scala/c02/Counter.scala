@@ -25,9 +25,6 @@ trait Number4 {
   def method5(number3: Number3, number1: Number1): Number5
 }
 
-case class TopNumber0(tail: Number3) extends Number2 {
-  override def method2(number1: Number1): Number5 = tail.method3(YBottomNumber0, number1)
-}
 case class TopNumber1(tail: Number3) extends Number2 {
   override def method2(number1: Number1): Number5 = tail.method3(YBottomNumber1, number1)
 }
@@ -46,52 +43,48 @@ case class MiddleNumber2(tail: Number3) extends Number3 {
 }
 
 case object BottomNumber0 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = number1.method1(TopNumber1(BottomNumber2))
-  override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber2(number4).method2(number1)
-}
-case object BottomNumber1 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = Number5Positive(BottomNumber0.method2(number1))
+  override def method2(number1: Number1): Number5                   = Number5Positive(BottomNumber1.method2(number1))
   override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber0(number4).method2(number1)
 }
-case object BottomNumber2 extends Number2 with Number3 {
-  override def method2(number1: Number1): Number5                   = Number5Positive(BottomNumber1.method2(number1))
+case object BottomNumber1 extends Number2 with Number3 {
+  override def method2(number1: Number1): Number5                   = Number5Positive(BottomNumber2.method2(number1))
   override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber1(number4).method2(number1)
+}
+case object BottomNumber2 extends Number2 with Number3 {
+  override def method2(number1: Number1): Number5                   = number1.method1(TopNumber1(BottomNumber0))
+  override def method3(number4: Number4, number1: Number1): Number5 = YTopNumber2(number4).method2(number1)
 }
 
 case class YTopNumber0(tail: Number4) extends Number2 {
-  override def method2(number1: Number1): Number5 = tail.method4(BottomNumber0, number1)
-}
-case class YTopNumber1(tail: Number4) extends Number2 {
   override def method2(number1: Number1): Number5 = tail.method4(BottomNumber1, number1)
 }
+case class YTopNumber1(tail: Number4) extends Number2 {
+  override def method2(number1: Number1): Number5 = tail.method4(BottomNumber2, number1)
+}
 case class YTopNumber2(tail: Number4) extends Number2 {
-  override def method2(number1: Number1): Number5 = tail.method5(BottomNumber2, number1)
+  override def method2(number1: Number1): Number5 = tail.method5(BottomNumber0, number1)
 }
 
 case class YMiddleNumber0(tail: Number4) extends Number4 {
   override def method4(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber0(number3), number1)
-  override def method5(number3: Number3, number1: Number1): Number5 = tail.method5(MiddleNumber2(number3), number1)
+  override def method5(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber1(number3), number1)
 }
 case class YMiddleNumber1(tail: Number4) extends Number4 {
   override def method4(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber1(number3), number1)
-  override def method5(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber0(number3), number1)
+  override def method5(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber2(number3), number1)
 }
 case class YMiddleNumber2(tail: Number4) extends Number4 {
   override def method4(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber2(number3), number1)
-  override def method5(number3: Number3, number1: Number1): Number5 = tail.method4(MiddleNumber1(number3), number1)
+  override def method5(number3: Number3, number1: Number1): Number5 = tail.method5(MiddleNumber0(number3), number1)
 }
 
-case object YBottomNumber0 extends Number4 {
-  override def method4(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber0(number3).method2(number1))
-  override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(number1.method1(TopNumber1(MiddleNumber2(number3))))
-}
 case object YBottomNumber1 extends Number4 {
   override def method4(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber1(number3).method2(number1))
-  override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber0(number3).method2(number1))
+  override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber2(number3).method2(number1))
 }
 case object YBottomNumber2 extends Number4 {
   override def method4(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber2(number3).method2(number1))
-  override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(TopNumber1(number3).method2(number1))
+  override def method5(number3: Number3, number1: Number1): Number5 = Number5Positive(number1.method1(TopNumber1(MiddleNumber0(number3))))
 }
 
 trait Number5 {
