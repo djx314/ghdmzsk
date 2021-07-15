@@ -15,7 +15,7 @@ object Runner {
 
   val number4 = Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04)
   val number5 = Number2S(Number2T, item05)
-  val number6 = Number1S(Number1S(Number1S(Number1T, item01), item02), item03)
+  val number6 = Number2T
 
   val number7 = Number1S(Number1S(Number1S(Number1T, item01), item02), item03)
   val number8 = Number2S(Number2S(Number2S(Number2T, item04), item05), item06)
