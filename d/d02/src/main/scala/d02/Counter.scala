@@ -11,9 +11,6 @@ case object Number2T               extends Number2
 sealed trait Number3
 case class Number3S(tail: Number3)       extends Number3
 case class Number3T(tail: () => Number3) extends Number3
-object Number3T {
-  lazy val zero: Number3 = Number3T(() => zero)
-}
 
 trait Context1 {
   def method1(number3: Number3): PartialFunction[Number2, Number1]
@@ -35,7 +32,7 @@ case class Context4(other: () => Context1) extends Context2 {
   }
 }
 
-case class Context5(other: () => Context1, selfContext: () => Context2) extends Context2 {
+case class Context5(selfContext: () => Context2) extends Context2 {
   override def method2(number2: Number2): PartialFunction[Number3, Number1] = { case Number3S(tail) =>
     Number1S(selfContext().method2(number2)(tail))
   }
@@ -53,7 +50,7 @@ case class Context7(other: () => Context1) extends Context2 {
   }
 }
 
-case class Context8(other: () => Context1, selfContext: () => Context2) extends Context2 {
+case class Context8(selfContext: () => Context2) extends Context2 {
   override def method2(number2: Number2): PartialFunction[Number3, Number1] = { case Number3T(tail) =>
     Number1S(selfContext().method2(number2)(tail()))
   }
