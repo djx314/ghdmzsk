@@ -19,42 +19,24 @@ trait Number3 {
   def method2(number2: Number2): Number1
 }
 
-trait Number4 extends Number3 {
-  def tail: Number3
-  override def method2(number2: Number2): Number1 = Number1S(number2.method1(tail))
+case class Number4(tail: () => Number3) extends Number3 {
+  override def method2(number2: Number2): Number1 = Number1S(number2.method1(tail()))
 }
 object Number4 {
-  def apply(tail: => Number3): Number3 = {
-    def tail1 = tail
-    new Number4 {
-      override def tail: Number3 = tail1
-    }
-  }
-  lazy val zero: Number3 = Number4(zero)
+  def apply(tail: => Number3): Number3 = Number4(() => tail)
+  lazy val zero: Number3               = Number4(zero)
 }
 
-trait Number5 extends Number3 {
-  def tail: Number3
-  override def method2(number2: Number2): Number1 = Number1S(tail.method2(number2))
+case class Number5(tail: () => Number3) extends Number3 {
+  override def method2(number2: Number2): Number1 = Number1S(tail().method2(number2))
 }
 object Number5 {
-  def apply(tail: => Number3): Number3 = {
-    def tail1 = tail
-    new Number5 {
-      override def tail: Number3 = tail1
-    }
-  }
+  def apply(tail: => Number3): Number3 = Number5(() => tail)
 }
 
-trait Number6 extends Number3 {
-  def tail: Number3
-  override def method2(number2: Number2): Number1 = number2.method1(tail)
+case class Number6(tail: () => Number3) extends Number3 {
+  override def method2(number2: Number2): Number1 = number2.method1(tail())
 }
 object Number6 {
-  def apply(tail: => Number3): Number3 = {
-    def tail1 = tail
-    new Number6 {
-      override def tail: Number3 = tail1
-    }
-  }
+  def apply(tail: => Number3): Number3 = Number6(() => tail)
 }
