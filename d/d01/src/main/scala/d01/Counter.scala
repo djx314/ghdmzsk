@@ -22,21 +22,11 @@ trait Number3 {
 case class Number4(tail: () => Number3) extends Number3 {
   override def method2(number2: Number2): Number1 = Number1S(number2.method1(tail()))
 }
-object Number4 {
-  def apply(tail: => Number3): Number3 = Number4(() => tail)
-  lazy val zero: Number3               = Number4(zero)
-}
 
 case class Number5(tail: () => Number3) extends Number3 {
   override def method2(number2: Number2): Number1 = Number1S(tail().method2(number2))
 }
-object Number5 {
-  def apply(tail: => Number3): Number3 = Number5(() => tail)
-}
 
 case class Number6(tail: () => Number3) extends Number3 {
   override def method2(number2: Number2): Number1 = number2.method1(tail())
-}
-object Number6 {
-  def apply(tail: => Number3): Number3 = Number6(() => tail)
 }
