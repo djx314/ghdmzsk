@@ -13,7 +13,6 @@ case object Number2 {
 case class Number2S(tail: () => Number2) extends Number2 {
   def method1(number3: Number3): Number1 = number3.receive1(tail())
 }
-// 加法这里会出现问题，只能从 number3 加到 number2
 case class Number2T(tail: () => Number2) extends Number2 {
   def method1(number3: Number3): Number1 = number3.receive0(tail())
 }
