@@ -113,7 +113,7 @@ object Runner {
         assert(context1.method1(number3)(number1) == Number1S(Number1S(Number1S(Number1T))))
       }
       {
-        val number1 = Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2T))))))))))
+        val number1               = Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2T))))))))))
         lazy val number2: Number3 = Number3S(Number3S(Number3S(number3)))
         lazy val number3: Number3 = Number3T(() => number2)
         assert(context1.method1(number3)(number1) == Number1S(Number1S(Number1S(Number1S(Number1T)))))
