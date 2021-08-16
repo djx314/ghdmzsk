@@ -7,9 +7,6 @@ case object Number1T               extends Number1
 trait Number2 {
   def method1(number3: Number3): Number1
 }
-case object Number2 {
-  lazy val zero: Number2 = Number2T(() => zero)
-}
 case class Number2S(tail: () => Number2) extends Number2 {
   def method1(number3: Number3): Number1 = number3.receive1(tail())
 }
