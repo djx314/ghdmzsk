@@ -12,21 +12,27 @@ object Runner {
   val item09 = Item2("Item09")
   val item10 = Item2("Item10")
 
-  val number1 = Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04)
-  val number2: Number2 =
-    Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(number3, item05), item06), item07), item08), item09), item10)
-  lazy val number3: Number2 = Number2T(() => number2)
-
-  val number4               = Number1S(Number1S(Number1S(Number1T, item01), item02), item02)
-  lazy val number5: Number2 = Number2T(() => number5)
-
-  val number6: Number2      = Number2S(Number2S(number7, item05), item06)
-  lazy val number7: Number2 = Number2T(() => number6)
-
   def main(args: Array[String]): Unit = {
-    assert(number1.method1(number2).length == 24)
-    assert(number4.method1(number5).length == 0)
-    assert(Number1T.method1(number5).length == 0)
-    assert(Number1T.method1(number6).length == 0)
+    {
+      val number1 = Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04)
+      lazy val number2: Number2 =
+        Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(number3, item05), item06), item07), item08), item09), item10)
+      lazy val number3: Number2 = Number2T(() => number2)
+      assert(number1.method1(number2).length == 24)
+    }
+    {
+      val number1               = Number1S(Number1S(Number1S(Number1T, item01), item02), item02)
+      lazy val number2: Number2 = Number2T(() => number2)
+      assert(number1.method1(number2).length == 0)
+    }
+    {
+      lazy val number1: Number2 = Number2T(() => number1)
+      assert(Number1T.method1(number1).length == 0)
+    }
+    {
+      lazy val number1: Number2 = Number2S(Number2S(number2, item05), item06)
+      lazy val number2: Number2 = Number2T(() => number1)
+      assert(Number1T.method1(number1).length == 0)
+    }
   }
 }

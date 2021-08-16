@@ -9,13 +9,7 @@ object Runner {
       lazy val context1: Context1 = Context3(() => context4)
       lazy val context2: Context2 = Context4(() => context1)
       lazy val context3: Context2 = Context5(() => context4)
-      lazy val context4: Context2 = new Context2 {
-        override def receive0(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive0(number2).orElse(context3.receive0(number2))
-
-        override def receive1(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive1(number2).orElse(context3.receive1(number2))
-      }
+      lazy val context4: Context2 = Context2.merge(context2, context3)
 
       {
         val number1 = Number2S(() => Number2S(() => Number2S(() => Number2S(() => number2Zero))))
@@ -40,13 +34,7 @@ object Runner {
       lazy val context1: Context1 = Context3(() => context4)
       lazy val context2: Context2 = Context4(() => context1)
       lazy val context3: Context2 = Context6(() => context1)
-      lazy val context4: Context2 = new Context2 {
-        override def receive0(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive0(number2).orElse(context3.receive0(number2))
-
-        override def receive1(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive1(number2).orElse(context3.receive1(number2))
-      }
+      lazy val context4: Context2 = Context2.merge(context2, context3)
 
       {
         val number1 = Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => number2Zero)))))
@@ -80,13 +68,7 @@ object Runner {
       lazy val context1: Context1 = Context3(() => context4)
       lazy val context2: Context2 = Context5(() => context4)
       lazy val context3: Context2 = Context6(() => context1)
-      lazy val context4: Context2 = new Context2 {
-        override def receive0(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive0(number2).orElse(context3.receive0(number2))
-
-        override def receive1(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive1(number2).orElse(context3.receive1(number2))
-      }
+      lazy val context4: Context2 = Context2.merge(context2, context3)
 
       {
         val number1 = Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => number2Zero)))))
@@ -119,13 +101,7 @@ object Runner {
       lazy val context1: Context1 = Context3(() => context4)
       lazy val context2: Context2 = Context5(() => context4)
       lazy val context3: Context2 = Context6(() => context1)
-      lazy val context4: Context2 = new Context2 {
-        override def receive0(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive0(number2).orElse(context3.receive0(number2))
-
-        override def receive1(number2: Number2): PartialFunction[Number3, Number1] =
-          context2.receive1(number2).orElse(context3.receive1(number2))
-      }
+      lazy val context4: Context2 = Context2.merge(context2, context3)
 
       {
         val number1 = Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => Number2S(() => number2Zero)))))))))
