@@ -22,25 +22,18 @@ object Runner {
   def main(args: Array[String]): Unit = {
     {
       val number1 = Number2S(() => Number2S(() => number2Zero, item01), item02)
-      val number2 = Number3S(
-        () => Number3S(() => Number3S(() => Number3S(() => Number3S(() => number3Zero, item03), item04), item05), item06),
-        item07
-      )
-      val number3 = Number4S(
-        () => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero, item08), item09), item10), item11),
-        item12
-      )
+      val number2 =
+        Number3S(() => Number3S(() => Number3S(() => Number3S(() => Number3S(() => number3Zero, item03), item04), item05), item06), item07)
+      val number3 = Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero)))))
       val number4 = Number1S(Number1S(Number1T, item01), item02)
       assert(Counter.count(number1, number2, number3) == number4)
     }
 
     {
       val number1 = Number2S(() => Number2S(() => number2Zero, item01), item02)
-      val number2 = Number3S(
-        () => Number3S(() => Number3S(() => Number3S(() => Number3S(() => number3Zero, item03), item04), item05), item06),
-        item07
-      )
-      val number3 = Number4S(() => Number4S(() => Number4S(() => number4Zero, item10), item11), item12)
+      val number2 =
+        Number3S(() => Number3S(() => Number3S(() => Number3S(() => Number3S(() => number3Zero, item03), item04), item05), item06), item07)
+      val number3 = Number4S(() => Number4S(() => Number4S(() => number4Zero)))
       val number4 = Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04)
       assert(Counter.count(number1, number2, number3) == number4)
     }
@@ -48,31 +41,15 @@ object Runner {
     {
       val number1 = Number2S(() => Number2S(() => Number2S(() => Number2S(() => number2Zero, item01), item02), item03), item04)
       val number2 = Number3S(() => Number3S(() => Number3S(() => number3Zero, item05), item06), item07)
-      val number3 =
-        Number4S(
-          () =>
-            Number4S(
-              () => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero, item08), item09), item10), item11),
-              item12
-            ),
-          item13
-        )
+      val number3 = Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero))))))
       val number4 = Number1S(Number1T, item01)
       assert(Counter.count(number1, number2, number3) == number4)
     }
 
     {
       val number1 = Number2S(() => Number2S(() => Number2S(() => Number2S(() => number2Zero, item01), item02), item03), item04)
-      val number2 =
-        Number3S(() => Number3S(() => number3Zero, item05), item06)
-      val number3 = Number4S(
-        () =>
-          Number4S(
-            () => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero, item07), item08), item09), item10),
-            item11
-          ),
-        item12
-      )
+      val number2 = Number3S(() => Number3S(() => number3Zero, item05), item06)
+      val number3 = Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero))))))
       assert(Counter.count(number1, number2, number3) == Number1T)
     }
 
@@ -80,25 +57,14 @@ object Runner {
       val number1 = Number2S(() => Number2S(() => number2Zero, item01), item02)
       val number2 = Number3S(() => Number3S(() => number3Zero, item03), item04)
       val number3 =
-        Number4S(
-          () =>
-            Number4S(
-              () =>
-                Number4S(
-                  () => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero, item05), item06), item07), item08),
-                  item09
-                ),
-              item10
-            ),
-          item11
-        )
+        Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero)))))))
       assert(Counter.count(number1, number2, number3) == Number1T)
     }
 
     {
       val number1 = Number2S(() => Number2S(() => number2Zero, item01), item02)
       val number2 = Number3S(() => Number3S(() => number3Zero, item03), item04)
-      val number3 = Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero, item05), item06), item07), item08)
+      val number3 = Number4S(() => Number4S(() => Number4S(() => Number4S(() => number4Zero))))
       assert(Counter.count(number1, number2, number3) == Number1T)
     }
   }

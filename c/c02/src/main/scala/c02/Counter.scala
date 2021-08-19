@@ -34,7 +34,7 @@ trait Number4 {
   def receive1(number2: Number2, number3: Number3, item2: Item): Number1
   def receive2(number2: Number2, number3: Number3, item1: Item, item2: Item): Number1
 }
-case class Number4S(tail: () => Number4, head: Item) extends Number4 {
+case class Number4S(tail: () => Number4) extends Number4 {
   override def receive0(number2: Number2, number3: Number3): Number1                           = Number1T
   override def receive1(number2: Number2, number3: Number3, item1: Item): Number1              = number2.method1(number3, tail())
   override def receive2(number2: Number2, number3: Number3, item1: Item, item2: Item): Number1 = number3.receive1(number2, tail(), item1)
