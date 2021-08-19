@@ -15,7 +15,7 @@ object Runner {
     }
     {
       lazy val number1: Number1 = Number1T(() => number1)
-      val number2: Number2      = Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2T))))))))))
+      val number2: Number2 = Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2S(Number2T))))))))))
       assert(number1.method1(number2).length == 0)
     }
     {
