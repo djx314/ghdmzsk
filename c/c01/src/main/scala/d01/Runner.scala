@@ -16,17 +16,17 @@ object Runner {
   lazy val number2Zero: Number2 = Number2T(() => number2Zero)
 
   def main(args: Array[String]): Unit = {
-    /*{
+    {
       // 12 + 12
       {
         val number1               = Number2S(() => Number2S(() => number2Zero, item01), item02)
-        lazy val number2: Number3 = Number5(() => Number5(() => Number5(() => number3, item03), item04), item05)
+        lazy val number2: Number3 = Number7(() => Number7(() => Number7(() => number3, item03), item04), item05)
         lazy val number3: Number3 = Number4(() => number3)
         val number4               = number1.method1(number2)
         assert(number4 == Number1S(Number1S(Number1S(Number1S(Number1S(Number1T, item01), item02), item03), item04), item05))
       }
       {
-        lazy val number1: Number3 = Number5(() => Number5(() => Number5(() => number2, item01), item02), item03)
+        lazy val number1: Number3 = Number7(() => Number7(() => Number7(() => number2, item01), item02), item03)
         lazy val number2: Number3 = Number4(() => number2)
         val number4               = number2Zero.method1(number1)
         assert(number4 == Number1S(Number1S(Number1S(Number1T, item01), item02), item03))
@@ -62,38 +62,68 @@ object Runner {
         val number4               = number1.method1(number2)
         assert(number4 == Number1T)
       }
-    }*/
+    }
 
     {
       // 12 × 12
-      val number1               = Number2S(() => Number2S(() => Number2S(() => number2Zero, item01), item02), item03)
-      lazy val number2: Number3 = Number5(() => Number5(() => Number5(() => Number5(() => number3, item04), item05), item06), item07)
-      lazy val number3: Number3 = Number6(() => number2)
-      val number4               = number1.method1(number2)
-      assert(
-        number4 == Number1S(
-          Number1S(
+      {
+        val number1               = Number2S(() => Number2S(() => Number2S(() => number2Zero, item01), item02), item03)
+        lazy val number2: Number3 = Number7(() => Number7(() => Number7(() => Number7(() => number3, item04), item05), item06), item07)
+        lazy val number3: Number3 = Number6(() => number2)
+        val number4               = number1.method1(number3)
+        assert(
+          number4 == Number1S(
             Number1S(
               Number1S(
                 Number1S(
                   Number1S(
-                    Number1S(Number1S(Number1S(Number1S(Number1S(Number1S(Number1T, item04), item05), item06), item07), item04), item05),
-                    item06
+                    Number1S(
+                      Number1S(Number1S(Number1S(Number1S(Number1S(Number1S(Number1T, item04), item05), item06), item07), item04), item05),
+                      item06
+                    ),
+                    item07
                   ),
-                  item07
+                  item04
                 ),
-                item04
+                item05
               ),
-              item05
+              item06
             ),
-            item06
-          ),
-          item07
+            item07
+          )
         )
-      )
+      }
+      // 12 × 12（交换律）
+      {
+        val number1               = Number2S(() => Number2S(() => Number2S(() => number2Zero, item01), item02), item03)
+        lazy val number2: Number3 = Number5(() => Number5(() => Number5(() => Number5(() => number3, item04), item05), item06), item07)
+        lazy val number3: Number3 = Number6(() => number2)
+        val number4               = number1.method1(number2)
+        assert(
+          number4 == Number1S(
+            Number1S(
+              Number1S(
+                Number1S(
+                  Number1S(
+                    Number1S(
+                      Number1S(Number1S(Number1S(Number1S(Number1S(Number1S(Number1T, item04), item05), item06), item07), item04), item05),
+                      item06
+                    ),
+                    item07
+                  ),
+                  item04
+                ),
+                item05
+              ),
+              item06
+            ),
+            item07
+          )
+        )
+      }
     }
 
-    /*{
+    {
       // 12 ÷ 12（下舍法）
       {
         val number1 = Number2S(
@@ -117,7 +147,7 @@ object Runner {
           item09
         )
         lazy val number2: Number3 = Number6(() => Number6(() => Number6(() => Number6(() => number3))))
-        lazy val number3: Number3 = Number5(() => number2, item10)
+        lazy val number3: Number3 = Number7(() => number2, item10)
         val number4               = number1.method1(number2)
         assert(number4 == Number1S(Number1S(Number1T, item10), item10))
       }
@@ -143,7 +173,7 @@ object Runner {
           item09
         )
         lazy val number2: Number3 = Number6(() => Number6(() => Number6(() => number3)))
-        lazy val number3: Number3 = Number5(() => number2, item10)
+        lazy val number3: Number3 = Number7(() => number2, item10)
         val number4               = number1.method1(number2)
         assert(number4 == Number1S(Number1S(Number1S(Number1T, item10), item10), item10))
       }
@@ -174,14 +204,11 @@ object Runner {
           item10
         )
         lazy val number2: Number3 = Number6(() => Number6(() => Number6(() => number3)))
-        lazy val number3: Number3 = Number5(() => number2, item11)
+        lazy val number3: Number3 = Number7(() => number2, item11)
         val number4               = number1.method1(number2)
         assert(number4 == Number1S(Number1S(Number1S(Number1T, item11), item11), item11))
       }
-    }*/
-
-    {
-      // 12 ÷ 12（下舍法）
+      // 12 ÷ 12（上舍法）
       {
         val number1 = Number2S(
           () =>
@@ -206,7 +233,7 @@ object Runner {
         lazy val number2: Number3 = Number6(() => Number6(() => Number6(() => Number6(() => number3))))
         lazy val number3: Number3 = Number5(() => number2, item10)
         val number4               = number1.method1(number3)
-        println(number4)
+        assert(number4 == Number1S(Number1S(Number1S(Number1T, item10), item10), item10))
       }
       {
         val number1 = Number2S(
@@ -232,7 +259,7 @@ object Runner {
         lazy val number2: Number3 = Number6(() => Number6(() => Number6(() => number3)))
         lazy val number3: Number3 = Number5(() => number2, item10)
         val number4               = number1.method1(number3)
-        println(number4)
+        assert(number4 == Number1S(Number1S(Number1S(Number1T, item10), item10), item10))
       }
       {
         val number1 = Number2S(
@@ -263,7 +290,7 @@ object Runner {
         lazy val number2: Number3 = Number6(() => Number6(() => Number6(() => number3)))
         lazy val number3: Number3 = Number5(() => number2, item11)
         val number4               = number1.method1(number3)
-        println(number4)
+        assert(number4 == Number1S(Number1S(Number1S(Number1S(Number1T, item11), item11), item11), item11))
       }
     }
   }

@@ -27,11 +27,16 @@ case class Number4(tail: () => Number3) extends Number3 {
 }
 
 case class Number5(tail: () => Number3, head: Item) extends Number3 {
-  override def receive0(number2: Number2): Number1             = tail().receive0(number2)
+  override def receive0(number2: Number2): Number1             = Number1T
   override def receive1(number2: Number2, item: Item): Number1 = Number1S(tail().receive1(number2, item), head)
 }
 
 case class Number6(tail: () => Number3) extends Number3 {
   override def receive0(number2: Number2): Number1             = Number1T
   override def receive1(number2: Number2, item: Item): Number1 = number2.method1(tail())
+}
+
+case class Number7(tail: () => Number3, head: Item) extends Number3 {
+  override def receive0(number2: Number2): Number1             = Number1S(tail().receive0(number2), head)
+  override def receive1(number2: Number2, item: Item): Number1 = Number1S(tail().receive1(number2, item), head)
 }
