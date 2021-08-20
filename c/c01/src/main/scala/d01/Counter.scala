@@ -22,21 +22,21 @@ trait Number3 {
 }
 
 case class Number4(tail: () => Number3) extends Number3 {
-  override def receive0(number2: Number2): Number1             = Number1T
-  override def receive1(number2: Number2, item: Item): Number1 = Number1S(number2.method1(tail()), item)
+  override def receive0(number2: Number2): Number1             = Number1T // 结束
+  override def receive1(number2: Number2, item: Item): Number1 = Number1S(number2.method1(tail()), item) // 上一个，后继
 }
 
 case class Number5(tail: () => Number3, head: Item) extends Number3 {
-  override def receive0(number2: Number2): Number1             = Number1T
-  override def receive1(number2: Number2, item: Item): Number1 = Number1S(tail().receive1(number2, item), head)
+  override def receive0(number2: Number2): Number1             = Number1T // 结束
+  override def receive1(number2: Number2, item: Item): Number1 = Number1S(tail().receive1(number2, item), head) // 自己，后继
 }
 
 case class Number6(tail: () => Number3) extends Number3 {
-  override def receive0(number2: Number2): Number1             = Number1T
-  override def receive1(number2: Number2, item: Item): Number1 = number2.method1(tail())
+  override def receive0(number2: Number2): Number1             = Number1T // 结束
+  override def receive1(number2: Number2, item: Item): Number1 = number2.method1(tail()) // 上一个
 }
 
 case class Number7(tail: () => Number3, head: Item) extends Number3 {
-  override def receive0(number2: Number2): Number1             = Number1S(tail().receive0(number2), head)
-  override def receive1(number2: Number2, item: Item): Number1 = Number1S(tail().receive1(number2, item), head)
+  override def receive0(number2: Number2): Number1             = Number1S(tail().receive0(number2), head) // 自己，后继
+  override def receive1(number2: Number2, item: Item): Number1 = Number1S(tail().receive1(number2, item), head) // 自己，后继
 }
