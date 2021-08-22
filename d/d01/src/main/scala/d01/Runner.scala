@@ -26,7 +26,7 @@ object Runner {
       val minus = minusFromInt(0)
       for (i <- 0 to 5000) {
         val beMinus = beMinusFromInt(i)
-        assert(beMinus.send0(minus).length == (if (i - 0 >= 0) i - 0 else 0))
+        assert(beMinus.send0(minus).length == i)
       }
     }
     {
