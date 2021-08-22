@@ -12,17 +12,16 @@ case object Number1T extends Number1 {
   override def length: Int = 0
 }
 
-abstract class Number2(val tail: () => Number2) {
-  val head: Item
+trait Number2 {
   def execute[S, T](context: Context[S, T], s: S, t: T): Number1
 }
-case class Number2S(override val tail: () => Number2, head: Item) extends Number2(tail) {
+case class Number2S(tail: () => Number2, head: Item) extends Number2 {
   override def execute[S, T](context: Context[S, T], parameter: S, t: T): Number1 = {
     val (newDataCtx, newNum) = context.convert(t, tail())
     context.bindS(newDataCtx, newNum, parameter, head)
   }
 }
-case class Number2T(override val tail: () => Number2, head: Item) extends Number2(tail) {
+case class Number2T(tail: () => Number2, head: Item) extends Number2 {
   override def execute[S, T](context: Context[S, T], parameter: S, t: T): Number1 = {
     val (newDataCtx, newNum) = context.convert(t, tail())
     context.bindT(newDataCtx, newNum, parameter, head)
