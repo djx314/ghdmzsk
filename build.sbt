@@ -22,3 +22,4 @@ val c03 = project in cRoot / "c03"
 val c04 = project in cRoot / "c04"
 
 val d01 = project in dRoot / "d01"
+val d02 = project in dRoot / "d02"
