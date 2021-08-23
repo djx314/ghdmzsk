@@ -77,13 +77,16 @@ object Runner {
       i2 <- 1 to 500
     } yield {
       val i3       = Random.nextInt(300)
-      val col1     = i1 to (i1 + i3)
-      val right    = col1.to(List).drop(i2)
+      val col1     = i1 to (i1 + i2)
+      val right    = col1.to(List).drop(i3)
       val leftNum1 = numberFromCollection(col1)
-      val leftNum2 = dropFromInt(i2)
+      val leftNum2 = dropFromInt(i3)
       val leftCol  = leftNum1.execute(new Context1[Int])((), leftNum2)
       val left     = number1ToList(leftCol)
       assert(left == right)
+      val size = if (col1.length - i3 >= 0) col1.length - i3 else 0
+      assert(left.length == size)
+      assert(right.length == size)
     }
   }
 }
