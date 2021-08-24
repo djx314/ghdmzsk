@@ -91,7 +91,10 @@ object Runner {
     ): Number1[R] = number._4.execute(this)(parameter, (number._1, number._2, number._3))
   }
 
-  def zero[T]: Number2[T] = Number2T(() => zero[T])
+  def zero[T]: Number2[T] = {
+    lazy val zeroNumber: Number2[T] = Number2T(() => zeroNumber)
+    zeroNumber
+  }
 
   def numberFromCollection[A](n: IterableOnce[A]): Number2[A] = {
     val iterator             = n.iterator
