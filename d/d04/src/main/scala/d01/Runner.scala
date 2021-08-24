@@ -106,6 +106,8 @@ object Runner {
       val next = iterator.next()
       Number2S(() => numberFromCollection(iterator), next)
     } else zero[A]
+    def toNumber: Number2[A, Unit] = if (iterator.hasNext) Number2S(() => toNumber, iterator.next()) else zero[A]
+    toNumber
   }
 
   def dropFromInt(n: Int): Number2[Unit, Unit] = n match {
