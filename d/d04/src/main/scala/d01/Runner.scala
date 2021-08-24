@@ -4,86 +4,101 @@ import scala.util.Random
 
 object Runner {
 
-  class DropTypeContext[S, R] extends TypeContext {
-    override type fromDataCtx = (Number2[Unit, Unit], Number2[S => Boolean, Unit], Number2[S => R, Unit])
-    override type toDataCtx   = (Number2[S => Boolean, Unit], Number2[S => R, Unit], Number2[S, Unit])
-    override type toDataType  = Number2[Unit, Unit]
-    override type Parameter   = Unit
-    override type Result      = R
+  class ListContext[S, R] extends TypeContext {
+    override type DataCtx = (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R])
   }
-  class DropContext[S, R] extends Context[S, Unit] {
-    /*override def convert(
-      t: (Number2[Unit, Unit], Number2[S => Boolean, Unit], Number2[S => R, Unit]),
+
+  class DropTypeContext[S, R] extends ListContext[S, R] {
+    override type toDataType = (Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R])
+    override type Parameter  = Unit
+    override type Result     = R
+  }
+  class DropContext[S, R] extends Context[DropTypeContext[S, R], S, Unit] {
+    override def convert(
+      t: (Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
       current: Number2[S, Unit]
-    ): ((Number2[S => Boolean, Unit], Number2[S => R, Unit], Number2[S, Unit]), Number2[Unit, Unit]) = ((t._2, t._3, current), t._1)
+    ): (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]) = (current, t._1, t._2, t._3)
     override def bindS(
-      number: (Number2[S => Boolean, Unit], Number2[S => R, Unit], Number2[S, Unit]),
-      current: Number2[Unit, Unit],
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
       parameter: Unit,
       head: S
-    ): Number1[R] = Number1T
+    ): Number1[R] = number._2.execute(new ReverseDropContext[S, R])(head, (number._1, number._3, number._4))
     override def bindT(
-      number: (Number2[S => Boolean, Unit], Number2[S => R, Unit], Number2[S, Unit]),
-      current: Number2[Unit, Unit],
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
       parameter: Unit,
       head: Unit
-    ): Number1[R] = Number1T*/
-    override def bindS[T <: TypeContext](number: T#toDataCtx, current: T#toDataType, parameter: T#Parameter, head: S): Number1[T#Result] =
-      Number1T
-    override def bindT[T <: TypeContext](
-      number: T#toDataCtx,
-      current: T#toDataType,
-      parameter: T#Parameter,
-      head: Unit
-    ): Number1[T#Result] = Number1T
+    ): Number1[R] = Number1T
   }
 
-  class ReverseDropContext[S, R] extends TypeContext {
-    override type fromDataCtx = (Number2[S => Boolean, Unit], Number2[S => R, Unit], Number2[S, Unit])
-    override type toDataCtx   = (Number2[Unit, Unit], Number2[S => Boolean, Unit], Number2[S => R, Unit])
-    override type toDataType  = Number2[S, Unit]
-    override type Parameter   = S
-    override type Result      = S
+  class ReverseDropTypeContext[S, R] extends ListContext[S, R] {
+    override type toDataType = (Number2[S, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R])
+    override type Parameter  = S
+    override type Result     = R
   }
-  class ReverseDropContext[S, R] extends Context[ReverseDropContext[S, R], Unit, Unit] {
+  class ReverseDropContext[S, R] extends Context[ReverseDropTypeContext[S, R], Unit, Unit] {
     override def convert(
-      t: (Number2[S => Boolean, Unit], Number2[S => R, Unit], Number2[S, Unit]),
+      t: (Number2[S, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
       current: Number2[Unit, Unit]
-    ): ((Number2[Unit, Unit], Number2[S => Boolean, Unit], Number2[S => R, Unit]), Number2[S, Unit]) = ((current, t._1, t._2), t._3)
+    ): (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]) = (t._1, current, t._2, t._3)
     override def bindS(
-      number: (Number2[Unit, Unit], Number2[S => Boolean, Unit], Number2[S => R, Unit]),
-      current: Number2[S, Unit],
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
       parameter: S,
       head: Unit
-    ): Number1[S] = Number1T
+    ): Number1[R] = number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4))
     override def bindT(
-      number: (Number2[Unit, Unit], Number2[S => Boolean, Unit], Number2[S => R, Unit]),
-      current: Number2[S, Unit],
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
       parameter: S,
       head: Unit
-    ): Number1[S] = Number1T
+    ): Number1[R] = number._3.execute(new FilterContext[S, R])(parameter, (number._1, number._2, number._4))
   }
 
-  class TypeContext3[S] extends TypeContext {
-    override type fromDataCtx = Number2[S, Unit]
-    override type toDataCtx   = Number2[Unit, Unit]
-    override type toDataType  = Number2[S, Unit]
-    override type Parameter   = Unit
-    override type Result      = S
+  class FilterTypeContext[S, R] extends ListContext[S, R] {
+    override type toDataType = (Number2[S, Unit], Number2[Unit, Unit], Number2[S => R, S => R])
+    override type Parameter  = S
+    override type Result     = R
   }
-  class Context3[S] extends Context[TypeContext3[S], Unit, Unit] {
-    override def convert(t: Number2[S, Unit], current: Number2[Unit, Unit]): (Number2[Unit, Unit], Number2[S, Unit])    = (current, t)
-    override def bindS(number: Number2[Unit, Unit], current: Number2[S, Unit], parameter: Unit, head: Unit): Number1[S] = Number1T
-    override def bindT(number: Number2[Unit, Unit], current: Number2[S, Unit], parameter: Unit, head: Unit): Number1[S] = Number1T
+  class FilterContext[S, R] extends Context[FilterTypeContext[S, R], S => Boolean, S => Boolean] {
+    override def convert(
+      t: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => R, S => R]),
+      current: Number2[S => Boolean, S => Boolean]
+    ): (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]) = (t._1, t._2, current, t._3)
+    override def bindS(
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
+      parameter: S,
+      head: S => Boolean
+    ): Number1[R] = if (head(parameter)) number._4.execute(new MapContext[S, R])(parameter, (number._1, number._2, number._3))
+    else number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4))
+    override def bindT(
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
+      parameter: S,
+      head: S => Boolean
+    ): Number1[R] = bindS(number, parameter, head)
+  }
+
+  class MapTypeContext[S, R] extends ListContext[S, R] {
+    override type toDataType = (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean])
+    override type Parameter  = S
+    override type Result     = R
+  }
+  class MapContext[S, R] extends Context[MapTypeContext[S, R], S => R, S => R] {
+    override def convert(
+      t: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean]),
+      current: Number2[S => R, S => R]
+    ): (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]) = (t._1, t._2, t._3, current)
+    override def bindS(
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
+      parameter: S,
+      head: S => R
+    ): Number1[R] = Number1S(number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4)), head(parameter))
+    override def bindT(
+      number: (Number2[S, Unit], Number2[Unit, Unit], Number2[S => Boolean, S => Boolean], Number2[S => R, S => R]),
+      parameter: S,
+      head: S => R
+    ): Number1[R] = bindS(number, parameter, head)
   }
 
   lazy val number2Zero: Number2[Any, Unit] = Number2T(() => number2Zero, ())
   def zero[T]: Number2[T, Unit]            = number2Zero.asInstanceOf[Number2[T, Unit]]
-
-  def dropFromInt(n: Int): Number2[Unit, Unit] = n match {
-    case n1 if n1 > 0 => Number2S(() => dropFromInt(n1 - 1), ())
-    case 0            => zero[Unit]
-  }
 
   def numberFromCollection[A](n: IterableOnce[A]): Number2[A, Unit] = {
     val iterator = n.iterator
@@ -93,27 +108,30 @@ object Runner {
     } else zero[A]
   }
 
+  def dropFromInt(n: Int): Number2[Unit, Unit] = n match {
+    case n1 if n1 > 0 => Number2S(() => dropFromInt(n1 - 1), ())
+    case 0            => zero[Unit]
+  }
+
+  def numberFromFun[S](filter: S): Number2[S, S] = {
+    lazy val number1: Number2[S, S] = Number2S(() => number2, filter)
+    lazy val number2: Number2[S, S] = Number2T(() => number1, filter)
+    number1
+  }
+
   def number1ToList[T](number1: Number1[T]): List[T] = number1 match {
     case Number1S(tail, head) => head :: number1ToList(tail)
     case Number1T             => List.empty
   }
 
   def main(args: Array[String]): Unit = {
-    for {
-      i1 <- 1 to 500
-      i2 <- 1 to 500
-    } yield {
-      val i3       = Random.nextInt(300)
-      val col1     = i1 to (i1 + i2)
-      val right    = col1.to(List).drop(i3)
-      val leftNum1 = numberFromCollection(col1)
-      val leftNum2 = dropFromInt(i3)
-      val leftCol  = leftNum1.execute(new Context1[Int])((), leftNum2)
-      val left     = number1ToList(leftCol)
-      assert(left == right)
-      val size = if (col1.length - i3 >= 0) col1.length - i3 else 0
-      assert(left.length == size)
-      assert(right.length == size)
-    }
+    val num1 = numberFromCollection(1 to 500).execute(new DropContext[Int, String])(
+      (),
+      (dropFromInt(60), numberFromFun((i: Int) => i % 5 == 0), numberFromFun((i: Int) => s"$i--$i"))
+    )
+    println(num1)
+    val col1 = (1 to 500).drop(60).filter(i => i % 5 == 0).map(i => s"$i--$i").to(List)
+    val col2 = number1ToList(num1)
+    assert(col1 == col2)
   }
 }
