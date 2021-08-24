@@ -1,7 +1,5 @@
 package d01
 
-import scala.util.Random
-
 object Runner {
 
   class ListContext[S, R] extends TypeContext {
@@ -26,7 +24,7 @@ object Runner {
     override def bindT(
       number: (Number2[S], Number2[Unit], Number2[S => Boolean], Number2[S => R]),
       parameter: Unit
-    ): Number1[R] = Number1T
+    ): Number1[R] = Number1T()
   }
 
   class ReverseDropTypeContext[S, R] extends ListContext[S, R] {
@@ -93,8 +91,7 @@ object Runner {
     ): Number1[R] = number._4.execute(this)(parameter, (number._1, number._2, number._3))
   }
 
-  lazy val number2Zero: Number2[Any] = Number2T(() => number2Zero)
-  def zero[T]: Number2[T]            = number2Zero.asInstanceOf[Number2[T]]
+  def zero[T]: Number2[T] = Number2T(() => zero[T])
 
   def numberFromCollection[A](n: IterableOnce[A]): Number2[A] = {
     val iterator             = n.iterator
@@ -115,16 +112,21 @@ object Runner {
 
   def number1ToList[T](number1: Number1[T]): List[T] = number1 match {
     case Number1S(tail, head) => head :: number1ToList(tail)
-    case Number1T             => List.empty
+    case Number1T()           => List.empty
+  }
+
+  def printlnNumber1[T](number1: Number1[T]): String = number1 match {
+    case Number1S(tail, head) => s"($head, ${printlnNumber1(tail)})"
+    case Number1T()           => "zero"
   }
 
   def main(args: Array[String]): Unit = {
     val num1 = numberFromCollection(1 to 500).execute(new DropContext[Int, String])(
       (),
-      (dropFromInt(60), numberFromFun((i: Int) => i % 5 == 0), numberFromFun((i: Int) => s"$i--$i"))
+      (dropFromInt(60), numberFromFun((i: Int) => i < 70 || i % 5 == 0), numberFromFun((i: Int) => s"$i--$i"))
     )
-    println(num1)
-    val col1 = (1 to 500).drop(60).filter(i => i % 5 == 0).map(i => s"$i--$i").to(List)
+    println(printlnNumber1(num1))
+    val col1 = (1 to 500).drop(60).filter(i => i < 70 || i % 5 == 0).map(i => s"$i--$i").to(List)
     val col2 = number1ToList(num1)
     assert(col1 == col2)
   }

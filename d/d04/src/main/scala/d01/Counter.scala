@@ -1,16 +1,8 @@
 package d01
 
-trait Number1[+T] {
-  def length: Int
-}
-case class Number1S[+T](tail: Number1[T], head: T) extends Number1[T] {
-  override def length: Int      = tail.length + 1
-  override def toString: String = s"($head, $tail)"
-}
-case object Number1T extends Number1[Nothing] {
-  override def length: Int      = 0
-  override def toString: String = "Zero"
-}
+trait Number1[T]
+case class Number1S[T](tail: Number1[T], head: T) extends Number1[T]
+case class Number1T[T]()                          extends Number1[T]
 
 trait Number2[A] {
   def execute[T <: TypeContext](contexts: Context[T, A])(s: T#Parameter, t: T#toDataType): Number1[T#Result]
