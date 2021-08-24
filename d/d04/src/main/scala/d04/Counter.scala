@@ -1,4 +1,4 @@
-package d01
+package d04
 
 trait Number1[T]
 case class Number1S[T](tail: Number1[T], head: T) extends Number1[T]
