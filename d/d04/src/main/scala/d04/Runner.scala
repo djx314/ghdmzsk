@@ -1,7 +1,6 @@
 package d04
 
 object Runner {
-
   class ListContext[S, R] extends TypeContext {
     override type DataCtx = (Number[S], Number[Unit], Number[S => Boolean], Number[S => R])
   }
