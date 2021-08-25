@@ -4,15 +4,12 @@ case class Item(name: String)
 
 trait Number1 {
   def method1(number2: Number2): Number1
-
 }
 case class Number1S(tail: Number1, head: Item) extends Number1 {
   override def method1(number2: Number2): Number1 = number2.method2(tail, head)
-
 }
 case object Number1T extends Number1 {
   override def method1(number2: Number2): Number1 = Number1T
-
 }
 
 trait Number2 {
