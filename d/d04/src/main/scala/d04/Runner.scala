@@ -91,20 +91,20 @@ object Runner {
     ): Number1[R] = number._4.execute(this)(parameter, (number._1, number._2, number._3))
   }
 
-  def zero[T]: Number2[T] = {
+  def zeroNumber[T]: Number2[T] = {
     lazy val zeroNumber: Number2[T] = Number2T(() => zeroNumber)
     zeroNumber
   }
 
   def numberFromCollection[A](n: IterableOnce[A]): Number2[A] = {
     val iterator             = n.iterator
-    def toNumber: Number2[A] = if (iterator.hasNext) Number2S(() => toNumber, iterator.next()) else zero[A]
+    def toNumber: Number2[A] = if (iterator.hasNext) Number2S(() => toNumber, iterator.next()) else zeroNumber
     toNumber
   }
 
   def dropFromInt(n: Int): Number2[Unit] = n match {
     case n1 if n1 > 0 => Number2S(() => dropFromInt(n1 - 1), ())
-    case 0            => zero[Unit]
+    case 0            => zeroNumber
   }
 
   def numberFromFun[S](filter: S): Number2[S] = {
