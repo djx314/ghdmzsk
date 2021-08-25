@@ -43,7 +43,7 @@ object Runner {
       def numberCount(number3: Number2): Number4 = Counter.count(number3, number1, number2)
       val value1                                 = 22d / 7d
       var count                                  = 0
-      for (i <- 0 to 200) {
+      for (i <- 0 to 5000) {
         val value2  = (i * value1).toInt
         val number3 = number4Length(numberCount(number2gen(i)))
         assert(value2 == number3)
