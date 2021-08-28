@@ -2,16 +2,22 @@ package c01
 
 case class Item(name: String)
 
-trait NumberTo {
-  def method1(numberBe: NumberBe): NumberBe
+trait Number1 {
+  def method1(number2: Number2): Number1
 }
-case class NumberToS(tail: () => NumberTo, head: Item) extends NumberTo {
-  override def method1(numberBe: NumberBe): NumberBe = NumberBeS(tail().method1(numberBe), head)
+case class Number1S(tail: Number1, head: Item) extends Number1 {
+  override def method1(number2: Number2): Number1 = number2.method2(tail, head)
 }
-case object NumberToT extends NumberTo {
-  override def method1(numberBe: NumberBe): NumberBe = numberBe
+case object Number1T extends Number1 {
+  override def method1(number2: Number2): Number1 = Number1T
 }
 
-trait NumberBe
-case class NumberBeS(tail: NumberBe, head: Item) extends NumberBe
-case object NumberBeT                            extends NumberBe
+trait Number2 {
+  def method2(number1: Number1, item: Item): Number1
+}
+case class Number2S(tail: Number2, head: Item) extends Number2 {
+  def method2(number1: Number1, item: Item): Number1 = number1.method1(tail)
+}
+case object Number2T extends Number2 {
+  def method2(number1: Number1, item: Item): Number1 = Number1S(number1, item)
+}
