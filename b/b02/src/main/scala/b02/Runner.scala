@@ -1,14 +1,14 @@
 package b02
 
 object Runner {
-  val item01 = Item("Item01")
-  val item02 = Item("Item02")
-  val item03 = Item("Item03")
-  val item04 = Item("Item04")
+  val item1 = Item("1")
+  val item2 = Item("2")
+  val item3 = Item("3")
+  val item4 = Item("4")
 
   def main(args: Array[String]): Unit = {
     {
-      lazy val number1: Number1 = Number1S(Number1S(Number1S(Number1S(number2, item01), item02), item03), item04)
+      lazy val number1: Number1 = Number1S(Number1S(Number1S(Number1S(number2, item1), item2), item3), item4)
       lazy val number2: Number1 = Number1T(() => number1)
       val number3: Number2      = Number2S(Number2S(Number2S(Number2T)))
       assert(number2.method1(number3).length == 12)
@@ -23,7 +23,7 @@ object Runner {
       assert(number1.method1(Number2T).length == 0)
     }
     {
-      lazy val number1: Number1 = Number1S(Number1S(Number1S(number2, item01), item02), item03)
+      lazy val number1: Number1 = Number1S(Number1S(Number1S(number2, item1), item2), item3)
       lazy val number2: Number1 = Number1T(() => number1)
       assert(number2.method1(Number2T).length == 0)
     }

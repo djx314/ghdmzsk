@@ -2,14 +2,14 @@ package b03
 
 object Runner {
   def number1gen(n: Int): Number1 = n match {
-    case i if i > 0 => Number1S(number1gen(i - 1), Item1(s"Item${i}"))
+    case i if i > 0 => Number1S(number1gen(i - 1), Item1(s"$i"))
     case 0          => Number1T
   }
 
   def number2gen(n: Int): Number2 = {
-    def number2s(f: Int, number2Tail: => Number2): Number2 = f match {
-      case i if i > 0 => Number2S(number2s(i - 1, number2Tail), Item2(s"Item${i}"))
-      case 0          => number2Tail
+    def number2s(f: Int, zero: => Number2): Number2 = f match {
+      case i if i > 0 => Number2S(number2s(i - 1, zero), Item2(s"$i"))
+      case 0          => zero
     }
     lazy val number2Tail: Number2 = number2s(n, number2Zero)
     lazy val number2Zero: Number2 = Number2T(() => number2Tail)
