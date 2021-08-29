@@ -1,4 +1,4 @@
-package d04
+package d01
 
 trait Collect[T]
 case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]

@@ -1,4 +1,6 @@
-package d04
+package d03
+
+import d01._
 
 object Runner {
   class ListContext[S, R] extends TypeContext {
@@ -127,7 +129,6 @@ object Runner {
       (),
       (dropFromInt(60), numberFromFun((i: Int) => i < 70 || i % 5 == 0), numberFromFun((i: Int) => s"$i--$i"))
     )
-    println(printlnNumber1(num1))
     val col1 = (1 to 500).drop(60).filter(i => i < 70 || i % 5 == 0).map(i => s"$i--$i").to(List)
     val col2 = number1ToList(num1)
     assert(col1 == col2)

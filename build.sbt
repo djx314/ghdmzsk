@@ -20,5 +20,6 @@ val c01 = project in cRoot / "c01"
 val c02 = project in cRoot / "c02"
 val c03 = project in cRoot / "c03"
 
-val d03 = project in dRoot / "d03"
-val d04 = project in dRoot / "d04"
+val d01 = project in dRoot / "d01"
+val d02 = (project in dRoot / "d02").dependsOn(d01)
+val d03 = (project in dRoot / "d03").dependsOn(d01)
