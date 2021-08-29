@@ -1,2 +1,2 @@
 Settings.settings
-name := "b07"
+name := "c02"

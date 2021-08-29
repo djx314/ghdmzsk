@@ -1,37 +1,45 @@
 package c01
 
 object Runner {
-  val item1  = Item("1")
-  val item2  = Item("2")
-  val item3  = Item("3")
-  val item4  = Item("4")
-  val item5  = Item("5")
-  val item6  = Item("6")
-  val item7  = Item("7")
-  val item8  = Item("8")
-  val item9  = Item("9")
-  val item10 = Item("10")
+  def beMinusFromInt(n: Int): Number1 = n match {
+    case n1 if n1 > 0 => Number1S(beMinusFromInt(n1 - 1), Item(s"$n"))
+    case 0            => Number1T
+  }
+
+  def minusFromInt(n: Int): Number2 = n match {
+    case n1 if n1 > 0 => Number2S(minusFromInt(n1 - 1), Item(s"$n"))
+    case 0            => Number2T
+  }
+
+  def beMinusLength(number1: Number1): Int = number1 match {
+    case Number1S(tail, item) => 1 + beMinusLength(tail)
+    case Number1T             => 0
+  }
 
   def main(args: Array[String]): Unit = {
     {
-      val number1: NumberTo = NumberToS(() => NumberToS(() => NumberToS(() => NumberToS(() => NumberToT, item1), item2), item3), item4)
-      val number2: NumberBe = NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeT, item1), item2), item3), item4)
-      assert(number1.method1(NumberBeT) == number2)
+      val minus = minusFromInt(20)
+      for (i <- 0 to 5000) {
+        val beMinus = beMinusFromInt(i)
+        val value   = beMinusLength(beMinus.method1(minus))
+        assert(value == (if (i - 20 >= 0) i - 20 else 0))
+      }
     }
     {
-      val number1: NumberBe = NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeT, item1), item2), item3), item4)
-      val number2: NumberBe = NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeT, item1), item2), item3), item4)
-      assert(NumberToT.method1(number1) == number2)
+      val minus = minusFromInt(0)
+      for (i <- 0 to 5000) {
+        val beMinus = beMinusFromInt(i)
+        val value   = beMinusLength(beMinus.method1(minus))
+        assert(value == i)
+      }
     }
     {
-      val number1: NumberTo = NumberToS(() => NumberToS(() => NumberToS(() => NumberToT, item5), item6), item7)
-      val number2: NumberBe = NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeT, item1), item2), item3), item4)
-      val number3: NumberBe =
-        NumberBeS(
-          NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeS(NumberBeT, item1), item2), item3), item4), item5), item6),
-          item7
-        )
-      assert(number1.method1(number2) == number3)
+      val minus = minusFromInt(5000)
+      for (i <- 0 to 5000) {
+        val beMinus = beMinusFromInt(i)
+        val value   = beMinusLength(beMinus.method1(minus))
+        assert(value == 0)
+      }
     }
   }
 }
