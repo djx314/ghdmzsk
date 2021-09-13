@@ -46,16 +46,19 @@ object Runner {
 
   def main(arr: Array[String]): Unit = {
     {
-      lazy val n1: NumberRight = NumberRightS(NumberRightS(NumberRightS(NumberRightS(n2, new Item), new Item), new Item), new Item)
-      lazy val n2: NumberRight = NumberRightT(() => n1)
+      val n1: NumberLeft = NumberLeftS(NumberLeftS(NumberLeftS(NumberLeftS(NumberLeftT))))
 
-      lazy val n3: NumberMiddle = NumberMiddleS(NumberMiddleS(NumberMiddleS(NumberMiddleS(n4))))
-      lazy val n4: NumberMiddle = NumberMiddleT(() => n3)
+      lazy val n2: NumberMiddle = NumberMiddleS(NumberMiddleS(NumberMiddleS(NumberMiddleS(n3))))
+      lazy val n3: NumberMiddle = NumberMiddleT(() => n2)
 
-      val n5: NumberLeft = NumberLeftS(NumberLeftS(NumberLeftS(NumberLeftS(NumberLeftT))))
+      lazy val n4: NumberRight = NumberRightS(NumberRightS(NumberRightS(NumberRightS(n5, new Item), new Item), new Item), new Item)
+      lazy val n5: NumberRight = NumberRightT(() => n4)
 
-      val n6   = n5.左推动(NumberRightU(NumberRightU(NumberRightU(n1, n3), n3), n3))
-      val res1 = countNumber(n6)
+      val n6 = NumberRightU(NumberRightU(NumberRightU(n4, n2), n2), n2)
+
+      val n7 = n1.左推动(n6)
+
+      val res1 = countNumber(n7)
       val res2 = math.pow(4, 5).toInt
       assert(res1 == res2)
     }
