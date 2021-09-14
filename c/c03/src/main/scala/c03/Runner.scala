@@ -1,4 +1,4 @@
-package c02
+package c03
 
 object Runner {
   def number1gen(n: Int): Number1 = n match {
