@@ -41,7 +41,7 @@ object Runner {
       case 2            => num1
     }
     val num5 = num4(n2)
-    num3.左推动(num5)
+    num3.method3(num5)
   }
 
   def main(arr: Array[String]): Unit = {
@@ -56,7 +56,7 @@ object Runner {
 
       val n6 = NumberRightU(NumberRightU(NumberRightU(n4, n2), n2), n2)
 
-      val n7 = n1.左推动(n6)
+      val n7 = n1.method3(n6)
 
       val res1 = countNumber(n7)
       val res2 = math.pow(4, 5).toInt
