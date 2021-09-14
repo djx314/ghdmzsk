@@ -6,8 +6,6 @@ class Item1
 class Item2
 class Item3
 class Item4
-class Item5
-class Item6
 
 trait HList
 case class HPositive[H, T <: HList](head: H, tail: T) extends HList
