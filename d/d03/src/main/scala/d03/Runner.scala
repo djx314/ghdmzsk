@@ -6,24 +6,24 @@ object Runner {
     case 0          => Number1T
   }
 
-  def number2gen(n: Int): Number2 = {
+  def number2gen(n: Int): (Number2, Number2) = {
     def number2s(f: Int, zero: => Number2): Number2 = f match {
       case i if i > 0 => Number2S(number2s(i - 1, zero))
       case 0          => zero
     }
     lazy val number2Tail: Number2 = number2s(n, number2Zero)
     lazy val number2Zero: Number2 = Number2T(() => number2Tail)
-    number2Zero
+    (number2Tail, number2Zero)
   }
 
-  def number3gen(n: Int): Number3 = {
+  def number3gen(n: Int): (Number3, Number3) = {
     def number3s(f: Int, zero: => Number3): Number3 = f match {
       case i if i > 0 => Number3S(number3s(i - 1, zero))
       case 0          => zero
     }
     lazy val number2Tail: Number3 = number3s(n, number2Zero)
     lazy val number2Zero: Number3 = Number3T(() => number2Tail)
-    number2Tail
+    (number2Tail, number2Zero)
   }
 
   def number4gen(n: Int): Number4 = n match {
@@ -38,10 +38,10 @@ object Runner {
 
   def main(args: Array[String]): Unit = {
     {
-      val number2                                                  = number2gen(7)
-      val number3                                                  = number3gen(22)
-      def numberCount(number1: Number1, number4: Number4): Number1 = Counter.count(number1, number4, number3, number2)
-      val value1                                                   = -22d / 7d
+      val (_, number2t)                                            = number2gen(7)
+      val (number3s, _)                                            = number3gen(22)
+      def numberCount(number1: Number1, number4: Number4): Number1 = number4.method3(number1, number2t, number3s)
+      val value1                                                   = -22d / 7
       var count                                                    = 0
       for {
         i1 <- 1 to 500

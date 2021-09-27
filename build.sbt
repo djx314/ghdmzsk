@@ -13,7 +13,6 @@ val b01 = project in bRoot / "b01"
 val b02 = project in bRoot / "b02"
 val b03 = project in bRoot / "b03"
 val b04 = project in bRoot / "b04"
-val b05 = project in bRoot / "b05"
 
 val c01 = project in cRoot / "c01"
 val c02 = project in cRoot / "c02"
