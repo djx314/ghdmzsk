@@ -39,15 +39,3 @@ case class Number4S(tail: Number4) extends Number4 {
 case object Number4T extends Number4 {
   override def method3(number1: Number1, number2: Number2, number3: Number3): Number1 = number1
 }
-
-object Counter {
-
-  /** number1 - number4 * number3 / number2
-    * @param number1
-    * @param number4
-    * @param number3
-    * @param number2
-    * @return
-    */
-  def count(number1: Number1, number4: Number4, number3: Number3, number2: Number2): Number1 = number4.method3(number1, number2, number3)
-}

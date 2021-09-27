@@ -35,7 +35,3 @@ case object Number3T extends Number3 {
 trait Number4
 case class Number4S(tail: Number4) extends Number4
 case object Number4T               extends Number4
-
-object Counter {
-  def count(number2: Number2, number3: Number3, number1: Number1): Number4 = number1.method1(number2, number3)
-}

@@ -38,11 +38,15 @@ object Runner {
 
   def main(args: Array[String]): Unit = {
     {
-      val (_, number2t)                                            = number2gen(7)
-      val (number3s, _)                                            = number3gen(22)
+      val (_, number2t) = number2gen(7)
+      val (number3s, _) = number3gen(22)
+
+      /** number1 - number4 * number3 / number2
+        */
       def numberCount(number1: Number1, number4: Number4): Number1 = number4.method3(number1, number2t, number3s)
-      val value1                                                   = -22d / 7
-      var count                                                    = 0
+
+      val value1 = -22d / 7
+      var count  = 0
       for {
         i1 <- 1 to 500
         i2 <- 1 to 500
