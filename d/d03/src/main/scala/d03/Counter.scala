@@ -1,92 +1,53 @@
 package d03
 
-import d01._
-
-class ListContext[S, R] extends TypeContext {
-  override type DataCtx = (Number[S], Number[Unit], Number[S => Boolean], Number[S => R])
+trait Number1 {
+  def method1(number2: Number2, number3: Number3, number4: Number4): Number1
+}
+case class Number1S(tail: Number1) extends Number1 {
+  override def method1(number2: Number2, number3: Number3, number4: Number4): Number1 = number2.method2(tail, number3, number4)
+}
+case object Number1T extends Number1 {
+  override def method1(number2: Number2, number3: Number3, number4: Number4): Number1 = Number1T
 }
 
-class DropTypeContext[S, R] extends ListContext[S, R] {
-  override type toDataType = (Number[Unit], Number[S => Boolean], Number[S => R])
-  override type Parameter  = Unit
-  override type Result     = R
+trait Number2 {
+  def method2(number1: Number1, number3: Number3, number4: Number4): Number1
 }
-class DropContext[S, R] extends Context[DropTypeContext[S, R], S] {
-  override def convert(
-    t: (Number[Unit], Number[S => Boolean], Number[S => R]),
-    current: Number[S]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (current, t._1, t._2, t._3)
-  override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: Unit,
-    head: S
-  ): Collect[R] = number._2.execute(new ReverseDropContext[S, R])(head, (number._1, number._3, number._4))
-  override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: Unit
-  ): Collect[R] = CollectT()
+case class Number2S(tail: Number2) extends Number2 {
+  override def method2(number1: Number1, number3: Number3, number4: Number4): Number1 = number3.method3(number1, tail, number4)
+}
+case class Number2T(tail: () => Number2) extends Number2 {
+  override def method2(number1: Number1, number3: Number3, number4: Number4): Number1 = number1.method1(tail(), number3, number4)
 }
 
-class ReverseDropTypeContext[S, R] extends ListContext[S, R] {
-  override type toDataType = (Number[S], Number[S => Boolean], Number[S => R])
-  override type Parameter  = S
-  override type Result     = R
+trait Number3 {
+  def method3(number1: Number1, number2: Number2, number4: Number4): Number1
 }
-class ReverseDropContext[S, R] extends Context[ReverseDropTypeContext[S, R], Unit] {
-  override def convert(
-    t: (Number[S], Number[S => Boolean], Number[S => R]),
-    current: Number[Unit]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (t._1, current, t._2, t._3)
-  override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S,
-    head: Unit
-  ): Collect[R] = number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4))
-  override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S
-  ): Collect[R] = number._3.execute(new FilterContext[S, R])(parameter, (number._1, number._2, number._4))
+case class Number3S(tail: Number3) extends Number3 {
+  override def method3(number1: Number1, number2: Number2, number4: Number4): Number1 = number2.method2(number1, tail, number4)
+}
+case class Number3T(tail: () => Number3) extends Number3 {
+  override def method3(number1: Number1, number2: Number2, number4: Number4): Number1 = number4.method3(number1, number2, tail())
 }
 
-class FilterTypeContext[S, R] extends ListContext[S, R] {
-  override type toDataType = (Number[S], Number[Unit], Number[S => R])
-  override type Parameter  = S
-  override type Result     = R
+trait Number4 {
+  def method3(number1: Number1, number2: Number2, number3: Number3): Number1
 }
-class FilterContext[S, R] extends Context[FilterTypeContext[S, R], S => Boolean] {
-  override def convert(
-    t: (Number[S], Number[Unit], Number[S => R]),
-    current: Number[S => Boolean]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (t._1, t._2, current, t._3)
-  override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S,
-    head: S => Boolean
-  ): Collect[R] = if (head(parameter)) number._4.execute(new MapContext[S, R])(parameter, (number._1, number._2, number._3))
-  else number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4))
-  override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S
-  ): Collect[R] = number._3.execute(this)(parameter, (number._1, number._2, number._4))
+case class Number4S(tail: Number4) extends Number4 {
+  override def method3(number1: Number1, number2: Number2, number3: Number3): Number1 = number3.method3(number1, number2, tail)
+}
+case object Number4T extends Number4 {
+  override def method3(number1: Number1, number2: Number2, number3: Number3): Number1 = number1
 }
 
-class MapTypeContext[S, R] extends ListContext[S, R] {
-  override type toDataType = (Number[S], Number[Unit], Number[S => Boolean])
-  override type Parameter  = S
-  override type Result     = R
-}
-class MapContext[S, R] extends Context[MapTypeContext[S, R], S => R] {
-  override def convert(
-    t: (Number[S], Number[Unit], Number[S => Boolean]),
-    current: Number[S => R]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (t._1, t._2, t._3, current)
-  override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S,
-    head: S => R
-  ): Collect[R] = CollectS(number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4)), head(parameter))
-  override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S
-  ): Collect[R] = number._4.execute(this)(parameter, (number._1, number._2, number._3))
+object Counter {
+
+  /** number1 - number4 * number3 / number2
+    * @param number1
+    * @param number4
+    * @param number3
+    * @param number2
+    * @return
+    */
+  def count(number1: Number1, number4: Number4, number3: Number3, number2: Number2): Number1 = number4.method3(number1, number2, number3)
 }
