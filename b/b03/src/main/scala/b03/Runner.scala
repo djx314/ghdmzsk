@@ -1,5 +1,7 @@
 package b03
 
+import scala.util.{Failure, Success}
+
 object Runner {
   def number1gen(n: Int): Number1 = n match {
     case i if i > 0 => Number1S(number1gen(i - 1), Item1(s"$i"))
@@ -22,6 +24,23 @@ object Runner {
   }
 
   def main(args: Array[String]): Unit = {
+    {
+      val number1 = number1gen(25)
+      val number2 = number2gen(0)
+
+      val number3 =
+        try Success(number1.method1(number2))
+        catch { case e: StackOverflowError => Failure(e) }
+
+      val exception = number3 match { case Failure(e) => e }
+
+      assert(exception.isInstanceOf[StackOverflowError])
+    }
+    {
+      val number1 = number1gen(0)
+      val number2 = number2gen(0)
+      assert(number1.method1(number2) == Number3T)
+    }
     {
       val number1 = number1gen(200)
       val number2 = number2gen(1)

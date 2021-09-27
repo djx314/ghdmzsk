@@ -1,47 +1,65 @@
 package d03
 
-import d01._
-
 object Runner {
-  def zeroNumber[T]: Number[T] = {
-    lazy val zeroNumber: Number[T] = NumberT(() => zeroNumber)
-    zeroNumber
+  def number1gen(n: Int): Number1 = n match {
+    case i if i > 0 => Number1S(number1gen(i - 1))
+    case 0          => Number1T
   }
 
-  def numberFromCollection[A](n: IterableOnce[A]): Number[A] = {
-    val iterator            = n.iterator
-    def toNumber: Number[A] = if (iterator.hasNext) NumberS(() => toNumber, iterator.next()) else zeroNumber
-    toNumber
+  def number2gen(n: Int): (Number2, Number2) = {
+    def number2s(f: Int, zero: => Number2): Number2 = f match {
+      case i if i > 0 => Number2S(number2s(i - 1, zero))
+      case 0          => zero
+    }
+    lazy val number2Tail: Number2 = number2s(n, number2Zero)
+    lazy val number2Zero: Number2 = Number2T(() => number2Tail)
+    (number2Tail, number2Zero)
   }
 
-  def dropFromInt(n: Int): Number[Unit] = n match {
-    case n1 if n1 > 0 => NumberS(() => dropFromInt(n1 - 1), ())
-    case 0            => zeroNumber
+  def number3gen(n: Int): (Number3, Number3) = {
+    def number3s(f: Int, zero: => Number3): Number3 = f match {
+      case i if i > 0 => Number3S(number3s(i - 1, zero))
+      case 0          => zero
+    }
+    lazy val number2Tail: Number3 = number3s(n, number2Zero)
+    lazy val number2Zero: Number3 = Number3T(() => number2Tail)
+    (number2Tail, number2Zero)
   }
 
-  def numberFromFun[S](filter: S): Number[S] = {
-    lazy val number1: Number[S] = NumberS(() => number2, filter)
-    lazy val number2: Number[S] = NumberT(() => number1)
-    number1
+  def number4gen(n: Int): Number4 = n match {
+    case i if i > 0 => Number4S(number4gen(i - 1))
+    case 0          => Number4T
   }
 
-  def number1ToList[T](number1: Collect[T]): List[T] = number1 match {
-    case CollectS(tail, head) => head :: number1ToList(tail)
-    case CollectT()           => List.empty
-  }
-
-  def printlnNumber1[T](number1: Collect[T]): String = number1 match {
-    case CollectS(tail, head) => s"($head, ${printlnNumber1(tail)})"
-    case CollectT()           => "zero"
+  def number1Length(number1: Number1): Int = number1 match {
+    case Number1S(tail) => 1 + number1Length(tail)
+    case Number1T       => 0
   }
 
   def main(args: Array[String]): Unit = {
-    val num1 = numberFromCollection(1 to 500).execute(new DropContext[Int, String])(
-      (),
-      (dropFromInt(60), numberFromFun((i: Int) => i < 70 || i % 5 == 0), numberFromFun((i: Int) => s"$i--$i"))
-    )
-    val col1 = (1 to 500).drop(60).filter(i => i < 70 || i % 5 == 0).map(i => s"$i--$i").to(List)
-    val col2 = number1ToList(num1)
-    assert(col1 == col2)
+    {
+      val (_, number2t) = number2gen(7)
+      val (number3s, _) = number3gen(22)
+
+      /** number1 - number4 * number3 / number2
+        */
+      def numberCount(number1: Number1, number4: Number4): Number1 = number4.method3(number1, number2t, number3s)
+
+      val value1 = -22d / 7
+      var count  = 0
+      for {
+        i1 <- 1 to 500
+        i2 <- 1 to 500
+      } {
+        val value2  = (i1 + i2 * value1).toInt
+        val value3  = if (value2 < 0) 0 else value2
+        val number1 = number1gen(i1)
+        val number4 = number4gen(i2)
+        val number3 = number1Length(numberCount(number1, number4))
+        assert(value3 == number3)
+        count += 1
+      }
+      println(s"匹配了 $count 个结果")
+    }
   }
 }

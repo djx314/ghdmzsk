@@ -1,43 +1,37 @@
 package d02
 
-import d01._
+case class Item1(name: String)
 
-class TypeContext1[S] extends TypeContext {
-  override type DataCtx    = (Number[S], Number[Unit])
-  override type toDataType = Number[Unit]
-  override type Parameter  = Unit
-  override type Result     = S
+trait Number1 {
+  def method1(number2: Number2, number3: Number3): Number4
 }
-class Context1[S] extends Context[TypeContext1[S], S] {
-  override def convert(t: Number[Unit], current: Number[S]): (Number[S], Number[Unit]) = (current, t)
-  override def bindS(number: (Number[S], Number[Unit]), parameter: Unit, head: S): Collect[S] =
-    number._2.execute(new Context2[S])(head, number._1)
-  override def bindT(number: (Number[S], Number[Unit]), parameter: Unit): Collect[S] = number._2.execute(new Context3[S])((), number._1)
+case class Number1S(tail: Number1, head: Item1) extends Number1 {
+  override def method1(number2: Number2, number3: Number3): Number4 = number2.method2(tail, number3)
+}
+case class Number1T(tail: () => Number1) extends Number1 {
+  override def method1(number2: Number2, number3: Number3): Number4 = Number4S(tail().method1(number2, number3))
 }
 
-class TypeContext2[S] extends TypeContext {
-  override type DataCtx    = (Number[S], Number[Unit])
-  override type toDataType = Number[S]
-  override type Parameter  = S
-  override type Result     = S
+trait Number2 {
+  def method2(number1: Number1, number3: Number3): Number4
 }
-class Context2[S] extends Context[TypeContext2[S], Unit] {
-  override def convert(t: Number[S], current: Number[Unit]): (Number[S], Number[Unit]) = (t, current)
-  override def bindS(number: (Number[S], Number[Unit]), parameter: S, head: Unit): Collect[S] =
-    number._1.execute(new Context1[S])((), number._2)
-  override def bindT(number: (Number[S], Number[Unit]), parameter: S): Collect[S] =
-    CollectS(number._1.execute(new Context1[S])((), number._2), parameter)
+case class Number2S(tail: Number2) extends Number2 {
+  override def method2(number1: Number1, number3: Number3): Number4 = number1.method1(tail, number3)
+}
+case class Number2T(tail: () => Number2) extends Number2 {
+  override def method2(number1: Number1, number3: Number3): Number4 = number3.method3(number1, tail())
 }
 
-class TypeContext3[S] extends TypeContext {
-  override type DataCtx    = (Number[S], Number[Unit])
-  override type toDataType = Number[S]
-  override type Parameter  = Unit
-  override type Result     = S
+trait Number3 {
+  def method3(number1: Number1, number2: Number2): Number4
 }
-class Context3[S] extends Context[TypeContext3[S], Unit] {
-  override def convert(t: Number[S], current: Number[Unit]): (Number[S], Number[Unit]) = (t, current)
-  override def bindS(number: (Number[S], Number[Unit]), parameter: Unit, head: Unit): Collect[S] =
-    number._1.execute(new Context1[S])((), number._2)
-  override def bindT(number: (Number[S], Number[Unit]), parameter: Unit): Collect[S] = CollectT()
+case class Number3S(tail: Number3) extends Number3 {
+  override def method3(number1: Number1, number2: Number2): Number4 = number2.method2(number1, tail)
 }
+case object Number3T extends Number3 {
+  override def method3(number1: Number1, number2: Number2): Number4 = Number4T
+}
+
+trait Number4
+case class Number4S(tail: Number4) extends Number4
+case object Number4T               extends Number4

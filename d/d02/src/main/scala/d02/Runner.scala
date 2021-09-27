@@ -1,47 +1,56 @@
 package d02
 
-import d01._
-
-import scala.util.Random
-
 object Runner {
-  def zero[T]: Number[T] = {
-    lazy val number2Zero: Number[T] = NumberT(() => number2Zero)
-    number2Zero
+  def number1gen(n: Int): (Number1, Number1) = {
+    def number1s(f: Int, zero: => Number1): Number1 = f match {
+      case i if i > 0 => Number1S(number1s(i - 1, zero), Item1(s"Item${i}"))
+      case 0          => zero
+    }
+    lazy val number1Tail: Number1 = number1s(n, number1Zero)
+    lazy val number1Zero: Number1 = Number1T(() => number1Tail)
+    (number1Tail, number1Zero)
   }
 
-  def dropFromInt(n: Int): Number[Unit] = n match {
-    case n1 if n1 > 0 => NumberS(() => dropFromInt(n1 - 1), ())
-    case 0            => zero
+  def number2gen(n: Int): (Number2, Number2) = {
+    def number2s(f: Int, zero: => Number2): Number2 = f match {
+      case i if i > 0 => Number2S(number2s(i - 1, zero))
+      case 0          => zero
+    }
+    lazy val number2Tail: Number2 = number2s(n, number2Zero)
+    lazy val number2Zero: Number2 = Number2T(() => number2Tail)
+    (number2Tail, number2Zero)
   }
 
-  def numberFromCollection[A](n: IterableOnce[A]): Number[A] = {
-    val iterator            = n.iterator
-    def toNumber: Number[A] = if (iterator.hasNext) NumberS(() => toNumber, iterator.next()) else zero
-    toNumber
+  def number3gen(n: Int): Number3 = n match {
+    case i if i > 0 => Number3S(number3gen(i - 1))
+    case 0          => Number3T
   }
 
-  def number1ToList[T](number1: Collect[T]): List[T] = number1 match {
-    case CollectS(tail, head) => head :: number1ToList(tail)
-    case CollectT()           => List.empty
+  def number4gen(n: Int): Number4 = n match {
+    case i if i > 0 => Number4S(number4gen(i - 1))
+    case 0          => Number4T
+  }
+
+  def number4Length(number4: Number4): Int = number4 match {
+    case Number4S(tail) => number4Length(tail) + 1
+    case Number4T       => 0
   }
 
   def main(args: Array[String]): Unit = {
-    for {
-      i1 <- 1 to 500
-      i2 <- 1 to 500
-    } yield {
-      val i3       = Random.nextInt(300)
-      val col1     = i1 to (i1 + i2)
-      val right    = col1.to(List).drop(i3)
-      val leftNum1 = numberFromCollection(col1)
-      val leftNum2 = dropFromInt(i3)
-      val leftCol  = leftNum1.execute(new Context1[Int])((), leftNum2)
-      val left     = number1ToList(leftCol)
-      assert(left == right)
-      val size = if (col1.length - i3 >= 0) col1.length - i3 else 0
-      assert(left.length == size)
-      assert(right.length == size)
+    {
+      val number1                                = number3gen(22)
+      val (number2s, _)                          = number1gen(7)
+      def numberCount(number3: Number2): Number4 = number2s.method1(number3, number1)
+      val value1                                 = 22d / 7
+      var count                                  = 0
+      for (i <- 0 to 5000) {
+        val value2        = (i * value1).toInt
+        val (_, number3t) = number2gen(i)
+        val number4       = number4Length(numberCount(number3t))
+        assert(value2 == number4)
+        count += 1
+      }
+      println(s"匹配了 $count 个结果")
     }
   }
 }
