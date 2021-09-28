@@ -5,9 +5,9 @@
 这个库目前主要有两种数据结构，一种是链表，另一种是双头链表，双头链表的部分将会在第二章引入。这些数据结构都会有一个特征，它们的大小可以用自然数表示。反过来，一个自然数，只要赋予它内容，赋予它结构，就成了一个对象，这个库主要研究这个对象的结构和它们之间的操作。
 
 在第一节中的链表数据结构，有数个参照
-1. [shapeless](https://github.com/milessabin/shapeless)的`shapeless.HList`以及`Scala2`的`Type Projection`，这是它最初的使用方式
-1. `scala.List`，这是它在运行时(Runtime)比较类似的体现方式
-1. `shapeless.Nat`，是它的一个纯值实现方式的参照
+1. [shapeless](https://github.com/milessabin/shapeless)的`shapeless.HList`以及`Scala2`的`Type Projection`，这是这个库最开始的用法
+1. `scala.List`，在运行时(Runtime)比较类似的实现
+1. `shapeless.Nat`，一个纯值实现方式的参照
 
 上述链表结构中，都有明显的自然数前驱和后继的特征，所以我把这一类结构以及在此之上的相互作用称为自然数编程。
 
