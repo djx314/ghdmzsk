@@ -12,15 +12,18 @@ case class HPositive[H, T <: HList](head: H, tail: T) extends HList
 case class HNil()                                     extends HList
 
 class HListAllTypeContext extends TypeContext {
+  override type Result = Item4
+}
+
+trait HListContext[T <: TypeContext, A] extends Context[T, A] {
   override type DataCtx = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]]
-  override type Result  = Item4
 }
 
 class HList1TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]
   override type Parameter  = Unit
 }
-class HList1Context extends Context[HList1TypeContext, Item1] {
+class HList1Context extends HListContext[HList1TypeContext, Item1] {
   override def convert(
     t: HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item1]
@@ -40,7 +43,7 @@ class HList2TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]
   override type Parameter  = Unit
 }
-class HList2Context extends Context[HList2TypeContext, Item2] {
+class HList2Context extends HListContext[HList2TypeContext, Item2] {
   override def convert(
     t: HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item2]
@@ -65,7 +68,7 @@ class HList3TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]]
   override type Parameter  = Unit
 }
-class HList3Context extends Context[HList3TypeContext, Item3] {
+class HList3Context extends HListContext[HList3TypeContext, Item3] {
   override def convert(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]],
     current: Number[Item3]
@@ -92,7 +95,7 @@ class HList4TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]]
   override type Parameter  = Unit
 }
-class HList4Context extends Context[HList4TypeContext, Item4] {
+class HList4Context extends HListContext[HList4TypeContext, Item4] {
   override def convert(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]],
     current: Number[Item4]
