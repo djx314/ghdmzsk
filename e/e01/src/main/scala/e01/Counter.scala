@@ -21,13 +21,13 @@ case class NumberT[A](tail: () => Number[A]) extends Number[A] {
 }
 
 trait Context[T <: TypeContext, A] {
-  def convert(t: T#toDataType, current: Number[A]): T#DataCtx
-  def bindS(number: T#DataCtx, parameter: T#Parameter, head: A): Collect[T#Result]
-  def bindT(number: T#DataCtx, parameter: T#Parameter): Collect[T#Result]
+  type DataCtx
+  def convert(t: T#toDataType, current: Number[A]): DataCtx
+  def bindS(number: DataCtx, parameter: T#Parameter, head: A): Collect[T#Result]
+  def bindT(number: DataCtx, parameter: T#Parameter): Collect[T#Result]
 }
 
 trait TypeContext {
-  type DataCtx
   type toDataType
   type Parameter
   type Result
