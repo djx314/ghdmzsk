@@ -1,6 +1,6 @@
 package a01
 
-case class Item(name: String)
+case class Item(name: Int)
 
 trait Number1
 case class Number1S(tail: Number1, head: Item) extends Number1

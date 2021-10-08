@@ -1,13 +1,13 @@
 package a02
 
 object Runner {
-  val item01 = Item("Item01")
-  val item02 = Item("Item02")
-  val item03 = Item("Item03")
-  val item04 = Item("Item04")
-  val item05 = Item("Item05")
-  val item06 = Item("Item06")
-  val item07 = Item("Item07")
+  val item01 = Item(1)
+  val item02 = Item(2)
+  val item03 = Item(3)
+  val item04 = Item(4)
+  val item05 = Item(5)
+  val item06 = Item(6)
+  val item07 = Item(7)
 
   def main(args: Array[String]): Unit = {
     {
