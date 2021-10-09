@@ -1,7 +1,7 @@
 package b01
 
-case class Item1(name: String)
-case class Item2(name: String)
+case class Item1(name: Int)
+case class Item2(name: Int)
 
 trait Number1 {
   def method1(number2: Number2): Number3
