@@ -1,2 +1,2 @@
 Settings.settings
-name := "f01"
+name := "g01"
