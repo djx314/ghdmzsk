@@ -29,6 +29,8 @@ object Runner {
     }
 
     println(hashMap.mkString("\n"))
+    assert(hashMap == hashMap.filter(_._2 == 10000))
+    assert(hashMap.size == 2)
   }
 
 }

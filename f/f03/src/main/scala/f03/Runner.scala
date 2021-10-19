@@ -9,8 +9,8 @@ object Runner {
     val hashMap: mutable.HashMap[List[String], Int] = mutable.HashMap.empty
 
     for (_ <- 1 to 10000) {
-      var random1 = math.abs(Random.nextInt()) % 200
-      var random2 = math.abs(Random.nextInt()) % 80
+      var random1 = math.abs(Random.nextInt()) % 2000
+      var random2 = math.abs(Random.nextInt()) % 800
       if (random1 == 0) random1 += 1
       if (random2 == 0) random2 += 1
       val result  = Counter.count(random1, random2)
@@ -29,6 +29,7 @@ object Runner {
     }
 
     println(hashMap.mkString("\n"))
+    assert(hashMap.filter(_._2 == 10000).size == 1)
   }
 
 }

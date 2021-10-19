@@ -29,9 +29,9 @@ object b03Counter {
       case n2 if n2 > 0 => Number2S(gen(n2 - 1, zero), Item2(n2))
       case 0            => zero
     }
-    lazy val number2Tail: Number2 = gen(n, number2Zero)
-    lazy val number2Zero: Number2 = Number2T(() => number2Tail)
-    (number2Tail, number2Zero)
+    lazy val number2Positive: Number2 = gen(n, number2Zero)
+    lazy val number2Zero: Number2     = Number2T(() => number2Positive)
+    (number2Positive, number2Zero)
   }
 
   def countResult(number: Number3): Int = number match {
@@ -40,11 +40,11 @@ object b03Counter {
   }
 
   def count(input1: Int, input2: Int): List[(String, Int)] = {
-    val number1                    = number1FromInt(input1)
-    val (number2Tail, number2Zero) = number2FromInt(input2)
-    val result1                    = number1.method1(number2Tail)
-    val result2                    = number1.method1(number2Zero)
-    List(("number1.method1(number2Tail)", countResult(result1)), ("number1.method1(number2Zero)", countResult(result2)))
+    val number1                        = number1FromInt(input1)
+    val (number2Positive, number2Zero) = number2FromInt(input2)
+    val result1                        = number1.method1(number2Positive)
+    val result2                        = number1.method1(number2Zero)
+    List(("number1.method1(number2Positive)", countResult(result1)), ("number1.method1(number2Zero)", countResult(result2)))
   }
 
 }
@@ -62,9 +62,9 @@ object b04Counter {
       case n2 if n2 > 0 => Number2S(gen(n2 - 1, zero), Item2(n2))
       case 0            => zero
     }
-    lazy val number2Tail: Number2 = gen(n, number2Zero)
-    lazy val number2Zero: Number2 = Number2T(() => number2Tail)
-    (number2Tail, number2Zero)
+    lazy val number2Positive: Number2 = gen(n, number2Zero)
+    lazy val number2Zero: Number2     = Number2T(() => number2Positive)
+    (number2Positive, number2Zero)
   }
 
   def countResult(number: Number3): Int = number match {
@@ -73,11 +73,11 @@ object b04Counter {
   }
 
   def count(input1: Int, input2: Int): List[(String, Int)] = {
-    val number1                    = number1FromInt(input1)
-    val (number2Tail, number2Zero) = number2FromInt(input2)
-    val result1                    = number2Tail.method2(number1)
-    val result2                    = number2Zero.method2(number1)
-    List(("number2Tail.method2(number1)", countResult(result1)), ("number2Zero.method2(number1)", countResult(result2)))
+    val number1                        = number1FromInt(input1)
+    val (number2Positive, number2Zero) = number2FromInt(input2)
+    val result1                        = number2Positive.method2(number1)
+    val result2                        = number2Zero.method2(number1)
+    List(("number2Positive.method2(number1)", countResult(result1)), ("number2Zero.method2(number1)", countResult(result2)))
   }
 
 }
