@@ -36,76 +36,84 @@ object Runner {
       val number1              = number1gen(28)
       val (number2s, number2t) = number2gen(200)
       val (number3s, number3t) = number3gen(200)
-      val number4              = number4gen(28)
+      val number4              = number4gen(28 * 200 / 200)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
+      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(28)
       val (number2s, number2t) = number2gen(72)
       val (number3s, number3t) = number3gen(83)
-      val number4              = number4gen(25)
-      val number5              = number4gen(24)
+      val number4              = number4gen(28 * 72 / 83 + 1)
+      val number5              = number4gen(28 * 72 / 83)
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
+      assert(number2t.method2(number1, number3t) == number4) // 上舍法
     }
     {
       val number1              = number1gen(83)
       val (number2s, number2t) = number2gen(28)
       val (number3s, number3t) = number3gen(72)
-      val number4              = number4gen(33)
-      val number5              = number4gen(32)
+      val number4              = number4gen(83 * 28 / 72 + 1)
+      val number5              = number4gen(83 * 28 / 72)
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
+      assert(number2t.method2(number1, number3t) == number4) // 上舍法
     }
     {
       val number1              = number1gen(268)
       val (number2s, number2t) = number2gen(35)
       val (number3s, number3t) = number3gen(63)
-      val number4              = number4gen(149)
-      val number5              = number4gen(148)
+      val number4              = number4gen(268 * 35 / 63 + 1)
+      val number5              = number4gen(268 * 35 / 63)
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
+      assert(number2t.method2(number1, number3t) == number4) // 上舍法
     }
     {
       val number1              = number1gen(268)
       val (number2s, number2t) = number2gen(0)
       val (number3s, number3t) = number3gen(63)
-      val number4              = number4gen(0)
+      val number4              = number4gen(268 * 0 / 63)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
+      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(0)
       val (number2s, number2t) = number2gen(2131)
       val (number3s, number3t) = number3gen(234)
-      val number4              = number4gen(0)
+      val number4              = number4gen(0 * 2131 / 234)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
+      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(200)
       val (number2s, number2t) = number2gen(28)
       val (number3s, number3t) = number3gen(200)
-      val number4              = number4gen(28)
+      val number4              = number4gen(200 * 28 / 200)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
+      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(200)
       val (number2s, number2t) = number2gen(28)
       val (number3s, number3t) = number3gen(140)
-      val number4              = number4gen(40)
+      val number4              = number4gen(200 * 28 / 140)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
+      assert(number2t.method2(number1, number3t) == number4)
     }
   }
 }

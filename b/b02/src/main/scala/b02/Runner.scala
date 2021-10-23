@@ -1,10 +1,10 @@
 package b02
 
 object Runner {
-  val item1 = Item("1")
-  val item2 = Item("2")
-  val item3 = Item("3")
-  val item4 = Item("4")
+  val item1 = Item(1)
+  val item2 = Item(2)
+  val item3 = Item(3)
+  val item4 = Item(4)
 
   def count(num: Number3): Int = num match {
     case Number3S(tail, _) => count(tail) + 1
@@ -13,10 +13,10 @@ object Runner {
 
   def main(args: Array[String]): Unit = {
     {
-      val number1: Number1      = Number1S(Number1S(Number1S(Number1T)))
-      lazy val number2: Number2 = Number2S(Number2S(Number2S(Number2S(number3, item1), item2), item3), item4)
-      lazy val number3: Number2 = Number2T(() => number2)
-      val number4               = count(number3.method2(number1))
+      val number1: Number1       = Number1S(Number1S(Number1S(Number1T)))
+      lazy val number2s: Number2 = Number2S(Number2S(Number2S(Number2S(number2t, item1), item2), item3), item4)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number4                = count(number2t.method2(number1))
       assert(number4 == 12)
     }
     {
