@@ -1,7 +1,7 @@
-package f02
+package f01
 
 object Counter {
-  def count(input1: Int, input2: Int): List[(String, Int)] = b03Counter.count(input1, input2) ::: b04Counter.count(input1, input2)
+  def count(input1: Int, input2: Int): List[(String, Int)] = b01Counter.count(input1, input2) ::: b02Counter.count(input1, input2)
 
   def convert[T](l: List[T]): List[List[T]] = innerConvert(l, l.size)
 
@@ -16,8 +16,8 @@ object Counter {
   } else List.empty
 }
 
-object b03Counter {
-  import b03._
+object b01Counter {
+  import b01._
 
   def number1FromInt(n: Int): Number1 = n match {
     case n1 if n1 > 0 => Number1S(number1FromInt(n1 - 1), Item1(n1))
@@ -35,8 +35,8 @@ object b03Counter {
   }
 
   def countResult(number: Number3): Int = number match {
-    case Number3S(tail) => countResult(tail) + 1
-    case Number3T       => 0
+    case Number3S(tail, _, _) => countResult(tail) + 1
+    case Number3T             => 0
   }
 
   def count(input1: Int, input2: Int): List[(String, Int)] = {
@@ -49,17 +49,17 @@ object b03Counter {
 
 }
 
-object b04Counter {
-  import b04._
+object b02Counter {
+  import b02._
 
   def number1FromInt(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1S(number1FromInt(n1 - 1), Item1(n1))
+    case n1 if n1 > 0 => Number1S(number1FromInt(n1 - 1))
     case 0            => Number1T
   }
 
   def number2FromInt(n: Int): (Number2, Number2) = {
     def gen(n1: Int, zero: => Number2): Number2 = n1 match {
-      case n2 if n2 > 0 => Number2S(gen(n2 - 1, zero), Item2(n2))
+      case n2 if n2 > 0 => Number2S(gen(n2 - 1, zero), Item(n2))
       case 0            => zero
     }
     lazy val number2Positive: Number2 = gen(n, number2Zero)
@@ -68,8 +68,8 @@ object b04Counter {
   }
 
   def countResult(number: Number3): Int = number match {
-    case Number3S(tail) => countResult(tail) + 1
-    case Number3T       => 0
+    case Number3S(tail, _) => countResult(tail) + 1
+    case Number3T          => 0
   }
 
   def count(input1: Int, input2: Int): List[(String, Int)] = {

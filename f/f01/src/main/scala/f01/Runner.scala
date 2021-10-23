@@ -1,4 +1,4 @@
-package f03
+package f01
 
 import scala.collection.mutable
 import scala.util.Random
@@ -9,13 +9,11 @@ object Runner {
     val hashMap: mutable.HashMap[List[String], Int] = mutable.HashMap.empty
 
     for (_ <- 1 to 10000) {
-      var random1 = math.abs(Random.nextInt()) % 100
+      var random1 = math.abs(Random.nextInt()) % 200
       var random2 = math.abs(Random.nextInt()) % 80
-      var random3 = math.abs(Random.nextInt()) % 80
       if (random1 == 0) random1 += 1
       if (random2 == 0) random2 += 1
-      if (random3 == 0) random3 += 1
-      val result  = Counter.count(random1, random2, random3)
+      val result  = Counter.count(random1, random2)
       val convert = Counter.convert(result)
       for (each <- convert) {
         def keys    = each.map(_._1)
@@ -31,7 +29,8 @@ object Runner {
     }
 
     println(hashMap.mkString("\n"))
-    assert(hashMap.filter(_._2 == 10000).size == 1)
+    assert(hashMap == hashMap.filter(_._2 == 10000))
+    assert(hashMap.size == 2)
   }
 
 }
