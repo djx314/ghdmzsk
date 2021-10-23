@@ -1,17 +1,14 @@
 package f01
 
 import scala.collection.mutable
-import scala.util.Random
 
 object Runner {
 
   def main(arr: Array[String]): Unit = {
     val hashMap: mutable.HashMap[Set[String], Int] = mutable.HashMap.empty
 
-    for (_ <- 1 to 10000) {
-      var random1 = math.abs(Random.nextInt()) % 200
-      if (random1 == 0) random1 += 1
-      val result  = Counter.count(random1, random1)
+    for (i <- 0 to 9999) {
+      val result  = Counter.count(i, i) ::: Counter.count(i + 1, i)
       val result1 = result.groupBy(_._2).map(s => s._2.map(_._1).to(Set))
       for (each <- result1) {
         hashMap.get(each) match {

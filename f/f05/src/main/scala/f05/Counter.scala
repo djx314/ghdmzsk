@@ -1,49 +1,11 @@
-package f04
+package f05
 
 object Counter {
-  def count(input1: Int, input2: Int, input3: Int): List[(String, Int)] = c01Counter.count(input1, input2, input3)
-
-  def convert[T](l: List[T]): List[List[T]] = innerConvert(l, l.size)
-
-  def innerConvert[T](l: List[T], count: Int): List[List[T]] = if (count > 0) {
-    l match {
-      case head :: Nil => List(List(head))
-      case head :: tail =>
-        val l1 = innerConvert(tail, tail.size).map(s => head :: s)
-        val l2 = tail.appended(head)
-        innerConvert(l2, count - 1) ::: l1
-    }
-  } else List.empty
-
-  def tranList(list: List[(String, Int)]): List[List[(String, Int)]] = {
-    val l1                               = list.sortBy(_._2)
-    var total: List[List[(String, Int)]] = List(List.empty)
-    var current: List[(String, Int)]     = List(l1.head)
-    var currentValue: Int                = l1.head._2
-
-    def flush = total = for {
-      c <- convert(current)
-      t <- total
-    } yield t ::: c
-
-    for (each <- l1.tail) {
-      if (each._2 == currentValue) {
-        current = current.appended(each)
-      } else {
-        flush
-        current = List(each)
-        currentValue = each._2
-      }
-    }
-
-    flush
-
-    total
-  }
+  def count(input1: Int, input2: Int, input3: Int): List[(String, Int)] = c02Counter.count(input1, input2, input3)
 }
 
-object c01Counter {
-  import c01._
+object c02Counter {
+  import c02._
 
   def number1FromInt(n: Int): Number1 = n match {
     case n1 if n1 > 0 => Number1S(number1FromInt(n1 - 1))
