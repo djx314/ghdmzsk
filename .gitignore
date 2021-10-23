@@ -1,6 +1,6 @@
 target
 .idea
-/sbt
+/sbt1.bat
 /sbt.bat
 /sbt-launch.jar
 .bsp/
