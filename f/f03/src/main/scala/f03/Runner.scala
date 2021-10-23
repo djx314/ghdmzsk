@@ -6,32 +6,22 @@ import scala.util.Random
 object Runner {
 
   def main(arr: Array[String]): Unit = {
-    val hashMap: mutable.HashMap[List[String], Int] = mutable.HashMap.empty
+    val hashMap: mutable.HashMap[Set[String], Int] = mutable.HashMap.empty
 
     for (_ <- 1 to 10000) {
-      var random1 = math.abs(Random.nextInt()) % 100
-      var random2 = math.abs(Random.nextInt()) % 80
-      var random3 = math.abs(Random.nextInt()) % 80
+      var random1 = math.abs(Random.nextInt()) % 200
       if (random1 == 0) random1 += 1
-      if (random2 == 0) random2 += 1
-      if (random3 == 0) random3 += 1
-      val result  = Counter.count(random1, random2, random3)
-      val convert = Counter.convert(result)
-      for (each <- convert) {
-        def keys    = each.map(_._1)
-        val values  = each.map(_._2)
-        val confirm = values.tail.foldLeft((values.head, true))((i1, i2) => if (i1._2) (i2, i2 >= i1._1) else (i2, false))
-        if (confirm._2) {
-          hashMap.get(keys) match {
-            case Some(s) => hashMap.put(keys, s + 1)
-            case None    => hashMap.put(keys, 1)
-          }
+      val result  = Counter.count(random1, random1, random1)
+      val result1 = result.groupBy(_._2).map(s => s._2.map(_._1).to(Set))
+      for (each <- result1) {
+        hashMap.get(each) match {
+          case Some(s) => hashMap.put(each, s + 1)
+          case None    => hashMap.put(each, 1)
         }
       }
     }
 
-    println(hashMap.mkString("\n"))
-    assert(hashMap.filter(_._2 == 10000).size == 1)
+    println(hashMap.to(List).sortWith((s, t) => s._2 > t._2).mkString("\n"))
   }
 
 }

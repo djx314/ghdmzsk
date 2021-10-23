@@ -14,6 +14,32 @@ object Counter {
         innerConvert(l2, count - 1) ::: l1
     }
   } else List.empty
+
+  def tranList(list: List[(String, Int)]): List[List[(String, Int)]] = {
+    val l1                               = list.sortBy(_._2)
+    var total: List[List[(String, Int)]] = List(List.empty)
+    var current: List[(String, Int)]     = List(l1.head)
+    var currentValue: Int                = l1.head._2
+
+    def flush = total = for {
+      c <- convert(current)
+      t <- total
+    } yield t ::: c
+
+    for (each <- l1.tail) {
+      if (each._2 == currentValue) {
+        current = current.appended(each)
+      } else {
+        flush
+        current = List(each)
+        currentValue = each._2
+      }
+    }
+
+    flush
+
+    total
+  }
 }
 
 object b03Counter {

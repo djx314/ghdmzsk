@@ -23,10 +23,6 @@ object Runner {
     case n1 if n1 > 0 => Number1S(() => 加数_被加数(n1 - 1))
     case 0            => number1vZero
   }
-  def 被加数第二(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1S(() => 被加数第二(n1 - 1))
-    case 0            => number1tZero
-  }
   def 被减数_被乘数_被除数(n: Int): Number1 = n match {
     case n1 if n1 > 0 => Number1V(() => 被减数_被乘数_被除数(n1 - 1))
     case 0            => number1tZero
@@ -35,7 +31,7 @@ object Runner {
     case n1 if n1 > 0 => Number1V(() => 减数(n1 - 1))
     case 0            => number1uZero
   }
-  def 乘数_加数第二(n: Int): (Number1, Number1) = {
+  def 乘数(n: Int): (Number1, Number1) = {
     def gen(n1: Int, zero: => Number1): Number1 = n1 match {
       case n2 if n2 > 0 => Number1S(() => gen(n2 - 1, zero))
       case 0            => zero
@@ -60,18 +56,17 @@ object Runner {
         i1 <- 0 to 20
         i2 <- 0 to 20
       } {
+        val number1 = 加数_被加数(i1)
+        val number2 = 加数_被加数(i2)
+
         {
-          val number1 = 加数_被加数(i1)
-          val number2 = 加数_被加数(i2)
           def number3 = number1.method1(number2)
           val count1  = count(() => number3)
           assert(count1 == i1 + i2)
         }
         {
-          val number1                        = 被加数第二(i1)
-          val (number2Positive, number2Zero) = 乘数_加数第二(i2)
-          def number3                        = number2Positive.method1(number1)
-          val count1                         = count(() => number3)
+          def number3 = number2.method1(number1)
+          val count1  = count(() => number3)
           assert(count1 == i1 + i2)
         }
       }
@@ -95,7 +90,7 @@ object Runner {
         i2 <- 0 to 20
       } {
         val number1                        = 被减数_被乘数_被除数(i1)
-        val (number2Positive, number2Zero) = 乘数_加数第二(i2)
+        val (number2Positive, number2Zero) = 乘数(i2)
 
         {
           def number3 = number1.method1(number2Positive)
