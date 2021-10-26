@@ -31,23 +31,18 @@ object Runner {
     case n1 if n1 > 0 => Number1V(() => 减数(n1 - 1))
     case 0            => number1uZero
   }
-  def 乘数(n: Int): (Number1, Number1) = {
-    def gen(n1: Int, zero: => Number1): Number1 = n1 match {
-      case n2 if n2 > 0 => Number1S(() => gen(n2 - 1, zero))
+  def 乘数除数(n1: Int, n2: Int): (Number1, Number1) = {
+    def gen1(n3: Int, zero: => Number1): Number1 = n3 match {
+      case n4 if n4 > 0 => Number1S(() => gen1(n4 - 1, zero))
       case 0            => zero
     }
-    lazy val number1s: Number1 = gen(n, number1v)
-    lazy val number1v: Number1 = Number1V(() => number1s)
+    def gen2(n3: Int, zero: => Number1): Number1 = n3 match {
+      case n4 if n4 > 0 => Number1V(() => gen2(n4 - 1, zero))
+      case 0            => zero
+    }
+    lazy val number1s: Number1 = gen1(n1, number1v)
+    lazy val number1v: Number1 = gen2(n2, number1s)
     (number1s, number1v)
-  }
-  def 除数(n: Int): (Number1, Number1) = {
-    def gen(n1: Int, zero: => Number1): Number1 = n1 match {
-      case n2 if n2 > 0 => Number1V(() => gen(n2 - 1, zero))
-      case 0            => zero
-    }
-    lazy val number1v: Number1 = gen(n, number1s)
-    lazy val number1s: Number1 = Number1S(() => number1v)
-    (number1v, number1s)
   }
 
   def main(arr: Array[String]): Unit = {
@@ -90,7 +85,7 @@ object Runner {
         i2 <- 0 to 20
       } {
         val number1                        = 被减数_被乘数_被除数(i1)
-        val (number2Positive, number2Zero) = 乘数(i2)
+        val (number2Positive, number2Zero) = 乘数除数(i2, 1)
 
         {
           def number3 = number1.method1(number2Positive)
@@ -111,7 +106,7 @@ object Runner {
         i3 <- 0 to i2 - 1
       } {
         val number1                        = 被减数_被乘数_被除数(i1 * i2 + i3)
-        val (number2Positive, number2Zero) = 除数(i2)
+        val (number2Zero, number2Positive) = 乘数除数(1, i2)
 
         {
           def number3 = number1.method1(number2Zero)
