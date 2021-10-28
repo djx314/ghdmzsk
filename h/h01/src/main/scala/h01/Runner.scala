@@ -4,9 +4,8 @@ object Runner {
 
   def count(number2: () => Number2): Int = {
     val value =
-      try {
-        Option(number2())
-      } catch {
+      try Option(number2())
+      catch {
         case _: StackOverflowError => Option.empty
       }
     value match {
@@ -28,16 +27,12 @@ object Runner {
     if (n > 0) Number1V(tail) else Number1U(tail)
   }
   def 乘数_除数(numbers: Int, numbert: Int): (Number1, Number1) = {
-    def gen1(n3: Int, zero: => Number1): Number1 = n3 match {
-      case n4 if n4 > 0 => Number1S(() => gen1(n4 - 1, zero))
-      case 0            => zero
-    }
-    def gen2(n3: Int, zero: => Number1): Number1 = n3 match {
-      case n4 if n4 > 0 => Number1V(() => gen2(n4 - 1, zero))
-      case 0            => zero
-    }
-    lazy val numberTypes: Number1 = gen1(numbers, numberTypev)
-    lazy val numberTypev: Number1 = gen2(numbert, numberTypes)
+    def gens(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => gens(n - 1, zero)) else zero
+    def genv(n: Int, zero: => Number1): Number1 = if (n > 0) Number1V(() => genv(n - 1, zero)) else zero
+
+    lazy val numberTypes: Number1 = gens(numbers, numberTypev)
+    lazy val numberTypev: Number1 = genv(numbert, numberTypes)
+
     (numberTypes, numberTypev)
   }
 
