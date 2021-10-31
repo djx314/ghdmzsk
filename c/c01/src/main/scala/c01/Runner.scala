@@ -40,7 +40,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
-      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(28)
@@ -51,7 +50,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
-      assert(number2t.method2(number1, number3t) == number4) // 上舍法
     }
     {
       val number1              = number1gen(83)
@@ -62,7 +60,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
-      assert(number2t.method2(number1, number3t) == number4) // 上舍法
     }
     {
       val number1              = number1gen(268)
@@ -73,7 +70,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
-      assert(number2t.method2(number1, number3t) == number4) // 上舍法
     }
     {
       val number1              = number1gen(268)
@@ -83,7 +79,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
-      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(0)
@@ -93,7 +88,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
-      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(200)
@@ -103,7 +97,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
-      assert(number2t.method2(number1, number3t) == number4)
     }
     {
       val number1              = number1gen(200)
@@ -113,7 +106,6 @@ object Runner {
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
-      assert(number2t.method2(number1, number3t) == number4)
     }
   }
 }
