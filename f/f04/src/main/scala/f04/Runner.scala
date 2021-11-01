@@ -5,11 +5,6 @@ import scala.util.Random
 
 object Runner {
 
-  // 一个结果集，他们之间两两的差异，无论何时，都存在为 0 和为 1 的可能性，但是不存在其他可能性，则这些结果集为候选结果集。
-  /*def mergePlus1(l: List[(String, Int)]): List[(String, Int)] = {
-    11
-  }*/
-
   def main(arr: Array[String]): Unit = {
     val hashMap: mutable.HashMap[Set[String], Int] = mutable.HashMap.empty
 
