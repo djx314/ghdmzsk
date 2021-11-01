@@ -1,4 +1,4 @@
-package g01
+package g02
 
 object Runner {
 
