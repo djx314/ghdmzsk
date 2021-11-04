@@ -6,7 +6,7 @@ trait Number1[+T] {
   def method1(number2: Number2): IO[T]
 }
 class Number1S[U, +T](tail: U => Number1[T], head: IO[U]) extends Number1[T] {
-  override def method1(number2: Number2): IO[T] = number2.method2(head.map(h => tail(h)))
+  override def method1(number2: Number2): IO[T] = head.flatMap(h => tail(h).method1(number2))
 }
 object Number1S {
   def apply[U, T](head: IO[U])(tail: U => Number1[T]): Number1[T] = new Number1S(tail, head)
