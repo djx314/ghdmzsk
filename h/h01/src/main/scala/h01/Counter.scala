@@ -16,5 +16,5 @@ case class Number1V(tail: () => Number1) extends Number1 {
   override def method1(number1: Number1): Number2 = number1.method1(tail())
 }
 
-trait Number2
+sealed trait Number2
 case class Number2S(tail: () => Number2) extends Number2

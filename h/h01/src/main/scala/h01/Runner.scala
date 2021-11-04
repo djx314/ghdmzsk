@@ -4,9 +4,8 @@ object Runner {
 
   def count(number2: () => Number2): Int = {
     val value =
-      try {
-        Option(number2())
-      } catch {
+      try Option(number2())
+      catch {
         case _: StackOverflowError => Option.empty
       }
     value match {
@@ -15,39 +14,26 @@ object Runner {
     }
   }
 
-  lazy val number1vZero: Number1 = Number1V(() => number1vZero)
-  lazy val number1tZero: Number1 = Number1T(() => number1tZero)
-  lazy val number1uZero: Number1 = Number1U(() => number1uZero)
+  def 加数_被加数(n: Int): Number1 = {
+    val tail = () => 加数_被加数(n - 1)
+    if (n > 0) Number1S(tail) else Number1V(tail)
+  }
+  def 被减数_被乘数_被除数(n: Int): Number1 = {
+    val tail = () => 被减数_被乘数_被除数(n - 1)
+    if (n > 0) Number1V(tail) else Number1T(tail)
+  }
+  def 减数(n: Int): Number1 = {
+    val tail = () => 减数(n - 1)
+    if (n > 0) Number1V(tail) else Number1U(tail)
+  }
+  def 乘数_除数(numbers: Int, numbert: Int): (Number1, Number1) = {
+    def gens(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => gens(n - 1, zero)) else zero
+    def genv(n: Int, zero: => Number1): Number1 = if (n > 0) Number1V(() => genv(n - 1, zero)) else zero
 
-  def 加数_被加数(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1S(() => 加数_被加数(n1 - 1))
-    case 0            => number1vZero
-  }
-  def 被减数_被乘数_被除数(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1V(() => 被减数_被乘数_被除数(n1 - 1))
-    case 0            => number1tZero
-  }
-  def 减数(n: Int): Number1 = n match {
-    case n1 if n1 > 0 => Number1V(() => 减数(n1 - 1))
-    case 0            => number1uZero
-  }
-  def 乘数(n: Int): (Number1, Number1) = {
-    def gen(n1: Int, zero: => Number1): Number1 = n1 match {
-      case n2 if n2 > 0 => Number1S(() => gen(n2 - 1, zero))
-      case 0            => zero
-    }
-    lazy val number1s: Number1 = gen(n, number1v)
-    lazy val number1v: Number1 = Number1V(() => number1s)
-    (number1s, number1v)
-  }
-  def 除数(n: Int): (Number1, Number1) = {
-    def gen(n1: Int, zero: => Number1): Number1 = n1 match {
-      case n2 if n2 > 0 => Number1V(() => gen(n2 - 1, zero))
-      case 0            => zero
-    }
-    lazy val number1v: Number1 = gen(n, number1s)
-    lazy val number1s: Number1 = Number1S(() => number1v)
-    (number1v, number1s)
+    lazy val numberTypes: Number1 = gens(numbers, numberTypev)
+    lazy val numberTypev: Number1 = genv(numbert, numberTypes)
+
+    (numberTypes, numberTypev)
   }
 
   def main(arr: Array[String]): Unit = {
@@ -90,7 +76,7 @@ object Runner {
         i2 <- 0 to 20
       } {
         val number1                        = 被减数_被乘数_被除数(i1)
-        val (number2Positive, number2Zero) = 乘数(i2)
+        val (number2Positive, number2Zero) = 乘数_除数(numbers = i2, numbert = 1)
 
         {
           def number3 = number1.method1(number2Positive)
@@ -111,7 +97,7 @@ object Runner {
         i3 <- 0 to i2 - 1
       } {
         val number1                        = 被减数_被乘数_被除数(i1 * i2 + i3)
-        val (number2Positive, number2Zero) = 除数(i2)
+        val (number2Zero, number2Positive) = 乘数_除数(numbers = 1, numbert = i2)
 
         {
           def number3 = number1.method1(number2Zero)

@@ -1,24 +1,30 @@
-package g01
+package g02
 
 object Runner2 {
 
   def count(number1: Number1): Int = number1 match {
-    case Number1S(tail) => count(tail) + 1
-    case Number1T       => 0
+    case Number1S(tail) => count(tail()) + 1
+    case Number1U       => 0
   }
 
-  def 被加数_被减数_被乘数_被除数(n: Int): Number1 = if (n > 0) Number1S(被加数_被减数_被乘数_被除数(n - 1)) else Number1T
-
-  def 加数(n: Int): Number2 = if (n > 0) Number2S(() => 加数(n - 1)) else Number2U
-
-  def 减数(n: Int): Number2 = if (n > 0) Number2T(() => 减数(n - 1)) else Number2U
-
-  def 乘数_除数(ns: Int, nt: Int): (Number2, Number2) = {
-    def gens(n: Int, zero: => Number2): Number2 = if (n > 0) Number2S(() => gens(n - 1, zero)) else zero
-    def gent(n: Int, zero: => Number2): Number2 = if (n > 0) Number2T(() => gent(n - 1, zero)) else zero
-    lazy val number2s: Number2                  = gens(ns, number2t)
-    lazy val number2t: Number2                  = gent(nt, number2s)
-    (number2s, number2t)
+  def 被加数_被减数_被乘数_被除数(n: Int): Number1 = {
+    val tail = () => 被加数_被减数_被乘数_被除数(n - 1)
+    if (n > 0) Number1S(tail) else Number1U
+  }
+  def 加数(n: Int): Number1 = {
+    val tail = () => 加数(n - 1)
+    if (n > 0) Number1T(tail) else Number1V
+  }
+  def 减数(n: Int): Number1 = {
+    val tail = () => 减数(n - 1)
+    if (n > 0) Number1S(tail) else Number1V
+  }
+  def 乘数_除数(nt: Int, ns: Int): (Number1, Number1) = {
+    def gent(n: Int, zero: => Number1): Number1 = if (n > 0) Number1T(() => gent(n - 1, zero)) else zero
+    def gens(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => gens(n - 1, zero)) else zero
+    lazy val number1t: Number1                  = gent(nt, number1s)
+    lazy val number1s: Number1                  = gens(ns, number1t)
+    (number1t, number1s)
   }
 
   def main(arr: Array[String]): Unit = {
@@ -29,7 +35,7 @@ object Runner2 {
       } {
         val number1 = 被加数_被减数_被乘数_被除数(i1)
         val number2 = 加数(i2)
-        val number3 = number2.method2(number1)
+        val number3 = number2.method1(number1)
         val count1  = count(number3)
         assert(count1 == i1 + i2)
       }
@@ -41,7 +47,7 @@ object Runner2 {
       } {
         val number1 = 被加数_被减数_被乘数_被除数(i1)
         val number2 = 减数(i2)
-        val number3 = number2.method2(number1)
+        val number3 = number2.method1(number1)
         val count1  = count(number3)
         val count2  = if (i1 >= i2) i1 - i2 else 0
         assert(count1 == count2)
@@ -61,7 +67,7 @@ object Runner2 {
           assert(count1 == i1 * i2)
         }
         {
-          val number3 = number2Zero.method2(number1)
+          val number3 = number2Zero.method1(number1)
           val count1  = count(number3)
           assert(count1 == i1 * i2)
         }
@@ -83,7 +89,7 @@ object Runner2 {
           assert(count1 == count2)
         }
         {
-          val number3 = number2Positive.method2(number1)
+          val number3 = number2Positive.method1(number1)
           val count1  = count(number3)
           assert(count1 == i1)
         }
