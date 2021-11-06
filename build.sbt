@@ -13,6 +13,7 @@ val hRoot    = rootFile / "h"
 val a01    = project in aRoot / "a01"
 val a01_01 = project in aRoot / "a01-01"
 val a01_02 = project in aRoot / "a01-02"
+val a01_03 = project in aRoot / "a01-03"
 
 val a02    = project in aRoot / "a02"
 val a02_01 = project in aRoot / "a02-01"
