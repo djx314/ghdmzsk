@@ -9,4 +9,8 @@ object Settings {
 
   val settings = Seq(setting1, setting2)
 
+  val setting3 = scalaVersion      := "3.1.0"
+
+  val scala3Settings = Seq(setting3, setting2)
+
 }
