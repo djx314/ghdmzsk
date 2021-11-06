@@ -13,3 +13,17 @@ object Base {
   }
 
 }
+
+object Compare {
+
+  def dropRightImpl[T](l: List[T], item: T): List[T] = l match {
+    case head :: tail => item :: dropRightImpl(tail, head)
+    case Nil          => Nil
+  }
+
+  def dropRight[T](l: List[T]): List[T] = l match {
+    case head :: tail => dropRightImpl(tail, head)
+    case Nil          => Nil
+  }
+
+}

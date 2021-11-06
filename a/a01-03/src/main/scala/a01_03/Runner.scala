@@ -10,7 +10,9 @@ object Runner {
       val number1 = Base.number1FromList(l1)
       val number2 = number1.dropRight.dropRight.dropRight
       val l2      = Base.number1ToList(number2)
+      val l3      = Compare.dropRight(Compare.dropRight(Compare.dropRight(l1)))
       assert(l1.dropRight(3) == l2)
+      assert(l1.dropRight(3) == l3)
     }
   }
 
