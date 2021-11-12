@@ -1,0 +1,33 @@
+@(current1: String)(current2: String)(total: List[String])
+package f01.List
+
+import f01._
+
+object @{current1}_@{current2}_Top {
+    @for(each1 <- total) {
+        object @{each1}Exe {
+            @for(each2 <- total) {
+                def @{each2}_exe = {
+                    def number1gen(n: Int): Number1 = if (n > 0) @{current1}(() => number1gen(n - 1)) else Fusion.@{current2.toLowerCase}
+                    def number2gen(n: Int): Number1 = if (n > 0) @{each1}(() => number2gen(n - 1)) else Fusion.@{each2.toLowerCase}
+                    for {
+                        i1 <- 0 to 20
+                        i2 <- 0 to 20
+                    } {
+                        def counter1 = number1gen(i1).method1(number2gen(i2))
+                    }
+                }
+            }
+            def exe = {
+                @for(each2 <- total) {
+                    @{each2}_exe
+                }
+            }
+        }
+    }
+    def exe = {
+        @for(each1 <- total) {
+            @{each1}Exe.exe
+        }
+    }
+}

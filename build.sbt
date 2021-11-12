@@ -42,6 +42,11 @@ val f03 = (project in fRoot / "f03").dependsOn(b03, b04)
 val f04 = (project in fRoot / "f04").dependsOn(c01)
 val f05 = (project in fRoot / "f05").dependsOn(c02)
 
+val f_codegen_path = fRoot / "f_codegen"
+val f_codegen = project in f_codegen_path
+
+addCommandAlias("f_codegen", s"f_codegen/runMain f_codegen.Runner ${f_codegen_path.getAbsolutePath}")
+
 val g01 = project in gRoot / "g01"
 val g02 = project in gRoot / "g02"
 
