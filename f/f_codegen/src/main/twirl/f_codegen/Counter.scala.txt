@@ -8,8 +8,8 @@ object @{current1}_@{current2}_Top {
         object @{each1}Exe {
             @for(each2 <- total) {
                 def @{each2}_exe = {
-                    def number1gen(n: Int): Number1 = if (n > 0) @{current1}(() => number1gen(n - 1)) else Fusion.@{current2.toLowerCase}
-                    def number2gen(n: Int): Number1 = if (n > 0) @{each1}(() => number2gen(n - 1)) else Fusion.@{each2.toLowerCase}
+                    def number1gen(n: Int): Number1 = Fusion.@{current1.toLowerCase}Gen(n, Fusion.@{current2.toLowerCase})
+                    def number2gen(n: Int): Number1 = Fusion.@{each1.toLowerCase}Gen(n, Fusion.@{each2.toLowerCase})
                     for {
                         i1 <- 0 to 20
                         i2 <- 0 to 20
