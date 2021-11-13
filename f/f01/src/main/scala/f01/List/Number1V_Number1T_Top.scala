@@ -166,6 +166,10 @@ object Number1V_Number1T_Top {
         def counter1 = number1gen(i1).method1(number2gen(i2))
       }
     }
+
+    /* 减法 */
+    /* 夹娃娃的时候，投一个硬币夹一次，等待娃娃回应你的期待，通常都是空欢喜。 */
+    /*  */
     def Number1U_exe = {
       def number1gen(n: Int): Number1 = Fusion.number1vGen(n, Fusion.number1t)
       def number2gen(n: Int): Number1 = Fusion.number1vGen(n, Fusion.number1u)
@@ -174,6 +178,9 @@ object Number1V_Number1T_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.count(() => counter1)
+        val result2  = Result.result7(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1V_exe = {
