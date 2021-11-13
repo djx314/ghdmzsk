@@ -1,6 +1,6 @@
 package d02
 
-case class Item1(name: String)
+case class Item1(name: Int)
 
 trait Number1 {
   def method1(number2: Number2, number3: Number3): Number4

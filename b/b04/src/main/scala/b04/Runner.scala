@@ -3,25 +3,10 @@ package b04
 import scala.util.{Failure, Success}
 
 object Runner {
-  def number1gen(n: Int): Number1 = n match {
-    case i if i > 0 => Number1S(number1gen(i - 1), Item1(i))
-    case 0          => Number1T
-  }
 
-  def number2gen(n: Int): (Number2, Number2) = {
-    def number2s(f: Int, zero: => Number2): Number2 = f match {
-      case i if i > 0 => Number2S(number2s(i - 1, zero), Item2(i))
-      case 0          => zero
-    }
-    lazy val number1Tail: Number2 = number2s(n, number1Zero)
-    lazy val number1Zero: Number2 = Number2T(() => number1Tail)
-    (number1Tail, number1Zero)
-  }
-
-  def number3gen(n: Int): Number3 = n match {
-    case i if i > 0 => Number3S(number3gen(i - 1))
-    case 0          => Number3T
-  }
+  def number1Gen(n: Int): Number1                    = if (n > 0) Number1S(number1Gen(n - 1), Item1(n)) else Number1T
+  def number2sGen(n: Int, zero: => Number2): Number2 = if (n > 0) Number2S(number2sGen(n - 1, zero), Item2(n)) else zero
+  def number3Gen(n: Int): Number3                    = if (n > 0) Number3S(number3Gen(n - 1)) else Number3T
 
   def count(num: Number3): Int = num match {
     case Number3S(tail) => count(tail) + 1
@@ -30,8 +15,9 @@ object Runner {
 
   def main(args: Array[String]): Unit = {
     {
-      val number1              = number1gen(25)
-      val (number2s, number2t) = number2gen(0)
+      val number1                = number1Gen(25)
+      lazy val number2s: Number2 = number2sGen(0, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
 
       val number3 =
         try Success(number2s.method2(number1))
@@ -42,8 +28,9 @@ object Runner {
       assert(exception.isInstanceOf[StackOverflowError])
     }
     {
-      val number1              = number1gen(0)
-      val (number2s, number2t) = number2gen(0)
+      val number1                = number1Gen(0)
+      lazy val number2s: Number2 = number2sGen(0, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
 
       val number3 =
         try Success(number2s.method2(number1))
@@ -54,45 +41,52 @@ object Runner {
       assert(exception.isInstanceOf[StackOverflowError])
     }
     {
-      val number1              = number1gen(200)
-      val (number2s, number2t) = number2gen(1)
-      val number3              = number3gen(200)
+      val number1                = number1Gen(200)
+      lazy val number2s: Number2 = number2sGen(1, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(200)
       assert(number2s.method2(number1) == number3)
     }
     {
-      val number1              = number1gen(200)
-      val (number2s, number2t) = number2gen(2)
-      val number3              = number3gen(100)
+      val number1                = number1Gen(200)
+      lazy val number2s: Number2 = number2sGen(2, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(100)
       assert(number2s.method2(number1) == number3)
     }
     {
-      val number1              = number1gen(56)
-      val (number2s, number2t) = number2gen(7)
-      val number3              = number3gen(8)
+      val number1                = number1Gen(56)
+      lazy val number2s: Number2 = number2sGen(7, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(8)
       assert(number2s.method2(number1) == number3)
     }
     {
-      val number1              = number1gen(56)
-      val (number2s, number2t) = number2gen(8)
-      val number3              = number3gen(7)
+      val number1                = number1Gen(56)
+      lazy val number2s: Number2 = number2sGen(8, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(7)
       assert(number2s.method2(number1) == number3)
     }
     {
-      val number1              = number1gen(82)
-      val (number2s, number2t) = number2gen(9)
-      val number3              = number3gen(9)
+      val number1                = number1Gen(82)
+      lazy val number2s: Number2 = number2sGen(9, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(9)
       assert(number2s.method2(number1) == number3)
     }
     {
-      val number1              = number1gen(2)
-      val (number2s, number2t) = number2gen(5)
-      val number3              = number3gen(0)
+      val number1                = number1Gen(2)
+      lazy val number2s: Number2 = number2sGen(5, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(0)
       assert(number2s.method2(number1) == number3)
     }
     {
-      val number1              = number1gen(12)
-      val (number2s, number2t) = number2gen(5)
-      val number3              = number3gen(2)
+      val number1                = number1Gen(12)
+      lazy val number2s: Number2 = number2sGen(5, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      val number3                = number3Gen(2)
       assert(number2s.method2(number1) == number3)
     }
   }
