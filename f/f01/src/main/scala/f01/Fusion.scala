@@ -42,5 +42,6 @@ object Result {
   def result3(i1: Int, i2: Int): Int         = i1 + i2 + 1
   def result4(i1: Int, i2: Int): Int         = i1 + 1
   def result5(i1: Int, i2: Int): Int         = i1 + i2 * 2 + 1
+  def result6(i1: Int, i2: Int): Int         = i1 + i2
 
 }
