@@ -1,111 +1,104 @@
 package c01
 
 object Runner {
-  def number1gen(n: Int): Number1 = n match {
-    case i if i > 0 => Number1S(number1gen(i - 1))
-    case 0          => Number1T
-  }
 
-  def number2gen(n: Int): (Number2, Number2) = {
-    def number2s(f: Int, zero: => Number2): Number2 = f match {
-      case i if i > 0 => Number2S(number2s(i - 1, zero))
-      case 0          => zero
-    }
-    lazy val number2Tail: Number2 = number2s(n, number2Zero)
-    lazy val number2Zero: Number2 = Number2T(() => number2Tail)
-    (number2Tail, number2Zero)
-  }
-
-  def number3gen(n: Int): (Number3, Number3) = {
-    def number3s(f: Int, zero: => Number3): Number3 = f match {
-      case i if i > 0 => Number3S(number3s(i - 1, zero))
-      case 0          => zero
-    }
-    lazy val number3Tail: Number3 = number3s(n, number3Zero)
-    lazy val number3Zero: Number3 = Number3T(() => number3Tail)
-    (number3Tail, number3Zero)
-  }
-
-  def number4gen(n: Int): Number4 = n match {
-    case i if i > 0 => Number4S(number4gen(i - 1))
-    case 0          => Number4T
-  }
+  def number1Gen(n: Int): Number1                    = if (n > 0) Number1S(number1Gen(n - 1)) else Number1T
+  def number2sGen(n: Int, zero: => Number2): Number2 = if (n > 0) Number2S(number2sGen(n - 1, zero)) else zero
+  def number3sGen(n: Int, zero: => Number3): Number3 = if (n > 0) Number3S(number3sGen(n - 1, zero)) else zero
+  def number4Gen(n: Int): Number4                    = if (n > 0) Number4S(number4Gen(n - 1)) else Number4T
 
   def main(args: Array[String]): Unit = {
     {
-      val number1              = number1gen(28)
-      val (number2s, number2t) = number2gen(200)
-      val (number3s, number3t) = number3gen(200)
-      val number4              = number4gen(28 * 200 / 200)
+      val number1                = number1Gen(28)
+      lazy val number2s: Number2 = number2sGen(200, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(200, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(28 * 200 / 200)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
     }
     {
-      val number1              = number1gen(28)
-      val (number2s, number2t) = number2gen(72)
-      val (number3s, number3t) = number3gen(83)
-      val number4              = number4gen(28 * 72 / 83 + 1)
-      val number5              = number4gen(28 * 72 / 83)
+      val number1                = number1Gen(28)
+      lazy val number2s: Number2 = number2sGen(72, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(83, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(28 * 72 / 83 + 1)
+      val number5                = number4Gen(28 * 72 / 83)
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
     }
     {
-      val number1              = number1gen(83)
-      val (number2s, number2t) = number2gen(28)
-      val (number3s, number3t) = number3gen(72)
-      val number4              = number4gen(83 * 28 / 72 + 1)
-      val number5              = number4gen(83 * 28 / 72)
+      val number1                = number1Gen(83)
+      lazy val number2s: Number2 = number2sGen(28, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(72, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(83 * 28 / 72 + 1)
+      val number5                = number4Gen(83 * 28 / 72)
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
     }
     {
-      val number1              = number1gen(268)
-      val (number2s, number2t) = number2gen(35)
-      val (number3s, number3t) = number3gen(63)
-      val number4              = number4gen(268 * 35 / 63 + 1)
-      val number5              = number4gen(268 * 35 / 63)
+      val number1                = number1Gen(268)
+      lazy val number2s: Number2 = number2sGen(35, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(63, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(268 * 35 / 63 + 1)
+      val number5                = number4Gen(268 * 35 / 63)
       assert(number1.method1(number2s, number3t) == number4) // 上舍法
       assert(number2t.method2(number1, number3t) == number4) // 上舍法
       assert(number3s.method3(number1, number2t) == number5) // 下舍法
     }
     {
-      val number1              = number1gen(268)
-      val (number2s, number2t) = number2gen(0)
-      val (number3s, number3t) = number3gen(63)
-      val number4              = number4gen(268 * 0 / 63)
+      val number1                = number1Gen(268)
+      lazy val number2s: Number2 = number2sGen(0, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(63, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(268 * 0 / 63)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
     }
     {
-      val number1              = number1gen(0)
-      val (number2s, number2t) = number2gen(2131)
-      val (number3s, number3t) = number3gen(234)
-      val number4              = number4gen(0 * 2131 / 234)
+      val number1                = number1Gen(0)
+      lazy val number2s: Number2 = number2sGen(2131, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(234, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(0 * 2131 / 234)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
     }
     {
-      val number1              = number1gen(200)
-      val (number2s, number2t) = number2gen(28)
-      val (number3s, number3t) = number3gen(200)
-      val number4              = number4gen(200 * 28 / 200)
+      val number1                = number1Gen(200)
+      lazy val number2s: Number2 = number2sGen(28, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(200, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(200 * 28 / 200)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
     }
     {
-      val number1              = number1gen(200)
-      val (number2s, number2t) = number2gen(28)
-      val (number3s, number3t) = number3gen(140)
-      val number4              = number4gen(200 * 28 / 140)
+      val number1                = number1Gen(200)
+      lazy val number2s: Number2 = number2sGen(28, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+      lazy val number3s: Number3 = number3sGen(140, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
+      val number4                = number4Gen(200 * 28 / 140)
       assert(number1.method1(number2s, number3t) == number4)
       assert(number2t.method2(number1, number3t) == number4)
       assert(number3s.method3(number1, number2t) == number4)
     }
   }
+
 }

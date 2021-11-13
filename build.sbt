@@ -12,10 +12,11 @@ val hRoot    = rootFile / "h"
 
 val a01    = project in aRoot / "a01"
 val a01_01 = project in aRoot / "a01-01"
+val a01_02 = project in aRoot / "a01-02"
+val a01_03 = project in aRoot / "a01-03"
 
 val a02    = project in aRoot / "a02"
 val a02_01 = project in aRoot / "a02-01"
-val a02_02 = project in aRoot / "a02-02"
 
 val b01 = project in bRoot / "b01"
 val b02 = project in bRoot / "b02"
@@ -40,6 +41,11 @@ val f02 = (project in fRoot / "f02").dependsOn(b01, b02)
 val f03 = (project in fRoot / "f03").dependsOn(b03, b04)
 val f04 = (project in fRoot / "f04").dependsOn(c01)
 val f05 = (project in fRoot / "f05").dependsOn(c02)
+
+val f_codegen_path = fRoot / "f_codegen"
+val f_codegen = project in f_codegen_path
+
+addCommandAlias("f_codegen", s"f_codegen/runMain f_codegen.Runner ${f_codegen_path.getAbsolutePath}")
 
 val g01 = project in gRoot / "g01"
 val g02 = project in gRoot / "g02"

@@ -1,45 +1,24 @@
 package d03
 
 object Runner {
-  def number1gen(n: Int): Number1 = n match {
-    case i if i > 0 => Number1S(number1gen(i - 1))
-    case 0          => Number1T
-  }
 
-  def number2gen(n: Int): (Number2, Number2) = {
-    def number2s(f: Int, zero: => Number2): Number2 = f match {
-      case i if i > 0 => Number2S(number2s(i - 1, zero))
-      case 0          => zero
-    }
-    lazy val number2Tail: Number2 = number2s(n, number2Zero)
-    lazy val number2Zero: Number2 = Number2T(() => number2Tail)
-    (number2Tail, number2Zero)
-  }
-
-  def number3gen(n: Int): (Number3, Number3) = {
-    def number3s(f: Int, zero: => Number3): Number3 = f match {
-      case i if i > 0 => Number3S(number3s(i - 1, zero))
-      case 0          => zero
-    }
-    lazy val number2Tail: Number3 = number3s(n, number2Zero)
-    lazy val number2Zero: Number3 = Number3T(() => number2Tail)
-    (number2Tail, number2Zero)
-  }
-
-  def number4gen(n: Int): Number4 = n match {
-    case i if i > 0 => Number4S(number4gen(i - 1))
-    case 0          => Number4T
-  }
+  def number1Gen(n: Int): Number1                   = if (n > 0) Number1S(number1Gen(n - 1)) else Number1T
+  def number2Gen(n: Int, zero: => Number2): Number2 = if (n > 0) Number2S(number2Gen(n - 1, zero)) else zero
+  def number3Gen(n: Int, zero: => Number3): Number3 = if (n > 0) Number3S(number3Gen(n - 1, zero)) else zero
+  def number4Gen(n: Int): Number4                   = if (n > 0) Number4S(number4Gen(n - 1)) else Number4T
 
   def number1Length(number1: Number1): Int = number1 match {
-    case Number1S(tail) => 1 + number1Length(tail)
+    case Number1S(tail) => number1Length(tail) + 1
     case Number1T       => 0
   }
 
   def main(args: Array[String]): Unit = {
     {
-      val (_, number2t) = number2gen(7)
-      val (number3s, _) = number3gen(22)
+      lazy val number2s: Number2 = number2Gen(7, number2t)
+      lazy val number2t: Number2 = Number2T(() => number2s)
+
+      lazy val number3s: Number3 = number3Gen(22, number3t)
+      lazy val number3t: Number3 = Number3T(() => number3s)
 
       /** number1 - number4 * number3 / number2
         */
@@ -52,9 +31,9 @@ object Runner {
         i2 <- 1 to 500
       } {
         val value2  = (i1 + i2 * value1).toInt
-        val value3  = if (value2 < 0) 0 else value2
-        val number1 = number1gen(i1)
-        val number4 = number4gen(i2)
+        val value3  = if (value2 >= 0) value2 else 0
+        val number1 = number1Gen(i1)
+        val number4 = number4Gen(i2)
         val number3 = number1Length(numberCount(number1, number4))
         assert(value3 == number3)
         count += 1
@@ -62,4 +41,5 @@ object Runner {
       println(s"匹配了 $count 个结果")
     }
   }
+
 }
