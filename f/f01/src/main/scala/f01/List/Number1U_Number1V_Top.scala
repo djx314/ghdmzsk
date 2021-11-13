@@ -130,7 +130,7 @@ object Number1U_Number1V_Top {
     }
 
     /* 两人产生互动，互动过程中双方都有情绪波动产生，不久后一方虽然继续与对方互动，但热情消失，另一方则仍有热情， */
-    /* 不久后另一方热情也消失，但双方即使没有热情，依然保持互动，直至天荒地老。                            */
+    /* 不久后另一方热情也消失，但双方即使没有热情，依然保持互动，直至天荒地老。                              */
     def Number1V_exe = {
       def number1gen(n: Int): Number1 = Fusion.number1uGen(n, Fusion.number1v)
       def number2gen(n: Int): Number1 = Fusion.number1uGen(n, Fusion.number1v)
