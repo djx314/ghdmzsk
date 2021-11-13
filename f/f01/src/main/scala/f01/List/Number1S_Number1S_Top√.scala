@@ -1,5 +1,10 @@
 package f01.List
 import f01._
+
+/* ss1 作为左侧数的运算都有一个共同特征，单方面的慈爱、憎恨、付出，以为到了一段时间之后就会终止，*/
+/* 但真正等到那个时间来临之后却发现，这些守护、怨念、付出，根本不会有停止的念头，              */
+/* 只会单方面地，完全不顾及对方地，永无停止地产生这种念头                                  */
+
 object Number1S_Number1S_Top {
   object Number1SExe {
     def Number1S_exe = {
