@@ -136,8 +136,8 @@ object Number1S_Number1U_Top {
       }
     }
 
-    /* 自己噼里啪啦地说了一大通，然后向对方发起挑战，对方一言不合过来撕逼，双方嗨爆。 */
-    /* 到得后来，自己会不会停下来呢？自己不会的，唯有别人知道斗不过你，不理你，这场撕逼才会停。 */
+    /* 一个小朋友在自娱自乐，忽而叫来了另外一个小朋友，两个人玩得很开心。 */
+    /* 叫来的小朋友一般专注度不如原来的小朋友，不久后就走了，原来的小朋友也停止了玩耍。 */
     def Number1T_exe = {
       def number1Gen(n: Int): Number1 = Fusion.number1sGen(n, Fusion.number1u)
       def number2Gen(n: Int): Number1 = Fusion.number1uGen(n, Fusion.number1t)
