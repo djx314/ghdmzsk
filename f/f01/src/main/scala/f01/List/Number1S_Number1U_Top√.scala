@@ -138,6 +138,9 @@ object Number1S_Number1U_Top {
 
     /* 一个小朋友在自娱自乐，忽而叫来了另外一个小朋友，两个人玩得很开心。 */
     /* 叫来的小朋友一般专注度不如原来的小朋友，不久后就走了，原来的小朋友也停止了玩耍。 */
+
+    /* 一个人在自娱自乐，打单机游戏，喝啤酒吃花生看足球，忽而叫来了另外一个朋友，两人一起联机，啤酒吃花生讨论比赛。 */
+    /* 请过来的人一般都会先提出自己要走了，原来把别人请来的人一般不会先把别人赶走。 */
     def Number1T_exe = {
       def number1Gen(n: Int): Number1 = Fusion.number1sGen(n, Fusion.number1u)
       def number2Gen(n: Int): Number1 = Fusion.number1uGen(n, Fusion.number1t)
