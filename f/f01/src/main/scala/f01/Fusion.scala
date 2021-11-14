@@ -42,5 +42,12 @@ object Result {
   def result3(i1: Int, i2: Int): Int         = i1 + i2 + 1
   def result4(i1: Int, i2: Int): Int         = i1 + 1
   def result5(i1: Int, i2: Int): Int         = i1 + i2 * 2 + 1
+  def result6(i1: Int, i2: Int): Int         = i1 + i2
+  def result7(i1: Int, i2: Int): Int         = if (i1 - i2 >= 0) i1 - i2 else 0
+  def result8(i1: Int, i2: Int): Int         = i2
+  def result9(i1: Int, i2: Int): Int         = 0
+  def result10(i1: Int, i2: Int): Int        = i2 + 1
+  def result11(i1: Int, i2: Int): Int        = 1
+  def result12(i1: Int, i2: Int): Int        = i2 * 2 + 1
 
 }
