@@ -10,6 +10,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1T_exe = {
