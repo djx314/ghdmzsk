@@ -68,6 +68,7 @@ object Result {
   def result26(i1: Int, i2: Int): Option[Int] = if (i1 - i2 > 0) Option.empty else Option(i1)
   def result27(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 + 1 else i1
   def result28(i1: Int, i2: Int): Int         = if (i1 - i2 >= 0) i1 * 2 - i2 else i1
+  def result29(i1: Int, i2: Int): Int         = if (i1 - i2 <= 0) i2 - i1 + 1 else 0
 
   def countResult(i1: Int, i2: Int): SList[(Int, Option[Int])] = SList(
     (1, Option(result1(i1, i2))),
@@ -97,7 +98,8 @@ object Result {
     (25, Option(result25(i1, i2))),
     (26, result26(i1, i2)),
     (27, Option(result27(i1, i2))),
-    (28, Option(result28(i1, i2)))
+    (28, Option(result28(i1, i2))),
+    (29, Option(result29(i1, i2)))
   )
 
   def someResult(i1: Int, i2: Int): SList[(Int, Int)] = countResult(i1, i2).collect { case (a, Some(b)) => (a, b) }
