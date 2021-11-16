@@ -23,7 +23,7 @@ object Runner {
         try Success(number2s.method2(number1))
         catch { case e: StackOverflowError => Failure(e) }
 
-      val exception = number3 match { case Failure(e) => e }
+      val exception = number3.failed.get
 
       assert(exception.isInstanceOf[StackOverflowError])
     }
@@ -36,7 +36,7 @@ object Runner {
         try Success(number2s.method2(number1))
         catch { case e: StackOverflowError => Failure(e) }
 
-      val exception = number3 match { case Failure(e) => e }
+      val exception = number3.failed.get
 
       assert(exception.isInstanceOf[StackOverflowError])
     }
