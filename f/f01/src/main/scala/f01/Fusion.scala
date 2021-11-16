@@ -68,7 +68,10 @@ object Result {
   def result26(i1: Int, i2: Int): Option[Int] = if (i1 - i2 > 0) Option.empty else Option(i1)
   def result27(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 + 1 else i1
   def result28(i1: Int, i2: Int): Int         = if (i1 - i2 >= 0) i1 * 2 - i2 else i1
-  def result29(i1: Int, i2: Int): Int         = if (i1 - i2 <= 0) i2 - i1 + 1 else 0
+  def result29(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) 0 else i2 - i1 + 1
+  def result30(i1: Int, i2: Int): Int         = if (i1 == 0) i2 else i2 + 1
+  def result31(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 * 2 + 1 else i1 + i2
+  def result32(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 + 1 else i1
 
   def countResult(i1: Int, i2: Int): SList[(Int, Option[Int])] = SList(
     (1, Option(result1(i1, i2))),
@@ -99,12 +102,15 @@ object Result {
     (26, result26(i1, i2)),
     (27, Option(result27(i1, i2))),
     (28, Option(result28(i1, i2))),
-    (29, Option(result29(i1, i2)))
+    (29, Option(result29(i1, i2))),
+    (30, Option(result30(i1, i2))),
+    (31, Option(result31(i1, i2))),
+    (32, Option(result32(i1, i2)))
   )
 
   def someResult(i1: Int, i2: Int): SList[(Int, Int)] = countResult(i1, i2).collect { case (a, Some(b)) => (a, b) }
 
-  def main(arr: Array[String]): Unit = {
+  def main1(arr: Array[String]): Unit = {
     val coll: HashMap[(Int, Int, Int), Int] = HashMap.empty
     for {
       i1                         <- 0 to 19
