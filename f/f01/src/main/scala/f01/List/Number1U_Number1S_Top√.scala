@@ -23,6 +23,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result13(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1U_exe = {
@@ -33,6 +36,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1V_exe = {
@@ -43,6 +49,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def exe = {
@@ -61,6 +70,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1T_exe = {
@@ -71,6 +83,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result14(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1U_exe = {
@@ -81,6 +96,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1V_exe = {
@@ -91,6 +109,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def exe = {
@@ -109,6 +130,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1T_exe = {
@@ -119,6 +143,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result15(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1U_exe = {
@@ -129,6 +156,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1V_exe = {
@@ -139,6 +169,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def exe = {
@@ -157,6 +190,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1T_exe = {
@@ -167,6 +203,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result16(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1U_exe = {
@@ -177,6 +216,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def Number1V_exe = {
@@ -187,6 +229,9 @@ object Number1U_Number1S_Top {
         i2 <- 0 to 20
       } {
         def counter1 = number1gen(i1).method1(number2gen(i2))
+        val result1  = Counter.countOpt(() => counter1)
+        val result2  = Result.result2(i1, i2)
+        assert(result1 == result2)
       }
     }
     def exe = {
