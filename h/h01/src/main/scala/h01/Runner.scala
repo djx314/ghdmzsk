@@ -20,6 +20,7 @@ object Runner {
 
   def number1sGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => number1sGen(n - 1, zero)) else zero
   def number1vGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1V(() => number1vGen(n - 1, zero)) else zero
+  def number1uGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1U(() => number1uGen(n - 1, zero)) else zero
 
   def main(arr: Array[String]): Unit = {
     {
@@ -28,16 +29,44 @@ object Runner {
         i2 <- 0 to 20
       } {
         val number1 = number1sGen(i1, number1v)
-        val number2 = number1sGen(i2, number1v)
 
         {
+          val number2 = number1sGen(i2, number1v)
           def number3 = number1.method1(number2)
           val count1  = count(() => number3)
           assert(count1 == i1 + i2)
         }
         {
-          def number3 = number2.method1(number1)
+          val number2 = number1sGen(i2, number1t)
+          def number3 = number1.method1(number2)
           val count1  = count(() => number3)
+          assert(count1 == i1 + i2)
+        }
+        {
+          val number2 = number1uGen(i2, number1t)
+          def number3 = number1.method1(number2)
+          val count1  = count(() => number3)
+          assert(count1 == i1 + i2)
+        }
+        {
+          val number2 = number1uGen(i2, number1v)
+          def number3 = number1.method1(number2)
+          val count1  = count(() => number3)
+          assert(count1 == i1 + i2)
+        }
+
+        val number4 = number1uGen(i1, number1v)
+
+        {
+          val number5 = number1sGen(i2, number1v)
+          def number6 = number4.method1(number5)
+          val count1  = count(() => number6)
+          assert(count1 == i1 + i2)
+        }
+        {
+          val number5 = number1uGen(i2, number1v)
+          def number6 = number4.method1(number5)
+          val count1  = count(() => number6)
           assert(count1 == i1 + i2)
         }
       }

@@ -3,8 +3,10 @@ package e03
 import e01._
 
 object Runner {
+  private def zeroNumberImpl[T]: Number[T] = NumberT(() => zeroNumberImpl)
+
   def zeroNumber[T]: Number[T] = {
-    lazy val zeroNumber: Number[T] = NumberT(() => zeroNumber)
+    val zeroNumber: Number[T] = zeroNumberImpl
     zeroNumber
   }
 
@@ -14,16 +16,9 @@ object Runner {
     toNumber
   }
 
-  def dropFromInt(n: Int): Number[Unit] = n match {
-    case n1 if n1 > 0 => NumberS(() => dropFromInt(n1 - 1), ())
-    case 0            => zeroNumber
-  }
+  def numberFromFun[S](filter: S, zero: => Number[S]): Number[S] = NumberS(() => zero, filter)
 
-  def numberFromFun[S](filter: S): Number[S] = {
-    lazy val number1: Number[S] = NumberS(() => number2, filter)
-    lazy val number2: Number[S] = NumberT(() => number1)
-    number1
-  }
+  def dropFromInt(n: Int): Number[Unit] = if (n > 0) NumberS(() => dropFromInt(n - 1), ()) else zeroNumber
 
   def number1ToList[T](number1: Collect[T]): List[T] = number1 match {
     case CollectS(tail, head) => head :: number1ToList(tail)
@@ -36,9 +31,15 @@ object Runner {
   }
 
   def main(args: Array[String]): Unit = {
+
+    lazy val numberFilterA_1: Number[Int => Boolean] = numberFromFun((i: Int) => i < 70 || i % 5 == 0, numberFilterA_2)
+    lazy val numberFilterA_2: Number[Int => Boolean] = NumberT(() => numberFilterA_1)
+    lazy val numberFilterB_1: Number[Int => String]  = numberFromFun((i: Int) => s"$i--$i", numberFilterB_2)
+    lazy val numberFilterB_2: Number[Int => String]  = NumberT(() => numberFilterB_1)
+
     val num1 = numberFromCollection(1 to 500).execute(new DropContext[Int, String])(
       (),
-      (dropFromInt(60), numberFromFun((i: Int) => i < 70 || i % 5 == 0), numberFromFun((i: Int) => s"$i--$i"))
+      (dropFromInt(60), numberFilterA_1, numberFilterB_1)
     )
     val col1 = (1 to 500).drop(60).filter(i => i < 70 || i % 5 == 0).map(i => s"$i--$i").to(List)
     val col2 = number1ToList(num1)

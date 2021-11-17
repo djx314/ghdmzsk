@@ -5,15 +5,14 @@ import e01._
 import scala.util.Random
 
 object Runner {
+  private def zeroNumberImpl[T]: Number[T] = NumberT(() => zeroNumberImpl)
+
   def zero[T]: Number[T] = {
-    lazy val number2Zero: Number[T] = NumberT(() => number2Zero)
+    lazy val number2Zero: Number[T] = zeroNumberImpl
     number2Zero
   }
 
-  def dropFromInt(n: Int): Number[Unit] = n match {
-    case n1 if n1 > 0 => NumberS(() => dropFromInt(n1 - 1), ())
-    case 0            => zero
-  }
+  def dropFromInt(n: Int): Number[Unit] = if (n > 0) NumberS(() => dropFromInt(n - 1), ()) else zero
 
   def numberFromCollection[A](n: IterableOnce[A]): Number[A] = {
     val iterator            = n.iterator

@@ -7,39 +7,20 @@ object Runner {
     case ResultO             => 0
   }
 
-  def numberGen1(n: Int): NumberRight = {
-    def gen(n1: Int, zero: => NumberRight): NumberRight = n1 match {
-      case n2 if n2 > 0 => NumberRightS(gen(n2 - 1, zero), new Item)
-      case 0            => zero
-    }
-    lazy val num1: NumberRight = gen(n, num2)
-    lazy val num2: NumberRight = NumberRightT(() => num1)
-    num1
-  }
-
-  def numberGen2(n: Int): NumberMiddle = {
-    def gen(n1: Int, zero: => NumberMiddle): NumberMiddle = n1 match {
-      case n2 if n2 > 0 => NumberMiddleS(gen(n2 - 1, zero))
-      case 0            => zero
-    }
-    lazy val num1: NumberMiddle = gen(n, num2)
-    lazy val num2: NumberMiddle = NumberMiddleT(() => num1)
-    num1
-  }
-
-  def numberGen3(n: Int): NumberLeft = n match {
-    case n1 if n1 > 0 => NumberLeftS(numberGen3(n1 - 1))
-    case 0            => NumberLeftT
-  }
+  def numberGen1(n: Int, zero: => NumberRight): NumberRight   = if (n > 0) NumberRightS(numberGen1(n - 1, zero), new Item) else zero
+  def numberGen2(n: Int, zero: => NumberMiddle): NumberMiddle = if (n > 0) NumberMiddleS(numberGen2(n - 1, zero)) else zero
+  def numberGen3(n: Int): NumberLeft                          = if (n > 0) NumberLeftS(numberGen3(n - 1)) else NumberLeftT
 
   def countPow(n1: Int, n2: Int): Result = {
-    val num1 = numberGen1(n1)
-    val num2 = numberGen2(n1)
-    val num3 = numberGen3(n1)
-    def num4(n3: Int): NumberRight = n3 match {
-      case n4 if n4 > 2 => NumberRightU(num4(n4 - 1), num2)
-      case 2            => num1
-    }
+    lazy val num1: NumberRight     = numberGen1(n1, num1Impl)
+    lazy val num1Impl: NumberRight = NumberRightT(() => num1)
+
+    lazy val num2: NumberMiddle     = numberGen2(n1, num2Impl)
+    lazy val num2Impl: NumberMiddle = NumberMiddleT(() => num2)
+
+    val num3                       = numberGen3(n1)
+    def num4(n3: Int): NumberRight = if (n3 > 2) NumberRightU(num4(n3 - 1), num2) else num1
+
     val num5 = num4(n2)
     num3.method3(num5)
   }
