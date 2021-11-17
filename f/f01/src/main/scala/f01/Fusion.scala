@@ -72,6 +72,13 @@ object Result {
   def result30(i1: Int, i2: Int): Int         = if (i1 == 0) i2 else i2 + 1
   def result31(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 * 2 + 1 else i1 + i2
   def result32(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 + 1 else i1
+  def result33(i1: Int, i2: Int): Option[Int] = if (i1 == 0) Option.empty else Option(i2)
+  def result34(i1: Int, i2: Int): Option[Int] = if (i1 == 0) Option.empty else Option(0)
+  def result35(i1: Int, i2: Int): Option[Int] = if (i1 - i2 > 0) Option(i2) else Option.empty
+  def result36(i1: Int, i2: Int): Option[Int] = if (i1 - i2 > 0) Option(0) else Option.empty
+  def result37(i1: Int, i2: Int): Int         = if (i1 == 0) 0 else i2
+  def result38(i1: Int, i2: Int): Int         = if (i1 - i2 > 0) i2 else i1
+  def result39(i1: Int, i2: Int): Option[Int] = if (i1 - i2 > 0) Option.empty else Option(0)
 
   def countResult(i1: Int, i2: Int): SList[(Int, Option[Int])] = SList(
     (1, Option(result1(i1, i2))),
@@ -105,7 +112,14 @@ object Result {
     (29, Option(result29(i1, i2))),
     (30, Option(result30(i1, i2))),
     (31, Option(result31(i1, i2))),
-    (32, Option(result32(i1, i2)))
+    (32, Option(result32(i1, i2))),
+    (33, result33(i1, i2)),
+    (34, result34(i1, i2)),
+    (35, result35(i1, i2)),
+    (36, result36(i1, i2)),
+    (37, Option(result37(i1, i2))),
+    (38, Option(result38(i1, i2))),
+    (39, result39(i1, i2))
   )
 
   def someResult(i1: Int, i2: Int): SList[(Int, Int)] = countResult(i1, i2).collect { case (a, Some(b)) => (a, b) }
