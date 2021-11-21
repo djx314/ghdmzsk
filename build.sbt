@@ -13,7 +13,6 @@ val hRoot    = rootFile / "h"
 val a01    = project in aRoot / "a01"
 val a01_01 = project in aRoot / "a01-01"
 val a01_02 = project in aRoot / "a01-02"
-val a01_03 = project in aRoot / "a01-03"
 
 val a02    = project in aRoot / "a02"
 val a02_01 = project in aRoot / "a02-01"
@@ -31,6 +30,8 @@ val d02 = project in dRoot / "d02"
 val d03 = project in dRoot / "d03"
 
 val e01 = project in eRoot / "e01"
+val e01_01 = project in eRoot / "e01-01"
+val e01_02 = project in eRoot / "e01-02"
 val e02 = (project in eRoot / "e02").dependsOn(e01)
 val e03 = (project in eRoot / "e03").dependsOn(e01)
 val e04 = (project in eRoot / "e04").dependsOn(e01)

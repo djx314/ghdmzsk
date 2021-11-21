@@ -1,4 +1,4 @@
-package a01_02
+package e01_01
 
 import cats.effect.unsafe.implicits.global
 import sttp.client3._

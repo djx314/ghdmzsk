@@ -1,5 +1,3 @@
 Settings.settings
-name := "a01-02"
+name := "a01-03"
 
-libraryDependencies ++= Dependent.catsEffect
-libraryDependencies ++= Dependent.sttp
