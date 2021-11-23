@@ -33,7 +33,7 @@ object Runner extends App {
     name2 <- data
     name3 <- data
   } {
-    val current = filePath2.resolve(name1)
+    val current = filePath2.resolve(name1.toLowerCase + "_top")
     Files.createDirectories(current)
     Using.resource(new PrintWriter(current.resolve(s"${name1}_${name2}_${name3}_Top.scala").toFile, "utf-8")) { writer =>
       val content = trimLines(txt.f02(name1)(name2)(name3)(data).body)
