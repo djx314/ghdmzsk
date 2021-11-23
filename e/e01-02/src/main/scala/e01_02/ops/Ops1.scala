@@ -124,4 +124,18 @@ object Ops1 {
     override def bindT(number: () => Number[A], parameter: Unit): A           = throw new NoSuchElementException("head of empty list")
   }
 
+  // class EqualsContext[B] extends TypeContext {
+  //   override type toDataType = Number[B]
+  //   override type Parameter  = Unit
+  //   override type Result     = Boolean
+  // }
+
+  // def ops_equals[A,B]: Context[EqualsContext[B], A] = new Context[EqualsContext[B], A] {
+  //   override type DataCtx = () => Number[A]
+  //   override def convertS(t: Unit, current: () => Number[A]): () => Number[A] = current
+  //   override def convertT(t: Unit, current: () => Number[A]): () => Number[A] = current
+  //   override def bindS(number: () => Number[A], parameter: Unit, head: A): A  = head
+  //   override def bindT(number: () => Number[A], parameter: Unit): A           = throw new NoSuchElementException("head of empty list")
+  // }
+
 }

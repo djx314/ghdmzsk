@@ -16,6 +16,7 @@ object NumberOps {
     def corresponds[B](that: Number[B])(p: (A, B) => Boolean): Boolean = number.execute(Ops1.ops_corresponds1[A, B])(p, that)
     def headOption: Option[A]                                          = number.execute(Ops1.ops_headOption)((), ())
     def head: A                                                        = number.execute(Ops1.ops_head)((), ())
+     def equals[B](b: Number[B]): Boolean                                                        = number.execute(Ops1.ops_head)((), ())
   }
 
 }
