@@ -168,4 +168,19 @@ object Ops1 {
     override def bindT(number: Unit, parameter: Unit): Boolean          = true
   }
 
+  class ExistsContext[A] extends TypeContext {
+    override type toDataType = Unit
+    override type Parameter  = A => Boolean
+    override type Result     = Boolean
+  }
+
+  def existsContext[A]: Context[ExistsContext[A], A] = new Context[ExistsContext[A], A] {
+    override type DataCtx = () => Number[A]
+    override def convertS(t: Unit, current: () => Number[A]): () => Number[A] = current
+    override def convertT(t: Unit, current: () => Number[A]): () => Number[A] = current
+    override def bindS(number: () => Number[A], parameter: A => Boolean, head: A): Boolean =
+      if (parameter(head)) true else number().execute(this)(parameter, ())
+    override def bindT(number: () => Number[A], parameter: A => Boolean): Boolean = false
+  }
+
 }

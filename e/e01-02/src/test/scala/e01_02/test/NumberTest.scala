@@ -134,6 +134,17 @@ object HelloWorldSpec extends DefaultRunnableSpec {
         val equals5   = assert(result5)(equalTo(list1_1 == list1_2))
         equals1 && equals2 && equals3 && equals4 && equals5
       }
+    },
+    test("exists") {
+      check(Gen.listOf(Gen.int), Gen.int, Gen.listOf(Gen.string), Gen.string) { (list1, data1, list2, data2) =>
+        val number1 = OpsConvertList.fromList(list1)
+        val number2 = OpsConvertList.fromList(list2)
+        val result1 = number1.exists(_ > 30)
+        val result2 = number2.exists(_.size < 5)
+        val equals1 = assert(result1)(equalTo(list1.exists(_ > 30)))
+        val equals2 = assert(result2)(equalTo(list2.exists(_.size < 5)))
+        equals1 && equals2
+      }
     }
   )
 }

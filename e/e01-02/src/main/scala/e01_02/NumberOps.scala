@@ -23,6 +23,7 @@ object NumberOps {
       }
       case _ => false
     }
+    final def exists(p: A => Boolean): Boolean = number.execute(Ops1.existsContext)(p, ())
   }
 
 }
