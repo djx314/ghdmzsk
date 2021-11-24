@@ -16,7 +16,13 @@ object NumberOps {
     def corresponds[B](that: Number[B])(p: (A, B) => Boolean): Boolean = number.execute(Ops1.ops_corresponds1[A, B])(p, that)
     def headOption: Option[A]                                          = number.execute(Ops1.ops_headOption)((), ())
     def head: A                                                        = number.execute(Ops1.ops_head)((), ())
-    // def equals[B](b: Number[B]): Boolean                               = number.execute(Ops1.ops_head)((), ())
+    def ops_equals(b: Any): Boolean = b match {
+      case n: Number[_] => {
+        def compare[T1, T2](number1: Number[T1], number2: Number[T2]): Boolean = number1.execute(Ops1.ops_equals1[T1, T2])((), number2)
+        compare(n, number)
+      }
+      case _ => false
+    }
   }
 
 }
