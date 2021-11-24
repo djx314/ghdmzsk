@@ -124,13 +124,27 @@ object Ops1 {
     override def bindT(number: () => Number[A], parameter: Unit): A           = throw new NoSuchElementException("head of empty list")
   }
 
-  // class EqualsContext[B] extends TypeContext {
+  // class EqualsContext1[B] extends TypeContext {
   //   override type toDataType = Number[B]
   //   override type Parameter  = Unit
   //   override type Result     = Boolean
   // }
 
-  // def ops_equals[A,B]: Context[EqualsContext[B], A] = new Context[EqualsContext[B], A] {
+  // def ops_equals1[A, B]: Context[EqualsContext1[B], A] = new Context[EqualsContext1[B], A] {
+  //   override type DataCtx = () => Number[A]
+  //   override def convertS(t: Unit, current: () => Number[A]): () => Number[A] = current
+  //   override def convertT(t: Unit, current: () => Number[A]): () => Number[A] = current
+  //   override def bindS(number: () => Number[A], parameter: Unit, head: A): A  = head
+  //   override def bindT(number: () => Number[A], parameter: Unit): A           = throw new NoSuchElementException("head of empty list")
+  // }
+
+  // class EqualsContext2[A, B] extends TypeContext {
+  //   override type toDataType = Number[B]
+  //   override type Parameter  = Unit
+  //   override type Result     = Boolean
+  // }
+
+  // def ops_equals2[A, B]: Context[EqualsContext2[A, B], A] = new Context[EqualsContext2[A, B], A] {
   //   override type DataCtx = () => Number[A]
   //   override def convertS(t: Unit, current: () => Number[A]): () => Number[A] = current
   //   override def convertT(t: Unit, current: () => Number[A]): () => Number[A] = current
