@@ -2,6 +2,8 @@ package i01
 
 object Runner {
 
+  // Number1 类似于树的节点，Number2 类似于树的叶子
+
   def count1(number: Number1): Int = number match {
     case Number1S(tail, head) => count1(tail) + count2(head)
     case Number1T             => 0
