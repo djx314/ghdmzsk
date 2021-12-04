@@ -17,5 +17,5 @@ case class Number2S(tail: Number2, head: Number1) extends Number2 {
   def method2(number1: Number1): Number1 = Number1S(head, number1.method1(tail))
 }
 case object Number2T extends Number2 {
-  def method2(number1: Number1): Number1 = number1
+  def method2(number1: Number1): Number1 = Number1S(Number1S(number1, Number2T), Number2T)
 }

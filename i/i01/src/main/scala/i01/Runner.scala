@@ -39,19 +39,19 @@ object Runner {
       Number2S(Number2S(Number2S(Number2T, Number1S(Number1T, Number2S(Number2T, Number1S(Number1T, Number2T)))), Number1T), Number1T)
     )
     val number2 = Number2S(Number2T, Number1S(Number1T, Number2S(Number2S(Number2S(Number2T, Number1T), Number1T), Number1T)))
-    val number3 = number2.method2(number1)
-    val number4 = number1.method1(number2)
+    val number3 = number1.method1(number2)
+    val number4 = number2.method2(number1)
 
     val input1  = count1(number1)
     val input2  = count2(number2)
-    val result1 = count1(number3)
-    val result2 = count2(number4)
+    val result1 = count2(number3)
+    val result2 = count1(number4)
 
     println(count1(number1)) // -3
     println(count2(number2)) // 3
-    println(count1(number3)) // 0
-    println(count2(number4)) // 2
-    assert(input1 + input2 == result1 || input1 + input2 == result2)
+    println(count2(number3)) // 0
+    println(count1(number4)) // -2
+    assert(input1 + input2 == result1)
 
     for {
       i <- 1 to 15
@@ -67,54 +67,54 @@ object Runner {
       val n3 = count2(num3)
       val n4 = count1(num4)
 
-      assert(n1 + n2 == n3 || n1 + n2 == n4)
-      println(s"($n1) + ($n2) = ($n3, ${n3 == n1 + n2}), ($n4, ${n4 == n1 + n2})")
+      assert(n1 + n2 == n3)
+      println(s"$n1 + $n2 = $n3 ${n3 == n1 + n2}")
 
-// (4) + (3) = (7, true), (5, false)
-// (-7) + (2) = (-3, false), (-5, true)
-// (-4) + (-24) = (-28, true), (-30, false)
-// (0) + (37) = (37, true), (35, false)
-// (12) + (7) = (19, true), (17, false)
-// (-5) + (2) = (-1, false), (-3, true)
-// (3) + (-1) = (2, true), (0, false)
-// (0) + (-1) = (-1, true), (-3, false)
-// (34) + (-37) = (-3, true), (-5, false)
-// (0) + (12) = (12, true), (10, false)
-// (41) + (-4) = (37, true), (35, false)
-// (0) + (-19) = (-19, true), (-21, false)
-// (-1) + (1) = (2, false), (0, true)
-// (3) + (19) = (22, true), (20, false)
-// (0) + (39) = (39, true), (37, false)
-// (12) + (100) = (112, true), (110, false)
-// (100) + (-76) = (24, true), (22, false)
-// (63) + (24) = (87, true), (85, false)
-// (38) + (101) = (139, true), (137, false)
-// (0) + (-81) = (-81, true), (-83, false)
-// (-51) + (60) = (9, true), (7, false)
-// (0) + (-80) = (-80, true), (-82, false)
-// (60) + (26) = (88, false), (86, true)
-// (-113) + (-33) = (-146, true), (-148, false)
-// (0) + (-54) = (-54, true), (-56, false)
-// (0) + (0) = (0, true), (0, true)
-// (-28) + (0) = (-28, true), (-28, true)
-// (303) + (-353) = (-48, false), (-50, true)
-// (-98) + (14) = (-84, true), (-86, false)
-// (195) + (1) = (196, true), (194, false)
-// (-274) + (-341) = (-613, false), (-615, true)
-// (-180) + (923) = (745, false), (743, true)
-// (74) + (-718) = (-642, false), (-644, true)
-// (-219) + (-479) = (-696, false), (-698, true)
-// (258) + (-90) = (170, false), (168, true)
-// (212) + (0) = (212, true), (212, true)
-// (-553) + (0) = (-551, false), (-553, true)
-// (0) + (1406) = (1406, true), (1404, false)
-// (452) + (290) = (742, true), (740, false)
-// (761) + (663) = (1426, false), (1424, true)
-// (-243) + (-1030) = (-1271, false), (-1273, true)
-// (-659) + (-935) = (-1594, true), (-1596, false)
-// (541) + (0) = (541, true), (541, true)
-// (539) + (1065) = (1606, false), (1604, true)
-// (867) + (2150) = (3019, false), (3017, true)
+// 0 + 17 = 17 true
+// 1 + 2 = 3 true
+// -1 + 18 = 17 true
+// 0 + 10 = 10 true
+// -5 + 33 = 28 true
+// 0 + -28 = -28 true
+// 0 + -5 = -5 true
+// 0 + 1 = 1 true
+// 7 + 20 = 27 true
+// 24 + 73 = 97 true
+// -8 + 25 = 17 true
+// 20 + 0 = 20 true
+// 0 + 14 = 14 true
+// 0 + -34 = -34 true
+// 62 + 109 = 171 true
+// 0 + 0 = 0 true
+// 19 + 24 = 43 true
+// 92 + 41 = 133 true
+// -9 + 0 = -9 true
+// 64 + 1 = 65 true
+// 17 + 104 = 121 true
+// -50 + -174 = -224 true
+// -160 + 86 = -74 true
+// -110 + -96 = -206 true
+// -58 + 51 = -7 true
+// -9 + -149 = -158 true
+// 38 + 6 = 44 true
+// -102 + 0 = -102 true
+// -224 + -159 = -383 true
+// 50 + -315 = -265 true
+// 0 + 254 = 254 true
+// 0 + -667 = -667 true
+// 0 + 0 = 0 true
+// 0 + 0 = 0 true
+// 969 + 0 = 969 true
+// 265 + -838 = -573 true
+// 1734 + 1037 = 2771 true
+// -506 + 820 = 314 true
+// -218 + 700 = 482 true
+// 405 + 0 = 405 true
+// -1055 + -822 = -1877 true
+// 12 + 16 = 28 true
+// 1157 + 354 = 1511 true
+// -277 + -1791 = -2068 true
+// 1048 + -319 = 729 true
     }
   }
 
