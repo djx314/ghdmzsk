@@ -3,12 +3,12 @@ package i01
 object Runner {
 
   def count1(number: Number1): Int = number match {
-    case Number1S(tail, head) => count1(tail) + count2(head) - 1
-    case Number1T             => 0
+    case Number1S(tail, head, _) => count1(tail) + count2(head) + 1
+    case Number1T                => 0
   }
 
   def count2(number: Number2): Int = number match {
-    case Number2S(tail, head) => count2(tail) + count1(head) + 1
+    case Number2S(tail, head) => count2(tail) + count1(head) - 1
     case Number2T             => 0
   }
 
@@ -19,7 +19,7 @@ object Runner {
     if (deep > randomDeep())
       Number1T
     else {
-      def genList1(length: Int): Number1 = if (length > 0) Number1S(genList1(length - 1), genNumber2(deep + 1)) else Number1T
+      def genList1(length: Int): Number1 = if (length > 0) Number1S(genList1(length - 1), genNumber2(deep + 1), data) else Number1T
       genList1(randomLength())
     }
   }
@@ -33,24 +33,30 @@ object Runner {
     }
   }
 
+  val data = Item(2)
+
   def main(arr: Array[String]): Unit = {
     val number1 = Number1S(
-      Number1S(Number1S(Number1S(Number1S(Number1T, Number2T), Number2T), Number2T), Number2T),
-      Number2S(Number2S(Number2S(Number2T, Number1S(Number1T, Number2S(Number2T, Number1S(Number1T, Number2T)))), Number1T), Number1T)
+      Number1S(Number1S(Number1S(Number1S(Number1T, Number2T, data), Number2T, data), Number2T, data), Number2T, data),
+      Number2S(
+        Number2S(Number2S(Number2T, Number1S(Number1T, Number2S(Number2T, Number1S(Number1T, Number2T, data)), data)), Number1T),
+        Number1T
+      ),
+      data
     )
-    val number2 = Number2S(Number2T, Number1S(Number1T, Number2S(Number2S(Number2S(Number2T, Number1T), Number1T), Number1T)))
+    val number2 = Number2S(Number2T, Number1S(Number1T, Number2S(Number2S(Number2S(Number2T, Number1T), Number1T), Number1T), data))
     val number3 = number1.method1(number2)
-    val number4 = number2.method2(number1)
+    val number4 = number2.method2(number1, data)
 
     val input1  = count1(number1)
     val input2  = count2(number2)
     val result1 = count2(number3)
     val result2 = count1(number4)
 
-    println(count1(number1)) // -3
-    println(count2(number2)) // 3
-    println(count2(number3)) // 0
-    println(count1(number4)) // -2
+    println(input1)  // 3
+    println(input2)  // -3
+    println(result1) // 0
+    println(result2) // -2
     assert(input1 + input2 == result1)
 
     for {
@@ -68,51 +74,51 @@ object Runner {
       assert(n1 + n2 == n3)
       println(s"$n1 + $n2 = $n3 ${n3 == n1 + n2}")
 
-// 0 + 17 = 17 true
-// 1 + 2 = 3 true
-// -1 + 18 = 17 true
-// 0 + 10 = 10 true
-// -5 + 33 = 28 true
-// 0 + -28 = -28 true
-// 0 + -5 = -5 true
-// 0 + 1 = 1 true
-// 7 + 20 = 27 true
-// 24 + 73 = 97 true
-// -8 + 25 = 17 true
-// 20 + 0 = 20 true
-// 0 + 14 = 14 true
-// 0 + -34 = -34 true
-// 62 + 109 = 171 true
+// 11 + 5 = 16 true
+// 5 + 0 = 5 true
+// 15 + 1 = 16 true
+// 5 + 0 = 5 true
+// -7 + 23 = 16 true
+// -13 + 0 = -13 true
+// -10 + -4 = -14 true
+// -11 + 26 = 15 true
+// -1 + -1 = -2 true
+// 0 + 23 = 23 true
+// -25 + -7 = -32 true
+// -10 + 0 = -10 true
+// 1 + -47 = -46 true
+// -48 + 14 = -34 true
+// 31 + 62 = 93 true
+// -70 + 0 = -70 true
+// 120 + -101 = 19 true
+// -9 + -2 = -11 true
+// 34 + -173 = -139 true
+// -1 + 80 = 79 true
+// 26 + -13 = 13 true
+// 108 + 28 = 136 true
+// -211 + -35 = -246 true
+// 21 + -5 = 16 true
+// 92 + -61 = 31 true
+// 17 + -364 = -347 true
+// 0 + -130 = -130 true
+// 318 + 377 = 695 true
 // 0 + 0 = 0 true
-// 19 + 24 = 43 true
-// 92 + 41 = 133 true
-// -9 + 0 = -9 true
-// 64 + 1 = 65 true
-// 17 + 104 = 121 true
-// -50 + -174 = -224 true
-// -160 + 86 = -74 true
-// -110 + -96 = -206 true
-// -58 + 51 = -7 true
-// -9 + -149 = -158 true
-// 38 + 6 = 44 true
-// -102 + 0 = -102 true
-// -224 + -159 = -383 true
-// 50 + -315 = -265 true
-// 0 + 254 = 254 true
-// 0 + -667 = -667 true
+// -47 + 406 = 359 true
+// 131 + -61 = 70 true
+// -51 + -339 = -390 true
+// 145 + 0 = 145 true
+// -76 + 405 = 329 true
 // 0 + 0 = 0 true
+// 686 + 75 = 761 true
+// -254 + 0 = -254 true
+// 0 + -73 = -73 true
+// 369 + -92 = 277 true
+// 494 + -182 = 312 true
+// 580 + 918 = 1498 true
+// -610 + -1 = -611 true
+// -342 + 5 = -337 true
 // 0 + 0 = 0 true
-// 969 + 0 = 969 true
-// 265 + -838 = -573 true
-// 1734 + 1037 = 2771 true
-// -506 + 820 = 314 true
-// -218 + 700 = 482 true
-// 405 + 0 = 405 true
-// -1055 + -822 = -1877 true
-// 12 + 16 = 28 true
-// 1157 + 354 = 1511 true
-// -277 + -1791 = -2068 true
-// 1048 + -319 = 729 true
+// 1 + 0 = 1 true
     }
   }
 
