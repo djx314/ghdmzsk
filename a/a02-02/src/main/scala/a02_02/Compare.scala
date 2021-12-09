@@ -1,4 +1,4 @@
-package a01_03
+package a02_02
 
 object Base {
 
@@ -10,6 +10,13 @@ object Base {
   def number1ToList[T](number1: Number1[T]): List[T] = number1 match {
     case Number1S(tail, head) => head :: number1ToList(tail)
     case Number1T             => Nil
+  }
+
+  lazy val number2: Number2 = Number2S(() => number2)
+
+  def dropRight[T](number1: Number1[T]): Number1[T] = number1 match {
+    case Number1S(tail, head) => tail.method1(number2, head)
+    case Number1T             => Number1T
   }
 
 }
