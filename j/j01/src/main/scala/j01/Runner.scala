@@ -26,7 +26,7 @@ object Runner {
     lazy val numbert: NumberA = new NumberAT(new NumberTContext(() => numbert))
     class NumberTContext(val nextFunc: () => NumberA) extends ContextT[NumberB, MinusResult] {
       override type NextNumber = NumberA
-      override lazy val next: NumberA                              = nextFunc()
+      override def next: NumberA                                   = nextFunc()
       override def executeMethod1(nextOther: NumberB): MinusResult = MinusZero
     }
 
