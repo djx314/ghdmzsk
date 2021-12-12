@@ -20,15 +20,15 @@ object Runner {
     def numberv(n: Int, nextNum: NumberA): NumberA = new NumberAS(n, contextv(nextNum))
     def contextv(nextNum: NumberA): ContextS[Int, NumberB, MinusResult] = new ContextS[Int, NumberB, MinusResult] {
       override type NextNumber = NumberA
-      override val next: NumberA                                                         = nextNum
-      override def executeMethod1(next: NumberA, head: Int, other: NumberB): MinusResult = other.method1((next, head))
+      override val next: NumberA                                          = nextNum
+      override def executeMethod1(head: Int, other: NumberB): MinusResult = other.method1((next, head))
     }
 
     lazy val numbert: NumberA = new NumberAT(contextt)
     lazy val contextt: ContextT[NumberB, MinusResult] = new ContextT[NumberB, MinusResult] {
       override type NextNumber = NumberA
-      override def next: NumberA                                                  = numbert
-      override def executeMethod1(next: NumberA, nextOther: NumberB): MinusResult = MinusZero
+      override def next: NumberA                                   = numbert
+      override def executeMethod1(nextOther: NumberB): MinusResult = MinusZero
     }
 
     // ================================================================
@@ -36,15 +36,15 @@ object Runner {
     def numberv2(nextNum: NumberB): NumberB = new NumberBT(contextv2(nextNum))
     def contextv2(nextNum: NumberB): ContextT[(NumberA, Int), MinusResult] = new ContextT[(NumberA, Int), MinusResult] {
       override type NextNumber = NumberB
-      override val next: NumberB                                                         = nextNum
-      override def executeMethod1(next: NumberB, nextOther: (NumberA, Int)): MinusResult = nextOther._1.method1(next)
+      override val next: NumberB                                          = nextNum
+      override def executeMethod1(nextOther: (NumberA, Int)): MinusResult = nextOther._1.method1(next)
     }
 
     lazy val numberu: NumberB = new NumberBT(contextu)
     lazy val contextu: ContextT[(NumberA, Int), MinusResult] = new ContextT[(NumberA, Int), MinusResult] {
       override type NextNumber = NumberB
       override def next: NumberB = numberu
-      override def executeMethod1(next: NumberB, nextOther: (NumberA, Int)): MinusResult =
+      override def executeMethod1(nextOther: (NumberA, Int)): MinusResult =
         MinusPositive(nextOther._1.method1(next), Item(nextOther._2))
     }
 
