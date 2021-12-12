@@ -10,6 +10,7 @@ val fRoot    = rootFile / "f"
 val gRoot    = rootFile / "g"
 val hRoot    = rootFile / "h"
 val iRoot    = rootFile / "i"
+val jRoot    = rootFile / "j"
 
 val a01    = project in aRoot / "a01"
 val a01_01 = project in aRoot / "a01-01"
@@ -56,3 +57,4 @@ val h01 = project in hRoot / "h01"
 
 val i01 = project in iRoot / "i01"
 
+val j01 = project in jRoot / "j01"
