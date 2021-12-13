@@ -36,7 +36,7 @@ object Runner {
 
       val leftNum1 = numberFromCollection(col1)
       val leftNum2 = dropFromInt(i3)
-      val leftCol  = leftNum1.execute(new Context1[Int])((), leftNum2)
+      val leftCol  = leftNum1.execute(new Context1[Int])(leftNum2)
       val left     = number1ToList(leftCol)
 
       assert(left == right)

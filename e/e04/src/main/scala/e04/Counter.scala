@@ -17,84 +17,67 @@ class HListAllTypeContext extends TypeContext {
 
 class HList1TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]
-  override type Parameter  = Unit
 }
 class HList1Context extends Context[HList1TypeContext, Item1] {
   override def bindS(
     t: HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item1],
-    parameter: Unit,
     head: Item1
-  ): Collect[Item4] = t.head.execute(new HList2Context)(parameter, HPositive(current, t.tail))
+  ): Collect[Item4] = t.head.execute(new HList2Context)(HPositive(current, t.tail))
   override def bindT(
     t: HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
-    current: Number[Item1],
-    parameter: Unit
+    current: Number[Item1]
   ): Collect[Item4] = CollectT()
 }
 
 class HList2TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]
-  override type Parameter  = Unit
 }
 class HList2Context extends Context[HList2TypeContext, Item2] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item2],
-    parameter: Unit,
     head: Item2
-  ): Collect[Item4] =
-    t.tail.head.execute(new HList3Context)(parameter, HPositive(t.head, HPositive(current, t.tail.tail)))
+  ): Collect[Item4] = t.tail.head.execute(new HList3Context)(HPositive(t.head, HPositive(current, t.tail.tail)))
   override def bindT(
     t: HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
-    current: Number[Item2],
-    parameter: Unit
-  ): Collect[Item4] = t.head.execute(new HList1Context)(
-    parameter,
-    HPositive(current, HPositive(t.tail.head, HPositive(t.tail.tail.head, t.tail.tail.tail)))
-  )
+    current: Number[Item2]
+  ): Collect[Item4] =
+    t.head.execute(new HList1Context)(HPositive(current, HPositive(t.tail.head, HPositive(t.tail.tail.head, t.tail.tail.tail))))
 }
 
 class HList3TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]]
-  override type Parameter  = Unit
 }
 class HList3Context extends Context[HList3TypeContext, Item3] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]],
     current: Number[Item3],
-    parameter: Unit,
     head: Item3
   ): Collect[Item4] =
-    t.tail.tail.head.execute(new HList4Context)(parameter, HPositive(t.head, HPositive(t.tail.head, HPositive(current, t.tail.tail.tail))))
+    t.tail.tail.head.execute(new HList4Context)(HPositive(t.head, HPositive(t.tail.head, HPositive(current, t.tail.tail.tail))))
   override def bindT(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]],
-    current: Number[Item3],
-    parameter: Unit
+    current: Number[Item3]
   ): Collect[Item4] =
-    t.tail.head.execute(new HList2Context)(parameter, HPositive(t.head, HPositive(current, HPositive(t.tail.tail.head, t.tail.tail.tail))))
+    t.tail.head.execute(new HList2Context)(HPositive(t.head, HPositive(current, HPositive(t.tail.tail.head, t.tail.tail.tail))))
 }
 
 class HList4TypeContext extends HListAllTypeContext {
   override type toDataType = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]]
-  override type Parameter  = Unit
 }
 class HList4Context extends Context[HList4TypeContext, Item4] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]],
     current: Number[Item4],
-    parameter: Unit,
     head: Item4
   ): Collect[Item4] = CollectS(
-    current.execute(new HList4Context)(parameter, HPositive(t.head, HPositive(t.tail.head, HPositive(t.tail.tail.head, t.tail.tail.tail)))),
+    current.execute(new HList4Context)(HPositive(t.head, HPositive(t.tail.head, HPositive(t.tail.tail.head, t.tail.tail.tail)))),
     head
   )
   override def bindT(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]],
-    current: Number[Item4],
-    parameter: Unit
-  ): Collect[Item4] = t.tail.tail.head.execute(new HList3Context)(
-    parameter,
-    HPositive(t.head, HPositive(t.tail.head, HPositive(current, t.tail.tail.tail)))
-  )
+    current: Number[Item4]
+  ): Collect[Item4] =
+    t.tail.tail.head.execute(new HList3Context)(HPositive(t.head, HPositive(t.tail.head, HPositive(current, t.tail.tail.tail))))
 }

@@ -30,7 +30,7 @@ object Runner {
       lazy val col41: Number[Item4] = numberFromInt(di, new Item4, col42)
       lazy val col42: Number[Item4] = NumberT(() => col41)
 
-      col11.execute(new HList1Context)((), HPositive(col21, HPositive(col31, HPositive(col41, HNil()))))
+      col11.execute(new HList1Context)(HPositive(col21, HPositive(col31, HPositive(col41, HNil()))))
     }
     {
       val di   = 1
