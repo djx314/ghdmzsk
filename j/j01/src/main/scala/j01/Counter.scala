@@ -11,12 +11,8 @@ case class NumberT[Other, Result](context: ContextT[Other, Result]) extends Numb
 }
 
 trait ContextS[Current, Other, Result] {
-  type NextNumber
-  def next: NextNumber
   def executeMethod1(current: Current, other: Other): Result
 }
 trait ContextT[Other, Result] {
-  type NextNumber
-  def next: NextNumber
   def executeMethod1(nextOther: Other): Result
 }
