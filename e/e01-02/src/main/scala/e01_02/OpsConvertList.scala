@@ -9,11 +9,8 @@ object OpsConvertList {
   }
 
   private def toListContext[A]: Context[ToListContext[A], A] = new Context[ToListContext[A], A] {
-    override type DataCtx = () => Number[A]
-    override def convertS(t: Unit, current: () => Number[A]): () => Number[A]      = current
-    override def convertT(t: Unit, current: () => Number[A]): () => Number[A]      = current
-    override def bindS(number: () => Number[A], parameter: Unit, head: A): List[A] = head :: number().execute(this)((), ())
-    override def bindT(number: () => Number[A], parameter: Unit): List[A]          = List.empty
+    override def bindS(t: Unit, current: () => Number[A], parameter: Unit, head: A): List[A] = head :: current().execute(this)((), ())
+    override def bindT(t: Unit, current: () => Number[A], parameter: Unit): List[A]          = List.empty
   }
 
   def toList[A](number: Number[A]): List[A] = number.execute(toListContext)((), ())
