@@ -11,14 +11,8 @@ trait HList
 case class HPositive[H, T <: HList](head: H, tail: T) extends HList
 case class HNil()                                     extends HList
 
-class HListAllTypeContext extends TypeContext {
-  override type Result = Item4
-}
-
-class HList1TypeContext extends HListAllTypeContext {
-  override type toDataType = HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]
-}
-class HList1Context extends Context[HList1TypeContext, Item1] {
+class HList1Context
+    extends Context[HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]], Collect[Item4], Item1] {
   override def bindS(
     t: HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item1],
@@ -30,10 +24,8 @@ class HList1Context extends Context[HList1TypeContext, Item1] {
   ): Collect[Item4] = CollectT()
 }
 
-class HList2TypeContext extends HListAllTypeContext {
-  override type toDataType = HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]]
-}
-class HList2Context extends Context[HList2TypeContext, Item2] {
+class HList2Context
+    extends Context[HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]], Collect[Item4], Item2] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item2],
@@ -46,10 +38,8 @@ class HList2Context extends Context[HList2TypeContext, Item2] {
     t.head.execute(new HList1Context)(HPositive(current, HPositive(t.tail.head, HPositive(t.tail.tail.head, t.tail.tail.tail))))
 }
 
-class HList3TypeContext extends HListAllTypeContext {
-  override type toDataType = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]]
-}
-class HList3Context extends Context[HList3TypeContext, Item3] {
+class HList3Context
+    extends Context[HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]], Collect[Item4], Item3] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]],
     current: Number[Item3],
@@ -63,10 +53,8 @@ class HList3Context extends Context[HList3TypeContext, Item3] {
     t.tail.head.execute(new HList2Context)(HPositive(t.head, HPositive(current, HPositive(t.tail.tail.head, t.tail.tail.tail))))
 }
 
-class HList4TypeContext extends HListAllTypeContext {
-  override type toDataType = HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]]
-}
-class HList4Context extends Context[HList4TypeContext, Item4] {
+class HList4Context
+    extends Context[HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]], Collect[Item4], Item4] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]],
     current: Number[Item4],

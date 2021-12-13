@@ -2,11 +2,7 @@ package e03
 
 import e01._
 
-class DropTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[Unit], Number[S => Boolean], Number[S => R])
-  override type Result     = R
-}
-class DropContext[S, R] extends Context[DropTypeContext[S, R], S] {
+class DropContext[S, R] extends Context[(Number[Unit], Number[S => Boolean], Number[S => R]), Collect[R], S] {
   override def bindS(
     t: (Number[Unit], Number[S => Boolean], Number[S => R]),
     current: Number[S],
@@ -15,11 +11,7 @@ class DropContext[S, R] extends Context[DropTypeContext[S, R], S] {
   override def bindT(t: (Number[Unit], Number[S => Boolean], Number[S => R]), current: Number[S]): Collect[R] = CollectT()
 }
 
-class ReverseDropTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[S], Number[S => Boolean], Number[S => R], S)
-  override type Result     = R
-}
-class ReverseDropContext[S, R] extends Context[ReverseDropTypeContext[S, R], Unit] {
+class ReverseDropContext[S, R] extends Context[(Number[S], Number[S => Boolean], Number[S => R], S), Collect[R], Unit] {
   override def bindS(
     t: (Number[S], Number[S => Boolean], Number[S => R], S),
     current: Number[Unit],
@@ -31,11 +23,7 @@ class ReverseDropContext[S, R] extends Context[ReverseDropTypeContext[S, R], Uni
   ): Collect[R] = t._2.execute(new FilterContext[S, R])((t._1, current, t._3, t._4))
 }
 
-class FilterTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[S], Number[Unit], Number[S => R], S)
-  override type Result     = R
-}
-class FilterContext[S, R] extends Context[FilterTypeContext[S, R], S => Boolean] {
+class FilterContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => R], S), Collect[R], S => Boolean] {
   override def bindS(
     t: (Number[S], Number[Unit], Number[S => R], S),
     current: Number[S => Boolean],
@@ -48,11 +36,7 @@ class FilterContext[S, R] extends Context[FilterTypeContext[S, R], S => Boolean]
   ): Collect[R] = current.execute(this)((t._1, t._2, t._3, t._4))
 }
 
-class MapTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[S], Number[Unit], Number[S => Boolean], S)
-  override type Result     = R
-}
-class MapContext[S, R] extends Context[MapTypeContext[S, R], S => R] {
+class MapContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => Boolean], S), Collect[R], S => R] {
   override def bindS(
     t: (Number[S], Number[Unit], Number[S => Boolean], S),
     current: Number[S => R],

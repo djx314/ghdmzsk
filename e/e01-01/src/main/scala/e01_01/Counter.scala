@@ -10,25 +10,24 @@ trait CollectFlatMap[F[_], A] {
 }
 
 trait Number[F[+_], +A] {
-  def execute[T <: TypeContext](contexts: Context[T, F, A])(s: T#Parameter, t: T#toDataType): T#Result
+  def execute[T <: TypeContext](contexts: Context[T, F, A])(t: T#toDataType): T#Result
 }
 case class NumberS[F[+_], +A, E](tail: E => Number[F, A], flatMap: CollectFlatMap[F, E]) extends Number[F, A] {
-  override def execute[T <: TypeContext](context: Context[T, F, A])(parameter: T#Parameter, t: T#toDataType): T#Result =
-    context.bindS(t, tail, parameter, flatMap)
+  override def execute[T <: TypeContext](context: Context[T, F, A])(t: T#toDataType): T#Result =
+    context.bindS(t, tail, flatMap)
 }
 case class NumberT[F[+_], +A](tail: () => Number[F, A], head: A) extends Number[F, A] {
-  override def execute[T <: TypeContext](context: Context[T, F, A])(parameter: T#Parameter, t: T#toDataType): T#Result =
-    context.bindT(t, tail, parameter, head)
+  override def execute[T <: TypeContext](context: Context[T, F, A])(t: T#toDataType): T#Result =
+    context.bindT(t, tail, head)
 }
 
 trait Context[T <: TypeContext, F[+_], -A] {
-  def bindS[X](t: T#toDataType, current: X => Number[F, A], parameter: T#Parameter, flatMap: CollectFlatMap[F, X]): T#Result
-  def bindT(t: T#toDataType, current: () => Number[F, A], parameter: T#Parameter, head: A): T#Result
+  def bindS[X](t: T#toDataType, current: X => Number[F, A], flatMap: CollectFlatMap[F, X]): T#Result
+  def bindT(t: T#toDataType, current: () => Number[F, A], head: A): T#Result
 }
 
 trait TypeContext {
   type toDataType
-  type Parameter
   type Result
 }
 
@@ -77,33 +76,31 @@ class CollectContext[F[+_]] {
     )
   }
 
-  def runF[Data](number: Number[F, Data])(implicit f: FlatMap[F], a: Applicative[F]): F[Data] = number.execute(Runner.runner)((), ())
+  def runF[Data](number: Number[F, Data])(implicit f: FlatMap[F], a: Applicative[F]): F[Data] = number.execute(Runner.runner)(())
   def plusF[Data](number: Number[F, Data])(implicit i: FlatMap[F]): NumberFlatMap[Data] = new NumberFlatMap[Data] {
-    override def flatMap[T](u: Data => Number[F, T]): Number[F, T] = number.execute(Plus.plus[T, Data])((), u)
+    override def flatMap[T](u: Data => Number[F, T]): Number[F, T] = number.execute(Plus.plus[T, Data])(u)
   }
   def plusM[Data](number: Number[F, Data])(implicit i: Functor[F]): NumberMap[Data] = new NumberMap[Data] {
-    override def map[T](u: Data => T): Number[F, T] = number.execute(Plus.plusMap[T, Data])((), u)
+    override def map[T](u: Data => T): Number[F, T] = number.execute(Plus.plusMap[T, Data])(u)
   }
 
   private object Runner {
     class TypeContextData[Data] extends TypeContext {
       override type toDataType = Unit
-      override type Parameter  = Unit
       override type Result     = F[Data]
     }
 
     def runner[Data](implicit f: FlatMap[F], a: Applicative[F]): Context[TypeContextData[Data], F, Data] =
       new Context[TypeContextData[Data], F, Data] {
-        override def bindS[X](t: Unit, current: X => Number[F, Data], parameter: Unit, flatMap: CollectFlatMap[F, X]): F[Data] =
-          flatMap.f(n => current(n).execute(this)((), ()))
-        override def bindT(t: Unit, current: () => Number[F, Data], parameter: Unit, head: Data): F[Data] = Applicative[F].pure(head)
+        override def bindS[X](t: Unit, current: X => Number[F, Data], flatMap: CollectFlatMap[F, X]): F[Data] =
+          flatMap.f(n => current(n).execute(this)(()))
+        override def bindT(t: Unit, current: () => Number[F, Data], head: Data): F[Data] = Applicative[F].pure(head)
       }
   }
 
   private object Plus {
     class PlusTypeContextData[Data, B] extends TypeContext {
       override type toDataType = B => Number[F, Data]
-      override type Parameter  = Unit
       override type Result     = Number[F, Data]
     }
 
@@ -112,18 +109,16 @@ class CollectContext[F[+_]] {
         override def bindS[X](
           t: B => Number[F, Data],
           current: X => Number[F, B],
-          parameter: Unit,
           flatMap: CollectFlatMap[F, X]
         ): Number[F, Data] = {
-          val io = (x: X) => current(x).execute(this)((), t)
+          val io = (x: X) => current(x).execute(this)(t)
           NumberS(io, flatMap)
         }
-        override def bindT(t: B => Number[F, Data], current: () => Number[F, B], parameter: Unit, head: B): Number[F, Data] = t(head)
+        override def bindT(t: B => Number[F, Data], current: () => Number[F, B], head: B): Number[F, Data] = t(head)
       }
 
     class PlusMapTypeContextData[Data, B] extends TypeContext {
       override type toDataType = B => Data
-      override type Parameter  = Unit
       override type Result     = Number[F, Data]
     }
 
@@ -132,13 +127,12 @@ class CollectContext[F[+_]] {
         override def bindS[X](
           t: B => Data,
           current: X => Number[F, B],
-          parameter: Unit,
           flatMap: CollectFlatMap[F, X]
         ): Number[F, Data] = {
-          val io = (x: X) => current(x).execute(this)((), t)
+          val io = (x: X) => current(x).execute(this)(t)
           NumberS(io, flatMap)
         }
-        override def bindT(t: B => Data, current: () => Number[F, B], parameter: Unit, head: B): Number[F, Data] = numberT(t(head))
+        override def bindT(t: B => Data, current: () => Number[F, B], head: B): Number[F, Data] = numberT(t(head))
       }
   }
 
