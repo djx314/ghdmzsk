@@ -1,18 +1,21 @@
 package j01
 
-trait Number[Other, Result] {
-  def method1(o: Other): Result
-}
-case class NumberS[Current, Other, Result](head: Current, context: ContextS[Current, Other, Result]) extends Number[Other, Result] {
-  override def method1(o: Other): Result = context.executeMethod1(head, o)
-}
-case class NumberT[Other, Result](context: ContextT[Other, Result]) extends Number[Other, Result] {
-  override def method1(o: Other): Result = context.executeMethod1(o)
+trait Number[ToDataType, Result] {
+  def method1(o: ToDataType): Result
 }
 
-trait ContextS[Current, Other, Result] {
-  def executeMethod1(current: Current, other: Other): Result
+case class NumberS[ToDataType, A, Result](head: A, context: ContextS[ToDataType, A, Result]) extends Number[ToDataType, Result] {
+  override def method1(o: ToDataType): Result = context.executeMethod1(head, o)
 }
-trait ContextT[Other, Result] {
-  def executeMethod1(nextOther: Other): Result
+trait ContextS[ToDataType, A, Result] {
+  val tail: () => Number[ToDataType, Result]
+  def executeMethod1(head: A, other: ToDataType): Result
+}
+
+case class NumberT[ToDataType, Result](context: ContextT[ToDataType, Result]) extends Number[ToDataType, Result] {
+  override def method1(o: ToDataType): Result = context.executeMethod1(o)
+}
+trait ContextT[ToDataType, Result] {
+  val tail: () => Number[ToDataType, Result]
+  def executeMethod1(other: ToDataType): Result
 }

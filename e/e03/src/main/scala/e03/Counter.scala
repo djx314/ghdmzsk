@@ -6,7 +6,7 @@ trait Collect[T]
 case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]
 case class CollectT[T]()                          extends Collect[T]
 
-class DropContext[S, R] extends Context[(Number[Unit], Number[S => Boolean], Number[S => R]), Collect[R], S] {
+class DropContext[S, R] extends Context[(Number[Unit], Number[S => Boolean], Number[S => R]), S, Collect[R]] {
   override def bindS(
     t: (Number[Unit], Number[S => Boolean], Number[S => R]),
     current: Number[S],
@@ -15,7 +15,7 @@ class DropContext[S, R] extends Context[(Number[Unit], Number[S => Boolean], Num
   override def bindT(t: (Number[Unit], Number[S => Boolean], Number[S => R]), current: Number[S]): Collect[R] = CollectT()
 }
 
-class ReverseDropContext[S, R] extends Context[(Number[S], Number[S => Boolean], Number[S => R], S), Collect[R], Unit] {
+class ReverseDropContext[S, R] extends Context[(Number[S], Number[S => Boolean], Number[S => R], S), Unit, Collect[R]] {
   override def bindS(
     t: (Number[S], Number[S => Boolean], Number[S => R], S),
     current: Number[Unit],
@@ -27,7 +27,7 @@ class ReverseDropContext[S, R] extends Context[(Number[S], Number[S => Boolean],
   ): Collect[R] = t._2.execute(new FilterContext[S, R])((t._1, current, t._3, t._4))
 }
 
-class FilterContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => R], S), Collect[R], S => Boolean] {
+class FilterContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => R], S), S => Boolean, Collect[R]] {
   override def bindS(
     t: (Number[S], Number[Unit], Number[S => R], S),
     current: Number[S => Boolean],
@@ -40,7 +40,7 @@ class FilterContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => 
   ): Collect[R] = current.execute(this)((t._1, t._2, t._3, t._4))
 }
 
-class MapContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => Boolean], S), Collect[R], S => R] {
+class MapContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => Boolean], S), S => R, Collect[R]] {
   override def bindS(
     t: (Number[S], Number[Unit], Number[S => Boolean], S),
     current: Number[S => R],

@@ -8,8 +8,8 @@ object Runner {
   case object MinusZero                                   extends MinusResult
 
   trait NumberA extends Number[NumberB, MinusResult]
-  class NumberAS(head: Int, context: ContextS[Int, NumberB, MinusResult])
-      extends NumberS[Int, NumberB, MinusResult](head, context)
+  class NumberAS(head: Int, context: ContextS[NumberB, Int, MinusResult])
+      extends NumberS[NumberB, Int, MinusResult](head, context)
       with NumberA
   class NumberAT(context: ContextT[NumberB, MinusResult]) extends NumberT[NumberB, MinusResult](context) with NumberA
 
@@ -17,26 +17,26 @@ object Runner {
   class NumberBT(context: ContextT[(NumberA, Int), MinusResult]) extends NumberT[(NumberA, Int), MinusResult](context) with NumberB
 
   def main(arr: Array[String]): Unit = {
-    def numberv(n: Int, nextNum: NumberA): NumberA = new NumberAS(n, new NumberVContext(nextNum))
-    class NumberVContext(val next: NumberA) extends ContextS[Int, NumberB, MinusResult] {
-      override def executeMethod1(head: Int, other: NumberB): MinusResult = other.method1((next, head))
+    def numberv(n: Int, nextNum: NumberA): NumberA = new NumberAS(n, new NumberVContext(() => nextNum))
+    class NumberVContext(override val tail: () => NumberA) extends ContextS[NumberB, Int, MinusResult] {
+      override def executeMethod1(head: Int, other: NumberB): MinusResult = other.method1((tail(), head))
     }
 
-    lazy val numbert: NumberA = new NumberAT(new NumberTContext)
-    class NumberTContext extends ContextT[NumberB, MinusResult] {
+    lazy val numbert: NumberA = new NumberAT(new NumberTContext(() => numbert))
+    class NumberTContext(override val tail: () => NumberA) extends ContextT[NumberB, MinusResult] {
       override def executeMethod1(nextOther: NumberB): MinusResult = MinusZero
     }
 
     // ================================================================
 
-    def numberv2(nextNum: NumberB): NumberB = new NumberBT(new NumberV2Context(nextNum))
-    class NumberV2Context(val next: NumberB) extends ContextT[(NumberA, Int), MinusResult] {
-      override def executeMethod1(nextOther: (NumberA, Int)): MinusResult = nextOther._1.method1(next)
+    def numberv2(nextNum: NumberB): NumberB = new NumberBT(new NumberV2Context(() => nextNum))
+    class NumberV2Context(override val tail: () => NumberB) extends ContextT[(NumberA, Int), MinusResult] {
+      override def executeMethod1(nextOther: (NumberA, Int)): MinusResult = nextOther._1.method1(tail())
     }
 
     lazy val numberu: NumberB = new NumberBT(new NumberUContext(() => numberu))
-    class NumberUContext(val next: () => NumberB) extends ContextT[(NumberA, Int), MinusResult] {
-      override def executeMethod1(nextOther: (NumberA, Int)): MinusResult = MinusPositive(nextOther._1.method1(next()), Item(nextOther._2))
+    class NumberUContext(override val tail: () => NumberB) extends ContextT[(NumberA, Int), MinusResult] {
+      override def executeMethod1(nextOther: (NumberA, Int)): MinusResult = MinusPositive(nextOther._1.method1(tail()), Item(nextOther._2))
     }
 
     def numbervt(n: Int): NumberA = if (n > 0) numberv(n, numbervt(n - 1)) else numbert

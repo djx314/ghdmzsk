@@ -2,7 +2,7 @@ package e01_02
 
 object OpsConvertList {
 
-  private class toListContext[A] extends Context[Unit, List[A], A] {
+  private class toListContext[A] extends Context[Unit, A, List[A]] {
     override def bindS(t: Unit, current: () => Number[A], head: A): List[A] = head :: current().execute(this)(())
     override def bindT(t: Unit, current: () => Number[A]): List[A]          = List.empty
   }

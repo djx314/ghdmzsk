@@ -16,7 +16,7 @@ case class HPositive[H, T <: HList](head: H, tail: T) extends HList
 case class HNil()                                     extends HList
 
 class HList1Context
-    extends Context[HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]], Collect[Item4], Item1] {
+    extends Context[HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]], Item1, Collect[Item4]] {
   override def bindS(
     t: HPositive[Number[Item2], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item1],
@@ -29,7 +29,7 @@ class HList1Context
 }
 
 class HList2Context
-    extends Context[HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]], Collect[Item4], Item2] {
+    extends Context[HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]], Item2, Collect[Item4]] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item3], HPositive[Number[Item4], HNil]]],
     current: Number[Item2],
@@ -43,7 +43,7 @@ class HList2Context
 }
 
 class HList3Context
-    extends Context[HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]], Collect[Item4], Item3] {
+    extends Context[HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]], Item3, Collect[Item4]] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item4], HNil]]],
     current: Number[Item3],
@@ -58,7 +58,7 @@ class HList3Context
 }
 
 class HList4Context
-    extends Context[HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]], Collect[Item4], Item4] {
+    extends Context[HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]], Item4, Collect[Item4]] {
   override def bindS(
     t: HPositive[Number[Item1], HPositive[Number[Item2], HPositive[Number[Item3], HNil]]],
     current: Number[Item4],
