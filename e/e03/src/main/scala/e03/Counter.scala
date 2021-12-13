@@ -2,6 +2,10 @@ package e03
 
 import e01._
 
+trait Collect[T]
+case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]
+case class CollectT[T]()                          extends Collect[T]
+
 class DropContext[S, R] extends Context[(Number[Unit], Number[S => Boolean], Number[S => R]), Collect[R], S] {
   override def bindS(
     t: (Number[Unit], Number[S => Boolean], Number[S => R]),

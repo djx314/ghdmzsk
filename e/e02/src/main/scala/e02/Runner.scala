@@ -5,6 +5,7 @@ import e01._
 import scala.util.Random
 
 object Runner {
+
   private def zeroNumberImpl[T]: Number[T] = NumberT(() => zeroNumberImpl)
 
   def zero[T]: Number[T] = {

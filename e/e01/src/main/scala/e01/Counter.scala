@@ -1,9 +1,5 @@
 package e01
 
-trait Collect[T]
-case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]
-case class CollectT[T]()                          extends Collect[T]
-
 trait Number[A] {
   def execute[ToDataType, Result](contexts: Context[ToDataType, Result, A])(t: ToDataType): Result
 }

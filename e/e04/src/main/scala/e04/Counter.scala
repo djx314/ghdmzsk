@@ -7,6 +7,10 @@ class Item2
 class Item3
 class Item4
 
+trait Collect[T]
+case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]
+case class CollectT[T]()                          extends Collect[T]
+
 trait HList
 case class HPositive[H, T <: HList](head: H, tail: T) extends HList
 case class HNil()                                     extends HList

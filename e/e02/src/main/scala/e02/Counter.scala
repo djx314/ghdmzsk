@@ -2,6 +2,10 @@ package e02
 
 import e01._
 
+trait Collect[T]
+case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]
+case class CollectT[T]()                          extends Collect[T]
+
 class Context1[S] extends Context[Number[Unit], Collect[S], S] {
   override def bindS(t: Number[Unit], current: Number[S], head: S): Collect[S] = t.execute(new Context2[S])((current, head))
   override def bindT(t: Number[Unit], current: Number[S]): Collect[S]          = t.execute(new Context3[S])(current)
