@@ -33,8 +33,6 @@ object Runner {
     }
   }
 
-  val data = Item(2)
-
   def main(arr: Array[String]): Unit = {
     val number1 = Number1S(
       Number1S(Number1S(Number1S(Number1S(Number1T, Number2T), Number2T), Number2T), Number2T),
