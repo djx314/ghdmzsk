@@ -12,7 +12,7 @@ object Number1S_Number1U_Number1V_Top {
       } {
         val number1                       = number1gen(i1)
         lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
-        lazy val number2Zero: Number1 = { Number1S(() => number2Positive) }
+        lazy val number2Zero: Number1     = { Number1S(() => number2Positive) }
         {
           def counter1 = number1.method1(number2Positive)
           val result1  = true
@@ -62,7 +62,7 @@ object Number1S_Number1U_Number1V_Top {
       } {
         val number1                       = number1gen(i1)
         lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
-        lazy val number2Zero: Number1 = { Number1T(() => number2Positive) }
+        lazy val number2Zero: Number1     = { Number1T(() => number2Positive) }
         {
           def counter1 = number1.method1(number2Positive)
           val result1  = true
@@ -112,7 +112,7 @@ object Number1S_Number1U_Number1V_Top {
       } {
         val number1                       = number1gen(i1)
         lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
-        lazy val number2Zero: Number1 = { Number1U(() => number2Positive) }
+        lazy val number2Zero: Number1     = { Number1U(() => number2Positive) }
         {
           def counter1 = number1.method1(number2Positive)
           val result1  = true
@@ -162,7 +162,7 @@ object Number1S_Number1U_Number1V_Top {
       } {
         val number1                       = number1gen(i1)
         lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
-        lazy val number2Zero: Number1 = { Number1V(() => number2Positive) }
+        lazy val number2Zero: Number1     = { Number1V(() => number2Positive) }
         {
           def counter1 = number1.method1(number2Positive)
           val result1  = true
