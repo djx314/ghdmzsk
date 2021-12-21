@@ -54,6 +54,7 @@ object Result {
   def result13(i1: Int, i2: Int): Int         = if (i2 == 0) 0 else i1
   def result14(i1: Int, i2: Int): Int         = if (i2 == 0) i1 + 1 else i1
   def result15(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option(i1 + 1) else Option.empty
+  def result16(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option(i1) else Option.empty
 
   def countResult(i1: Int, i2: Int): List[(Int, Option[Int])] = List((1, Option(1)))
 

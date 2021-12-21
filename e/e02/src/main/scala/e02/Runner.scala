@@ -5,6 +5,7 @@ import e01._
 import scala.util.Random
 
 object Runner {
+
   private def zeroNumberImpl[T]: Number[T] = NumberT(() => zeroNumberImpl)
 
   def zero[T]: Number[T] = {
@@ -36,7 +37,7 @@ object Runner {
 
       val leftNum1 = numberFromCollection(col1)
       val leftNum2 = dropFromInt(i3)
-      val leftCol  = leftNum1.execute(new Context1[Int])((), leftNum2)
+      val leftCol  = leftNum1.execute(new Context1[Int])(leftNum2)
       val left     = number1ToList(leftCol)
 
       assert(left == right)

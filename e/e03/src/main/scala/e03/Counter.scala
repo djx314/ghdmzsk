@@ -2,91 +2,52 @@ package e03
 
 import e01._
 
-class DropTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[Unit], Number[S => Boolean], Number[S => R])
-  override type Parameter  = Unit
-  override type Result     = R
-}
-class DropContext[S, R] extends Context[DropTypeContext[S, R], S] {
-  override type DataCtx = (Number[S], Number[Unit], Number[S => Boolean], Number[S => R])
-  override def convert(
+trait Collect[T]
+case class CollectS[T](tail: Collect[T], head: T) extends Collect[T]
+case class CollectT[T]()                          extends Collect[T]
+
+class DropContext[S, R] extends Context[(Number[Unit], Number[S => Boolean], Number[S => R]), S, Collect[R]] {
+  override def bindS(
     t: (Number[Unit], Number[S => Boolean], Number[S => R]),
-    current: Number[S]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (current, t._1, t._2, t._3)
-  override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: Unit,
+    current: Number[S],
     head: S
-  ): Collect[R] = number._2.execute(new ReverseDropContext[S, R])(head, (number._1, number._3, number._4))
-  override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: Unit
-  ): Collect[R] = CollectT()
+  ): Collect[R] = t._1.execute(new ReverseDropContext[S, R])((current, t._2, t._3, head))
+  override def bindT(t: (Number[Unit], Number[S => Boolean], Number[S => R]), current: Number[S]): Collect[R] = CollectT()
 }
 
-class ReverseDropTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[S], Number[S => Boolean], Number[S => R])
-  override type Parameter  = S
-  override type Result     = R
-}
-class ReverseDropContext[S, R] extends Context[ReverseDropTypeContext[S, R], Unit] {
-  override type DataCtx = (Number[S], Number[Unit], Number[S => Boolean], Number[S => R])
-  override def convert(
-    t: (Number[S], Number[S => Boolean], Number[S => R]),
-    current: Number[Unit]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (t._1, current, t._2, t._3)
+class ReverseDropContext[S, R] extends Context[(Number[S], Number[S => Boolean], Number[S => R], S), Unit, Collect[R]] {
   override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S,
+    t: (Number[S], Number[S => Boolean], Number[S => R], S),
+    current: Number[Unit],
     head: Unit
-  ): Collect[R] = number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4))
+  ): Collect[R] = t._1.execute(new DropContext[S, R])((current, t._2, t._3))
   override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S
-  ): Collect[R] = number._3.execute(new FilterContext[S, R])(parameter, (number._1, number._2, number._4))
+    t: (Number[S], Number[S => Boolean], Number[S => R], S),
+    current: Number[Unit]
+  ): Collect[R] = t._2.execute(new FilterContext[S, R])((t._1, current, t._3, t._4))
 }
 
-class FilterTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[S], Number[Unit], Number[S => R])
-  override type Parameter  = S
-  override type Result     = R
-}
-class FilterContext[S, R] extends Context[FilterTypeContext[S, R], S => Boolean] {
-  override type DataCtx = (Number[S], Number[Unit], Number[S => Boolean], Number[S => R])
-  override def convert(
-    t: (Number[S], Number[Unit], Number[S => R]),
-    current: Number[S => Boolean]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (t._1, t._2, current, t._3)
+class FilterContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => R], S), S => Boolean, Collect[R]] {
   override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S,
+    t: (Number[S], Number[Unit], Number[S => R], S),
+    current: Number[S => Boolean],
     head: S => Boolean
-  ): Collect[R] = if (head(parameter)) number._4.execute(new MapContext[S, R])(parameter, (number._1, number._2, number._3))
-  else number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4))
+  ): Collect[R] = if (head(t._4)) t._3.execute(new MapContext[S, R])((t._1, t._2, current, t._4))
+  else t._1.execute(new DropContext[S, R])((t._2, current, t._3))
   override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S
-  ): Collect[R] = number._3.execute(this)(parameter, (number._1, number._2, number._4))
+    t: (Number[S], Number[Unit], Number[S => R], S),
+    current: Number[S => Boolean]
+  ): Collect[R] = current.execute(this)((t._1, t._2, t._3, t._4))
 }
 
-class MapTypeContext[S, R] extends TypeContext {
-  override type toDataType = (Number[S], Number[Unit], Number[S => Boolean])
-  override type Parameter  = S
-  override type Result     = R
-}
-class MapContext[S, R] extends Context[MapTypeContext[S, R], S => R] {
-  override type DataCtx = (Number[S], Number[Unit], Number[S => Boolean], Number[S => R])
-  override def convert(
-    t: (Number[S], Number[Unit], Number[S => Boolean]),
-    current: Number[S => R]
-  ): (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]) = (t._1, t._2, t._3, current)
+class MapContext[S, R] extends Context[(Number[S], Number[Unit], Number[S => Boolean], S), S => R, Collect[R]] {
   override def bindS(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S,
+    t: (Number[S], Number[Unit], Number[S => Boolean], S),
+    current: Number[S => R],
     head: S => R
-  ): Collect[R] = CollectS(number._1.execute(new DropContext[S, R])((), (number._2, number._3, number._4)), head(parameter))
+  ): Collect[R] = CollectS(t._1.execute(new DropContext[S, R])((t._2, t._3, current)), head(t._4))
   override def bindT(
-    number: (Number[S], Number[Unit], Number[S => Boolean], Number[S => R]),
-    parameter: S
-  ): Collect[R] = number._4.execute(this)(parameter, (number._1, number._2, number._3))
+    t: (Number[S], Number[Unit], Number[S => Boolean], S),
+    current: Number[S => R]
+  ): Collect[R] = current.execute(this)((t._1, t._2, t._3, t._4))
 }

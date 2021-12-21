@@ -37,10 +37,7 @@ object Runner {
     lazy val numberFilterB_1: Number[Int => String]  = numberFromFun((i: Int) => s"$i--$i", numberFilterB_2)
     lazy val numberFilterB_2: Number[Int => String]  = NumberT(() => numberFilterB_1)
 
-    val num1 = numberFromCollection(1 to 500).execute(new DropContext[Int, String])(
-      (),
-      (dropFromInt(60), numberFilterA_1, numberFilterB_1)
-    )
+    val num1 = numberFromCollection(1 to 500).execute(new DropContext[Int, String])((dropFromInt(60), numberFilterA_1, numberFilterB_1))
     val col1 = (1 to 500).drop(60).filter(i => i < 70 || i % 5 == 0).map(i => s"$i--$i").to(List)
     val col2 = number1ToList(num1)
     assert(col1 == col2)
