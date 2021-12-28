@@ -55,6 +55,7 @@ val g02 = project in gRoot / "g02"
 
 val h01 = project in hRoot / "h01"
 
-val i01 = project in iRoot / "i01"
+val i01    = project in iRoot / "i01"
+val i01_01 = project in iRoot / "i01-01"
 
-val j01 = project in jRoot / "j01"
+// val j01 = project in jRoot / "j01"
