@@ -3,43 +3,39 @@ package i01_01
 object Runner {
 
   val number = Number1S(
-    Number1S(Number1S(Number1T, Number2T("60"), "width"), Number2T("60"), "height"),
+    TagText("html"),
+    Number1S(AttriPro("height"), Number1S(AttriPro("width"), Number1T, Number2T(AttriText("60"))), Number2T(AttriText("60"))),
     Number2S(
-      Number2T(""),
+      Number2T(EmptyText),
       Number1S(
-        Number1S(Number1T, Number2T("{ width: 60px; }"), "style"),
+        TagText("body"),
+        Number1S(AttriPro("style"), Number1T, Number2T(AttriText("{ width: 60px; }"))),
         Number2S(
           Number2S(
             Number2S(
-              Number2T(""),
-              Number1S(
-                Number1S(Number1T, Number2T("highlight"), "highlight"),
-                Number2T("aa"),
-                "div"
-              )
+              Number2T(EmptyText),
+              Number1S(TagText("div"), Number1S(AttriPro("highlight"), Number1T, Number2T(EmptyAttri)), Number2T(PreText("aa")))
             ),
-            Number1S(
-              Number1T,
-              Number2T("bb"),
-              "div"
-            )
+            Number1S(TagText("div"), Number1T, Number2T(PreText("bb")))
           ),
           Number1S(
-            Number1S(Number1S(Number1T, Number2T("{ width: 60px; }"), "style"), Number2T("0px"), "border"),
+            TagText("div"),
+            Number1S(
+              AttriPro("border"),
+              Number1S(AttriPro("style"), Number1T, Number2T(AttriText("{ width: 60px; }"))),
+              Number2T(AttriText("0px"))
+            ),
             Number2S(
               Number2S(
-                Number2S(Number2T("cc"), Number1S(Number1S(Number1T, Number2T("66ccff"), "color"), Number2T("dd"), "span")),
-                Number1S(Number1T, Number2T("ee  "), "")
+                Number2T(PSText("cc", "ff")),
+                Number1S(TagText("span"), Number1S(AttriPro("color"), Number1T, Number2T(AttriText("66ccff"))), Number2T(PreText("dd")))
               ),
-              Number1S(Number1T, Number2T("ff"), "")
-            ),
-            "div"
+              Number1S(EmptyTag, Number1T, Number2T(PreText("ee  ")))
+            )
           )
-        ),
-        "body"
+        )
       )
-    ),
-    "html"
+    )
   )
 
   def main(arr: Array[String]): Unit = {
