@@ -4,7 +4,7 @@ object Runner2 {
 
   import Builder._
 
-  val number = html(width := 60, height := 60)(
+  val number1 = html(width := 60, height := 60)(
     body(style := "{ width: 60px; }")(
       div(highlight)("aa"),
       div("bb"),
@@ -12,9 +12,22 @@ object Runner2 {
     )
   )
 
+  val cssWidth  = css("width")
+  val cssHeight = css("height")
+
+  val number2 = html(width := 60, height := 60)(
+    body(cssWidth := "60px")(
+      div(highlight)("aa"),
+      div("bb"),
+      div(border := "0px", style := "border: 1px", cssWidth := "60px", cssHeight := "60px")("cc")(span(color := "66ccff")("dd"))("ee  ")(
+        "ff"
+      )
+    )
+  )
+
   def main(arr: Array[String]): Unit = {
-    assert(Runner2.number == Runner.number)
-    println(Counter.count(number))
+    assert(Runner2.number1 == Runner.number)
+    println(Counter.count(number1))
     /*<html width="60" height="60">
       <body style="{ width: 60px; }">
         <div highlight>
@@ -28,6 +41,8 @@ object Runner2 {
         </div>
       </body>
     </html>*/
+
+    println(Counter.count(number2))
 
   }
 

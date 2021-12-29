@@ -26,3 +26,4 @@ case object EmptyTag             extends HtmlTag
 
 sealed trait AttributeTag         extends Tag
 case class AttriPro(text: String) extends AttributeTag
+case object EmptyAttrPro          extends AttributeTag
