@@ -60,7 +60,7 @@ object Builder {
 
   implicit val implicit3: ValueApply[attr] = new ValueApply[attr] {
     override def input(number: Number1, t: attr): Number1 = number match {
-      case Number1S(text, attribute, children) => Number1S(text, Number1S(AttriPro(t.attrName), attribute, Number2T(EmptyAttri)), children)
+      case Number1S(text, attribute, children) => Number1S(text, Number1S(TagText(t.attrName), attribute, Number2T(EmptyText)), children)
     }
   }
 
@@ -86,9 +86,9 @@ object Builder {
 
   implicit private[this] class Number1ExtendsionPrivate(val number: Number1) {
     def appendProperty[T](pro: String, value: T)(implicit v: TranToString[T]): Number1 =
-      Number1S(AttriPro(pro), number, Number2T(AttriText(v.t(value))))
+      Number1S(TagText(pro), number, Number2T(TextContent(v.t(value))))
     def appendCssProperty[T](pro: String, value: T)(implicit v: TranToString[T]): Number1 =
-      Number1S(EmptyAttrPro, number, Number2S(Number2T(EmptyAttri), Number1T.appendProperty(pro, value)))
+      Number1S(EmptyTag, number, Number2S(Number2T(EmptyText), Number1T.appendProperty(pro, value)))
   }
 
 }

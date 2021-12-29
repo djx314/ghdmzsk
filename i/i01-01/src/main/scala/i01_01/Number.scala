@@ -9,21 +9,9 @@ case class Number2S(tail: Number2, head: Number1) extends Number2
 case class Number2T(text: Text)                   extends Number2
 
 trait Text
-
-sealed trait AttributeText         extends Text
-case class AttriText(text: String) extends AttributeText
-case object EmptyAttri             extends AttributeText
-
-sealed trait HtmlText                extends Text
-case class TextContent(text: String) extends HtmlText
-case object EmptyText                extends HtmlText
+case class TextContent(text: String) extends Text
+case object EmptyText                extends Text
 
 trait Tag
-
-sealed trait HtmlTag             extends Tag
-case class TagText(text: String) extends HtmlTag
-case object EmptyTag             extends HtmlTag
-
-sealed trait AttributeTag         extends Tag
-case class AttriPro(text: String) extends AttributeTag
-case object EmptyAttrPro          extends AttributeTag
+case class TagText(text: String) extends Tag
+case object EmptyTag             extends Tag

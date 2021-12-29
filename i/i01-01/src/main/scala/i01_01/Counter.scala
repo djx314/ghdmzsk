@@ -24,23 +24,23 @@ object Counter {
   }
 
   def countAttributeImpl(number: Number1): (String, List[String]) = number match {
-    case Number1S(AttriPro("style"), tail, Number2T(nText: AttributeText)) =>
+    case Number1S(TagText("style"), tail, Number2T(nText: Text)) =>
       val att = countAttributeImpl(tail)
       nText match {
-        case AttriText(str) => (att._1, str :: att._2)
-        case EmptyAttri     => att
+        case TextContent(str) => (att._1, str :: att._2)
+        case EmptyText        => att
       }
-    case Number1S(AttriPro(text), tail, Number2T(nText: AttributeText)) =>
+    case Number1S(TagText(text), tail, Number2T(nText: Text)) =>
       val pro = nText match {
-        case AttriText(str) => text + "=\"" + str + "\""
-        case EmptyAttri     => text
+        case TextContent(str) => text + "=\"" + str + "\""
+        case EmptyText        => text
       }
       val att = countAttributeImpl(tail)
       (att._1 + " " + pro, att._2)
     case Number1S(
-          EmptyAttrPro,
+          EmptyTag,
           tail,
-          Number2S(Number2T(EmptyAttri), Number1S(AttriPro(cssPro), Number1T, Number2T(AttriText(cssValue))))
+          Number2S(Number2T(EmptyText), Number1S(TagText(cssPro), Number1T, Number2T(TextContent(cssValue))))
         ) =>
       val att = countAttributeImpl(tail)
       (att._1, s"$cssPro: $cssValue" :: att._2)
@@ -49,7 +49,7 @@ object Counter {
 
   def countChildren(number: Number2): String = number match {
     case Number2S(tail, head) => countChildren(tail) + count(head)
-    case Number2T(text: HtmlText) =>
+    case Number2T(text: Text) =>
       text match {
         case TextContent(str) => str
         case EmptyText        => ""
