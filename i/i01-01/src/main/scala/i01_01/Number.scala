@@ -14,11 +14,9 @@ sealed trait AttributeText         extends Text
 case class AttriText(text: String) extends AttributeText
 case object EmptyAttri             extends AttributeText
 
-sealed trait HtmlText                                extends Text
-case class PreText(text: String)                     extends HtmlText
-case class SuffText(text: String)                    extends HtmlText
-case class PSText(preText: String, suffText: String) extends HtmlText
-case object EmptyText                                extends HtmlText
+sealed trait HtmlText                extends Text
+case class TextContent(text: String) extends HtmlText
+case object EmptyText                extends HtmlText
 
 trait Tag
 

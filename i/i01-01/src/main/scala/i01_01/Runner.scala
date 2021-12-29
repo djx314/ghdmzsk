@@ -14,23 +14,30 @@ object Runner {
           Number2S(
             Number2S(
               Number2T(EmptyText),
-              Number1S(TagText("div"), Number1S(AttriPro("highlight"), Number1T, Number2T(EmptyAttri)), Number2T(PreText("aa")))
+              Number1S(TagText("div"), Number1S(AttriPro("highlight"), Number1T, Number2T(EmptyAttri)), Number2T(TextContent("aa")))
             ),
-            Number1S(TagText("div"), Number1T, Number2T(PreText("bb")))
+            Number1S(TagText("div"), Number1T, Number2T(TextContent("bb")))
           ),
           Number1S(
             TagText("div"),
             Number1S(
-              AttriPro("border"),
-              Number1S(AttriPro("style"), Number1T, Number2T(AttriText("{ width: 60px; }"))),
-              Number2T(AttriText("0px"))
+              AttriPro("style"),
+              Number1S(AttriPro("border"), Number1T, Number2T(AttriText("0px"))),
+              Number2T(AttriText("{ width: 60px; }"))
             ),
             Number2S(
               Number2S(
-                Number2T(PSText("cc", "ff")),
-                Number1S(TagText("span"), Number1S(AttriPro("color"), Number1T, Number2T(AttriText("66ccff"))), Number2T(PreText("dd")))
+                Number2S(
+                  Number2T(TextContent("cc")),
+                  Number1S(
+                    TagText("span"),
+                    Number1S(AttriPro("color"), Number1T, Number2T(AttriText("66ccff"))),
+                    Number2T(TextContent("dd"))
+                  )
+                ),
+                Number1S(EmptyTag, Number1T, Number2T(TextContent("ee  ")))
               ),
-              Number1S(EmptyTag, Number1T, Number2T(PreText("ee  ")))
+              Number1S(EmptyTag, Number1T, Number2T(TextContent("ff")))
             )
           )
         )

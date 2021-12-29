@@ -1,12 +1,19 @@
 package i01_01
 
+import scala.io.Source
+import scala.util.Using
+
 object Counter {
 
+  def spaceLine(s: String): String = Using.resource(Source.fromString(s))(t => t.getLines().map(r => "  " + r).mkString("\n"))
+
   def count(number: Number1): String = number match {
+    case Number1S(TagText("span"), tail, head) =>
+      s"<span${countAttribute(tail)}>" + s"${countChildren(head)}" + s"</span>"
     case Number1S(TagText(text), tail, head) =>
-      s"""<$text${countAttribute(tail)}>${countChildren(head)("")}</$text>"""
-    case Number1S(EmptyTag, tail, head) =>
-      countChildren(head)("")
+      s"<$text${countAttribute(tail)}>\n" + s"${spaceLine(countChildren(head))}" + s"\n</$text>\n"
+    case Number1S(EmptyTag, _, head) =>
+      countChildren(head)
     case Number1T => ""
   }
 
@@ -16,18 +23,16 @@ object Counter {
         case AttriText(str) => text + "=\"" + str + "\""
         case EmptyAttri     => text
       }
-      " " + pro + countAttribute(tail)
+      countAttribute(tail) + " " + pro
     case Number1T => ""
   }
 
-  def countChildren(number: Number2): String => String = number match {
-    case Number2S(tail, head) => s => countChildren(tail)(count(head) + s)
+  def countChildren(number: Number2): String = number match {
+    case Number2S(tail, head) => countChildren(tail) + count(head)
     case Number2T(text: HtmlText) =>
       text match {
-        case PreText(str)              => s => str + s
-        case SuffText(str)             => s => s + str
-        case PSText(preText, suffText) => s => preText + s + suffText
-        case EmptyText                 => identity
+        case TextContent(str) => str
+        case EmptyText        => ""
       }
   }
 
