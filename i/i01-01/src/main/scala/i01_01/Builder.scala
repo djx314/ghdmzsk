@@ -1,19 +1,19 @@
 package i01_01
 
-import i01_01.Ast.{CommonProperty, CssProperty, EmtpyTag, HtmlTag, SingleProperty, TextHtmlTag}
+import i01_01.Ast._
 
 import scala.language.implicitConversions
 
 object Builder {
 
-  def tag(tagName: String): Number1 = EmtpyTag(tagName)
-  val html                          = tag("html")
-  val body                          = tag("body")
-  val div                           = tag("div")
-  val span                          = tag("span")
+  def tag(tagName: String): HtmlNumber = HtmlTag.tag(tagName)
+  val html                             = tag("html")
+  val body                             = tag("body")
+  val div                              = tag("div")
+  val span                             = tag("span")
 
   trait AttributeAppendable {
-    def append(number: Number1): Number1
+    def append(number: HtmlNumber): HtmlNumber
   }
 
   case class attr(attrName: String) {
@@ -43,42 +43,42 @@ object Builder {
   }
 
   trait ValueApply[T] {
-    def input(number: Number1, t: T): Number1
+    def input(number: HtmlNumber, t: T): HtmlNumber
   }
   object ValueApply {
     def apply[T](implicit t: ValueApply[T]): ValueApply[T] = t
   }
 
   implicit val implicit1: ValueApply[AttributeAppendable] = new ValueApply[AttributeAppendable] {
-    override def input(number: Number1, t: AttributeAppendable): Number1 = number match {
+    override def input(number: HtmlNumber, t: AttributeAppendable): HtmlNumber = number match {
       case HtmlTag(text, attribute, children) => HtmlTag(text, attribute = t.append(attribute), children)
     }
   }
 
-  implicit val implicit2: ValueApply[Number1] = new ValueApply[Number1] {
-    override def input(number: Number1, t: Number1): Number1 = number match {
+  implicit val implicit2: ValueApply[HtmlNumber] = new ValueApply[HtmlNumber] {
+    override def input(number: HtmlNumber, t: HtmlNumber): HtmlNumber = number match {
       case HtmlTag(text, attribute, children) => HtmlTag(text, attribute = attribute, Number2S(children, t))
     }
   }
 
   implicit val implicit3: ValueApply[attr] = new ValueApply[attr] {
-    override def input(number: Number1, t: attr): Number1 = number match {
+    override def input(number: HtmlNumber, t: attr): HtmlNumber = number match {
       case HtmlTag(text, attribute, children) => HtmlTag(text, attribute = SingleProperty(attribute, t.attrName), children)
     }
   }
 
   implicit val implicit4: ValueApply[String] = new ValueApply[String] {
-    override def input(number: Number1, t: String): Number1 = number match {
-      case EmtpyTag(tagName, attr)         => TextHtmlTag(tagName, attr, textContent = t)
-      case TextHtmlTag(text, attribute, s) => TextHtmlTag(text, attribute, textContent = s + t)
-      case HtmlTag(text, attribute, Number2S(tail, TextHtmlTag(EmptyTag, Number1T, s))) =>
+    override def input(number: HtmlNumber, t: String): HtmlNumber = number match {
+      case TextHtmlTag(text, attribute, None)    => TextHtmlTag(text, attribute, textContent = t)
+      case TextHtmlTag(text, attribute, Some(s)) => TextHtmlTag(text, attribute, textContent = s + t)
+      case HtmlTag(text, attribute, Number2S(tail, TextHtmlTag(EmptyText, Number1T, Some(s)))) =>
         HtmlTag(text, attribute, Number2S(tail, TextHtmlTag(textContent = s + t)))
       case HtmlTag(text, attribute, children) => HtmlTag(text, attribute, Number2S(children, TextHtmlTag(t)))
     }
   }
 
   implicit val implicit5: ValueApply[Int] = new ValueApply[Int] {
-    override def input(number: Number1, t: Int): Number1 = ValueApply[String].input(number, t.toString)
+    override def input(number: HtmlNumber, t: Int): HtmlNumber = ValueApply[String].input(number, t.toString)
   }
 
   trait HtmlInputAbs {
@@ -92,8 +92,8 @@ object Builder {
 
   implicit def vImplicit1[T](n: T)(implicit valueApply: ValueApply[T]): HtmlInputAbs = HtmlInput(n = n, valueApply = valueApply)
 
-  implicit class Number1Extendsion(val number: Number1) {
-    def apply(value: HtmlInputAbs*): Number1 = value.foldLeft(number)((s, t) => t.valueApply.input(s, t.n))
+  implicit class Number1Extendsion(val number: HtmlNumber) {
+    def apply(value: HtmlInputAbs*): HtmlNumber = value.foldLeft(number)((s, t) => t.valueApply.input(s, t.n))
   }
 
 }

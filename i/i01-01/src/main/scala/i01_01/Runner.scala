@@ -2,27 +2,29 @@ package i01_01
 
 object Runner {
 
+  import Ast._
+
   val number = Number1S(
-    TagText("html"),
-    Number1S(TagText("height"), Number1S(TagText("width"), Number1T, Number2T(TextContent("60"))), Number2T(TextContent("60"))),
+    TextContent("html"),
+    Number1S(TextContent("height"), Number1S(TextContent("width"), Number1T, Number2T(TextContent("60"))), Number2T(TextContent("60"))),
     Number2S(
       Number2T(EmptyText),
       Number1S(
-        TagText("body"),
-        Number1S(TagText("style"), Number1T, Number2T(TextContent("{ width: 60px; }"))),
+        TextContent("body"),
+        Number1S(TextContent("style"), Number1T, Number2T(TextContent("{ width: 60px; }"))),
         Number2S(
           Number2S(
             Number2S(
               Number2T(EmptyText),
-              Number1S(TagText("div"), Number1S(TagText("highlight"), Number1T, Number2T(EmptyText)), Number2T(TextContent("aa")))
+              Number1S(TextContent("div"), Number1S(TextContent("highlight"), Number1T, Number2T(EmptyText)), Number2T(TextContent("aa")))
             ),
-            Number1S(TagText("div"), Number1T, Number2T(TextContent("bb")))
+            Number1S(TextContent("div"), Number1T, Number2T(TextContent("bb")))
           ),
           Number1S(
-            TagText("div"),
+            TextContent("div"),
             Number1S(
-              TagText("style"),
-              Number1S(TagText("border"), Number1T, Number2T(TextContent("0px"))),
+              TextContent("style"),
+              Number1S(TextContent("border"), Number1T, Number2T(TextContent("0px"))),
               Number2T(TextContent("{ width: 60px; }"))
             ),
             Number2S(
@@ -30,14 +32,14 @@ object Runner {
                 Number2S(
                   Number2T(TextContent("cc")),
                   Number1S(
-                    TagText("span"),
-                    Number1S(TagText("color"), Number1T, Number2T(TextContent("66ccff"))),
+                    TextContent("span"),
+                    Number1S(TextContent("color"), Number1T, Number2T(TextContent("66ccff"))),
                     Number2T(TextContent("dd"))
                   )
                 ),
-                Number1S(EmptyTag, Number1T, Number2T(TextContent("ee  ")))
+                Number1S(EmptyText, Number1T, Number2T(TextContent("ee  ")))
               ),
-              Number1S(EmptyTag, Number1T, Number2T(TextContent("ff")))
+              Number1S(EmptyText, Number1T, Number2T(TextContent("ff")))
             )
           )
         )

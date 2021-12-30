@@ -44,7 +44,6 @@ object Runner2 {
        </html>*/
 
     println(Counter.count(number2))
-
   }
 
 }
