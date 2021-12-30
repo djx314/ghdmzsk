@@ -15,7 +15,7 @@ object Counter {
     case HtmlTag(TextContent(text), tail, head) =>
       s"<$text${countAttribute(tail)}>\n${spaceLine(countChildren(head))}\n</$text>\n"
     case BlankTag(head) => countChildren(head)
-    case HtmlNumberT    => ""
+    case Number1T()     => ""
   }
 
   def countAttribute(number: Number1[Text, Text]): String = {
@@ -25,7 +25,7 @@ object Counter {
   }
 
   def countAttributeImpl(number: Number1[Text, Text]): (String, List[String]) = number match {
-    case notEmpty @ HtmlNumberS(_, tail, _) =>
+    case notEmpty @ Number1S(_, tail, _) =>
       val (pro, css) = countAttributeImpl(tail)
       notEmpty match {
         case CommonProperty(_, "style", value) =>
@@ -38,12 +38,12 @@ object Counter {
         case CssProperty(_, cssPro, cssValue) =>
           (pro, s"$cssPro: $cssValue" :: css)
       }
-    case HtmlNumberT => ("", List.empty)
+    case Number1T() => ("", List.empty)
   }
 
   def countChildren(number: Number2[Text, Text]): String = number match {
-    case ChildNumberS(tail, head) => countChildren(tail) + count(head)
-    case ChildNumberT(text: Text) =>
+    case Number2S(tail, head) => countChildren(tail) + count(head)
+    case Number2T(text: Text) =>
       text match {
         case TextContent(str) => str
         case EmptyText        => ""

@@ -7,44 +7,44 @@ object Runner {
 
   val number = HtmlTag(
     "html",
-    CommonProperty(CommonProperty(HtmlNumberT, "width", "60"), "height", "60"),
-    ChildNumberS(
-      ChildNumberT(EmptyText),
+    CommonProperty(CommonProperty(Number1T(), "width", "60"), "height", "60"),
+    Number2S(
+      Number2T(EmptyText),
       HtmlTag(
         "body",
-        CommonProperty(HtmlNumberT, "style", "{ width: 60px; }"),
-        ChildNumberS(
-          ChildNumberS(
-            ChildNumberS(
-              ChildNumberT(EmptyText),
+        CommonProperty(Number1T(), "style", "{ width: 60px; }"),
+        Number2S(
+          Number2S(
+            Number2S(
+              Number2T(EmptyText),
               TextHtmlTag(
                 "div",
-                SingleProperty(HtmlNumberT, "highlight"),
+                SingleProperty(Number1T(), "highlight"),
                 "aa"
               )
             ),
-            TextHtmlTag("div", HtmlNumberT, "bb")
+            TextHtmlTag("div", Number1T(), "bb")
           ),
           HtmlTag(
             "div",
             CommonProperty(
-              CommonProperty(HtmlNumberT, "style", "{ width: 60px; }"),
+              CommonProperty(Number1T(), "style", "{ width: 60px; }"),
               "border",
               "0px"
             ),
-            ChildNumberS(
-              ChildNumberS(
-                ChildNumberS(
-                  ChildNumberT(TextContent("cc")),
+            Number2S(
+              Number2S(
+                Number2S(
+                  Number2T(TextContent("cc")),
                   TextHtmlTag(
                     "span",
-                    CommonProperty(HtmlNumberT, "color", "66ccff"),
+                    CommonProperty(Number1T(), "color", "66ccff"),
                     "dd"
                   )
                 ),
-                TextHtmlTag(EmptyText, HtmlNumberT, "ee  ")
+                TextHtmlTag(EmptyText, Number1T(), "ee  ")
               ),
-              TextHtmlTag(EmptyText, HtmlNumberT, "ff")
+              TextHtmlTag(EmptyText, Number1T(), "ff")
             )
           )
         )
