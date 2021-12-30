@@ -26,21 +26,22 @@ object Runner2 {
   )
 
   def main(arr: Array[String]): Unit = {
-    assert(Runner2.number1 == Runner.number)
+    assert(Counter.count(Runner2.number1) == Counter.count(Runner.number))
     println(Counter.count(number1))
+    println(Counter.count(Runner.number))
     /*<html width="60" height="60">
-      <body style="{ width: 60px; }">
-        <div highlight>
-          aa
-        </div>
-        <div>
-          bb
-        </div>
-        <div border="0px" style="{ width: 60px; }">
-          cc<span color="66ccff">dd</span>ee  ff
-        </div>
-      </body>
-    </html>*/
+         <body style="{ width: 60px; }">
+           <div highlight>
+             aa
+           </div>
+           <div>
+             bb
+           </div>
+           <div border="0px" style="{ width: 60px; }">
+             cc<span color="66ccff">dd</span>ee  ff
+           </div>
+         </body>
+       </html>*/
 
     println(Counter.count(number2))
 
