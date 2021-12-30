@@ -3,43 +3,48 @@ package i01_01
 object Runner {
 
   import Ast._
+  import Model._
 
-  val number = Number1S(
-    TextContent("html"),
-    Number1S(TextContent("height"), Number1S(TextContent("width"), Number1T, Number2T(TextContent("60"))), Number2T(TextContent("60"))),
-    Number2S(
-      Number2T(EmptyText),
-      Number1S(
-        TextContent("body"),
-        Number1S(TextContent("style"), Number1T, Number2T(TextContent("{ width: 60px; }"))),
-        Number2S(
-          Number2S(
-            Number2S(
-              Number2T(EmptyText),
-              Number1S(TextContent("div"), Number1S(TextContent("highlight"), Number1T, Number2T(EmptyText)), Number2T(TextContent("aa")))
+  val number = HtmlTag(
+    "html",
+    CommonProperty(CommonProperty(HtmlNumberT, "width", "60"), "height", "60"),
+    ChildNumberS(
+      ChildNumberT(EmptyText),
+      HtmlTag(
+        "body",
+        CommonProperty(HtmlNumberT, "style", "{ width: 60px; }"),
+        ChildNumberS(
+          ChildNumberS(
+            ChildNumberS(
+              ChildNumberT(EmptyText),
+              TextHtmlTag(
+                "div",
+                SingleProperty(HtmlNumberT, "highlight"),
+                "aa"
+              )
             ),
-            Number1S(TextContent("div"), Number1T, Number2T(TextContent("bb")))
+            TextHtmlTag("div", HtmlNumberT, "bb")
           ),
-          Number1S(
-            TextContent("div"),
-            Number1S(
-              TextContent("style"),
-              Number1S(TextContent("border"), Number1T, Number2T(TextContent("0px"))),
-              Number2T(TextContent("{ width: 60px; }"))
+          HtmlTag(
+            "div",
+            CommonProperty(
+              CommonProperty(HtmlNumberT, "style", "{ width: 60px; }"),
+              "border",
+              "0px"
             ),
-            Number2S(
-              Number2S(
-                Number2S(
-                  Number2T(TextContent("cc")),
-                  Number1S(
-                    TextContent("span"),
-                    Number1S(TextContent("color"), Number1T, Number2T(TextContent("66ccff"))),
-                    Number2T(TextContent("dd"))
+            ChildNumberS(
+              ChildNumberS(
+                ChildNumberS(
+                  ChildNumberT(TextContent("cc")),
+                  TextHtmlTag(
+                    "span",
+                    CommonProperty(HtmlNumberT, "color", "66ccff"),
+                    "dd"
                   )
                 ),
-                Number1S(EmptyText, Number1T, Number2T(TextContent("ee  ")))
+                TextHtmlTag(EmptyText, HtmlNumberT, "ee  ")
               ),
-              Number1S(EmptyText, Number1T, Number2T(TextContent("ff")))
+              TextHtmlTag(EmptyText, HtmlNumberT, "ff")
             )
           )
         )

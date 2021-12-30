@@ -1,10 +1,11 @@
 package i01_01
 
-import i01_01.Ast._
-
 import scala.language.implicitConversions
 
 object Builder {
+
+  import Ast._
+  import Model._
 
   def tag(tagName: String): HtmlNumber = HtmlTag.tag(tagName)
   val html                             = tag("html")
@@ -71,7 +72,7 @@ object Builder {
     override def input(number: HtmlNumber, t: String): HtmlNumber = number match {
       case TextHtmlTag(text, attribute, None)    => TextHtmlTag(text, attribute, textContent = t)
       case TextHtmlTag(text, attribute, Some(s)) => TextHtmlTag(text, attribute, textContent = s + t)
-      case HtmlTag(text, attribute, Number2S(tail, TextHtmlTag(EmptyText, Number1T, Some(s)))) =>
+      case HtmlTag(text, attribute, Number2S(tail, TextHtmlTag(EmptyText, Number1T(), Some(s)))) =>
         HtmlTag(text, attribute, Number2S(tail, TextHtmlTag(textContent = s + t)))
       case HtmlTag(text, attribute, children) => HtmlTag(text, attribute, Number2S(children, TextHtmlTag(t)))
     }
