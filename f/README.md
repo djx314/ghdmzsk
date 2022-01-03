@@ -80,4 +80,13 @@ Counter.count = 0
 #### tv2Z-tt1
 Counter.count = 0
 
-# number1t_top/Number1T_Number1T_Number1U_Top.scala
+## number1t_top/Number1T_Number1T_Number1U_Top.scala
+### tt1-us2
+#### tt1-us2P
+Counter.count = 0
+#### tt1-us2Z
+Counter.count = 0
+#### us2P-tt1
+Counter.countOpt = if (i2 == 0) Option.empty else Option(1)
+#### us2Z-tt1
+Counter.countOpt = if (i2 == 0) Option.empty else Option(2)
