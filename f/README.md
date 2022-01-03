@@ -18,6 +18,27 @@ case class Number1V(tail: () => Number1) extends Number1 {
 sealed trait Number2
 case class Number2S(tail: () => Number2) extends Number2
 
+object Counter {
+  def count(number2: () => Number2): Int = {
+    val value =
+      try Option(number2())
+      catch {
+        case _: StackOverflowError => Option.empty
+      }
+    value match {
+      case Some(Number2S(tail)) => count(tail) + 1
+      case None                 => 0
+    }
+  }
+
+  def countOpt(number2: () => Number2): Option[Int] = {
+    try Option(count(number2)).filter(_ < 500)
+    catch {
+      case _: StackOverflowError => Option.empty
+    }
+  }
+}
+
 object Fusion {
 
   lazy val number1s: Number1 = Number1S(() => number1s)
@@ -41,9 +62,9 @@ for {
     lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
     lazy val number2Zero: Number1     = { Number1S(() => number2Positive) }
     {
-      def counter1 = number1.method1(number2Positive)
-      val result1  = true
-      val result2  = true
+      def counter1 = number2Positive.method1(number1)
+      val result1  = Counter.countOpt(() => counter1)
+      val result2  = Option.empty
       if (result1 != result2) {
         val e = new Exception()
         throw e
@@ -53,5 +74,17 @@ for {
 println("success")
 ```
 
-### number1t_top/Number1T_Number1T_Number1S_Top.scala
+## number1t_top/Number1T_Number1T_Number1S_Top.scala
+### tt1-ss2
 #### tt1-ss2P
+Counter.count = 0
+#### tt1-ss2Z
+Counter.count = 0
+#### ss2P-tt1
+Counter.countOpt = Option.empty
+#### ss2Z-tt1
+Counter.countOpt = Option.empty
+
+### tt1-st2
+#### tt1-ss2P
+Counter.count = 0
