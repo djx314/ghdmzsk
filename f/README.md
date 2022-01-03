@@ -36,7 +36,7 @@ def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1sGen(n
 for {
     i1 <- 0 to 20
     i2 <- 0 to 20
-  } {
+} {
     val number1                       = number1gen(i1)
     lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
     lazy val number2Zero: Number1     = { Number1S(() => number2Positive) }
@@ -45,12 +45,12 @@ for {
       val result1  = true
       val result2  = true
       if (result1 != result2) {
-        throw new Exception(
-          s"Number Count Error with Number1T_Number1T_Number1S_Top.Number1SExe.list_round(i1 = $i1, i2Positive = $i2)"
-        )
+        val e = new Exception()
+        throw e
       }
     }
 }
+println("success")
 ```
 
 ### number1t_top/Number1T_Number1T_Number1S_Top.scala
