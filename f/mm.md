@@ -53,7 +53,7 @@ object Fusion {
 
 }
 def number1gen(n: Int): Number1                           = Fusion.number1tGen(n, Fusion.number1t)
-def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1sGen(n, zero)
+def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1uGen(n, zero)
 for {
     i1 <- 0 to 20
     i2 <- 0 to 20
@@ -62,9 +62,13 @@ for {
     lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
     lazy val number2Zero: Number1     = { Number1T(() => number2Positive) }
     {
-      def counter1 = number2Zero.method1(number1)
-      val result1  = Counter.countOpt(() => counter1)
-      val result2  = if (i2 == 0) Option(0) else Option.empty
+      // def counter1 = number1.method1(number2Positive)
+      // def counter1 = number1.method1(number2Zero)
+      def counter1 = number2Positive.method1(number1)
+      // def counter1 = number2Zero.method1(number1)
+      
+      val result1  = Counter.count(() => counter1)
+      val result2  = if (i2 == 0) 0 else 1
       if (result1 != result2) {
         throw new Exception()
       }
