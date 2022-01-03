@@ -93,3 +93,23 @@ Counter.count = 0
 Counter.countOpt = if (i2 == 0) Option(0) else Option.empty
 #### st2Z-tt1
 Counter.countOpt = if (i2 == 0) Option(0) else Option.empty
+
+### tt1-su2
+#### tt1-su2P
+Counter.count = 0
+#### tt1-su2Z
+Counter.count = 0
+#### tt1-su2P
+Counter.count = i2 + 1
+#### tt1-su2Z
+Counter.count = 1
+
+### tt1-sv2
+#### tt1-sv2P
+Counter.count = 0
+#### tt1-sv2Z
+Counter.count = 0
+#### sv2P-tt1
+Counter.count = i2
+#### sv2Z-tt1
+Counter.count = 0
