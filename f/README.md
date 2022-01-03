@@ -144,3 +144,13 @@ Counter.count = 0
 Counter.count = 1
 ### tu2Z-tt1
 Counter.count = 1
+
+## tt1-tv2
+### tt1-tv2P
+Counter.count = 0
+### tt1-tv2Z
+Counter.count = 0
+### tv2P-tt1
+Counter.count = 0
+### tv2Z-tt1
+Counter.count = 0
