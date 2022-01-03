@@ -113,3 +113,34 @@ Counter.count = 0
 Counter.count = i2
 #### sv2Z-tt1
 Counter.count = 0
+
+## number1t_top/Number1T_Number1T_Number1T_Top.scala
+## tt1-ts2
+### tt1-ts2P
+Counter.count = 0
+### tt1-ts2Z
+Counter.count = 0
+### ts2P-tt1
+Counter.countOpt = Option.empty
+### ts2Z-tt1
+Counter.countOpt = Option.empty
+
+## tt1-tt2
+### tt1-tt2P
+Counter.count = 0
+### tt1-tt2Z
+Counter.count = 0
+### tt2P-tt1
+Counter.count = 0
+### tt2Z-tt1
+Counter.count = 0
+
+## tt1-tu2
+### tt1-tu2P
+Counter.count = 0
+### tt1-tu2Z
+Counter.count = 0
+### tu2P-tt1
+Counter.count = 1
+### tu2Z-tt1
+Counter.count = 1
