@@ -88,3 +88,9 @@ Counter.countOpt = Option.empty
 ### tt1-st2
 #### tt1-ss2P
 Counter.count = 0
+#### tt1-ss2Z
+Counter.count = 0
+#### ss2P-tt1
+Counter.countOpt = if (i2 == 0) Option(0) else Option.empty
+#### ss2Z-tt1
+Counter.countOpt = if (i2 == 0) Option(0) else Option.empty
