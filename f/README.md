@@ -60,14 +60,13 @@ for {
 } {
     val number1                       = number1gen(i1)
     lazy val number2Positive: Number1 = number2PositiveGen(i2, number2Zero)
-    lazy val number2Zero: Number1     = { Number1S(() => number2Positive) }
+    lazy val number2Zero: Number1     = { Number1T(() => number2Positive) }
     {
-      def counter1 = number2Positive.method1(number1)
+      def counter1 = number2Zero.method1(number1)
       val result1  = Counter.countOpt(() => counter1)
-      val result2  = Option.empty
+      val result2  = if (i2 == 0) Option(0) else Option.empty
       if (result1 != result2) {
-        val e = new Exception()
-        throw e
+        throw new Exception()
       }
     }
 }
