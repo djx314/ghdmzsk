@@ -100,3 +100,23 @@ Counter.count = 0
 Counter.count = if (i2 == 0) 0 else 1
 #### ut2Z-tt1
 Counter.count = if (i2 == 0) 0 else 1
+
+### tt1-uu2
+#### tt1-uu2P
+Counter.count = 0
+#### tt1-uu2Z
+Counter.count = 0
+#### uu2P-tt1
+Counter.count = 1
+#### uu2Z-tt1
+Counter.count = 1
+
+### tt1-uv2
+#### tt1-uv2P
+Counter.count = 0
+#### tt1-uv2Z
+Counter.count = 0
+#### uv2P-tt1
+Counter.count = if (i2 == 0) 0 else 1
+#### uv2Z-tt1
+Counter.count = 0
