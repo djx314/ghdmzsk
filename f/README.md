@@ -151,3 +151,13 @@ Counter.count = 0
 Counter.count = if (i2 == 0) 1 else 0
 #### vu2Z-tt1
 Counter.count = 1
+
+### tt1-vv2
+#### tt1-vv2P
+Counter.count = 0
+#### tt1-vv2Z
+Counter.count = 0
+#### vv2P-tt1
+Counter.count = 0
+#### vv2Z-tt1
+Counter.count = 0
