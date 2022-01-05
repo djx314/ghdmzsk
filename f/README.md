@@ -120,3 +120,34 @@ Counter.count = 0
 Counter.count = if (i2 == 0) 0 else 1
 #### uv2Z-tt1
 Counter.count = 0
+
+## number1t_top/Number1T_Number1T_Number1V_Top.scala
+### tt1-vs2
+#### tt1-vs2P
+Counter.count = 0
+#### tt1-vs2Z
+Counter.count = 0
+#### vs2P-tt1
+Counter.countOpt = if (i2 == 0) Option.empty else Option(0)
+#### vs2Z-tt1
+Counter.countOpt = if (i2 == 0) Option.empty else Option(1)
+
+### tt1-vt2
+#### tt1-vt2P
+Counter.count = 0
+#### tt1-vt2Z
+Counter.count = 0
+#### vt2P-tt1
+Counter.count = 0
+#### vt2Z-tt1
+Counter.count = 0
+
+### tt1-vu2
+#### tt1-vu2P
+Counter.count = 0
+#### tt1-vu2Z
+Counter.count = 0
+#### vu2P-tt1
+Counter.count = if (i2 == 0) 1 else 0
+#### vu2Z-tt1
+Counter.count = 1
