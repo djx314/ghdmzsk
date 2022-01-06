@@ -161,3 +161,44 @@ Counter.count = 0
 Counter.count = 0
 #### vv2Z-tt1
 Counter.count = 0
+
+## number1t_top/Number1T_Number1U_Number1S_Top.scala
+### tu1-ss2
+#### tu1-ss2P
+Counter.countOpt = Option.empty
+#### tu1-ss2Z
+Counter.countOpt = Option.empty
+#### ss2P-tu1
+Counter.countOpt = Option.empty
+#### ss2Z-tu1
+Counter.countOpt = Option.empty
+
+### tu1-st2
+#### tu1-st2P
+Counter.countOpt = if (i2 == 0) Option(1) else Option.empty
+#### tu1-st2Z
+Counter.countOpt = if (i2 == 0) Option(1) else Option.empty
+#### st2P-tu1
+Counter.countOpt = if (i2 == 0) Option(0) else Option.empty
+#### st2Z-tu1
+Counter.countOpt = if (i2 == 0) Option(0) else Option.empty
+
+### tu1-su2
+#### tu1-su2P
+Counter.countOpt = Option.empty
+#### tu1-su2Z
+Counter.countOpt = Option.empty
+#### su2P-tu1
+Counter.countOpt = Option.empty
+#### su2Z-tu1
+Counter.countOpt = Option.empty
+
+### tu1-sv2
+#### tu1-sv2P
+Counter.countOpt = Option.empty
+#### tu1-sv2Z
+Counter.countOpt = Option.empty
+#### sv2P-tu1
+Counter.countOpt = Option.empty
+#### sv2Z-tu1
+Counter.countOpt = Option.empty
