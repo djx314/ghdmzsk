@@ -27,8 +27,8 @@ object Runner2 {
 
   def main(arr: Array[String]): Unit = {
     // assert(Counter.count(Runner2.number1) == Counter.count(Runner.number))
-    println(Counter.count(number1))
-    println(Counter.count(Runner.number))
+    // println(Counter.count(number1))
+    // println(Counter.count(Runner.number))
     /*<html width="60" height="60">
          <body style="{ width: 60px; }">
            <div highlight>
@@ -43,7 +43,8 @@ object Runner2 {
          </body>
        </html>*/
 
-    println(Counter.count(number2))
+    // println(Counter.count(number2))
+    println(XmlGen.gen1(number2))
   }
 
 }
