@@ -66,6 +66,9 @@ object Result {
     if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 / i2) else Option(i1 / i2 + 1)
   def result23(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option.empty else Option(i1 / i2)
   def result24(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option.empty else Option(i1 / i2 + 1)
+  def result25(i1: Int, i2: Int): Int         = i2 + 1
+  def result26(i1: Int, i2: Int): Int         = 1
+  def result27(i1: Int, i2: Int): Int         = i2
 
   def countResult(i1: Int, i2: Int): List[(Int, Option[Int])] = List((1, Option(1)))
 
