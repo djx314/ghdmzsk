@@ -1,10 +1,10 @@
-package f02.number1u_top
+package f02.number1t_top
 
 import f02._
-object Number1U_Number1S_Number1V_Top {
+object Number1T_Number1U_Number1U_Top {
   object Number1SExe {
-    def number1gen(n: Int): Number1                           = Fusion.number1uGen(n, Fusion.number1s)
-    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1vGen(n, zero)
+    def number1gen(n: Int): Number1                           = Fusion.number1tGen(n, Fusion.number1u)
+    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1uGen(n, zero)
     def exe = {
       for {
         i1 <- 0 to 20
@@ -19,7 +19,7 @@ object Number1U_Number1S_Number1V_Top {
           val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1SExe.list_round(i1 = $i1, i2Positive = $i2)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1SExe.list_round(i1 = $i1, i2Positive = $i2)"
             )
           }
         }
@@ -28,7 +28,7 @@ object Number1U_Number1S_Number1V_Top {
           val result1  = Counter.countOpt(() => counter1)
           val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1SExe.list_round(i1 = $i1, i2Zero = $i2)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1SExe.list_round(i1 = $i1, i2Zero = $i2)")
           }
         }
         {
@@ -37,7 +37,7 @@ object Number1U_Number1S_Number1V_Top {
           val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1SExe.round_list(i2Positive = $i2, i1 = $i1)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1SExe.round_list(i2Positive = $i2, i1 = $i1)"
             )
           }
         }
@@ -46,15 +46,15 @@ object Number1U_Number1S_Number1V_Top {
           val result1  = Counter.countOpt(() => counter1)
           val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1SExe.round_list(i2Zero = $i2, i1 = $i1)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1SExe.round_list(i2Zero = $i2, i1 = $i1)")
           }
         }
       }
     }
   }
   object Number1TExe {
-    def number1gen(n: Int): Number1                           = Fusion.number1uGen(n, Fusion.number1s)
-    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1vGen(n, zero)
+    def number1gen(n: Int): Number1                           = Fusion.number1tGen(n, Fusion.number1u)
+    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1uGen(n, zero)
     def exe = {
       for {
         i1 <- 0 to 20
@@ -66,19 +66,19 @@ object Number1U_Number1S_Number1V_Top {
         {
           def counter1 = number1.method1(number2Positive)
           val result1  = Counter.countOpt(() => counter1)
-          val result2  = Result.result34(i1, i2)
+          val result2  = Result.result33(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1TExe.list_round(i1 = $i1, i2Positive = $i2)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1TExe.list_round(i1 = $i1, i2Positive = $i2)"
             )
           }
         }
         {
           def counter1 = number1.method1(number2Zero)
           val result1  = Counter.countOpt(() => counter1)
-          val result2  = Result.result34(i1, i2)
+          val result2  = Result.result33(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1TExe.list_round(i1 = $i1, i2Zero = $i2)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1TExe.list_round(i1 = $i1, i2Zero = $i2)")
           }
         }
         {
@@ -87,7 +87,7 @@ object Number1U_Number1S_Number1V_Top {
           val result2  = Result.result2(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1TExe.round_list(i2Positive = $i2, i1 = $i1)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1TExe.round_list(i2Positive = $i2, i1 = $i1)"
             )
           }
         }
@@ -96,15 +96,15 @@ object Number1U_Number1S_Number1V_Top {
           val result1  = Counter.countOpt(() => counter1)
           val result2  = Result.result2(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1TExe.round_list(i2Zero = $i2, i1 = $i1)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1TExe.round_list(i2Zero = $i2, i1 = $i1)")
           }
         }
       }
     }
   }
   object Number1UExe {
-    def number1gen(n: Int): Number1                           = Fusion.number1uGen(n, Fusion.number1s)
-    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1vGen(n, zero)
+    def number1gen(n: Int): Number1                           = Fusion.number1tGen(n, Fusion.number1u)
+    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1uGen(n, zero)
     def exe = {
       for {
         i1 <- 0 to 20
@@ -115,46 +115,46 @@ object Number1U_Number1S_Number1V_Top {
         lazy val number2Zero: Number1     = { Number1U(() => number2Positive) }
         {
           def counter1 = number1.method1(number2Positive)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1UExe.list_round(i1 = $i1, i2Positive = $i2)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1UExe.list_round(i1 = $i1, i2Positive = $i2)"
             )
           }
         }
         {
           def counter1 = number1.method1(number2Zero)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1UExe.list_round(i1 = $i1, i2Zero = $i2)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1UExe.list_round(i1 = $i1, i2Zero = $i2)")
           }
         }
         {
           def counter1 = number2Positive.method1(number1)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1UExe.round_list(i2Positive = $i2, i1 = $i1)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1UExe.round_list(i2Positive = $i2, i1 = $i1)"
             )
           }
         }
         {
           def counter1 = number2Zero.method1(number1)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1UExe.round_list(i2Zero = $i2, i1 = $i1)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1UExe.round_list(i2Zero = $i2, i1 = $i1)")
           }
         }
       }
     }
   }
   object Number1VExe {
-    def number1gen(n: Int): Number1                           = Fusion.number1uGen(n, Fusion.number1s)
-    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1vGen(n, zero)
+    def number1gen(n: Int): Number1                           = Fusion.number1tGen(n, Fusion.number1u)
+    def number2PositiveGen(n: Int, zero: => Number1): Number1 = Fusion.number1uGen(n, zero)
     def exe = {
       for {
         i1 <- 0 to 20
@@ -165,38 +165,38 @@ object Number1U_Number1S_Number1V_Top {
         lazy val number2Zero: Number1     = { Number1V(() => number2Positive) }
         {
           def counter1 = number1.method1(number2Positive)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1VExe.list_round(i1 = $i1, i2Positive = $i2)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1VExe.list_round(i1 = $i1, i2Positive = $i2)"
             )
           }
         }
         {
           def counter1 = number1.method1(number2Zero)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1VExe.list_round(i1 = $i1, i2Zero = $i2)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1VExe.list_round(i1 = $i1, i2Zero = $i2)")
           }
         }
         {
           def counter1 = number2Positive.method1(number1)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
             throw new Exception(
-              s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1VExe.round_list(i2Positive = $i2, i1 = $i1)"
+              s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1VExe.round_list(i2Positive = $i2, i1 = $i1)"
             )
           }
         }
         {
           def counter1 = number2Zero.method1(number1)
-          val result1  = true
-          val result2  = true
+          val result1  = Counter.countOpt(() => counter1)
+          val result2  = Result.result1(i1, i2)
           if (result1 != result2) {
-            throw new Exception(s"Number Count Error with Number1U_Number1S_Number1V_Top.Number1VExe.round_list(i2Zero = $i2, i1 = $i1)")
+            throw new Exception(s"Number Count Error with Number1T_Number1U_Number1U_Top.Number1VExe.round_list(i2Zero = $i2, i1 = $i1)")
           }
         }
       }

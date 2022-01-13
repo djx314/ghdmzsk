@@ -19,7 +19,6 @@ trait Number2 {
 case class Number2S(tail: Number2, head: Item2) extends Number2 {
   override def method2(number1: Number1, item1: Item1): Number3 = Number3S(tail.method2(number1, item1), item1, head)
 }
-// case class Number2T(tail: () => Number2) extends Number2 {
 case class Number2T(head: () => Number2) extends Number2 {
   override def method2(number1: Number1, item1: Item1): Number3 = number1.method1(head())
 }
