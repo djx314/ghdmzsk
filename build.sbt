@@ -38,6 +38,7 @@ val e02    = (project in eRoot / "e02").dependsOn(e01)
 val e03    = (project in eRoot / "e03").dependsOn(e01)
 val e04    = (project in eRoot / "e04").dependsOn(e01)
 val e05    = (project in eRoot / "e05").dependsOn(e01)
+val e06    = (project in eRoot / "e06").dependsOn(e01)
 
 val f01 = (project in fRoot / "f01").dependsOn(a02)
 val f02 = (project in fRoot / "f02").dependsOn(b01, b02)
@@ -57,5 +58,3 @@ val h01 = project in hRoot / "h01"
 
 val i01    = project in iRoot / "i01"
 val i01_01 = project in iRoot / "i01-01"
-
-// val j01 = project in jRoot / "j01"
