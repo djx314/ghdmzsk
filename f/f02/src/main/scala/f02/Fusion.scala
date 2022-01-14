@@ -77,6 +77,12 @@ object Result {
   def result33(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option(1) else Option.empty
   def result34(i1: Int, i2: Int): Option[Int] = if (i1 != 0 && i2 == 0) Option(1) else Option.empty
   def result35(i1: Int, i2: Int): Option[Int] = if (i1 != 0) Option(1) else Option.empty
+  def result36(i1: Int, i2: Int): Option[Int] = if (i1 == 0) Option(0) else Option.empty
+  def result37(i1: Int, i2: Int): Option[Int] = if (i1 == 0) Option(0) else if (i2 == 0) Option(1) else Option.empty
+  def result38(i1: Int, i2: Int): Int         = i1 * i2 + 2 * i1
+  def result39(i1: Int, i2: Int): Int         = if (i1 == 0) 0 else i1 * i2 + 2 * i1 - i2
+  def result40(i1: Int, i2: Int): Int         = i1 * i2 + 2 * i1 + i2 + 1
+  def result41(i1: Int, i2: Int): Int         = i1 * i2 + 2 * i1 + 1
 
   def countResult(i1: Int, i2: Int): List[(Int, Option[Int])] = List((1, Option(1)))
 
