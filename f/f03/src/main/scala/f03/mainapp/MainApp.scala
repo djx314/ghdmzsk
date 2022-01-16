@@ -1,9 +1,11 @@
-package f03
+package f03.mainapp
 
 import scala.collection.mutable
 import scala.util.Random
+import zio._
 
-object Runner {
+object MainApp {
+  type ZIOEnv[T]        = RIO[ZEnv, T]
 
   def main(arr: Array[String]): Unit = {
     val hashMap: mutable.HashMap[Set[String], Int] = mutable.HashMap.empty
