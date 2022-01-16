@@ -77,6 +77,35 @@ object Result {
   def result33(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option(1) else Option.empty
   def result34(i1: Int, i2: Int): Option[Int] = if (i1 != 0 && i2 == 0) Option(1) else Option.empty
   def result35(i1: Int, i2: Int): Option[Int] = if (i1 != 0) Option(1) else Option.empty
+  def result36(i1: Int, i2: Int): Option[Int] = if (i1 == 0) Option(0) else Option.empty
+  def result37(i1: Int, i2: Int): Option[Int] = if (i1 == 0) Option(0) else if (i2 == 0) Option(1) else Option.empty
+  def result38(i1: Int, i2: Int): Int         = i1 * i2 + 2 * i1
+  def result39(i1: Int, i2: Int): Int         = if (i1 == 0) 0 else i1 * i2 + 2 * i1 - i2
+  def result40(i1: Int, i2: Int): Int         = i1 * i2 + 2 * i1 + i2 + 1
+  def result41(i1: Int, i2: Int): Int         = i1 * i2 + 2 * i1 + 1
+  def result42(i1: Int, i2: Int): Int         = i1 * i2 + i1
+  def result43(i1: Int, i2: Int): Int         = if (i1 == 0) 0 else i1 * i2 + i1 - i2
+  def result44(i1: Int, i2: Int): Int         = i1 * i2 + i1 + i2
+  def result45(i1: Int, i2: Int): Int         = if (i1 == 0) 0 else 1
+  def result46(i1: Int, i2: Int): Int         = 2 * i1
+  def result47(i1: Int, i2: Int): Int         = 2 * i1 + 1
+  def result48(i1: Int, i2: Int): Option[Int] =
+    if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2 - 1) else Option(2 * i1 + i1 / i2)
+  def result49(i1: Int, i2: Int): Option[Int] =
+    if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2) else Option(2 * i1 + i1 / i2 + 1)
+  def result50(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option.empty else Option(2 * i1 + i1 / i2 + 1)
+  def result51(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option.empty else Option(2 * i1 + i1 / i2 + 2)
+  def result52(i1: Int, i2: Int): Int         = if (i1 != 0 && i2 == 0) 1 else 2 * i1
+  def result53(i1: Int, i2: Int): Int         = if (i2 == 0) 0 else 2 * i1 + 1
+  def result54(i1: Int, i2: Int): Int         = 2 * i1 - i1 / (i2 + 1)
+  def result55(i1: Int, i2: Int): Int         = if (i1 % (i2 + 1) == 0) 2 * i1 - i1 / (i2 + 1) else 2 * i1 - i1 / (i2 + 1) - 1
+  def result56(i1: Int, i2: Int): Int         = 2 * i1 - (i1 + 1) / (i2 + 1) + 1
+  def result57(i1: Int, i2: Int): Option[Int] =
+    if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2 - 1) else Option(i1 + i1 / i2)
+  def result58(i1: Int, i2: Int): Option[Int] =
+    if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1)
+  def result59(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option.empty else Option(i1 + i1 / i2)
+  def result60(i1: Int, i2: Int): Option[Int] = if (i2 == 0) Option.empty else Option(i1 + i1 / i2 + 1)
 
   def countResult(i1: Int, i2: Int): List[(Int, Option[Int])] = List((1, Option(1)))
 

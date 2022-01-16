@@ -9,8 +9,9 @@ object Settings {
 
   val setting3 = scalaVersion := "3.1.0"
   val setting4 = scalacOptions ++= Seq("-feature")
+  val setting5 = scalacOptions ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 
-  val settings       = Seq(setting1, setting2, setting4)
+  val settings       = Seq(setting1, setting2, setting5)
   val scala3Settings = Seq(setting3, setting2, setting4)
 
 }
