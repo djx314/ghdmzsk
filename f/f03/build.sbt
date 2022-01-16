@@ -1,10 +1,15 @@
 Settings.settings
 name := "f03"
 
-javaOptions += "-Xss600k"
-fork := true
+reStart / javaOptions += "-Xss600k"
 
 libraryDependencies ++= Dependent.tapir
 libraryDependencies ++= Dependent.zioLogging
-libraryDependencies ++= Dependent.distage
 libraryDependencies ++= Dependent.http4s
+libraryDependencies ++= Dependent.catsEffect
+libraryDependencies ++= Dependent.macwire
+libraryDependencies ++= Dependent.slf4j
+libraryDependencies ++= Dependent.distage
+libraryDependencies ++= Dependent.scalaTags
+
+addCompilerPlugin(Dependent.kindProjector)

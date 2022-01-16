@@ -6,7 +6,7 @@ import sttp.tapir._
 import sttp.tapir.json.circe._
 import sttp.tapir.generic.auto._
 
-object NumberEndpoint   {
+object NumberEndpoint {
 
   implicit class appendOutPout[A, I, E, O, -R](endpo: Endpoint[A, I, E, ResultSet[O], R]) {
     def append: Endpoint[A, I, E, (O, StatusCode), R] =
@@ -19,5 +19,13 @@ object NumberEndpoint   {
     def appendError: Endpoint[A, I, (E, StatusCode), O, R] =
       endpo.errorOut(statusCode).mapErrorOut(d => (d._1.data, d._2))(s => (ResultSet(s._1, s._2.code), s._2))
   }
+
+  val root = endpoint
+
+  val tag1 = "html 展示页"
+
+  val pageHelper = root.out(htmlBodyUtf8).description("常用页面引导").tag(tag1)
+
+  val index = root.in("index").out(htmlBodyUtf8).description("首页").tag(tag1)
 
 }

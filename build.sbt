@@ -42,7 +42,7 @@ val e06    = (project in eRoot / "e06").dependsOn(e01)
 
 val f01 = (project in fRoot / "f01").dependsOn(a02)
 val f02 = (project in fRoot / "f02").dependsOn(b01, b02)
-val f03 = (project in fRoot / "f03").dependsOn(b03, b04)
+val f03 = project in fRoot / "f03"
 val f04 = (project in fRoot / "f04").dependsOn(c01)
 val f05 = (project in fRoot / "f05").dependsOn(c02)
 

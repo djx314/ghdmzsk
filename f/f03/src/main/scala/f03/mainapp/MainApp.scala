@@ -1,29 +1,58 @@
 package f03.mainapp
 
-import scala.collection.mutable
-import scala.util.Random
+import cats.implicits._
+import com.softwaremill.macwire._
+
+import distage._
+
+import f03.fusion.NumberFusion
+
+import org.http4s._
+import org.http4s.server.staticcontent._
+
+import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
+import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
+import sttp.tapir.openapi.circe.yaml._
+import sttp.tapir.swagger.SwaggerUI
+
 import zio._
+import zio.interop.catz._
 
 object MainApp {
-  type ZIOEnv[T]        = RIO[ZEnv, T]
 
-  def main(arr: Array[String]): Unit = {
-    val hashMap: mutable.HashMap[Set[String], Int] = mutable.HashMap.empty
+  type ZIOEnv[T] = RIO[ZEnv, T]
 
-    for (_ <- 1 to 10000) {
-      var random1 = math.abs(Random.nextInt()) % 2000
-      if (random1 == 0) random1 += 1
-      val result  = Counter.count(random1, random1)
-      val result1 = result.groupBy(_._2).map(s => s._2.map(_._1).to(Set))
-      for (each <- result1) {
-        hashMap.get(each) match {
-          case Some(s) => hashMap.put(each, s + 1)
-          case None    => hashMap.put(each, 1)
-        }
-      }
-    }
+  lazy val appRoutes            = wire[AppRoutes]
+  private lazy val numberFusion = wire[NumberFusion]
 
-    println(hashMap.mkString("\n"))
+  // prepare
+  private object GDModule extends ModuleDef {
+    make[AppRoutes]
+    make[NumberFusion]
   }
 
+  private object GDApp {
+    private val injector = Injector[RIO[ZEnv, *]]()
+    private val plan = injector.plan(
+      GDModule,
+      Activation.empty,
+      Roots(
+        DIKey[AppRoutes]
+      )
+    )
+    private val resource = injector.produce(plan)
+    val routes           = resource.use(s => ZIO.effect(s.get[AppRoutes]))
+  }
+
+}
+
+class AppRoutes(numberFusion: NumberFusion) {
+  private val lowLevelRoutes = ZHttp4sServerInterpreter[ZEnv]().from(numberFusion.lowLevelRoutes).toRoutes
+  private val httpRoutes     = ZHttp4sServerInterpreter[ZEnv]().from(numberFusion.routes).toRoutes
+  private val fileRoutes     = fileService[MainApp.ZIOEnv](FileService.Config("D:/xlxz", pathPrefix = "eeff"))
+
+  private val docsAsYaml: String = OpenAPIDocsInterpreter().toOpenAPI(numberFusion.docs, "Number App", "1.0").toYaml
+  private val swaggerUIRoute     = ZHttp4sServerInterpreter[ZEnv]().from(SwaggerUI[MainApp.ZIOEnv](docsAsYaml)).toRoutes
+
+  val routes: HttpRoutes[MainApp.ZIOEnv] = httpRoutes <+> fileRoutes <+> swaggerUIRoute <+> lowLevelRoutes
 }

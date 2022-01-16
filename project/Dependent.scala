@@ -4,13 +4,17 @@ import sbt.Keys._
 object Dependent {
 
   object versions {
-    val catsEffect = "3.3.4"
-    val sttp       = "3.3.18"
-    val zio        = "1.0.13"
-    val zioLogging = "0.5.14"
-    val tapir      = "0.20.0-M5"
-    val distage    = "1.0.8"
-    val http4s         = "0.23.7"
+    val catsEffect    = "3.3.4"
+    val sttp          = "3.3.18"
+    val zio           = "1.0.13"
+    val zioLogging    = "0.5.14"
+    val tapir         = "0.20.0-M5"
+    val distage       = "1.0.8"
+    val http4s        = "0.23.7"
+    val kindProjector = "0.13.2"
+    val macwire       = "2.5.3"
+    val slf4j         = "1.7.33"
+    val scalaTags     = "0.11.0"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -43,5 +47,18 @@ object Dependent {
     "org.http4s" %% "http4s-blaze-client" % versions.http4s,
     "org.http4s" %% "http4s-circe"        % versions.http4s
   )
+
+  val macwire = Seq(
+    "com.softwaremill.macwire" %% "macros"     % versions.macwire % "provided",
+    "com.softwaremill.macwire" %% "macrosakka" % versions.macwire % "provided",
+    "com.softwaremill.macwire" %% "util"       % versions.macwire,
+    "com.softwaremill.macwire" %% "proxy"      % versions.macwire
+  )
+
+  val kindProjector = "org.typelevel" % "kind-projector" % versions.kindProjector cross CrossVersion.full
+
+  val slf4j = Seq("org.slf4j" % "slf4j-simple" % versions.slf4j)
+
+  val scalaTags = Seq("com.lihaoyi" %% "scalatags" % versions.scalaTags)
 
 }
