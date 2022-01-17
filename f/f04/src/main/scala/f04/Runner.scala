@@ -1,20 +1,29 @@
 package f04
 
-import scala.collection.mutable
-import scala.util.Random
+import scala.scalajs.js.annotation.JSExportTopLevel
+import io.udash.wrappers.jquery._
+import org.scalajs.dom
+import org.scalajs.dom.{document, window}
 
-object Runner {
+object IndexViewJavascript {
 
-  def main(arr: Array[String]): Unit = {
-    val hashMap: mutable.HashMap[Set[String], Int] = mutable.HashMap.empty
+  @JSExportTopLevel("initIndexPage")
+  def initIndexPage(): Unit = jQ { () =>
+    val cleanAllPlanButton = document.getElementById("cleanAllPlanButton")
+    cleanAllPlanButton.addEventListener(
+      "click",
+      { e: dom.MouseEvent =>
+        window.alert(cleanAllPlanButton.textContent)
+      }
+    )
 
-    for (_ <- 1 to 10000) {
-      var random1 = math.abs(Random.nextInt()) % 200
-      if (random1 == 0) random1 += 1
-      hashMap += ((Set("1213", "werwrwer"), 2))
-    }
-
-    println(hashMap.to(List).sortWith((s, t) => s._2 > t._2).mkString("\n"))
+    val reInputPlanButton = document.getElementById("reInputPlanButton")
+    reInputPlanButton.addEventListener(
+      "click",
+      { e: dom.MouseEvent =>
+        window.alert(reInputPlanButton.textContent)
+      }
+    )
   }
 
 }

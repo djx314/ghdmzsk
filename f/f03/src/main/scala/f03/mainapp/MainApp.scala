@@ -4,7 +4,7 @@ import cats.implicits._
 import com.softwaremill.macwire._
 import distage._
 import f03.fusion.NumberFusion
-import f03.views.IndexView
+import f03.views.{IndexView, JsDependencies}
 import org.http4s._
 import org.http4s.server.staticcontent._
 import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
@@ -18,10 +18,11 @@ object MainApp {
 
   type ZIOEnv[T] = RIO[ZEnv, T]
 
-  lazy val appRoutes            = wire[AppRoutes]
-  private lazy val appConfig    = wire[AppConfig]
-  private lazy val numberFusion = wire[NumberFusion]
-  private lazy val indexView    = wire[IndexView]
+  lazy val appRoutes              = wire[AppRoutes]
+  private lazy val appConfig      = wire[AppConfig]
+  private lazy val numberFusion   = wire[NumberFusion]
+  private lazy val indexView      = wire[IndexView]
+  private lazy val jsDependencies = wire[JsDependencies]
 
   // prepare
   private object GDModule extends ModuleDef {

@@ -11,6 +11,7 @@ libraryDependencies ++= Dependent.macwire
 libraryDependencies ++= Dependent.slf4j
 libraryDependencies ++= Dependent.distage
 libraryDependencies ++= Dependent.scalaTags
+libraryDependencies ++= Dependent.jqueryJSSource
 
 addCompilerPlugin(Dependent.kindProjector)
 enablePlugins(SbtWeb)

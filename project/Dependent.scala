@@ -4,17 +4,20 @@ import sbt.Keys._
 object Dependent {
 
   object versions {
-    val catsEffect    = "3.3.4"
-    val sttp          = "3.3.18"
-    val zio           = "1.0.13"
-    val zioLogging    = "0.5.14"
-    val tapir         = "0.20.0-M5"
-    val distage       = "1.0.8"
-    val http4s        = "0.23.7"
-    val kindProjector = "0.13.2"
-    val macwire       = "2.5.3"
-    val slf4j         = "1.7.33"
-    val scalaTags     = "0.11.0"
+    val catsEffect     = "3.3.4"
+    val sttp           = "3.3.18"
+    val zio            = "1.0.13"
+    val zioLogging     = "0.5.14"
+    val tapir          = "0.20.0-M5"
+    val distage        = "1.0.8"
+    val http4s         = "0.23.7"
+    val kindProjector  = "0.13.2"
+    val macwire        = "2.5.3"
+    val slf4j          = "1.7.33"
+    val scalaTags      = "0.11.0"
+    val scalajsJQuery  = "3.2.0"
+    val scalajsDom     = "2.1.0"
+    val jqueryJSSource = "3.6.0"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -59,6 +62,7 @@ object Dependent {
 
   val slf4j = Seq("org.slf4j" % "slf4j-simple" % versions.slf4j)
 
-  val scalaTags = Seq("com.lihaoyi" %% "scalatags" % versions.scalaTags)
+  val scalaTags      = Seq("com.lihaoyi" %% "scalatags" % versions.scalaTags)
+  val jqueryJSSource = Seq("org.webjars" % "jquery" % versions.jqueryJSSource)
 
 }
