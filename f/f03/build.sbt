@@ -13,3 +13,9 @@ libraryDependencies ++= Dependent.distage
 libraryDependencies ++= Dependent.scalaTags
 
 addCompilerPlugin(Dependent.kindProjector)
+enablePlugins(SbtWeb)
+Assets / pipelineStages := Seq(scalaJSPipeline)
+
+Compile / compile := ((Compile / compile) dependsOn scalaJSPipeline).value
+
+version := "0.0.1"
