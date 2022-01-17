@@ -18,6 +18,7 @@ object Dependent {
     val scalajsJQuery  = "3.2.0"
     val scalajsDom     = "2.1.0"
     val jqueryJSSource = "3.6.0"
+    val sqlite = "3.36.0.3"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -64,5 +65,6 @@ object Dependent {
 
   val scalaTags      = Seq("com.lihaoyi" %% "scalatags" % versions.scalaTags)
   val jqueryJSSource = Seq("org.webjars" % "jquery" % versions.jqueryJSSource)
+  val sqlite = Seq( "org.xerial" % "sqlite-jdbc" % versions.sqlite)
 
 }

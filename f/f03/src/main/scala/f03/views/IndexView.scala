@@ -7,14 +7,14 @@ import java.util.Date
 
 class JsDependencies(appConfig: AppConfig) {
 
-  def jsPath(version: String) = if (appConfig.isProd)
-    s"/f03/$version/f04-fastopt/main.js"
+  def jsPath = if (appConfig.isProd)
+    "/f03/0.0.1/f04-fastopt/main.js"
   else
-    s"/f03/$version/f04-fastopt/main.js?version=${new Date().getTime}"
+    s"/f03/0.0.1/f04-fastopt/main.js?version=${new Date().getTime}"
 
   val jquery = script(src := "/jquery/3.6.0/jquery.min.js", `type` := "text/javascript")
 
-  def main = script(src := jsPath("0.0.1"), `type` := "text/javascript")
+  def main = script(src := jsPath, `type` := "text/javascript")
 
 }
 
