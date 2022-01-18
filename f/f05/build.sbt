@@ -1,11 +1,8 @@
-import sbt.Def.spaceDelimited
-
 Settings.settings
 name := "f05"
 
 libraryDependencies ++= Dependent.slick
 libraryDependencies ++= Dependent.sqlite
-
 
 enablePlugins(FlywayPlugin)
 
@@ -14,5 +11,3 @@ flywayLocations += "db/migration"
 
 val gen = inputKey[Unit]("slickCodegen")
 gen := (Compile / run).partialInput(" f/f03").evaluated
-
-
