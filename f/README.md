@@ -43,6 +43,21 @@ object Counter {
   }
 }
 ```
+如下，则实现了一个简单的自然数加法，符合特定约束的 Number1 实例组成的运算被称为数运算，本文旨在穷举这些数运算的可能情况，并分析他们的特征。
+```scala
+import Fusion._
+for {
+  i1 <- 0 to 20
+  i2 <- 0 to 20
+} {
+  val number1 = number1sGen(i1, number1v)
+  val number2 = number1sGen(i2, number1v)
+  def number3 = number1.method1(number2)
+  val count1  = count(() => number3)
+  assert(count1 == i1 + i2)
+}
+```
+以下是一些常用的构造数实例的方法，部分已经在上面的自然数加法中被使用了。
 ```scala
 object Fusion {
 
