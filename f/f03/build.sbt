@@ -11,5 +11,14 @@ libraryDependencies ++= Dependent.macwire
 libraryDependencies ++= Dependent.slf4j
 libraryDependencies ++= Dependent.distage
 libraryDependencies ++= Dependent.scalaTags
+libraryDependencies ++= Dependent.jqueryJSSource
+libraryDependencies ++= Dependent.sqlite
+libraryDependencies ++= Dependent.slick
 
 addCompilerPlugin(Dependent.kindProjector)
+enablePlugins(SbtWeb)
+Assets / pipelineStages := Seq(scalaJSPipeline)
+
+Compile / compile := ((Compile / compile) dependsOn scalaJSPipeline).value
+
+version := "0.0.1"

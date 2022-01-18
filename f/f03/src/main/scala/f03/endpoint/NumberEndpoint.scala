@@ -20,11 +20,11 @@ object NumberEndpoint {
       endpo.errorOut(statusCode).mapErrorOut(d => (d._1.data, d._2))(s => (ResultSet(s._1, s._2.code), s._2))
   }
 
-  val root = endpoint
+  private val root = endpoint
 
-  val tag1 = "html 展示页"
+  private val tag1 = "html 展示页"
 
-  val pageHelper = root.out(htmlBodyUtf8).description("常用页面引导").tag(tag1)
+  val pageHelper = root.in("helper").out(htmlBodyUtf8).description("常用页面引导").tag(tag1)
 
   val index = root.in("index").out(htmlBodyUtf8).description("首页").tag(tag1)
 
