@@ -13,6 +13,7 @@ libraryDependencies ++= Dependent.distage
 libraryDependencies ++= Dependent.scalaTags
 libraryDependencies ++= Dependent.jqueryJSSource
 libraryDependencies ++= Dependent.sqlite
+libraryDependencies ++= Dependent.slick
 
 addCompilerPlugin(Dependent.kindProjector)
 enablePlugins(SbtWeb)
@@ -21,8 +22,3 @@ Assets / pipelineStages := Seq(scalaJSPipeline)
 Compile / compile := ((Compile / compile) dependsOn scalaJSPipeline).value
 
 version := "0.0.1"
-
-enablePlugins(FlywayPlugin)
-
-flywayUrl := "jdbc:sqlite:./f/f03/db/numberdatabase.db"
-flywayLocations += "db/migration"

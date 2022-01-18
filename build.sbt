@@ -44,7 +44,7 @@ val f01 = (project in fRoot / "f01").dependsOn(a02)
 val f02 = (project in fRoot / "f02").dependsOn(b01, b02)
 val f03 = (project in fRoot / "f03").settings(scalaJSProjects := Seq(f04))
 val f04 = project in fRoot / "f04"
-val f05 = (project in fRoot / "f05").dependsOn(c02)
+val f05 = project in fRoot / "f05"
 
 val f_codegen_path = fRoot / "f_codegen"
 val f_codegen      = project in f_codegen_path
