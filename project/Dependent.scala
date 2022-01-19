@@ -13,7 +13,7 @@ object Dependent {
     val http4s         = "0.23.7"
     val kindProjector  = "0.13.2"
     val macwire        = "2.5.3"
-    val slf4j          = "1.7.33"
+    val slf4j          = "2.0.0-alpha6"
     val scalaTags      = "0.11.0"
     val scalajsJQuery  = "3.2.0"
     val scalajsDom     = "2.1.0"

@@ -24,7 +24,7 @@ object NumberEndpoint {
 
   private val tag1 = "html 展示页"
 
-  val pageHelper = root.in("helper").out(htmlBodyUtf8).description("常用页面引导").tag(tag1)
+  val pageHelper = root.in("help").out(htmlBodyUtf8).description("常用页面引导").tag(tag1)
 
   val index = root.in("index").out(htmlBodyUtf8).description("首页").tag(tag1)
 
