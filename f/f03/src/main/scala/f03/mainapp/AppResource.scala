@@ -1,6 +1,7 @@
 package f03.mainapp
 
 import zio._
+import zio.logging._
 import f03.slick.model.Tables.profile.api._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,12 +19,13 @@ object db {
 trait AppResource {
   def sqliteSlickManaged: UManaged[SlickDB]
   def sqliteSlickLayer: ULayer[Has[SlickDB]]
+  def loggingEnv: URLayer[ZEnv, Logging]
 }
 
 class AppResourceImpl extends AppResource {
 
   override val sqliteSlickManaged: UManaged[SlickDB] = {
-    val db1     = ZIO.succeed(Database.forURL("jdbc:sqlite:./f/f03/db/numberdatabase.db", driver = "org.sqlite.JDBC"))
+    val db1     = ZIO.succeed(Database.forURL("jdbc:sqlite:./db/numberdatabase.db", driver = "org.sqlite.JDBC"))
     val managed = ZManaged.fromAutoCloseable(db1)
     for (db <- managed) yield new SlickDB {
       override def run[T](dbioWith: ExecutionContext => DBIO[T]): ExecutionContext => Future[T] = dbioWith.andThen(db.run)
@@ -31,5 +33,8 @@ class AppResourceImpl extends AppResource {
   }
 
   override val sqliteSlickLayer: ULayer[Has[SlickDB]] = sqliteSlickManaged.toLayer
+
+  val loggingEnv: URLayer[ZEnv, Logging] =
+    Logging.console(logLevel = LogLevel.Info, format = LogFormat.ColoredLogFormat()) >>> Logging.withRootLoggerName("number-app")
 
 }

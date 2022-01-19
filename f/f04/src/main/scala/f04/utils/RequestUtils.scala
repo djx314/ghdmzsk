@@ -27,4 +27,35 @@ object RequestUtils {
     resultP.future
   }
 
+  def ajaxJson[T: Decoder](settings: JQueryAjaxSettings): Future[T] = {
+    val setter = settings.asInstanceOf[js.Dynamic]
+    setter.contentType = "application/json;charset=utf-8"
+    setter.dataType = "json"
+    val promise = Promise[T]()
+
+    val success: js.Any => Unit = { data =>
+      val json = io.circe.parser.parse(JSON.stringify(data))
+      json.flatMap(_.as[T]).fold(_ => promise.tryFailure(new Exception("响应数据格式错误。")), s => promise.trySuccess(s))
+    }
+    val successDo: (js.Any, String, JQueryXHR) => js.Any = { (data, status, xhr) =>
+      success(data)
+    }
+
+    val fail: (JQueryXHR, String, String) => Unit = { (xhr, textStatus, errorThrown) =>
+      console.log(s"$textStatus, $errorThrown")
+      promise.tryFailure(new Exception("请求发生异常。"))
+    }
+    val failDo: (JQueryXHR, String, String) => js.Any = { (xhr, textStatus, errorThrown) =>
+      fail(xhr, textStatus, errorThrown)
+    }
+
+    setter.success = successDo
+    setter.error = failDo
+    val newSettings = setter.asInstanceOf[JQueryAjaxSettings]
+
+    jQ.ajax(newSettings)
+
+    promise.future
+  }
+
 }

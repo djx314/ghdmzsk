@@ -9,6 +9,7 @@ import org.scalajs.dom
 import org.scalajs.dom.{document, window}
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
+import scala.util.Failure
 
 object IndexViewJavascript {
 
@@ -20,7 +21,15 @@ object IndexViewJavascript {
     cleanAllPlanButton.addEventListener(
       "click",
       { e: dom.MouseEvent =>
-        window.alert(cleanAllPlanButton.textContent)
+        val action = for {
+          rUrl      <- reverseUrl
+          deleteUrl <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = rUrl.deleteAllCountPlan, method = "delete"))
+        } yield window.alert(s"删除了${deleteUrl.data}条数据")
+        action.onComplete {
+          case Failure(exception) =>
+            window.alert("删除“计算计划”数据发生异常")
+          case _ =>
+        }
       }
     )
 
@@ -32,7 +41,6 @@ object IndexViewJavascript {
       }
     )
 
-    reverseUrl.map(s => window.alert(s.deleteAllCountPlan))
   }
 
 }
