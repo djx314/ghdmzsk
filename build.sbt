@@ -40,10 +40,25 @@ val e04    = (project in eRoot / "e04").dependsOn(e01)
 val e05    = (project in eRoot / "e05").dependsOn(e01)
 val e06    = (project in eRoot / "e06").dependsOn(e01)
 
-val f01 = (project in fRoot / "f01").dependsOn(a02)
-val f02 = (project in fRoot / "f02").dependsOn(b01, b02)
-val f03 = (project in fRoot / "f03").settings(scalaJSProjects := Seq(f04))
-val f04 = project in fRoot / "f04"
+val f01      = (project in fRoot / "f01").dependsOn(a02)
+val f02      = (project in fRoot / "f02").dependsOn(b01, b02)
+lazy val f03 = (project in fRoot / "f03").settings(scalaJSProjects := Seq(f04)).dependsOn(f06.jvm)
+lazy val f04 = (project in fRoot / "f04").dependsOn(f06.js)
+lazy val f06 = crossProject(JSPlatform, JVMPlatform)
+  .in(fRoot / "f06")
+  .settings(
+    Settings.settings,
+    name    := "f06",
+    version := "0.0.1"
+  )
+  .jvmSettings(libraryDependencies ++= Dependent.circe ++: Dependent.scalajsStubs)
+  .jsSettings(
+    libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-core"    % Dependent.versions.circe,
+      "io.circe" %%% "circe-generic" % Dependent.versions.circe,
+      "io.circe" %%% "circe-parser"  % Dependent.versions.circe
+    )
+  )
 val f05 = project in fRoot / "f05"
 
 val f_codegen_path = fRoot / "f_codegen"

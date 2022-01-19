@@ -14,6 +14,7 @@ libraryDependencies ++= Dependent.scalaTags
 libraryDependencies ++= Dependent.jqueryJSSource
 libraryDependencies ++= Dependent.sqlite
 libraryDependencies ++= Dependent.slick
+libraryDependencies ++= Dependent.circe
 
 addCompilerPlugin(Dependent.kindProjector)
 enablePlugins(SbtWeb)
