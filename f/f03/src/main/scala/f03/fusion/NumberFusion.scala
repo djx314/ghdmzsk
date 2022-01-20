@@ -4,17 +4,16 @@ import f03.endpoint.NumberEndpoint
 import f03.reverseroutes.ReverseRoutes
 import f03.service.CountPlanService
 import f03.views.{HelperView, IndexView}
-import f06.models.ReverseUrl
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
 import zio._
 import zio.logging._
 
-class NumberFusion(indexView: IndexView, countPlanService: CountPlanService, helperView: HelperView, reverseRoutes: ReverseRoutes) {
+class NumberFusion(indexView: IndexView, helperView: HelperView, reverseRoutes: ReverseRoutes) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
 
-  val layer = ZLayer.succeedMany(Has(countPlanService))
+  val layer = CountPlanService.service
 
   val pageHelper = NumberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
   val index      = NumberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))

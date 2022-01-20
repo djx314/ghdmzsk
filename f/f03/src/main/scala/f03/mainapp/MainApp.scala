@@ -28,7 +28,6 @@ object MainApp {
   private lazy val numberFusion             = wire[NumberFusion]
   private lazy val indexView                = wire[IndexView]
   private lazy val jsDependencies           = wire[JsDependencies]
-  private lazy val countPlanService         = wire[CountPlanServiceImpl]
   private lazy val appResource: AppResource = wire[AppResourceImpl]
   private lazy val helperView               = wire[HelperView]
   private lazy val reverseRoutes            = wire[ReverseRoutes]
