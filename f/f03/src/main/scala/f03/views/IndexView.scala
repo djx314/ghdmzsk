@@ -7,7 +7,7 @@ class IndexView(jsDependencies: JsDependencies) {
   def view = "<!DOCTYPE html>" + html(
     head(
       jsDependencies.jquery,
-      jsDependencies.main,
+      jsDependencies.main(),
       script(`type` := "text/javascript")("""
           |(function() {
           |  initIndexPage();

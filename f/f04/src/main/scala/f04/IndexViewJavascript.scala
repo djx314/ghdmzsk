@@ -22,8 +22,9 @@ object IndexViewJavascript {
       "click",
       { e: dom.MouseEvent =>
         val action = for {
-          rUrl      <- reverseUrl
-          deleteUrl <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = rUrl.deleteAllCountPlan, method = "delete"))
+          rUrl <- reverseUrl
+          plan = rUrl.deleteAllCountPlan
+          deleteUrl <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method))
         } yield window.alert(s"删除了${deleteUrl.data}条数据")
         action.onComplete {
           case Failure(exception) =>

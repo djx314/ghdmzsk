@@ -4,8 +4,9 @@ import cats.implicits._
 import com.softwaremill.macwire._
 import distage._
 import f03.fusion.NumberFusion
+import f03.reverseroutes.ReverseRoutes
 import f03.service.CountPlanServiceImpl
-import f03.views.{IndexView, JsDependencies}
+import f03.views.{HelperView, IndexView, JsDependencies}
 import org.http4s._
 import org.http4s.server.staticcontent._
 import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
@@ -17,15 +18,20 @@ import zio.interop.catz._
 
 object MainApp {
 
-  type ZIOEnv[T] = RIO[ZEnv, T]
+  type ZIOEnv[T]    = RIO[AppEnv, T]
+  type CustomAppEnv = Has[SlickDB] with logging.Logging
+  type AppEnv       = ZEnv with CustomAppEnv
+  val appEnv = appResource.sqliteSlickLayer ++ appResource.loggingEnv
 
-  lazy val appRoutes                = wire[AppRoutes]
-  private lazy val appConfig        = wire[AppConfig]
-  private lazy val numberFusion     = wire[NumberFusion]
-  private lazy val indexView        = wire[IndexView]
-  private lazy val jsDependencies   = wire[JsDependencies]
-  private lazy val countPlanService = wire[CountPlanServiceImpl]
-  private lazy val appResource      = wire[AppResourceImpl]
+  lazy val appRoutes                        = wire[AppRoutes]
+  private lazy val appConfig                = wire[AppConfig]
+  private lazy val numberFusion             = wire[NumberFusion]
+  private lazy val indexView                = wire[IndexView]
+  private lazy val jsDependencies           = wire[JsDependencies]
+  private lazy val countPlanService         = wire[CountPlanServiceImpl]
+  private lazy val appResource: AppResource = wire[AppResourceImpl]
+  private lazy val helperView               = wire[HelperView]
+  private lazy val reverseRoutes            = wire[ReverseRoutes]
 
   // prepare
   private object GDModule extends ModuleDef {
@@ -49,12 +55,15 @@ object MainApp {
 }
 
 class AppRoutes(numberFusion: NumberFusion) {
-  private val lowLevelRoutes = ZHttp4sServerInterpreter[ZEnv]().from(numberFusion.lowLevelRoutes).toRoutes
-  private val httpRoutes     = ZHttp4sServerInterpreter[ZEnv]().from(numberFusion.routes).toRoutes
-  private val fileRoutes     = webjarServiceBuilder[MainApp.ZIOEnv].toRoutes
+  type AppEnv    = MainApp.AppEnv
+  type ZIOEnv[T] = MainApp.ZIOEnv[T]
+
+  private val lowLevelRoutes = ZHttp4sServerInterpreter[AppEnv]().from(numberFusion.lowLevelRoutes).toRoutes
+  private val httpRoutes     = ZHttp4sServerInterpreter[AppEnv]().from(numberFusion.routes).toRoutes
+  private val fileRoutes     = webjarServiceBuilder[ZIOEnv].toRoutes
 
   private val docsAsYaml: String = OpenAPIDocsInterpreter().toOpenAPI(numberFusion.docs, "Number App", "1.0").toYaml
-  private val swaggerUIRoute     = ZHttp4sServerInterpreter[ZEnv]().from(SwaggerUI[MainApp.ZIOEnv](docsAsYaml)).toRoutes
+  private val swaggerUIRoute     = ZHttp4sServerInterpreter[AppEnv]().from(SwaggerUI[ZIOEnv](docsAsYaml)).toRoutes
 
-  val routes: HttpRoutes[MainApp.ZIOEnv] = httpRoutes <+> fileRoutes <+> swaggerUIRoute <+> lowLevelRoutes
+  val routes: HttpRoutes[ZIOEnv] = httpRoutes <+> fileRoutes <+> swaggerUIRoute <+> lowLevelRoutes
 }

@@ -43,13 +43,23 @@ object NumberEndpoint {
 
   val index      = root.in("index").out(htmlBodyUtf8).description("首页").tag(htmlDocTag)
   val reverseUrl = root.get.in("reverseUrl").out(jsonBody[ResultSet[ReverseUrl]]).appendSuccess.description("反向路由").tag(JsonTag)
-  val deleteAllCountPlan = root.delete
+  val deleteAllCountPlan = root
     .in("countPlan")
+    .delete
     .out(jsonBody[ResultSet[Int]])
     .appendSuccess
     .errorOut(jsonBody[ResultSet[Unit]])
     .appendErrorMessage
     .description("删除所有计算计划")
+    .tag(JsonTag)
+  val resetAllCountPlan = root
+    .in("resetAllCountPlan")
+    .post
+    .out(jsonBody[ResultSet[Int]])
+    .appendSuccess
+    .errorOut(jsonBody[ResultSet[Unit]])
+    .appendErrorMessage
+    .description("重置所有计算计划")
     .tag(JsonTag)
 
 }

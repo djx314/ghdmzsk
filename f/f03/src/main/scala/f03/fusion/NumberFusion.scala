@@ -1,20 +1,22 @@
 package f03.fusion
 
 import f03.endpoint.NumberEndpoint
-import f03.mainapp.AppResource
 import f03.reverseroutes.ReverseRoutes
 import f03.service.CountPlanService
 import f03.views.{HelperView, IndexView}
+import f06.models.ReverseUrl
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
 import zio._
 import zio.logging._
 
-class NumberFusion(indexView: IndexView, countPlanService: CountPlanService, appResource: AppResource) {
+class NumberFusion(indexView: IndexView, countPlanService: CountPlanService, helperView: HelperView, reverseRoutes: ReverseRoutes) {
 
-  val layer = ZLayer.succeedMany(Has(countPlanService)) ++ appResource.loggingEnv
+  type AppEnv = f03.mainapp.MainApp.AppEnv
 
-  val pageHelper = NumberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(HelperView.view))
+  val layer = ZLayer.succeedMany(Has(countPlanService))
+
+  val pageHelper = NumberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
   val index      = NumberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))
   val deleteAllCountPlan =
     NumberEndpoint.deleteAllCountPlan.zServerLogic { _ =>
@@ -23,13 +25,13 @@ class NumberFusion(indexView: IndexView, countPlanService: CountPlanService, app
         for (_ <- Logging.throwable("删除所有 CountPlan 发生异常", e))
           yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
 
-      action.flatMapError(errorHandle).provideCustomLayer(layer)
+      action.flatMapError(errorHandle).provideSomeLayer[AppEnv](layer)
     }
 
-  val reverseUrl = NumberEndpoint.reverseUrl.zServerLogic(_ => ZIO.succeed(ReverseRoutes.reverseUrl))
+  val reverseUrl = NumberEndpoint.reverseUrl.zServerLogic(_ => ZIO.succeed(reverseRoutes.reverseUrl))
 
-  val routes         = List(index.widen[ZEnv], deleteAllCountPlan.widen[ZEnv], reverseUrl.widen[ZEnv])
-  val lowLevelRoutes = List(pageHelper.widen[ZEnv])
+  val routes         = List(index.widen[AppEnv], deleteAllCountPlan.widen[AppEnv], reverseUrl.widen[AppEnv])
+  val lowLevelRoutes = List(pageHelper.widen[AppEnv])
   val docs           = List(NumberEndpoint.pageHelper, NumberEndpoint.index, NumberEndpoint.deleteAllCountPlan, NumberEndpoint.reverseUrl)
 
 }
