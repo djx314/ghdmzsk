@@ -21,7 +21,7 @@ object MainApp {
   type ZIOEnv[T]    = RIO[AppEnv, T]
   type CustomAppEnv = Has[SlickDB] with logging.Logging
   type AppEnv       = ZEnv with CustomAppEnv
-  val appEnv = appResource.sqliteSlickLayer ++ appResource.loggingEnv
+  lazy val appEnv = appResource.sqliteSlickLayer ++ appResource.loggingEnv
 
   lazy val appRoutes                        = wire[AppRoutes]
   private lazy val appConfig                = wire[AppConfig]

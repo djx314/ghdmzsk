@@ -37,5 +37,4 @@ class AppResourceImpl extends AppResource {
   val loggingEnv: URLayer[ZEnv, Logging] =
     Logging.console(logLevel = LogLevel.Info, format = LogFormat.ColoredLogFormat()) >>> Logging.withRootLoggerName("number-app")
 
-
 }

@@ -7,7 +7,6 @@ import scala.language.implicitConversions
 import sttp.model.{Method, Uri}
 import sttp.tapir._
 import sttp.tapir.client.sttp.SttpClientInterpreter
-import zio._
 
 class ReverseRoutes {
 
