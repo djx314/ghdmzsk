@@ -8,12 +8,14 @@ import f03.slick.model.Tables.profile.api._
 trait CountPlanService {
   def deleteAll(): Task[Int]
   def resetAll(): Task[Option[Int]]
+  def count(): Task[Int]
 }
 
 object CountPlanService {
   type Live = Has[CountPlanService]
   def deleteAll(): RIO[Live, Int]        = ZIO.serviceWith[CountPlanService](_.deleteAll())
   def resetAll(): RIO[Live, Option[Int]] = ZIO.serviceWith[CountPlanService](_.resetAll())
+  def count(): RIO[Live, Int]            = ZIO.serviceWith[CountPlanService](_.count())
   val service = for {
     model <- ZLayer.service[DataCollection] ++ ZLayer.requires[MainApp.AppEnv]
     r     <- ZLayer.succeed(new CountPlanServiceImpl(model): CountPlanService)
@@ -29,5 +31,9 @@ class CountPlanServiceImpl(env: MainApp.AppEnv with Has[DataCollection]) extends
       result <- db.run(action.transactionally)
     } yield result
     runner.provide(env)
+  }
+  override def count(): Task[Int] = {
+    val runner = CountPlan.map(_.id).size.result
+    db.run(runner).provide(env)
   }
 }

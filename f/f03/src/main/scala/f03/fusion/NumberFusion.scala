@@ -45,14 +45,25 @@ class NumberFusion(
       action.flatMapError(errorHandle).provideSomeLayer[AppEnv](layer)
     }
 
+  val countCountPlan = NumberEndpoint.countCountPlan.zServerLogic { _ =>
+    val action = CountPlanService.count()
+    def errorHandle(e: Throwable) =
+      for (_ <- Logging.throwable("统计 CountPlan 数量发生异常", e))
+        yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
+
+    action.flatMapError(errorHandle).provideSomeLayer[AppEnv](layer)
+  }
+
   val reverseUrl = NumberEndpoint.reverseUrl.zServerLogic(_ => ZIO.succeed(reverseRoutes.reverseUrl))
+  // val staticFile = NumberEndpoint.staticFile.zServerLogic(_ => )
 
   val routes = List(
     index.widen[AppEnv],
     countPlanReviewPage.widen[AppEnv],
     deleteAllCountPlan.widen[AppEnv],
     resetAllCountPlan.widen[AppEnv],
-    reverseUrl.widen[AppEnv]
+    reverseUrl.widen[AppEnv],
+    countCountPlan.widen[AppEnv]
   )
   val lowLevelRoutes = List(pageHelper.widen[AppEnv])
   val docs = List(
@@ -61,7 +72,8 @@ class NumberFusion(
     NumberEndpoint.countPlanReviewPage,
     NumberEndpoint.deleteAllCountPlan,
     NumberEndpoint.resetAllCountPlan,
-    NumberEndpoint.reverseUrl
+    NumberEndpoint.reverseUrl,
+    NumberEndpoint.countCountPlan
   )
 
 }

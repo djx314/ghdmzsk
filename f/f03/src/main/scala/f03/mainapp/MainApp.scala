@@ -1,24 +1,20 @@
 package f03.mainapp
 
-import cats.implicits._
 import com.softwaremill.macwire._
 import distage._
 import f03.fusion.NumberFusion
 import f03.reverseroutes.ReverseRoutes
 import f03.service.DataCollection
 import f03.views.{CountPlanReview, HelperView, IndexView, JsDependencies}
-import org.http4s._
-import org.http4s.server.staticcontent._
 import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
-import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
 import sttp.tapir.openapi.circe.yaml._
+import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.swagger.SwaggerUI
+import sttp.tapir._
 import zio._
-import zio.interop.catz._
 
 object MainApp {
 
-  type ZIOEnv[T]    = RIO[AppEnv, T]
   type CustomAppEnv = Has[SlickDB] with logging.Logging
   type AppEnv       = ZEnv with CustomAppEnv
   lazy val appEnv = appResource.sqliteSlickLayer ++ appResource.loggingEnv
@@ -56,15 +52,20 @@ object MainApp {
 }
 
 class AppRoutes(numberFusion: NumberFusion) {
-  type AppEnv    = MainApp.AppEnv
-  type ZIOEnv[T] = MainApp.ZIOEnv[T]
+  type AppEnv = MainApp.AppEnv
 
-  private val lowLevelRoutes = ZHttp4sServerInterpreter[AppEnv]().from(numberFusion.lowLevelRoutes).toRoutes
-  private val httpRoutes     = ZHttp4sServerInterpreter[AppEnv]().from(numberFusion.routes).toRoutes
-  private val fileRoutes     = webjarServiceBuilder[ZIOEnv].toRoutes
+  private val interpreter = ZioHttpInterpreter[AppEnv]()
+
+  private val lowLevelRoutes = interpreter.toHttp(numberFusion.lowLevelRoutes)
+  private val httpRoutes     = interpreter.toHttp(numberFusion.routes)
+
+  private val webjarRoutes =
+    resourcesGetServerEndpoint[RIO[AppEnv, *]]("resources")(classOf[AppRoutes].getClassLoader, "META-INF/resources/webjars")
+  private val webjarHttp = interpreter.toHttp(webjarRoutes)
 
   private val docsAsYaml: String = OpenAPIDocsInterpreter().toOpenAPI(numberFusion.docs, "Number App", "1.0").toYaml
-  private val swaggerUIRoute     = ZHttp4sServerInterpreter[AppEnv]().from(SwaggerUI[ZIOEnv](docsAsYaml)).toRoutes
+  private val swaggerUIRoute     = interpreter.toHttp(SwaggerUI[RIO[AppEnv, *]](docsAsYaml))
 
-  val routes: HttpRoutes[ZIOEnv] = httpRoutes <+> fileRoutes <+> swaggerUIRoute <+> lowLevelRoutes
+  val app = httpRoutes ++ swaggerUIRoute ++ lowLevelRoutes ++ webjarHttp
+
 }
