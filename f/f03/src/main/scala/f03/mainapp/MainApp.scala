@@ -5,8 +5,8 @@ import com.softwaremill.macwire._
 import distage._
 import f03.fusion.NumberFusion
 import f03.reverseroutes.ReverseRoutes
-import f03.service.CountPlanServiceImpl
-import f03.views.{HelperView, IndexView, JsDependencies}
+import f03.service.DataCollection
+import f03.views.{CountPlanReview, HelperView, IndexView, JsDependencies}
 import org.http4s._
 import org.http4s.server.staticcontent._
 import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
@@ -31,6 +31,8 @@ object MainApp {
   private lazy val appResource: AppResource = wire[AppResourceImpl]
   private lazy val helperView               = wire[HelperView]
   private lazy val reverseRoutes            = wire[ReverseRoutes]
+  private lazy val dataCollection           = wire[DataCollection]
+  private lazy val countPlanReview          = wire[CountPlanReview]
 
   // prepare
   private object GDModule extends ModuleDef {

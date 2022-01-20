@@ -39,9 +39,10 @@ object NumberEndpoint {
   private val htmlDocTag = "Html 展示页"
   private val JsonTag    = "Json 请求"
 
-  val pageHelper = root.in("help").out(htmlBodyUtf8).description("常用页面引导").tag(htmlDocTag)
+  val pageHelper          = root.in("help").out(htmlBodyUtf8).description("常用页面引导").tag(htmlDocTag)
+  val index               = root.in("index").out(htmlBodyUtf8).description("首页").tag(htmlDocTag)
+  val countPlanReviewPage = root.in("countPlanReviewPage").out(htmlBodyUtf8).description("计算计划统计").tag(htmlDocTag)
 
-  val index      = root.in("index").out(htmlBodyUtf8).description("首页").tag(htmlDocTag)
   val reverseUrl = root.get.in("reverseUrl").out(jsonBody[ResultSet[ReverseUrl]]).appendSuccess.description("反向路由").tag(JsonTag)
   val deleteAllCountPlan = root
     .in("countPlan")
@@ -55,7 +56,7 @@ object NumberEndpoint {
   val resetAllCountPlan = root
     .in("resetAllCountPlan")
     .post
-    .out(jsonBody[ResultSet[Int]])
+    .out(jsonBody[ResultSet[Option[Int]]])
     .appendSuccess
     .errorOut(jsonBody[ResultSet[Unit]])
     .appendErrorMessage

@@ -33,9 +33,10 @@ class ReverseRoutes {
   }
 
   object Number {
-    val index              = requestPlan(NumberEndpoint.index)
-    val deleteAllCountPlan = requestPlan(NumberEndpoint.deleteAllCountPlan)
-    val resetAllCountPlan  = requestPlan(NumberEndpoint.resetAllCountPlan)
+    val index               = requestPlan(NumberEndpoint.index)
+    val countPlanReviewPage = requestPlan(NumberEndpoint.countPlanReviewPage)
+    val deleteAllCountPlan  = requestPlan(NumberEndpoint.deleteAllCountPlan)
+    val resetAllCountPlan   = requestPlan(NumberEndpoint.resetAllCountPlan)
   }
 
   val reverseUrl = ReverseUrl(deleteAllCountPlan = Number.deleteAllCountPlan, resetAllCountPlan = Number.resetAllCountPlan)

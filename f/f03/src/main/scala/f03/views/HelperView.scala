@@ -18,6 +18,9 @@ class HelperView(reverseRoutes: ReverseRoutes) {
       h2(textAlign.center)("页面导航"),
       p(textAlign.center)(
         a(href := Number.index.url, target := "_blank", css.color := "black")("首页")
+      ),
+      p(textAlign.center)(
+        a(href := Number.countPlanReviewPage.url, target := "_blank", css.color := "black")("计算计划统计")
       )
     )
   )
