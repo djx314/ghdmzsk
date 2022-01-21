@@ -27,19 +27,21 @@ object CounterRunnerExecutionJavascript {
           countOpt match {
             case None => window.alert("请填写数字")
             case Some(count) =>
-              val request = RequestUtils.planJson(reverseUrl.counterExecutionPlan(count))
+              val confirmValue = window.confirm(s"确认执行${count}条计算任务？")
+              if (confirmValue) {
+                val request = RequestUtils.planJson(reverseUrl.counterExecutionPlan(count))
 
-              val action =
-                for (data <- request)
-                  yield window.alert(s"执行计算任务${data.data}条")
+                val action =
+                  for (data <- request)
+                    yield window.alert(s"执行计算任务${data.data}条")
 
-              action.onComplete {
-                case Failure(exception) =>
-                  window.alert("查询“计算计划”数量发生异常")
-                case _ =>
-              }
+                action.onComplete {
+                  case Failure(exception) =>
+                    window.alert("执行计算任务发生异常")
+                  case _ =>
+                }
+              } else window.alert("执行计划取消")
           }
-
         }
       )
     }
