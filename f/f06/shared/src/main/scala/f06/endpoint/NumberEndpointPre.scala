@@ -7,7 +7,7 @@ import sttp.tapir.generic.auto._
 
 trait NumberEndpointPre {
 
-  private val root = endpoint
+  import EndpointHelper._
 
   protected val deleteAllCountPlanPre = root.in("countPlan").delete.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
 

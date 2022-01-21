@@ -6,6 +6,8 @@ import sttp.tapir._
 
 trait EndpointHelper {
 
+  val root = endpoint
+
   implicit class appendOutPout[A, I, E, O, -R](endpo: Endpoint[A, I, E, ResultSet[O], R]) {
     def append: Endpoint[A, I, E, (O, StatusCode), R] =
       endpo.out(statusCode).mapOut(d => (d._1.data, d._2))(s => (ResultSet(s._1, s._2.code, Option.empty), s._2))
