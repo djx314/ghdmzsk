@@ -1,7 +1,7 @@
 package f03.fusion
 
-import f03.endpoint.NumberEndpoint
-import f03.reverseroutes.ReverseRoutes
+import f06.endpoint.NumberEndpoint
+import f06.reverseroutes.ReverseRoutes
 import f03.service.CountPlanService
 import f03.views.{CountPlanReview, HelperView, IndexView}
 import sttp.model.StatusCode
@@ -13,7 +13,6 @@ class NumberFusion(
   indexView: IndexView,
   helperView: HelperView,
   countPlanReview: CountPlanReview,
-  reverseRoutes: ReverseRoutes,
   countPlanService: CountPlanService
 ) {
 
@@ -52,14 +51,11 @@ class NumberFusion(
     action.flatMapError(errorHandle)
   }
 
-  val reverseUrl = NumberEndpoint.reverseUrl.zServerLogic(_ => ZIO.succeed(reverseRoutes.reverseUrl))
-
   val routes = List(
     index.widen[AppEnv],
     countPlanReviewPage.widen[AppEnv],
     deleteAllCountPlan.widen[AppEnv],
     resetAllCountPlan.widen[AppEnv],
-    reverseUrl.widen[AppEnv],
     countCountPlan.widen[AppEnv]
   )
   val lowLevelRoutes = List(pageHelper.widen[AppEnv])
@@ -69,7 +65,6 @@ class NumberFusion(
     NumberEndpoint.countPlanReviewPage,
     NumberEndpoint.deleteAllCountPlan,
     NumberEndpoint.resetAllCountPlan,
-    NumberEndpoint.reverseUrl,
     NumberEndpoint.countCountPlan
   )
 

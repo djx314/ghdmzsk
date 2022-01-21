@@ -51,12 +51,14 @@ lazy val f06 = crossProject(JSPlatform, JVMPlatform)
     name    := "f06",
     version := "0.0.1"
   )
-  .jvmSettings(libraryDependencies ++= Dependent.circe ++: Dependent.scalajsStubs)
+  .jvmSettings(libraryDependencies ++= Dependent.tapirSttp ++: Dependent.circe ++: Dependent.scalajsStubs)
   .jsSettings(
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core"    % Dependent.versions.circe,
-      "io.circe" %%% "circe-generic" % Dependent.versions.circe,
-      "io.circe" %%% "circe-parser"  % Dependent.versions.circe
+      "io.circe"                    %%% "circe-core"        % Dependent.versions.circe,
+      "io.circe"                    %%% "circe-generic"     % Dependent.versions.circe,
+      "io.circe"                    %%% "circe-parser"      % Dependent.versions.circe,
+      "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client" % Dependent.versions.tapir,
+      "com.softwaremill.sttp.tapir" %%% "tapir-json-circe"  % Dependent.versions.tapir
     )
   )
 val f05 = project in fRoot / "f05"

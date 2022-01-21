@@ -12,6 +12,6 @@ object Main extends App {
     Logging.console(logLevel = LogLevel.Info, format = LogFormat.ColoredLogFormat()) >>> Logging.withRootLoggerName("number-app")
 
   override def run(args: List[String]): URIO[ZEnv, zio.ExitCode] =
-    MainApp.routes.use(s => Server.start(8090, s.app)).provideSomeLayer(loggingEnv).exitCode
+    MainApp.routes.use(s => Server.start(8080, s.app)).provideSomeLayer(loggingEnv).exitCode
 
 }

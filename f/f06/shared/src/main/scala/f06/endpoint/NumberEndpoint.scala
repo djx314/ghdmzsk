@@ -1,6 +1,6 @@
-package f03.endpoint
+package f06.endpoint
 
-import f06.models.{ResultSet, ReverseUrl}
+import f06.models.ResultSet
 import sttp.model.StatusCode
 import sttp.tapir._
 import sttp.tapir.json.circe._
@@ -36,16 +36,13 @@ object NumberEndpoint {
 
   private val root = endpoint
 
-  private val htmlDocTag   = "Html 展示页"
-  private val staticDocTag = "静态文件响应"
-  private val JsonTag      = "Json 请求"
+  private val htmlDocTag = "Html 展示页"
+  private val JsonTag    = "Json 请求"
 
   val pageHelper          = root.in("help").out(htmlBodyUtf8).description("常用页面引导").tag(htmlDocTag)
   val index               = root.in("index").out(htmlBodyUtf8).description("首页").tag(htmlDocTag)
   val countPlanReviewPage = root.in("countPlanReviewPage").out(htmlBodyUtf8).description("计算计划统计").tag(htmlDocTag)
-  // val staticFile = root.in("resources").in(paths).out(fileBody).description("静态文件响应").tag(staticDocTag)
 
-  val reverseUrl = root.get.in("reverseUrl").out(jsonBody[ResultSet[ReverseUrl]]).appendSuccess.description("反向路由").tag(JsonTag)
   val deleteAllCountPlan = root
     .in("countPlan")
     .delete

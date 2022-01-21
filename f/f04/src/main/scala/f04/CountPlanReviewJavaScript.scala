@@ -1,5 +1,6 @@
 package f04
 
+import f06.reverseroutes.ReverseRoutes
 import f04.utils.RequestUtils
 import f06.models.ResultSet
 import io.udash.wrappers.jquery._
@@ -11,6 +12,9 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.util.Failure
 
 object CountPlanReviewJavaScript {
+
+  val reverseUrl = (new ReverseRoutes).reverseUrl
+  println("11" + reverseUrl.countAllCountPlan.url)
 
   @JSExportTopLevel("initCountPlanReviewPage")
   def initCountPlanReviewPage() = jQ { () =>

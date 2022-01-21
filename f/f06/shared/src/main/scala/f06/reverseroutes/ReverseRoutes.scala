@@ -1,6 +1,6 @@
-package f03.reverseroutes
+package f06.reverseroutes
 
-import f03.endpoint.NumberEndpoint
+import f06.endpoint.NumberEndpoint
 import f06.models.{RequestPlan, ReverseUrl}
 
 import scala.language.implicitConversions
