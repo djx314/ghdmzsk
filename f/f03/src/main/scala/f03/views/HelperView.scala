@@ -20,6 +20,9 @@ class HelperView(reverseRoutes: ReverseRoutes) {
       ),
       p(textAlign.center)(
         a(href := reverseRoutes.countPlanReviewPage.url, target := "_blank", css.color := "black")("计算计划统计")
+      ),
+      p(textAlign.center)(
+        a(href := reverseRoutes.counterPage.url, target := "_blank", css.color := "black")("执行计算任务")
       )
     )
   )
