@@ -43,21 +43,13 @@ object NumberEndpoint {
   val index               = root.in("index").out(htmlBodyUtf8).description("首页").tag(htmlDocTag)
   val countPlanReviewPage = root.in("countPlanReviewPage").out(htmlBodyUtf8).description("计算计划统计").tag(htmlDocTag)
 
-  val deleteAllCountPlanJs =
-    root.in("countPlan").delete.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]]).description("删除所有计算计划").tag(JsonTag)
-  val deleteAllCountPlan = deleteAllCountPlanJs.appendSuccess.appendErrorMessage
+  val deleteAllCountPlanJs = root.in("countPlan").delete.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
+  val deleteAllCountPlan   = deleteAllCountPlanJs.description("删除所有计算计划").tag(JsonTag).appendSuccess.appendErrorMessage
 
-  val resetAllCountPlanJs = root
-    .in("resetAllCountPlan")
-    .post
-    .out(jsonBody[ResultSet[Option[Int]]])
-    .errorOut(jsonBody[ResultSet[Unit]])
-    .description("重置所有计算计划")
-    .tag(JsonTag)
-  val resetAllCountPlan = resetAllCountPlanJs.appendSuccess.appendErrorMessage
+  val resetAllCountPlanJs = root.in("resetAllCountPlan").post.out(jsonBody[ResultSet[Option[Int]]]).errorOut(jsonBody[ResultSet[Unit]])
+  val resetAllCountPlan   = resetAllCountPlanJs.description("重置所有计算计划").tag(JsonTag).appendSuccess.appendErrorMessage
 
-  val countCountPlanJs =
-    root.in("countCountPlan").post.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]]).description("统计计算计划数量").tag(JsonTag)
-  val countCountPlan = countCountPlanJs.appendSuccess.appendErrorMessage
+  val countCountPlanJs = root.in("countCountPlan").post.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
+  val countCountPlan   = countCountPlanJs.description("统计计算计划数量").tag(JsonTag).appendSuccess.appendErrorMessage
 
 }
