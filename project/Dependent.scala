@@ -18,7 +18,6 @@ object Dependent {
     val scalajsJQuery  = "3.2.0"
     val scalajsDom     = "2.1.0"
     val jqueryJSSource = "3.6.0"
-    val sqlite         = "3.36.0.3"
     val slick          = "3.4.0-M1"
     val circe          = "0.15.0-M1"
     val scalajsStubs   = "1.1.0"
@@ -73,8 +72,7 @@ object Dependent {
 
   val scalaTags      = Seq("com.lihaoyi" %% "scalatags" % versions.scalaTags)
   val jqueryJSSource = Seq("org.webjars" % "jquery" % versions.jqueryJSSource)
-  val sqlite         = Seq("org.xerial" % "sqlite-jdbc" % versions.sqlite)
-  val mysql = Seq("mysql" % "mysql-connector-java" % versions.mysql)
+  val mysql          = Seq("mysql" % "mysql-connector-java" % versions.mysql)
 
   val slick = Seq(
     "com.typesafe.slick" %% "slick"          % versions.slick,

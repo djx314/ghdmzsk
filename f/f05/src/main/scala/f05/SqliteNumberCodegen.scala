@@ -1,8 +1,8 @@
 package f05
 
 import slick.codegen.SourceCodeGenerator
-import slick.jdbc.SQLiteProfile
-import SQLiteProfile.api._
+import slick.jdbc.MySQLProfile
+import MySQLProfile.api._
 
 import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -11,7 +11,7 @@ import scala.concurrent.{blocking, Await, Future}
 object SqliteNumberCodegen extends App {
   val db = Database.forConfig("mysqlNumberDB")
   // fetch data model
-  val modelAction = SQLiteProfile.createModel(Some(SQLiteProfile.defaultTables)) // you can filter specific tables here
+  val modelAction = MySQLProfile.createModel(Some(MySQLProfile.defaultTables)) // you can filter specific tables here
   val modelFuture = db.run(modelAction)
   val codegenFuture = modelFuture.map(model =>
     new SourceCodeGenerator(model) {
@@ -28,7 +28,7 @@ object SqliteNumberCodegen extends App {
       Future {
         blocking(
           codegen.writeToMultipleFiles(
-            profile = "slick.jdbc.SQLiteProfile",
+            profile = "slick.jdbc.MySQLProfile",
             folder = genDir.toAbsolutePath.toString,
             pkg = "f03.slick.model",
             container = "Tables"

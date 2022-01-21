@@ -1,5 +1,5 @@
 CREATE TABLE count_plan (
-	id int NOT NULL PRIMARY KEY AUTOINCREMENT,
+	id int NOT NULL PRIMARY KEY auto_increment,
 	first_outer_name varchar(255) NOT NULL,
 	first_outer_type varchar(255) NOT NULL,
 	first_inner_name varchar(255) NOT NULL,
