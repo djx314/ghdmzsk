@@ -3,7 +3,14 @@ package f03.mainapp
 import distage._
 import f03.fusion.{CounterFusion, NumberFusion}
 import f06.reverseroutes.ReverseRoutes
-import f03.service.{CountPlanService, CountPlanServiceImpl, DataCollection, DataCollectionImpl}
+import f03.service.{
+  CountPlanService,
+  CountPlanServiceImpl,
+  CounterExecutionService,
+  CounterExecutionServiceImpl,
+  DataCollection,
+  DataCollectionImpl
+}
 import f03.views.{CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView, JsDependencies}
 import f06.endpoint.{CounterEndpoint, NumberEndpoint}
 import zio._
@@ -57,6 +64,7 @@ object MainApp {
   private object ServiceModule extends ModuleDef {
     make[DataCollection].from[DataCollectionImpl]
     make[CountPlanService].from[CountPlanServiceImpl]
+    make[CounterExecutionService].from[CounterExecutionServiceImpl]
   }
 
   private object EndpointModule extends ModuleDef {

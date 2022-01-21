@@ -10,4 +10,7 @@ trait CounterEndpointPre {
 
   import EndpointHelper._
 
+  protected val counterExecutionPlanPre =
+    root.in("counter" / "execution" / "plan").post.in(query[Int]("count")).out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
+
 }

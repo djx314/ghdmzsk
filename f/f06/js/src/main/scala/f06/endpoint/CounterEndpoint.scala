@@ -6,4 +6,6 @@ import sttp.tapir._
 import sttp.tapir.json.circe._
 import sttp.tapir.generic.auto._
 
-class CounterEndpoint extends CounterEndpointPre
+class CounterEndpoint extends CounterEndpointPre {
+  val counterExecutionPlan = counterExecutionPlanPre
+}
