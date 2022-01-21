@@ -1,7 +1,7 @@
 package f03.fusion
 
 import f03.service.CountPlanService
-import f03.views.{CountPlanReview, CounterView, HelperView, IndexView}
+import f03.views.{CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView}
 import f06.endpoint.{CounterEndpoint, NumberEndpoint}
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
@@ -9,7 +9,7 @@ import zio._
 import zio.logging._
 
 class CounterFusion(
-  counterView: CounterView,
+  counterView: CounterRunnerExecutionView,
   counterEndpoint: CounterEndpoint
 ) {
 

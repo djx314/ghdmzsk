@@ -1,8 +1,9 @@
 package f03.views
 
 import scalatags.Text.all._
+import scalatags.Text.{attrs => attr, styles => css}
 
-class CounterView(jsDependencies: JsDependencies) {
+class CounterRunnerExecutionView(jsDependencies: JsDependencies) {
 
   private val pageTitle = tag("title")
 
@@ -20,12 +21,10 @@ class CounterView(jsDependencies: JsDependencies) {
     ),
     body(
       h2(textAlign.center)("执行计算任务"),
-      div(textAlign.center)(
-        div(id := "reviewButton")(paddingTop := 5, paddingBottom := 5)(button("执行"))
-      ),
       div(
         table(marginLeft.auto, marginRight.auto)(
-          tr(td("执行计算任务"), td(span(id := "countPlanAllCount")))
+          tr(td("执行任务条数"), td(input(`type` := "text", name := "executeLineCount"))),
+          tr(td(colspan := 2)(input(`type` := "submit", value := "执行")))
         )
       )
     )

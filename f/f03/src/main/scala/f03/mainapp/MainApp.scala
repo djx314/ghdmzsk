@@ -4,7 +4,7 @@ import distage._
 import f03.fusion.{CounterFusion, NumberFusion}
 import f06.reverseroutes.ReverseRoutes
 import f03.service.{CountPlanService, CountPlanServiceImpl, DataCollection, DataCollectionImpl}
-import f03.views.{CountPlanReview, CounterView, HelperView, IndexView, JsDependencies}
+import f03.views.{CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView, JsDependencies}
 import f06.endpoint.{CounterEndpoint, NumberEndpoint}
 import zio._
 
@@ -34,7 +34,7 @@ object MainApp {
     make[JsDependencies]
     make[HelperView]
     make[CountPlanReview]
-    make[CounterView]
+    make[CounterRunnerExecutionView]
     make[ReverseRoutes]
   }
 
