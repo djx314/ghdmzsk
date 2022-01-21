@@ -2,7 +2,6 @@ package f04
 
 import f06.reverseroutes.ReverseRoutes
 import f04.utils.RequestUtils
-import f06.models.ResultSet
 import io.udash.wrappers.jquery._
 import org.scalajs.dom
 import org.scalajs.dom.{document, window}
@@ -13,7 +12,7 @@ import scala.util.Failure
 
 object CountPlanReviewJavaScript {
 
-  val reverseUrl = (new ReverseRoutes).reverseUrl
+  val reverseUrl = new ReverseRoutes
 
   @JSExportTopLevel("initCountPlanReviewPage")
   def initCountPlanReviewPage(): JQuery = jQ { () =>
@@ -28,8 +27,7 @@ object CountPlanReviewJavaScript {
         "click",
         { e: dom.MouseEvent =>
           cleanText()
-          val plan    = reverseUrl.countAllCountPlan
-          val request = RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method))
+          val request = RequestUtils.planJson(reverseUrl.countAllCountPlan)
 
           val action =
             for (data <- request)

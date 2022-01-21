@@ -1,10 +1,10 @@
 package f03.views
 
-import f06.models.ReverseUrl
+import f06.reverseroutes.ReverseRoutes
 import scalatags.Text.all._
 import scalatags.Text.{attrs => attr, styles => css}
 
-class HelperView(reverseUrl: ReverseUrl) {
+class HelperView(reverseRoutes: ReverseRoutes) {
 
   private val pageTitle = tag("title")
 
@@ -16,10 +16,10 @@ class HelperView(reverseUrl: ReverseUrl) {
     body(
       h2(textAlign.center)("页面导航"),
       p(textAlign.center)(
-        a(href := reverseUrl.index.url, target := "_blank", css.color := "black")("首页")
+        a(href := reverseRoutes.index.url, target := "_blank", css.color := "black")("首页")
       ),
       p(textAlign.center)(
-        a(href := reverseUrl.countPlanReviewPage.url, target := "_blank", css.color := "black")("计算计划统计")
+        a(href := reverseRoutes.countPlanReviewPage.url, target := "_blank", css.color := "black")("计算计划统计")
       )
     )
   )

@@ -1,7 +1,7 @@
 package f04.utils
 
+import f06.models.RequestPlan
 import io.circe.Decoder
-
 import io.udash.wrappers.jquery._
 import org.scalajs.dom.console
 
@@ -56,6 +56,10 @@ object RequestUtils {
     jQ.ajax(newSettings)
 
     promise.future
+  }
+
+  def planJson[ErrOut, Out: Decoder](plan: RequestPlan[ErrOut, Out]): Future[Out] = {
+    ajaxJson[Out](JQueryAjaxSettings(url = plan.url, method = plan.method))
   }
 
 }

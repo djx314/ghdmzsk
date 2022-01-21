@@ -5,7 +5,6 @@ import f03.fusion.NumberFusion
 import f06.reverseroutes.ReverseRoutes
 import f03.service.{CountPlanService, CountPlanServiceImpl, DataCollection, DataCollectionImpl}
 import f03.views.{CountPlanReview, HelperView, IndexView, JsDependencies}
-import f06.models.ReverseUrl
 import zio._
 
 object MainApp {
@@ -30,9 +29,6 @@ object MainApp {
     make[JsDependencies]
     make[HelperView]
     make[ReverseRoutes]
-    make[ReverseUrl].from { reverseRoutes: ReverseRoutes =>
-      reverseRoutes.reverseUrl
-    }
     make[DataCollection].from[DataCollectionImpl]
     make[CountPlanReview]
     make[CountPlanService].from[CountPlanServiceImpl]

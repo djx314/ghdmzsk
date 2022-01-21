@@ -1,7 +1,6 @@
 package f04
 
 import f04.utils.RequestUtils
-import f06.models.ResultSet
 import f06.reverseroutes.ReverseRoutes
 
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -14,7 +13,7 @@ import scala.util.Failure
 
 object IndexViewJavascript {
 
-  val reverseUrl = (new ReverseRoutes).reverseUrl
+  val reverseUrl = new ReverseRoutes
 
   @JSExportTopLevel("initIndexPage")
   def initIndexPage(): JQuery = jQ { () =>
@@ -23,8 +22,7 @@ object IndexViewJavascript {
       cleanAllPlanButton.addEventListener(
         "click",
         { e: dom.MouseEvent =>
-          val plan    = reverseUrl.deleteAllCountPlan
-          val request = RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method))
+          val request = RequestUtils.planJson(reverseUrl.deleteAllCountPlan)
 
           val action =
             for (data <- request)
@@ -44,8 +42,7 @@ object IndexViewJavascript {
       reInputPlanButton.addEventListener(
         "click",
         { e: dom.MouseEvent =>
-          val plan    = reverseUrl.resetAllCountPlan
-          val request = RequestUtils.ajaxJson[ResultSet[Option[Int]]](JQueryAjaxSettings(url = plan.url, method = plan.method))
+          val request = RequestUtils.planJson(reverseUrl.resetAllCountPlan)
 
           val action =
             for (data <- request)

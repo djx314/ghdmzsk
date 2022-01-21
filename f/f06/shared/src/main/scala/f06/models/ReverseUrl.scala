@@ -2,13 +2,5 @@ package f06.models
 
 import io.circe.generic.JsonCodec
 
-case class ReverseUrl(
-  index: RequestPlan,
-  countPlanReviewPage: RequestPlan,
-  deleteAllCountPlan: RequestPlan,
-  resetAllCountPlan: RequestPlan,
-  countAllCountPlan: RequestPlan
-)
-
 @JsonCodec
-case class RequestPlan(url: String, method: String)
+case class RequestPlan[ErrOut, Out](url: String, method: String)
