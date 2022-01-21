@@ -18,8 +18,8 @@ class CounterFusion(
 
   val counterPage = counterEndpoint.counterPage.zServerLogic(_ => ZIO.succeed(counterView.view))
 
-  val counterExecutionPlan = counterEndpoint.counterExecutionPlan.zServerLogic { _ =>
-    val action = counterExecutionService.executePlan()
+  val counterExecutionPlan = counterEndpoint.counterExecutionPlan.zServerLogic { count =>
+    val action = for (i <- counterExecutionService.executePlan(count)) yield ((), "计算完毕")
 
     def errorHandle(e: Throwable) =
       for (_ <- Logging.throwable("执行计算任务发生异常", e))

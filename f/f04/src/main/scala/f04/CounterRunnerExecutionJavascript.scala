@@ -33,7 +33,7 @@ object CounterRunnerExecutionJavascript {
 
                 val action =
                   for (data <- request)
-                    yield window.alert(s"执行计算任务${data.data}条")
+                    yield window.alert(data.message.getOrElse("任务成功"))
 
                 action.onComplete {
                   case Failure(exception) =>

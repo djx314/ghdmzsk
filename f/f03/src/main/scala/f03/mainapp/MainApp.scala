@@ -9,7 +9,9 @@ import f03.service.{
   CounterExecutionService,
   CounterExecutionServiceImpl,
   DataCollection,
-  DataCollectionImpl
+  DataCollectionImpl,
+  PlanExecute,
+  PlanExecuteImpl
 }
 import f03.views.{CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView, JsDependencies}
 import f06.endpoint.{CounterEndpoint, NumberEndpoint}
@@ -65,6 +67,7 @@ object MainApp {
     make[DataCollection].from[DataCollectionImpl]
     make[CountPlanService].from[CountPlanServiceImpl]
     make[CounterExecutionService].from[CounterExecutionServiceImpl]
+    make[PlanExecute].from[PlanExecuteImpl]
   }
 
   private object EndpointModule extends ModuleDef {
