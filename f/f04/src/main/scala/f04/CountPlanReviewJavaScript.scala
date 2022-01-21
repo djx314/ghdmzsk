@@ -28,13 +28,16 @@ object CountPlanReviewJavaScript {
         "click",
         { e: dom.MouseEvent =>
           cleanText()
-          val plan = reverseUrl.countAllCountPlan
+          val plan    = reverseUrl.countAllCountPlan
+          val request = RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method))
+
           val action =
-            for (data <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method)))
+            for (data <- request)
               yield countPlanAllCount.innerText = s"${data.data}条"
+
           action.onComplete {
             case Failure(exception) =>
-              window.alert("删除“计算计划”数据发生异常")
+              window.alert("查询“计算计划”数量发生异常")
             case _ =>
           }
         }

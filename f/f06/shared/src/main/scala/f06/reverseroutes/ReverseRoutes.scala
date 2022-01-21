@@ -28,8 +28,8 @@ class ReverseRoutes {
   private def requestPlan[I, E, O, R](
     endpoint: PublicEndpoint[I, E, O, R]
   )(implicit fill: FillParameter[I, FillParameterPoly1.type]): RequestPlan = {
-    val i = toUri(endpoint)
-    RequestPlan(i._1.toString(), i._2.method)
+    val (uri, method) = toUri(endpoint)
+    RequestPlan(uri.toString(), method.method)
   }
 
   val reverseUrl = ReverseUrl(

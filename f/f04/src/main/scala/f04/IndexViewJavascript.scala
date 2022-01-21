@@ -23,10 +23,13 @@ object IndexViewJavascript {
       cleanAllPlanButton.addEventListener(
         "click",
         { e: dom.MouseEvent =>
-          val plan = reverseUrl.deleteAllCountPlan
+          val plan    = reverseUrl.deleteAllCountPlan
+          val request = RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method))
+
           val action =
-            for (data <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method)))
+            for (data <- request)
               yield window.alert(s"删除了${data.data}条数据")
+
           action.onComplete {
             case Failure(exception) =>
               window.alert("删除“计算计划”数据发生异常")
@@ -41,13 +44,16 @@ object IndexViewJavascript {
       reInputPlanButton.addEventListener(
         "click",
         { e: dom.MouseEvent =>
-          val plan = reverseUrl.resetAllCountPlan
+          val plan    = reverseUrl.resetAllCountPlan
+          val request = RequestUtils.ajaxJson[ResultSet[Option[Int]]](JQueryAjaxSettings(url = plan.url, method = plan.method))
+
           val action =
-            for (data <- RequestUtils.ajaxJson[ResultSet[Option[Int]]](JQueryAjaxSettings(url = plan.url, method = plan.method)))
+            for (data <- request)
               yield data.data match {
                 case Some(count) => window.alert(s"重置了${count}条数据")
                 case _           => window.alert(s"没有重置数据")
               }
+
           action.onComplete {
             case Failure(exception) =>
               window.alert("重置“计算计划”数据发生异常")
