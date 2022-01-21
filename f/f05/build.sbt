@@ -3,6 +3,7 @@ name := "f05"
 
 libraryDependencies ++= Dependent.slick
 libraryDependencies ++= Dependent.sqlite
+libraryDependencies ++= Dependent.mysql
 libraryDependencies ++= Dependent.slf4j
 
 enablePlugins(FlywayPlugin)

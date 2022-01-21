@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{blocking, Await, Future}
 
 object SqliteNumberCodegen extends App {
-  val db = Database.forURL("jdbc:sqlite:./f/f03/db/numberdatabase.db", driver = "org.sqlite.JDBC")
+  val db = Database.forConfig("mysqlNumberDB")
   // fetch data model
   val modelAction = SQLiteProfile.createModel(Some(SQLiteProfile.defaultTables)) // you can filter specific tables here
   val modelFuture = db.run(modelAction)

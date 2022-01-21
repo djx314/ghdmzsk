@@ -23,6 +23,7 @@ object Dependent {
     val circe          = "0.15.0-M1"
     val scalajsStubs   = "1.1.0"
     val zhttp          = "1.0.0.0-RC21"
+    val mysql          = "8.0.26"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -73,6 +74,7 @@ object Dependent {
   val scalaTags      = Seq("com.lihaoyi" %% "scalatags" % versions.scalaTags)
   val jqueryJSSource = Seq("org.webjars" % "jquery" % versions.jqueryJSSource)
   val sqlite         = Seq("org.xerial" % "sqlite-jdbc" % versions.sqlite)
+  val mysql = Seq("mysql" % "mysql-connector-java" % versions.mysql)
 
   val slick = Seq(
     "com.typesafe.slick" %% "slick"          % versions.slick,
