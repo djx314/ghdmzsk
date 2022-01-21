@@ -1,39 +1,33 @@
 package f03.service
 
-import f03.mainapp.{db, MainApp}
+import f03.mainapp.{MainApp, SlickDB}
 import zio._
+import zio.logging._
 import f03.slick.model.Tables._
 import f03.slick.model.Tables.profile.api._
 
 trait CountPlanService {
-  def deleteAll(): Task[Int]
-  def resetAll(): Task[Option[Int]]
-  def count(): Task[Int]
+  type CTask[T] = RIO[MainApp.AppEnv, T]
+
+  def deleteAll(): CTask[Int]
+  def resetAll(): CTask[Option[Int]]
+  def count(): CTask[Int]
 }
 
-object CountPlanService {
-  type Live = Has[CountPlanService]
-  def deleteAll(): RIO[Live, Int]        = ZIO.serviceWith[CountPlanService](_.deleteAll())
-  def resetAll(): RIO[Live, Option[Int]] = ZIO.serviceWith[CountPlanService](_.resetAll())
-  def count(): RIO[Live, Int]            = ZIO.serviceWith[CountPlanService](_.count())
-  val service = for {
-    model <- ZLayer.service[DataCollection] ++ ZLayer.requires[MainApp.AppEnv]
-    r     <- ZLayer.succeed(new CountPlanServiceImpl(model): CountPlanService)
-  } yield r
-}
+class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanService {
+  override def deleteAll(): CTask[Int] = for {
+    result <- db.run(CountPlan.delete)
+    _      <- log.info(s"清空了${result}条数据")
+  } yield result
 
-class CountPlanServiceImpl(env: MainApp.AppEnv with Has[DataCollection]) extends CountPlanService {
-  override def deleteAll(): Task[Int] = db.run(CountPlan.delete).provide(env)
-  override def resetAll(): Task[Option[Int]] = {
-    val runner = for {
-      col    <- ZIO.service[DataCollection]
-      action <- ZIO.effectTotal(CountPlan ++= col.allCountPlan)
-      result <- db.run(action.transactionally)
-    } yield result
-    runner.provide(env)
-  }
-  override def count(): Task[Int] = {
+  override def resetAll(): CTask[Option[Int]] = for {
+    action <- ZIO.effectTotal(CountPlan ++= dCol.allCountPlan)
+    result <- db.run(action.transactionally)
+    _      <- log.info(result.map(s => s"重置了${s}条数据").getOrElse("没有重置数据"))
+  } yield result
+
+  override def count(): CTask[Int] = {
     val runner = CountPlan.map(_.id).size.result
-    db.run(runner).provide(env)
+    db.run(runner)
   }
 }

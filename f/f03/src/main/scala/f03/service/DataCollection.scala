@@ -2,7 +2,11 @@ package f03.service
 
 import f03.slick.model.Tables._
 
-class DataCollection {
+trait DataCollection {
+  def allCountPlan: Vector[CountPlanRow]
+}
+
+class DataCollectionImpl extends DataCollection {
   val baseName      = Vector("u", "v", "s", "t")
   val baseType      = Vector("u", "v", "s", "t")
   val unlimitedType = "unlimited"
@@ -22,7 +26,7 @@ class DataCollection {
     innerName <- baseName.filter(s => s != outerName)
   } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = innerType)
 
-  val allCountPlan: Vector[CountPlanRow] = {
+  override val allCountPlan: Vector[CountPlanRow] = {
     val allNumber = unlimitedRows.appendedAll(otherRows)
     for {
       firstNumber  <- allNumber

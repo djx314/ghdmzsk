@@ -2,7 +2,7 @@ package f03.fusion
 
 import f03.endpoint.NumberEndpoint
 import f03.reverseroutes.ReverseRoutes
-import f03.service.{CountPlanService, DataCollection}
+import f03.service.CountPlanService
 import f03.views.{CountPlanReview, HelperView, IndexView}
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
@@ -14,12 +14,10 @@ class NumberFusion(
   helperView: HelperView,
   countPlanReview: CountPlanReview,
   reverseRoutes: ReverseRoutes,
-  dataCollection: DataCollection
+  countPlanService: CountPlanService
 ) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
-
-  val layer = ZLayer.succeed(dataCollection) ++ ZLayer.requires[AppEnv] >>> CountPlanService.service
 
   val pageHelper          = NumberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
   val index               = NumberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))
@@ -27,35 +25,34 @@ class NumberFusion(
 
   val deleteAllCountPlan =
     NumberEndpoint.deleteAllCountPlan.zServerLogic { _ =>
-      val action = CountPlanService.deleteAll()
+      val action = countPlanService.deleteAll()
       def errorHandle(e: Throwable) =
         for (_ <- Logging.throwable("删除所有 CountPlan 发生异常", e))
           yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
 
-      action.flatMapError(errorHandle).provideSomeLayer[AppEnv](layer)
+      action.flatMapError(errorHandle)
     }
 
   val resetAllCountPlan =
     NumberEndpoint.resetAllCountPlan.zServerLogic { _ =>
-      val action = CountPlanService.resetAll()
+      val action = countPlanService.resetAll()
       def errorHandle(e: Throwable) =
         for (_ <- Logging.throwable("重置所有 CountPlan 发生异常", e))
           yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
 
-      action.flatMapError(errorHandle).provideSomeLayer[AppEnv](layer)
+      action.flatMapError(errorHandle)
     }
 
   val countCountPlan = NumberEndpoint.countCountPlan.zServerLogic { _ =>
-    val action = CountPlanService.count()
+    val action = countPlanService.count()
     def errorHandle(e: Throwable) =
       for (_ <- Logging.throwable("统计 CountPlan 数量发生异常", e))
         yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
 
-    action.flatMapError(errorHandle).provideSomeLayer[AppEnv](layer)
+    action.flatMapError(errorHandle)
   }
 
   val reverseUrl = NumberEndpoint.reverseUrl.zServerLogic(_ => ZIO.succeed(reverseRoutes.reverseUrl))
-  // val staticFile = NumberEndpoint.staticFile.zServerLogic(_ => )
 
   val routes = List(
     index.widen[AppEnv],
