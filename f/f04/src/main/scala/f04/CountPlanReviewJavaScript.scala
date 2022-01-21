@@ -14,10 +14,9 @@ import scala.util.Failure
 object CountPlanReviewJavaScript {
 
   val reverseUrl = (new ReverseRoutes).reverseUrl
-  println("11" + reverseUrl.countAllCountPlan.url)
 
   @JSExportTopLevel("initCountPlanReviewPage")
-  def initCountPlanReviewPage() = jQ { () =>
+  def initCountPlanReviewPage(): JQuery = jQ { () =>
     {
       val button            = document.getElementById("reviewButton")
       val countPlanAllCount = document.getElementById("countPlanAllCount")
@@ -29,11 +28,10 @@ object CountPlanReviewJavaScript {
         "click",
         { e: dom.MouseEvent =>
           cleanText()
-          val action = for {
-            rUrl <- GlobalValues.reverseUrl
-            plan = rUrl.countAllCountPlan
-            data <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method))
-          } yield countPlanAllCount.innerText = s"${data.data}条"
+          val plan = reverseUrl.countAllCountPlan
+          val action =
+            for (data <- RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method)))
+              yield countPlanAllCount.innerText = s"${data.data}条"
           action.onComplete {
             case Failure(exception) =>
               window.alert("删除“计算计划”数据发生异常")
