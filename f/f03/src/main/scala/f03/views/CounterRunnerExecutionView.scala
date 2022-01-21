@@ -15,7 +15,7 @@ class CounterRunnerExecutionView(jsDependencies: JsDependencies) {
       jsDependencies.main(),
       script(`type` := "text/javascript")("""
           |(function() {
-          |  initCountPlanReviewPage();
+          |  counterRunnerExecutionPage();
           |})();
           |""".stripMargin)
     ),
@@ -24,7 +24,7 @@ class CounterRunnerExecutionView(jsDependencies: JsDependencies) {
       div(
         table(marginLeft.auto, marginRight.auto)(
           tr(td("执行任务条数"), td(input(`type` := "text", name := "executeLineCount"))),
-          tr(td(colspan := 2)(input(`type` := "submit", value := "执行")))
+          tr(td(colspan := 2, textAlign.center)(input(id := "executeButton", `type` := "submit", value := "执行")))
         )
       )
     )
