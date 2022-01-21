@@ -3,10 +3,8 @@ package f06.endpoint
 import f06.models.ResultSet
 import sttp.model.StatusCode
 import sttp.tapir._
-import sttp.tapir.json.circe._
-import sttp.tapir.generic.auto._
 
-object NumberEndpoint {
+trait EndpointHelper {
 
   implicit class appendOutPout[A, I, E, O, -R](endpo: Endpoint[A, I, E, ResultSet[O], R]) {
     def append: Endpoint[A, I, E, (O, StatusCode), R] =
@@ -34,22 +32,9 @@ object NumberEndpoint {
         .mapErrorOut(d => (d._1.data, d._2, d._1.message.getOrElse("")))(s => (ResultSet(s._1, s._2.code, Option(s._3)), s._2))
   }
 
-  private val root = endpoint
-
-  private val htmlDocTag = "Html 展示页"
-  private val JsonTag    = "Json 请求"
-
-  val pageHelper          = root.in("help").out(htmlBodyUtf8).description("常用页面引导").tag(htmlDocTag)
-  val index               = root.in("index").out(htmlBodyUtf8).description("首页").tag(htmlDocTag)
-  val countPlanReviewPage = root.in("countPlanReviewPage").out(htmlBodyUtf8).description("计算计划统计").tag(htmlDocTag)
-
-  val deleteAllCountPlanJs = root.in("countPlan").delete.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
-  val deleteAllCountPlan   = deleteAllCountPlanJs.description("删除所有计算计划").tag(JsonTag).appendSuccess.appendErrorMessage
-
-  val resetAllCountPlanJs = root.in("resetAllCountPlan").post.out(jsonBody[ResultSet[Option[Int]]]).errorOut(jsonBody[ResultSet[Unit]])
-  val resetAllCountPlan   = resetAllCountPlanJs.description("重置所有计算计划").tag(JsonTag).appendSuccess.appendErrorMessage
-
-  val countCountPlanJs = root.in("countCountPlan").post.out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
-  val countCountPlan   = countCountPlanJs.description("统计计算计划数量").tag(JsonTag).appendSuccess.appendErrorMessage
+  val htmlDocTag = "Html 展示页"
+  val JsonTag    = "Json 请求"
 
 }
+
+object EndpointHelper extends EndpointHelper

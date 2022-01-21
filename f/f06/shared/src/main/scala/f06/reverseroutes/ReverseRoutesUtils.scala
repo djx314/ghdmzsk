@@ -1,6 +1,5 @@
 package f06.reverseroutes
 
-import f06.endpoint.NumberEndpoint
 import f06.models.RequestPlan
 
 import scala.language.implicitConversions
@@ -33,15 +32,3 @@ trait ReverseRoutesUtils {
 }
 
 object ReverseRoutesUtils extends ReverseRoutesUtils
-
-class ReverseRoutes {
-
-  import ReverseRoutesUtils._
-
-  val index               = requestPlan(NumberEndpoint.index)
-  val countPlanReviewPage = requestPlan(NumberEndpoint.countPlanReviewPage)
-  val deleteAllCountPlan  = requestPlan(NumberEndpoint.deleteAllCountPlanJs)
-  val resetAllCountPlan   = requestPlan(NumberEndpoint.resetAllCountPlanJs)
-  val countAllCountPlan   = requestPlan(NumberEndpoint.countCountPlanJs)
-
-}

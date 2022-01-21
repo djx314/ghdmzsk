@@ -12,17 +12,18 @@ class NumberFusion(
   indexView: IndexView,
   helperView: HelperView,
   countPlanReview: CountPlanReview,
-  countPlanService: CountPlanService
+  countPlanService: CountPlanService,
+  numberEndpoint: NumberEndpoint
 ) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
 
-  val pageHelper          = NumberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
-  val index               = NumberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))
-  val countPlanReviewPage = NumberEndpoint.countPlanReviewPage.zServerLogic(_ => ZIO.succeed(countPlanReview.view))
+  val pageHelper          = numberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
+  val index               = numberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))
+  val countPlanReviewPage = numberEndpoint.countPlanReviewPage.zServerLogic(_ => ZIO.succeed(countPlanReview.view))
 
   val deleteAllCountPlan =
-    NumberEndpoint.deleteAllCountPlan.zServerLogic { _ =>
+    numberEndpoint.deleteAllCountPlan.zServerLogic { _ =>
       val action = countPlanService.deleteAll()
       def errorHandle(e: Throwable) =
         for (_ <- Logging.throwable("删除所有 CountPlan 发生异常", e))
@@ -32,7 +33,7 @@ class NumberFusion(
     }
 
   val resetAllCountPlan =
-    NumberEndpoint.resetAllCountPlan.zServerLogic { _ =>
+    numberEndpoint.resetAllCountPlan.zServerLogic { _ =>
       val action = countPlanService.resetAll()
       def errorHandle(e: Throwable) =
         for (_ <- Logging.throwable("重置所有 CountPlan 发生异常", e))
@@ -41,7 +42,7 @@ class NumberFusion(
       action.flatMapError(errorHandle)
     }
 
-  val countCountPlan = NumberEndpoint.countCountPlan.zServerLogic { _ =>
+  val countCountPlan = numberEndpoint.countCountPlan.zServerLogic { _ =>
     val action = countPlanService.count()
     def errorHandle(e: Throwable) =
       for (_ <- Logging.throwable("统计 CountPlan 数量发生异常", e))
@@ -59,12 +60,12 @@ class NumberFusion(
   )
   val lowLevelRoutes = List(pageHelper.widen[AppEnv])
   val docs = List(
-    NumberEndpoint.pageHelper,
-    NumberEndpoint.index,
-    NumberEndpoint.countPlanReviewPage,
-    NumberEndpoint.deleteAllCountPlan,
-    NumberEndpoint.resetAllCountPlan,
-    NumberEndpoint.countCountPlan
+    numberEndpoint.pageHelper,
+    numberEndpoint.index,
+    numberEndpoint.countPlanReviewPage,
+    numberEndpoint.deleteAllCountPlan,
+    numberEndpoint.resetAllCountPlan,
+    numberEndpoint.countCountPlan
   )
 
 }
