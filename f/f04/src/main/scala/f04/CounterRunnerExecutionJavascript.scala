@@ -32,7 +32,9 @@ object CounterRunnerExecutionJavascript {
               val confirmValue = window.confirm(s"确认执行${count}条计算任务？")
               if (confirmValue) {
                 val request =
-                  RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000)))
+                  RequestUtils.ajaxJson[ResultSet[Unit]](
+                    JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000))
+                  )
 
                 val action =
                   for (data <- request)
