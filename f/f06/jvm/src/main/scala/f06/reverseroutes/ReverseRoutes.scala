@@ -2,9 +2,7 @@ package f06.reverseroutes
 
 import f06.endpoint.{CounterEndpoint, NumberEndpoint}
 
-import scala.language.implicitConversions
-
-class ReverseRoutes(override val numberEndpoint: NumberEndpoint, override val counterEndpoint: CounterEndpoint) extends ReverseRoutesPre {
+class ReverseRoutes(numberEndpoint: NumberEndpoint, counterEndpoint: CounterEndpoint) {
 
   import ReverseRoutesUtils._
 

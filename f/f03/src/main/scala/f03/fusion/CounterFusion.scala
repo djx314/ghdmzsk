@@ -1,6 +1,6 @@
 package f03.fusion
 
-import f03.service.{CountPlanService, CounterExecutionService}
+import f03.service.CounterExecutionService
 import f03.views.CounterRunnerExecutionView
 import f06.endpoint.CounterEndpoint
 import sttp.model.StatusCode
@@ -19,7 +19,7 @@ class CounterFusion(
   val counterPage = counterEndpoint.counterPage.zServerLogic(_ => ZIO.succeed(counterView.view))
 
   val counterExecutionPlan = counterEndpoint.counterExecutionPlan.zServerLogic { count =>
-    val action = for (i <- counterExecutionService.executePlan(count)) yield (i, "计算完毕")
+    val action = for (i <- counterExecutionService.executePlan(count)) yield (i, s"任务成功，剩余未计算计划数量：${i} 条")
 
     def errorHandle(e: Throwable) =
       for (_ <- Logging.throwable("执行计算任务发生异常", e))

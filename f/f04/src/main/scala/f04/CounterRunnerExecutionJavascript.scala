@@ -43,13 +43,13 @@ object CounterRunnerExecutionJavascript {
                 if (confirmValue) {
                   touchAllStartButton(true)
                   val request =
-                    RequestUtils.ajaxJson[ResultSet[Unit]](
+                    RequestUtils.ajaxJson[ResultSet[Int]](
                       JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000))
                     )
 
                   val action =
                     for (data <- request)
-                      yield window.alert(data.message.getOrElse("任务成功"))
+                      yield window.alert(data.message.getOrElse(s"任务成功"))
 
                   action.onComplete {
                     case Failure(exception) =>
@@ -90,7 +90,7 @@ object CounterRunnerExecutionJavascript {
                 for {
                   data      <- request
                   appendEle <- Future(ele)
-                  _         <- Future(appendEle.innerText = s"完成 50 个数据的计算，剩余项${data.data}条")
+                  _         <- Future(appendEle.innerText = s"完成一组（最多 50 个）数据的计算，剩余项 ${data.data} 条")
                   _         <- Future(autoExecuteMessageDiv.append(appendEle))
                   next      <- if (stop) Future.successful("计算已停止") else if (data.data > 0) action else Future.successful("所有计算任务执行完毕")
                 } yield next
