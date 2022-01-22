@@ -18,7 +18,7 @@ object CounterRunnerExecutionJavascript {
   @JSExportTopLevel("counterRunnerExecutionPage")
   def initCountPlanReviewPage(): JQuery = jQ { () =>
     {
-      val button         = document.getElementById("executeButton")
+      val button         = document.getElementById("executeButton").asInstanceOf[HTMLInputElement]
       val countNumberEle = document.getElementsByName("executeLineCount").collectFirst { case input: HTMLInputElement => input }
 
       button.addEventListener(
@@ -31,6 +31,7 @@ object CounterRunnerExecutionJavascript {
               val plan         = reverseUrl.counterExecutionPlan(count)
               val confirmValue = window.confirm(s"确认执行${count}条计算任务？")
               if (confirmValue) {
+                button.disabled = true
                 val request =
                   RequestUtils.ajaxJson[ResultSet[Unit]](
                     JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000))
@@ -40,10 +41,14 @@ object CounterRunnerExecutionJavascript {
                   for (data <- request)
                     yield window.alert(data.message.getOrElse("任务成功"))
 
+                def resetDisabled = button.disabled = false
+
                 action.onComplete {
                   case Failure(exception) =>
                     window.alert("执行计算任务发生异常")
+                    resetDisabled
                   case _ =>
+                    resetDisabled
                 }
               } else window.alert("执行计划取消")
           }
