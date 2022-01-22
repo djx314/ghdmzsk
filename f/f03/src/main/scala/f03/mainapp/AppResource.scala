@@ -19,7 +19,7 @@ class AppResourceImpl extends AppResource {
 
   override val sqliteSlickManaged: RManaged[Logging, SlickDB] = {
     val db1 = for {
-      _  <- log.info("开始加载 sqlite 数据库")
+      _  <- log.info("开始加载 mysql 数据库")
       db <- ZIO.succeed(Database.forConfig("mysqlNumberDB"))
     } yield db
     val managed = ZManaged.fromAutoCloseable(db1)
