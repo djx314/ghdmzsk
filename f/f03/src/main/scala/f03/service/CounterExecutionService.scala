@@ -45,7 +45,7 @@ class CounterExecutionServiceImpl(db: SlickDB, planExecute: PlanExecute) extends
   }
 
   override def executePlan(count: Int): CTask[List[Int]] = {
-    val setNeedToInsert = firstCounterPlan(count).mapMPar(5)(row => for (set <- planExecute.countNumberToString(row)) yield (row, set))
+    val setNeedToInsert = firstCounterPlan(count).mapMPar(20)(row => for (set <- planExecute.countNumberToString(row)) yield (row, set))
     def filterInsert(list: List[(CountPlanRow, CountSetRow)]) =
       ZStream.fromIterable(list).mapMPar(5) { case (plan, set) => executeCountPlan(plan, set) }
     for {
