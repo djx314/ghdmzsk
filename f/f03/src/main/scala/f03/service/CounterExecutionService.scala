@@ -10,7 +10,7 @@ import zio.stream.ZStream
 trait CounterExecutionService {
   type CTask[T] = RIO[MainApp.AppEnv, T]
 
-  def executePlan(count: Int): CTask[List[Int]]
+  def executePlan(count: Int): CTask[Int]
 }
 
 class CounterExecutionServiceImpl(db: SlickDB, planExecute: PlanExecute) extends CounterExecutionService {
@@ -44,13 +44,16 @@ class CounterExecutionServiceImpl(db: SlickDB, planExecute: PlanExecute) extends
     } yield a2
   }
 
-  override def executePlan(count: Int): CTask[List[Int]] = {
+  override def executePlan(count: Int): CTask[Int] = {
     val setNeedToInsert = firstCounterPlan(count).mapMPar(20)(row => for (set <- planExecute.countNumberToString(row)) yield (row, set))
     def filterInsert(list: List[(CountPlanRow, CountSetRow)]) =
       ZStream.fromIterable(list).mapMPar(5) { case (plan, set) => executeCountPlan(plan, set) }
+    val needCountDBIO = CountPlan.filter(_.counterResultId.isEmpty).map(_.id).size.result
+
     for {
       chunk     <- setNeedToInsert.runCollect
       inertList <- filterInsert(chunk.to(List)).runCollect
-    } yield inertList.to(List)
+      needCount <- db.run(needCountDBIO)
+    } yield needCount
   }
 }

@@ -10,7 +10,7 @@ import org.scalajs.dom.{document, window, HTMLInputElement}
 import scala.concurrent.Future
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js.annotation.JSExportTopLevel
-import scala.util.Failure
+import scala.util.{Failure, Success}
 
 object CounterRunnerExecutionJavascript {
 
@@ -82,31 +82,38 @@ object CounterRunnerExecutionJavascript {
 
               val plan = reverseUrl.counterExecutionPlan(50)
               def request =
-                RequestUtils.ajaxJson[ResultSet[Unit]](
+                RequestUtils.ajaxJson[ResultSet[Int]](
                   JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000))
                 )
 
-              def action: Future[Int] =
+              def action: Future[String] =
                 for {
                   data      <- request
                   appendEle <- Future(ele)
-                  _         <- Future(appendEle.innerText = "完成 50 个数据的计算")
+                  _         <- Future(appendEle.innerText = s"完成 50 个数据的计算，剩余项${data.data}条")
                   _         <- Future(autoExecuteMessageDiv.append(appendEle))
-                  next      <- if (stop) Future.successful(0) else action
+                  next      <- if (stop) Future.successful("计算已停止") else if (data.data > 0) action else Future.successful("所有计算任务执行完毕")
                 } yield next
 
-              val executeAction = action
-              executeAction.onComplete { case _ =>
+              def reset(message: String) = {
                 stop = false
                 val finishEle = ele
-                finishEle.innerText = "计算已停止"
+                finishEle.innerText = message
                 autoExecuteMessageDiv.append(finishEle)
                 touchAllStartButton(false)
               }
-            } else window.alert("执行请求已取消。")
 
+              val executeAction = action
+              executeAction.onComplete {
+                case Success(value) =>
+                  reset(value)
+                case Failure(exception) =>
+                  reset("计算过程发生异常，已停止")
+              }
+            } else window.alert("执行请求已取消。")
           }
         )
+
         stopAutoExecuteButton.addEventListener(
           "click",
           { e: dom.MouseEvent =>
