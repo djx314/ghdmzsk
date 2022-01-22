@@ -1,6 +1,7 @@
 package f04
 
 import f04.utils.RequestUtils
+import f06.models.ResultSet
 import f06.reverseroutes.ReverseRoutes
 import io.udash.wrappers.jquery._
 import org.scalajs.dom
@@ -27,9 +28,11 @@ object CounterRunnerExecutionJavascript {
           countOpt match {
             case None => window.alert("请填写数字")
             case Some(count) =>
+              val plan         = reverseUrl.counterExecutionPlan(count)
               val confirmValue = window.confirm(s"确认执行${count}条计算任务？")
               if (confirmValue) {
-                val request = RequestUtils.planJson(reverseUrl.counterExecutionPlan(count))
+                val request =
+                  RequestUtils.ajaxJson[ResultSet[Int]](JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000)))
 
                 val action =
                   for (data <- request)

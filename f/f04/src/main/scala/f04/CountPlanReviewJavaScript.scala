@@ -2,6 +2,7 @@ package f04
 
 import f06.reverseroutes.ReverseRoutes
 import f04.utils.RequestUtils
+import f06.models.PlanCountReview
 import io.udash.wrappers.jquery._
 import org.scalajs.dom
 import org.scalajs.dom.{document, window}
@@ -17,10 +18,16 @@ object CountPlanReviewJavaScript {
   @JSExportTopLevel("initCountPlanReviewPage")
   def initCountPlanReviewPage(): JQuery = jQ { () =>
     {
-      val button            = document.getElementById("reviewButton")
-      val countPlanAllCount = document.getElementById("countPlanAllCount")
+      val button             = document.getElementById("reviewButton")
+      val countPlanAllCount  = document.getElementById("countPlanAllCount")
+      val finishedCountCount = document.getElementById("finishedCountCount")
+      val waitForCountCount  = document.getElementById("waitForCountCount")
+      val countSetCount      = document.getElementById("countSetCount")
       def cleanText() = {
         countPlanAllCount.innerText = ""
+        finishedCountCount.innerText = ""
+        waitForCountCount.innerText = ""
+        countSetCount.innerText = ""
       }
 
       button.addEventListener(
@@ -30,8 +37,14 @@ object CountPlanReviewJavaScript {
           val request = RequestUtils.planJson(reverseUrl.countAllCountPlan)
 
           val action =
-            for (data <- request)
-              yield countPlanAllCount.innerText = s"${data.data}条"
+            for (resData <- request)
+              yield {
+                val data: PlanCountReview = resData.data
+                countPlanAllCount.innerText = s"${data.countPlanAllCount}条"
+                finishedCountCount.innerText = s"${data.finishedCountCount}条"
+                waitForCountCount.innerText = s"${data.waitForCountCount}条"
+                countSetCount.innerText = s"${data.countSetCount}条"
+              }
 
           action.onComplete {
             case Failure(exception) =>

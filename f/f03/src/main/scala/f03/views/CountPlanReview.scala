@@ -26,7 +26,10 @@ class CountPlanReview(jsDependencies: JsDependencies) {
       ),
       div(
         table(marginLeft.auto, marginRight.auto)(
-          tr(td("计算计划数量"), td(span(id := "countPlanAllCount")))
+          tr(td("计算计划数量"), td(span(id := "countPlanAllCount"))),
+          tr(td("已计算计算计划"), td(span(id := "finishedCountCount"))),
+          tr(td("未计算计算计划"), td(span(id := "waitForCountCount"))),
+          tr(td("结果集数量"), td(span(id := "countSetCount")))
         )
       )
     )
