@@ -26,6 +26,12 @@ class CounterRunnerExecutionView(jsDependencies: JsDependencies) {
           tr(td("执行任务条数"), td(input(`type` := "text", name := "executeLineCount"))),
           tr(td(colspan := 2, textAlign.center)(input(id := "executeButton", `type` := "submit", value := "执行")))
         )
+      ),
+      hr,
+      div(
+        div(textAlign.center, paddingTop := 10, paddingBottom := 10)(button(id := "executeAuto")("自动执行计算任务")),
+        div(textAlign.center, paddingBottom := 10)(button(id := "stopAutoExecute")("停止")),
+        div(textAlign.center)(id := "autoExecuteMessage")
       )
     )
   )
