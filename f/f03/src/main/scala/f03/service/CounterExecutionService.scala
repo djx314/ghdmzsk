@@ -7,6 +7,8 @@ import f03.slick.model.Tables._
 import f03.slick.model.Tables.profile.api._
 import zio.stream.ZStream
 
+import scala.concurrent.ExecutionContext
+
 trait CounterExecutionService {
   type CTask[T] = RIO[MainApp.AppEnv, T]
 
@@ -38,16 +40,14 @@ class CounterExecutionServiceImpl(db: SlickDB, planExecute: PlanExecute) extends
       case _ =>
         CountSet returning CountSet.map(_.id) into ((model, id) => model.copy(id = id)) += countSetRow
     }
-    def updatePlan(set: CountSetRow) = CountPlan.filter(_.id === plan.id).map(_.counterResultId).update(Option(set.id))
+    def updatePlan(set: DBIO[CountSetRow])(implicit ec: ExecutionContext) = for {
+      row   <- set
+      count <- CountPlan.filter(_.id === plan.id).map(_.counterResultId).update(Option(row.id))
+    } yield count
 
     for {
       a1 <- action
-      a2 <- db.run(implicit ec =>
-        for {
-          row   <- a1
-          count <- updatePlan(row)
-        } yield count
-      )
+      a2 <- db.run(implicit ec => updatePlan(a1).transactionally)
     } yield a2
   }
 

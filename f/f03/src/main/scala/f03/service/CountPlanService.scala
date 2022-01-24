@@ -25,7 +25,7 @@ class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanS
     } yield result1 + result2
 
     for {
-      result <- db.run(implicit ec => action)
+      result <- db.run(implicit ec => action.transactionally)
       _      <- log.info(s"清空了${result}条数据")
     } yield result
   }
