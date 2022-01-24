@@ -8,7 +8,7 @@ import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{blocking, Await, Future}
 
-object SqliteNumberCodegen extends App {
+object MysqlNumberCodegen extends App {
   val db = Database.forConfig("mysqlNumberDB")
   // fetch data model
   val modelAction = MySQLProfile.createModel(Some(MySQLProfile.defaultTables)) // you can filter specific tables here
@@ -22,7 +22,7 @@ object SqliteNumberCodegen extends App {
   )
 
   val sourceRootDir = Paths.get(args(0))
-  val genDir        = sourceRootDir.resolve(Paths.get("src", "main", "scala"))
+  val genDir        = sourceRootDir.resolve(Paths.get("src", "main", "slick"))
   Await.result(
     codegenFuture.flatMap(codegen =>
       Future {

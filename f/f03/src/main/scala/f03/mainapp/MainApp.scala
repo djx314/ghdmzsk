@@ -13,7 +13,7 @@ import f03.service.{
   PlanExecute,
   PlanExecuteImpl
 }
-import f03.views.{CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView, JsDependencies}
+import f03.views.{CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView, JsDependencies, ReSortCountExecutionPage}
 import f06.endpoint.{CounterEndpoint, NumberEndpoint}
 import zio._
 
@@ -45,6 +45,7 @@ object MainApp {
     make[CountPlanReview]
     make[CounterRunnerExecutionView]
     make[ReverseRoutes]
+    make[ReSortCountExecutionPage]
   }
 
   private object FusionModule extends ModuleDef {

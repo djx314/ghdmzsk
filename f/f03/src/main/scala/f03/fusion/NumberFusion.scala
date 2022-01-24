@@ -2,7 +2,7 @@ package f03.fusion
 
 import f06.endpoint.NumberEndpoint
 import f03.service.CountPlanService
-import f03.views.{CountPlanReview, HelperView, IndexView}
+import f03.views.{CountPlanReview, HelperView, IndexView, ReSortCountExecutionPage}
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
 import zio._
@@ -13,14 +13,16 @@ class NumberFusion(
   helperView: HelperView,
   countPlanReview: CountPlanReview,
   countPlanService: CountPlanService,
-  numberEndpoint: NumberEndpoint
+  numberEndpoint: NumberEndpoint,
+  reSortCountExecutionView: ReSortCountExecutionPage
 ) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
 
-  val pageHelper          = numberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
-  val index               = numberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))
-  val countPlanReviewPage = numberEndpoint.countPlanReviewPage.zServerLogic(_ => ZIO.succeed(countPlanReview.view))
+  val pageHelper               = numberEndpoint.pageHelper.zServerLogic(_ => ZIO.succeed(helperView.view))
+  val index                    = numberEndpoint.index.zServerLogic(_ => ZIO.succeed(indexView.view))
+  val countPlanReviewPage      = numberEndpoint.countPlanReviewPage.zServerLogic(_ => ZIO.succeed(countPlanReview.view))
+  val reSortCountExecutionPage = numberEndpoint.reSortCountExecutionPage.zServerLogic(_ => ZIO.succeed(reSortCountExecutionView.view))
 
   val deleteAllCountPlan =
     numberEndpoint.deleteAllCountPlan.zServerLogic { _ =>
@@ -56,7 +58,8 @@ class NumberFusion(
     countPlanReviewPage.widen[AppEnv],
     deleteAllCountPlan.widen[AppEnv],
     resetAllCountPlan.widen[AppEnv],
-    countCountPlan.widen[AppEnv]
+    countCountPlan.widen[AppEnv],
+    reSortCountExecutionPage.widen[AppEnv]
   )
   val lowLevelRoutes = List(pageHelper.widen[AppEnv])
   val docs = List(
@@ -65,7 +68,8 @@ class NumberFusion(
     numberEndpoint.countPlanReviewPage,
     numberEndpoint.deleteAllCountPlan,
     numberEndpoint.resetAllCountPlan,
-    numberEndpoint.countCountPlan
+    numberEndpoint.countCountPlan,
+    numberEndpoint.reSortCountExecutionPage
   )
 
 }

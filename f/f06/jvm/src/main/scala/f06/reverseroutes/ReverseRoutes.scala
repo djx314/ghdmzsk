@@ -6,8 +6,9 @@ class ReverseRoutes(numberEndpoint: NumberEndpoint, counterEndpoint: CounterEndp
 
   import ReverseRoutesUtils._
 
-  val index               = requestPlan(numberEndpoint.index)
-  val countPlanReviewPage = requestPlan(numberEndpoint.countPlanReviewPage)
-  val counterPage         = requestPlan(counterEndpoint.counterPage)
+  val index                    = requestPlan(numberEndpoint.index)
+  val countPlanReviewPage      = requestPlan(numberEndpoint.countPlanReviewPage)
+  val reSortCountExecutionPage = requestPlan(numberEndpoint.reSortCountExecutionPage)
+  val counterPage              = requestPlan(counterEndpoint.counterPage)
 
 }
