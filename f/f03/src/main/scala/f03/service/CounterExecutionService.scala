@@ -25,7 +25,14 @@ class CounterExecutionServiceImpl(db: SlickDB, planExecute: PlanExecute) extends
 
   protected def executeCountPlan(plan: CountPlanRow, countSetRow: CountSetRow): CTask[Int] = {
     val dbio =
-      CountSet.filter(s => s.countSet === countSetRow.countSet && s.isLimited === countSetRow.isLimited).take(1).to[List].result.headOption
+      CountSet
+        .filter(s =>
+          s.countSet === countSetRow.countSet && s.isLimited === countSetRow.isLimited && s.firstStart === countSetRow.firstStart && s.secondStart === countSetRow.secondStart
+        )
+        .take(1)
+        .to[List]
+        .result
+        .headOption
     val action = for (exists <- db.run(dbio)) yield exists match {
       case Some(s) => DBIO.successful(s)
       case _ =>
@@ -52,7 +59,7 @@ class CounterExecutionServiceImpl(db: SlickDB, planExecute: PlanExecute) extends
 
     for {
       chunk     <- setNeedToInsert.runCollect
-      inertList <- filterInsert(chunk.to(List)).runCollect
+      _         <- filterInsert(chunk.to(List)).runCollect
       needCount <- db.run(needCountDBIO)
     } yield needCount
   }

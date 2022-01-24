@@ -3,6 +3,8 @@ package f03.service
 import f03.counter.{Counter, Fusion, Number1}
 import f03.slick.model.Tables._
 
+case class CountResult(i1: Int, i2: Int, result: Option[Int])
+
 trait DataCollection {
   val S             = "s"
   val T             = "t"
@@ -17,7 +19,10 @@ trait DataCollection {
 
   case class SingleNumber(outerName: String, outerType: String, innerName: String, innerType: String, start: Int)
 
-  def countNumber(countPlan: CountPlanRow, firstValue: Int, secoundValue: Int): Option[Int]
+  def genString(result: List[CountResult]): String
+  def fromString(str: String): List[CountResult]
+
+  def countNumber(countPlan: CountPlanRow, firstValue: Int, secoundValue: Int): CountResult
   def genSingleNumber(countPlan: SingleNumber, value: Int): Number1
 }
 
@@ -102,7 +107,28 @@ class DataCollectionImpl extends DataCollection {
     }
   }
 
-  override def countNumber(countPlan: CountPlanRow, firstValue: Int, secoundValue: Int): Option[Int] = {
+  override def genString(result: List[CountResult]): String = {
+    def toStr(t: Option[Int]): String = t match {
+      case Some(s) => s.toString
+      case _       => UnlimitedType
+    }
+    result.map(s => s"${s.i1},${s.i2},${toStr(s.result)}").mkString("|")
+  }
+
+  override def fromString(str: String): List[CountResult] = {
+    def splitToList(str: String)(c: Char) = str.split(c).to(List).map(_.trim).filterNot(_.isEmpty)
+    def toSingle(str1: String): CountResult = {
+      val List(i1, i2, result) = splitToList(str1)(',')
+      val r1 = result match {
+        case UnlimitedType => Option.empty
+        case s             => s.toIntOption
+      }
+      CountResult(i1 = i1.toInt, i2 = i2.toInt, result = r1)
+    }
+    splitToList(str)('|').map(toSingle)
+  }
+
+  override def countNumber(countPlan: CountPlanRow, firstValue: Int, secoundValue: Int): CountResult = {
     val firstNumber = genSingleNumber(
       SingleNumber(
         outerName = countPlan.firstOuterName,
@@ -124,7 +150,7 @@ class DataCollectionImpl extends DataCollection {
       secoundValue
     )
     def exec = firstNumber.method1(secondNumber)
-    Counter.countOpt(() => exec)
+    CountResult(i1 = firstValue, i2 = secoundValue, result = Counter.countOpt(() => exec))
   }
 
 }
