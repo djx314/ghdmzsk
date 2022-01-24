@@ -18,10 +18,17 @@ trait CountPlanService {
 }
 
 class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanService {
-  override def deleteAll(): CTask[Int] = for {
-    result <- db.run(CountPlan.delete)
-    _      <- log.info(s"清空了${result}条数据")
-  } yield result
+  override def deleteAll(): CTask[Int] = {
+    def action(implicit ec: ExecutionContext) = for {
+      result1 <- CountPlan.delete
+      result2 <- CountSet.delete
+    } yield result1 + result2
+
+    for {
+      result <- db.run(implicit ec => action)
+      _      <- log.info(s"清空了${result}条数据")
+    } yield result
+  }
 
   override def resetAll(): CTask[Option[Int]] = for {
     action <- ZIO.effectTotal(CountPlan ++= dCol.allCountPlan)
