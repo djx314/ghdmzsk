@@ -10,5 +10,6 @@ class ReverseRoutes(numberEndpoint: NumberEndpoint, counterEndpoint: CounterEndp
   val countPlanReviewPage      = requestPlan(numberEndpoint.countPlanReviewPage)
   val reSortCountExecutionPage = requestPlan(numberEndpoint.reSortCountExecutionPage)
   val counterPage              = requestPlan(counterEndpoint.counterPage)
+  val codegenPage              = requestPlan(counterEndpoint.codegenPage)
 
 }

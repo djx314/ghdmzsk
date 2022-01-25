@@ -13,4 +13,6 @@ trait CounterEndpointPre {
   protected val counterExecutionPlanPre =
     root.in("counter" / "execution" / "plan").post.in(query[Int]("count")).out(jsonBody[ResultSet[Int]]).errorOut(jsonBody[ResultSet[Unit]])
 
+  protected val codegenPre = root.in("counter" / "codegen").post.out(jsonBody[ResultSet[Unit]]).errorOut(jsonBody[ResultSet[Unit]])
+
 }

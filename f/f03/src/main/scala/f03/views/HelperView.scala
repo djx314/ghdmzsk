@@ -26,6 +26,9 @@ class HelperView(reverseRoutes: ReverseRoutes) {
       ),
       p(textAlign.center)(
         a(href := reverseRoutes.reSortCountExecutionPage.url, target := "_blank", css.color := "black")("重计算")
+      ),
+      p(textAlign.center)(
+        a(href := reverseRoutes.codegenPage.url, target := "_blank", css.color := "black")("codegen")
       )
     )
   )

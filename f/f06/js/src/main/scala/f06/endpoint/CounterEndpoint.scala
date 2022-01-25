@@ -8,4 +8,5 @@ import sttp.tapir.generic.auto._
 
 class CounterEndpoint extends CounterEndpointPre {
   val counterExecutionPlan = counterExecutionPlanPre
+  val codegen              = codegenPre
 }

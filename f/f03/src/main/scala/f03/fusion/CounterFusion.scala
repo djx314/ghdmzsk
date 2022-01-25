@@ -1,7 +1,7 @@
 package f03.fusion
 
 import f03.service.CounterExecutionService
-import f03.views.CounterRunnerExecutionView
+import f03.views.{CodegenView, CounterRunnerExecutionView}
 import f06.endpoint.CounterEndpoint
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
@@ -11,12 +11,14 @@ import zio.logging._
 class CounterFusion(
   counterView: CounterRunnerExecutionView,
   counterEndpoint: CounterEndpoint,
-  counterExecutionService: CounterExecutionService
+  counterExecutionService: CounterExecutionService,
+  codegenView: CodegenView
 ) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
 
   val counterPage = counterEndpoint.counterPage.zServerLogic(_ => ZIO.succeed(counterView.view))
+  val codegenPage = counterEndpoint.codegenPage.zServerLogic(_ => ZIO.succeed(codegenView.view))
 
   val counterExecutionPlan = counterEndpoint.counterExecutionPlan.zServerLogic { count =>
     val action = for (i <- counterExecutionService.executePlan(count)) yield (i, s"任务成功，剩余未计算计划数量：${i} 条")
@@ -28,7 +30,7 @@ class CounterFusion(
     action.flatMapError(errorHandle)
   }
 
-  val routes = List(counterPage.widen[AppEnv], counterExecutionPlan.widen[AppEnv])
-  val docs   = List(counterEndpoint.counterPage, counterEndpoint.counterExecutionPlan)
+  val routes = List(counterPage.widen[AppEnv], codegenPage.widen[AppEnv], counterExecutionPlan.widen[AppEnv])
+  val docs   = List(counterEndpoint.counterPage, counterEndpoint.codegenPage, counterEndpoint.counterExecutionPlan)
 
 }
