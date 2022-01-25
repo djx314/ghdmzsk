@@ -44,6 +44,7 @@ val f01      = (project in fRoot / "f01").dependsOn(a02)
 val f02      = (project in fRoot / "f02").dependsOn(b01, b02)
 lazy val f03 = (project in fRoot / "f03").settings(scalaJSProjects := Seq(f04)).dependsOn(f06.jvm)
 lazy val f04 = (project in fRoot / "f04").dependsOn(f06.js)
+val f05      = project in fRoot / "f05"
 lazy val f06 = crossProject(JSPlatform, JVMPlatform)
   .in(fRoot / "f06")
   .settings(
@@ -61,7 +62,7 @@ lazy val f06 = crossProject(JSPlatform, JVMPlatform)
       "com.softwaremill.sttp.tapir" %%% "tapir-json-circe"  % Dependent.versions.tapir
     )
   )
-val f05 = project in fRoot / "f05"
+val f07 = project in fRoot / "f07"
 
 val f_codegen_path = fRoot / "f_codegen"
 val f_codegen      = project in f_codegen_path
