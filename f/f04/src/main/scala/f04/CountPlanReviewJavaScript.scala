@@ -9,7 +9,7 @@ import org.scalajs.dom.{document, window, HTMLElement}
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
-import scala.util.Failure
+import scala.util.{Failure, Success}
 
 object CountPlanReviewJavaScript {
 
@@ -25,6 +25,7 @@ object CountPlanReviewJavaScript {
       val countSetCount      = document.getElementById("countSetCount")
       val countMessageEle    = document.getElementById("countMessage")
       val countInfoEle       = document.getElementById("countInfo")
+      val reSortedCountSet   = document.getElementById("reSortedCountSet")
       def cleanText(showInfo: Boolean, message: Option[String] = Option.empty) = {
         message.foreach(s => countMessageEle.innerText = s)
         if (showInfo) {
@@ -40,6 +41,7 @@ object CountPlanReviewJavaScript {
         finishedCountCount.innerText = s"${planCountReview.finishedCountCount}条"
         waitForCountCount.innerText = s"${planCountReview.waitForCountCount}条"
         countSetCount.innerText = s"${planCountReview.countSetCount}条"
+        reSortedCountSet.innerText = s"${planCountReview.reSortedCountSet}条"
       }
 
       button.addEventListener(
@@ -48,17 +50,12 @@ object CountPlanReviewJavaScript {
           cleanText(showInfo = false, message = Option("统计中"))
           val request = RequestUtils.planJson(reverseUrl.countAllCountPlan)
 
-          val action =
-            for (resData <- request)
-              yield {
-                setData(resData.data)
-                cleanText(showInfo = true, message = Option.empty)
-              }
-
-          action.onComplete {
+          request.onComplete {
             case Failure(exception) =>
               window.alert("查询“计算计划”数量发生异常")
-            case _ =>
+            case Success(value) =>
+              setData(value.data)
+              cleanText(showInfo = true, message = Option.empty)
           }
         }
       )

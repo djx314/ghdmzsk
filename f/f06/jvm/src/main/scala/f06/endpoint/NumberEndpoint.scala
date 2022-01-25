@@ -17,4 +17,6 @@ class NumberEndpoint extends NumberEndpointPre {
 
   val countCountPlan = countCountPlanPre.description("统计计算计划数量").tag(JsonTag).appendSuccess.appendErrorMessage
 
+  val reSortCount = reSortCountPre.description("重排序").tag(JsonTag).appendSuccess.appendErrorMessage
+
 }

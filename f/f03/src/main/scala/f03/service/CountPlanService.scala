@@ -22,7 +22,8 @@ class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanS
     def action(implicit ec: ExecutionContext) = for {
       result1 <- CountPlan.delete
       result2 <- CountSet.delete
-    } yield result1 + result2
+      result3 <- ResultSetSort.delete
+    } yield result1 + result2 + result3
 
     for {
       result <- db.run(implicit ec => action.transactionally)
@@ -41,16 +42,19 @@ class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanS
     val finishedCountCountDBIO = CountPlan.filter(_.counterResultId.isDefined).map(_.id).size.result
     val waitForCountCountDBIO  = CountPlan.filter(_.counterResultId.isEmpty).map(_.id).size.result
     val countSetCountDBIO      = CountPlan.map(_.counterResultId).filter(_.isDefined).distinct.length.result
+    val reSortedCountSetDBIO   = ResultSetSort.filter(_.parent < 0).map(_.id).size.result
     def dbio(implicit ec: ExecutionContext) = for {
       countPlanAllCount  <- countPlanAllCountDBIO
       finishedCountCount <- finishedCountCountDBIO
       waitForCountCount  <- waitForCountCountDBIO
       countSetCount      <- countSetCountDBIO
+      reSortedCountSet   <- reSortedCountSetDBIO
     } yield PlanCountReview(
       countPlanAllCount = countPlanAllCount,
       finishedCountCount = finishedCountCount,
       waitForCountCount = waitForCountCount,
-      countSetCount = countSetCount
+      countSetCount = countSetCount,
+      reSortedCountSet = reSortedCountSet
     )
     db.run(implicit ec => dbio)
   }

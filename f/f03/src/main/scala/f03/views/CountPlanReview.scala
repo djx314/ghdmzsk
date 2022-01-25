@@ -31,7 +31,8 @@ class CountPlanReview(jsDependencies: JsDependencies) {
             tr(td("计算计划数量"), td(span(id := "countPlanAllCount"))),
             tr(td("已计算计算计划"), td(span(id := "finishedCountCount"))),
             tr(td("未计算计算计划"), td(span(id := "waitForCountCount"))),
-            tr(td("结果集数量"), td(span(id := "countSetCount")))
+            tr(td("结果集数量"), td(span(id := "countSetCount"))),
+            tr(td("重排序后结果数量"), td(span(id := "reSortedCountSet")))
           )
         )
       )

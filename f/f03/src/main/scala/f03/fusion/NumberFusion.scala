@@ -1,7 +1,7 @@
 package f03.fusion
 
 import f06.endpoint.NumberEndpoint
-import f03.service.CountPlanService
+import f03.service.{CountPlanService, CounterReSortedService}
 import f03.views.{CountPlanReview, HelperView, IndexView, ReSortCountExecutionPage}
 import sttp.model.StatusCode
 import sttp.tapir.ztapir._
@@ -14,7 +14,8 @@ class NumberFusion(
   countPlanReview: CountPlanReview,
   countPlanService: CountPlanService,
   numberEndpoint: NumberEndpoint,
-  reSortCountExecutionView: ReSortCountExecutionPage
+  reSortCountExecutionView: ReSortCountExecutionPage,
+  counterReSortedService: CounterReSortedService
 ) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
@@ -53,13 +54,23 @@ class NumberFusion(
     action.flatMapError(errorHandle)
   }
 
+  val reSortCount = numberEndpoint.reSortCount.zServerLogic { _ =>
+    val action = counterReSortedService.sortedPlan()
+    def errorHandle(e: Throwable) =
+      for (_ <- Logging.throwable("重排序发生异常", e))
+        yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
+
+    action.flatMapError(errorHandle)
+  }
+
   val routes = List(
     index.widen[AppEnv],
     countPlanReviewPage.widen[AppEnv],
     deleteAllCountPlan.widen[AppEnv],
     resetAllCountPlan.widen[AppEnv],
     countCountPlan.widen[AppEnv],
-    reSortCountExecutionPage.widen[AppEnv]
+    reSortCountExecutionPage.widen[AppEnv],
+    reSortCount.widen[AppEnv]
   )
   val lowLevelRoutes = List(pageHelper.widen[AppEnv])
   val docs = List(
@@ -69,6 +80,7 @@ class NumberFusion(
     numberEndpoint.deleteAllCountPlan,
     numberEndpoint.resetAllCountPlan,
     numberEndpoint.countCountPlan,
+    numberEndpoint.reSortCountExecutionPage,
     numberEndpoint.reSortCountExecutionPage
   )
 

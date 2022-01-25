@@ -25,7 +25,22 @@ object ReSortCountExecutionJavascript {
       startSecondSort.addEventListener(
         "click",
         { e: dom.MouseEvent =>
-          executeInfoEle.innerText = "执行完毕"
+          executeInfoEle.innerText = "执行中"
+
+          startSecondSort.disabled = true
+
+          val request = RequestUtils.planJson(reverseUrl.reSortCount)
+
+          request.onComplete {
+            case Failure(exception) =>
+              window.alert("查询“计算计划”数量发生异常")
+            case Success(value) =>
+              executeInfoEle.innerText = value.message.getOrElse("执行完毕")
+          }
+
+          request.onComplete { case _ =>
+            startSecondSort.disabled = false
+          }
         }
       )
     }

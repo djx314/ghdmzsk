@@ -8,6 +8,8 @@ import f03.service.{
   CountPlanServiceImpl,
   CounterExecutionService,
   CounterExecutionServiceImpl,
+  CounterReSortedService,
+  CounterReSortedServiceImpl,
   DataCollection,
   DataCollectionImpl,
   PlanExecute,
@@ -69,6 +71,7 @@ object MainApp {
     make[CountPlanService].from[CountPlanServiceImpl]
     make[CounterExecutionService].from[CounterExecutionServiceImpl]
     make[PlanExecute].from[PlanExecuteImpl]
+    make[CounterReSortedService].from[CounterReSortedServiceImpl]
   }
 
   private object EndpointModule extends ModuleDef {

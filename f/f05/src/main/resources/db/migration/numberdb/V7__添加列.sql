@@ -1,1 +1,1 @@
-alter table result_set_sort add column set text not null after second_start;
+alter table result_set_sort add column count_set text not null after is_limited;
