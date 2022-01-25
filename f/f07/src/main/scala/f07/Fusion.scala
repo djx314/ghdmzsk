@@ -130,7 +130,7 @@ object Result {
 
   def someResult(i1: Int, i2: Int): SList[(Int, Int)] = countResult(i1, i2).collect { case (a, Some(b)) => (a, b) }
 
-  def main(arr: Array[String]): Unit = {
+  def main1(arr: Array[String]): Unit = {
     val coll: HashMap[(Int, Int, Int), Int] = HashMap.empty
     for {
       i1                         <- 0 to 19
