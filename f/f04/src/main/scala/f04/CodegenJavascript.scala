@@ -33,7 +33,7 @@ object CodegenJavascript {
             case Failure(exception) =>
               window.alert("codegen 发生异常")
             case Success(value) =>
-              codegenButton.innerText = value.message.getOrElse("执行完毕")
+              codegenInfo.innerText = value.message.getOrElse("执行完毕")
           }
 
           request.onComplete { case _ =>

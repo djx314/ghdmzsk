@@ -4,6 +4,8 @@ import distage._
 import f03.fusion.{CounterFusion, NumberFusion}
 import f06.reverseroutes.ReverseRoutes
 import f03.service.{
+  CodegenService,
+  CodegenServiceImpl,
   CountPlanService,
   CountPlanServiceImpl,
   CounterExecutionService,
@@ -73,6 +75,7 @@ object MainApp {
     make[CounterExecutionService].from[CounterExecutionServiceImpl]
     make[PlanExecute].from[PlanExecuteImpl]
     make[CounterReSortedService].from[CounterReSortedServiceImpl]
+    make[CodegenService].from[CodegenServiceImpl]
   }
 
   private object EndpointModule extends ModuleDef {

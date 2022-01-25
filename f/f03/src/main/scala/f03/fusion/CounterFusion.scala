@@ -1,6 +1,6 @@
 package f03.fusion
 
-import f03.service.CounterExecutionService
+import f03.service.{CodegenService, CounterExecutionService}
 import f03.views.{CodegenView, CounterRunnerExecutionView}
 import f06.endpoint.CounterEndpoint
 import sttp.model.StatusCode
@@ -12,7 +12,8 @@ class CounterFusion(
   counterView: CounterRunnerExecutionView,
   counterEndpoint: CounterEndpoint,
   counterExecutionService: CounterExecutionService,
-  codegenView: CodegenView
+  codegenView: CodegenView,
+  codegenService: CodegenService
 ) {
 
   type AppEnv = f03.mainapp.MainApp.AppEnv
@@ -30,7 +31,17 @@ class CounterFusion(
     action.flatMapError(errorHandle)
   }
 
-  val routes = List(counterPage.widen[AppEnv], codegenPage.widen[AppEnv], counterExecutionPlan.widen[AppEnv])
-  val docs   = List(counterEndpoint.counterPage, counterEndpoint.codegenPage, counterEndpoint.counterExecutionPlan)
+  val codegen = counterEndpoint.codegen.zServerLogic { _ =>
+    val action = for (s <- codegenService.codegen()) yield (s, "任务成功")
+
+    def errorHandle(e: Throwable) =
+      for (_ <- Logging.throwable("执行任务发生异常", e))
+        yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
+
+    action.flatMapError(errorHandle)
+  }
+
+  val routes = List(counterPage.widen[AppEnv], codegenPage.widen[AppEnv], counterExecutionPlan.widen[AppEnv], codegen.widen[AppEnv])
+  val docs   = List(counterEndpoint.counterPage, counterEndpoint.codegenPage, counterEndpoint.counterExecutionPlan, counterEndpoint.codegen)
 
 }
