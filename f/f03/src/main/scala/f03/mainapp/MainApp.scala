@@ -1,57 +1,86 @@
 package f03.mainapp
 
-import cats.implicits._
-import com.softwaremill.macwire._
 import distage._
-import f03.fusion.NumberFusion
-import f03.views.{IndexView, JsDependencies}
-import org.http4s._
-import org.http4s.server.staticcontent._
-import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
-import sttp.tapir.server.http4s.ztapir.ZHttp4sServerInterpreter
-import sttp.tapir.openapi.circe.yaml._
-import sttp.tapir.swagger.SwaggerUI
+import f03.fusion.{CounterFusion, NumberFusion}
+import f06.reverseroutes.ReverseRoutes
+import f03.service.{
+  CodegenService,
+  CodegenServiceImpl,
+  CountPlanService,
+  CountPlanServiceImpl,
+  CounterExecutionService,
+  CounterExecutionServiceImpl,
+  CounterReSortedService,
+  CounterReSortedServiceImpl,
+  DataCollection,
+  DataCollectionImpl,
+  PlanExecute,
+  PlanExecuteImpl
+}
+import f03.views.{CodegenView, CountPlanReview, CounterRunnerExecutionView, HelperView, IndexView, JsDependencies, ReSortCountExecutionPage}
+import f06.endpoint.{CounterEndpoint, NumberEndpoint}
 import zio._
-import zio.interop.catz._
 
 object MainApp {
 
-  type ZIOEnv[T] = RIO[ZEnv, T]
+  type CustomAppEnv = logging.Logging
+  type AppEnv       = ZEnv with CustomAppEnv
 
-  lazy val appRoutes              = wire[AppRoutes]
-  private lazy val appConfig      = wire[AppConfig]
-  private lazy val numberFusion   = wire[NumberFusion]
-  private lazy val indexView      = wire[IndexView]
-  private lazy val jsDependencies = wire[JsDependencies]
+  private val injector = Injector[RIO[AppEnv, *]]()
+  private val plan     = injector.plan(NumberModule, Activation.empty, Roots(DIKey[AppRoutes[AppEnv]]))
+  private val resource = injector.produce(plan)
+  val routes           = resource.map(_.get[AppRoutes[AppEnv]])
 
-  // prepare
-  private object GDModule extends ModuleDef {
-    make[AppRoutes]
+  private object NumberModule extends ModuleDef {
+    make[AppRoutes[AppEnv]].from[AppRoutesImpl]
+
+    include(ViewModule)
+    include(FusionModule)
+    include(ConfigModule)
+    include(ResourceModule)
+    include(ServiceModule)
+    include(EndpointModule)
+  }
+
+  private object ViewModule extends ModuleDef {
+    make[IndexView]
+    make[JsDependencies]
+    make[HelperView]
+    make[CountPlanReview]
+    make[CounterRunnerExecutionView]
+    make[ReverseRoutes]
+    make[ReSortCountExecutionPage]
+    make[CodegenView]
+  }
+
+  private object FusionModule extends ModuleDef {
     make[NumberFusion]
+    make[CounterFusion]
   }
 
-  private object GDApp {
-    private val injector = Injector[RIO[ZEnv, *]]()
-    private val plan = injector.plan(
-      GDModule,
-      Activation.empty,
-      Roots(
-        DIKey[AppRoutes]
-      )
-    )
-    private val resource = injector.produce(plan)
-    val routes           = resource.use(s => ZIO.effect(s.get[AppRoutes]))
+  private object ConfigModule extends ModuleDef {
+    make[AppConfig]
   }
 
-}
+  private object ResourceModule extends ModuleDef {
+    make[AppResource].from[AppResourceImpl]
+    make[SlickDB].fromResource { AppResource: AppResource =>
+      AppResource.sqliteSlickManaged
+    }
+  }
 
-class AppRoutes(numberFusion: NumberFusion) {
-  private val lowLevelRoutes = ZHttp4sServerInterpreter[ZEnv]().from(numberFusion.lowLevelRoutes).toRoutes
-  private val httpRoutes     = ZHttp4sServerInterpreter[ZEnv]().from(numberFusion.routes).toRoutes
-  private val fileRoutes     = webjarServiceBuilder[MainApp.ZIOEnv].toRoutes
+  private object ServiceModule extends ModuleDef {
+    make[DataCollection].from[DataCollectionImpl]
+    make[CountPlanService].from[CountPlanServiceImpl]
+    make[CounterExecutionService].from[CounterExecutionServiceImpl]
+    make[PlanExecute].from[PlanExecuteImpl]
+    make[CounterReSortedService].from[CounterReSortedServiceImpl]
+    make[CodegenService].from[CodegenServiceImpl]
+  }
 
-  private val docsAsYaml: String = OpenAPIDocsInterpreter().toOpenAPI(numberFusion.docs, "Number App", "1.0").toYaml
-  private val swaggerUIRoute     = ZHttp4sServerInterpreter[ZEnv]().from(SwaggerUI[MainApp.ZIOEnv](docsAsYaml)).toRoutes
+  private object EndpointModule extends ModuleDef {
+    make[NumberEndpoint]
+    make[CounterEndpoint]
+  }
 
-  val routes: HttpRoutes[MainApp.ZIOEnv] = httpRoutes <+> fileRoutes <+> swaggerUIRoute <+> lowLevelRoutes
 }

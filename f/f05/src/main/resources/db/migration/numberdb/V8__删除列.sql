@@ -1,0 +1,1 @@
+alter table result_set_sort drop column count_set_id;

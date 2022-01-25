@@ -1,24 +1,17 @@
 package f03.mainapp
 
-import MainApp._
-
-import org.http4s._
-import org.http4s.blaze.server.BlazeServerBuilder
-
-import scala.concurrent.duration._
-
 import zio._
-import zio.interop.catz._
+import zhttp.http._
+import zhttp.service.Server
+import zio.logging._
 
 object Main extends App {
+  type AppEnv = MainApp.AppEnv
 
-  def builder(httpApp: HttpApp[ZIOEnv]) = BlazeServerBuilder[MainApp.ZIOEnv]
-    .bindHttp(8080, "localhost")
-    .withHttpApp(httpApp)
-    .withIdleTimeout(10.minutes)
-    .withResponseHeaderTimeout(10.minutes)
+  val loggingEnv: URLayer[ZEnv, Logging] =
+    Logging.console(logLevel = LogLevel.Info, format = LogFormat.ColoredLogFormat()) >>> Logging.withRootLoggerName("number-app")
 
   override def run(args: List[String]): URIO[ZEnv, zio.ExitCode] =
-    builder(MainApp.appRoutes.routes.orNotFound).resource.use(_ => ZIO.never).exitCode
+    MainApp.routes.use(s => Server.start(8080, s.app)).provideSomeLayer(loggingEnv).exitCode
 
 }
