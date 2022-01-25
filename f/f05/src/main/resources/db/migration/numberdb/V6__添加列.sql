@@ -1,0 +1,1 @@
+alter table result_set_sort add column count_set_id int not null after second_start;

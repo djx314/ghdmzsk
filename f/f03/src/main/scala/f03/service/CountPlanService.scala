@@ -40,7 +40,7 @@ class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanS
     val countPlanAllCountDBIO  = CountPlan.map(_.id).size.result
     val finishedCountCountDBIO = CountPlan.filter(_.counterResultId.isDefined).map(_.id).size.result
     val waitForCountCountDBIO  = CountPlan.filter(_.counterResultId.isEmpty).map(_.id).size.result
-    val countSetCountDBIO      = CountSet.map(_.id).size.result
+    val countSetCountDBIO      = CountPlan.map(_.counterResultId).filter(_.isDefined).distinct.length.result
     def dbio(implicit ec: ExecutionContext) = for {
       countPlanAllCount  <- countPlanAllCountDBIO
       finishedCountCount <- finishedCountCountDBIO
