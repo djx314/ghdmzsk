@@ -75,6 +75,8 @@ object Runner {
     println(s"未映射结果集数量：${setsLeftover().size}")
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
+
+    println(Confirm.confirm.mkString("\n"))
     // Gen3.genRunner()
   }
 
