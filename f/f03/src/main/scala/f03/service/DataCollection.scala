@@ -107,13 +107,7 @@ class DataCollectionImpl extends DataCollection {
     }
   }
 
-  override def genString(result: List[CountResult]): String = {
-    def toStr(t: Option[Int]): String = t match {
-      case Some(s) => s.toString
-      case _       => UnlimitedType
-    }
-    result.map(s => s"${s.i1},${s.i2},${toStr(s.result)}").mkString("|")
-  }
+  override def genString(result: List[CountResult]): String =     result.map(s => s"${s.i1},${s.i2},${s.result.map(_.toString).getOrElse(UnlimitedType)}").mkString("|")
 
   override def fromString(str: String): List[CountResult] = {
     def splitToList(str: String)(c: Char) = str.split(c).to(List).map(_.trim).filterNot(_.isEmpty)

@@ -48,7 +48,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
 
     def printlnPlan(plans: Seq[CountPlanRow], index: Int): CTask[Unit] = {
       val str1 = plans.map(p =>
-        s"val plan${p.id} = CountPlan(index = ${p.id}, firstOuterName = \"${p.firstOuterName}\", firstOuterType = \"${p.firstOuterType}\", firstInnerName = \"${p.firstInnerName}\", firstInnerType = \"${p.firstInnerType}\", firstStart = ${p.firstStart}, secondOuterName = \"${p.secondOuterName}\", secondOuterType = \"${p.secondOuterType}\", secondInnerName = \"${p.secondInnerName}\", secondInnerType = \"${p.secondOuterType}\", secondStart = ${p.secondStart}, set = CountSets.countSet${p.counterResultId
+        s"val plan${p.id} = CountPlan(index = ${p.id}, firstOuterName = \"${p.firstOuterName}\", firstOuterType = \"${p.firstOuterType}\", firstInnerName = \"${p.firstInnerName}\", firstInnerType = \"${p.firstInnerType}\", firstStart = ${p.firstStart}, secondOuterName = \"${p.secondOuterName}\", secondOuterType = \"${p.secondOuterType}\", secondInnerName = \"${p.secondInnerName}\", secondInnerType = \"${p.secondInnerType}\", secondStart = ${p.secondStart}, set = CountSets.countSet${p.counterResultId
           .getOrElse("未有值")})"
       )
       val str2 = s"  val sum$index: List[CountPlan] = List(${plans.map(s => s"plan${s.id}").mkString(",")})"
