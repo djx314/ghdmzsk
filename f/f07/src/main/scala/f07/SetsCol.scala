@@ -1,8 +1,10 @@
 package f07
 
-sealed trait SetsList
-case class CommonSetsList(key: String, firstStart: Int, secondStart: Int, value: (Int, Int) => Int)      extends SetsList
-case class OptSetsList(key: String, firstStart: Int, secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList
+sealed trait SetsList {
+  def key: String
+}
+case class CommonSetsList(override val key: String, firstStart: Int, secondStart: Int, value: (Int, Int) => Int)      extends SetsList
+case class OptSetsList(override val key: String, firstStart: Int, secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList
 
 trait SetsColAbs {
   def setsCol: Vector[SetsList]            = setsList
@@ -110,5 +112,18 @@ object SetsCol extends SetsColAbs {
   Tags.Tag081.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1))
   Tags.Tag082.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i2 + i2 / i1))
   Tags.Tag083.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i2 + i2 / i1 + 1))
+  Tags.Tag084.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i1 * i2)
+  Tags.Tag085.firstart(0).secondStart(0).value((i1: Int, i2: Int) => (i1 + 1) * i2)
+  Tags.Tag086.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else (i1 - 1) * i2)
+  Tags.Tag087.firstart(1).secondStart(0).value((i1: Int, i2: Int) => Option.empty)
+  Tags.Tag088.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2)
+  Tags.Tag089.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 3)
+  Tags.Tag090.firstart(0).secondStart(1).value((i1: Int, i2: Int) => Option.empty)
+  Tags.Tag091.firstart(0).secondStart(1).value((i1: Int, i2: Int) => 0)
+  Tags.Tag092.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(2))
+  Tags.Tag093.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i1 == 1) Option(4) else Option(3))
+  Tags.Tag094.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i1 == 1) Option(3) else Option(2))
+  Tags.Tag095.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else 2)
+  Tags.Tag096.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else 3)
 
 }
