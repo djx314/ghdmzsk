@@ -26,25 +26,21 @@ object Runner {
       each match {
         case CommonSetsList(key, firstStart, secondStart, value) =>
           val list = for {
-            i1 <- 0 to 20
-            i2 <- 0 to 20
+            i1 <- firstStart to 20
+            i2 <- secondStart to 20
           } yield Option(value(i1, i2))
-          (key, list.to(List))
+          (key, (firstStart, secondStart, list.to(List)))
         case OptSetsList(key, firstStart, secondStart, value) =>
           val list = for {
-            i1 <- 0 to 20
-            i2 <- 0 to 20
+            i1 <- firstStart to 20
+            i2 <- secondStart to 20
           } yield value(i1, i2)
-          (key, list.to(List))
+          (key, (firstStart, secondStart, list.to(List)))
       }
     }
     cols.groupBy(s => s._2).filter(_._2.size > 1).map(_._2.map(_._1).to(List)).to(List)
   }
 
-  def setsLeftover(): List[CountSet] = {
-    val countSets = col.map(_._2.mkString("|"))
-    CountSets.sum.filterNot(s => countSets.exists(t => t == s.set))
-  }
   val col = for {
     each <- SetsCol.setsCol
   } yield each match {
@@ -61,32 +57,27 @@ object Runner {
       } yield s"$i1,$i2,${value(i1, i2).getOrElse("unlimited")}"
       (key, list)
   }
+
+  def setsLeftover(): List[CountSet] = {
+    val countSets = col.map(_._2.mkString("|"))
+    CountSets.sum.filterNot(s => countSets.exists(t => t == s.set))
+  }
+
   def colLeftover(): Vector[String] = {
     val countSets = col.map(s => (s._1, s._2.mkString("|")))
     countSets.filterNot(s => CountSets.sum.exists(t => t.set == s._2)).map(_._1)
   }
 
   def main(arr: Array[String]): Unit = {
-    println(CountSets.sum.size)
-    println(setsLeftover().size)
-    println(colLeftover())
+    println(s"重复的映射：${distinctRunner()}")
+    println(s"结果集总数：${CountSets.sum.size}")
+    println(s"映射结果总数：${SetsCol.setsCol.size}")
+    println(s"未映射结果集数量：${setsLeftover().size}")
+    println(s"无效的映射 key：${colLeftover()}")
+    println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
-    println(
-      CountPlans.sum
-        .groupBy(s =>
-          (
-            s.firstOuterName,
-            s.firstOuterType,
-            s.firstInnerName,
-            s.firstInnerType,
-            s.secondOuterName,
-            s.secondOuterType,
-            s.secondInnerName,
-            s.secondInnerType
-          )
-        )
-        .size
-    )
+    // println(Confirm.confirm.mkString("\n"))
+    // Gen3.genRunner()
   }
 
 }
