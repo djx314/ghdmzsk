@@ -66,12 +66,15 @@ object Confirm {
             (key, v1, v2, v3, v4)
         }
 
-        val confirm1 = Option(i1) == v2_2 || Option(i1) == v2_4
-        val confirm2 = Option(i2) == v2_1 || Option(i2) == v2_3
-        confirm1 && confirm2
+        val confirm1 = Option(i1) == v2_2 && Option(i2) == v2_1
+        val confirm2 = Option(i1) == v2_4 && Option(i2) == v2_3
+        (confirm1, confirm2)
       }
 
-      if (confirmList.forall(identity)) Option((key1, mapping2.key)) else Option.empty
+      val (confirmList1, confirmList2) = confirmList.unzip
+      val confirm                      = confirmList1.forall(identity) || confirmList2.forall(identity)
+
+      if (confirm) Option((key1, mapping2.key)) else Option.empty
     }
 
     l.to(List).collect { case Some(s) => s }
