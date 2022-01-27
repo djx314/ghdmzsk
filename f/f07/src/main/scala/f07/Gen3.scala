@@ -54,7 +54,7 @@ object Gen3 {
     }
   }
 
-  def genStr(item: CountPlan): List[String] = {
+  def genStr(item: CountPlan, isLimited: Boolean): List[String] = {
     val number1 = SingleNumber(
       outerName = item.firstOuterName,
       outerType = item.firstOuterType,
@@ -69,13 +69,14 @@ object Gen3 {
       innerType = item.secondInnerType,
       start = item.secondStart
     )
+    val counter = if (isLimited) "Counter.count(() => count)" else "Counter.countOpt(() => count)"
     val str1 = s"""
       ${genSingleNumber("number1", number1, "i1")}
       ${genSingleNumber("number2", number2, "i2")}
       def count = number1.method1(number2)
-      val r1 = true
+      def r1 = $counter
       val r2 = true
-      assert(r1 == r2)
+      assert(true == r2)
        """
     val str2 = Using.resource(Source.fromString(str1))(r => r.getLines().to(List)).map(_.trim).filterNot(_.isEmpty).map(s => "  " + s)
 
@@ -84,10 +85,10 @@ object Gen3 {
   }
 
   def genRunner(): Unit = {
-    val filesStr = Runner.setsLeftover().map(s => CountPlans.sum.filter(t => t.set.set == s.set).head)
+    val filesStr = Runner.setsLeftover().map(s => (CountPlans.sum.filter(t => t.set.set == s.set).head, !s.set.contains("unlimited")))
 
     val list = List("package f07.test", "", "import f07._", "object Test {", "  def main(arr: Array[String]): Unit = {") ::: filesStr
-      .flatMap(genStr)
+      .flatMap(s => genStr(s._1, s._2))
       .appended("  }")
       .appended("}")
 
