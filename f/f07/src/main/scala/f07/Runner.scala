@@ -226,6 +226,7 @@ object Runner {
 
     printlnSingleResult()
 
+    println("互为逆运算的法：")
     println(Confirm.confirm.mkString("\n"))
 
     // Gen3.genRunner()
