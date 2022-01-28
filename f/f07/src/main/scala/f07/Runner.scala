@@ -226,7 +226,8 @@ object Runner {
 
     printlnSingleResult()
 
-    // println(Confirm.confirm.mkString("\n"))
+    println(Confirm.confirm.mkString("\n"))
+
     // Gen3.genRunner()
   }
 
