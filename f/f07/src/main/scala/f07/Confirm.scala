@@ -14,14 +14,14 @@ object Confirm {
       mapping1 match {
         case CommonSetsList(key, firstStart, secondStart, value) =>
           val list = for {
-            i1 <- firstStart to 20
-            i2 <- secondStart to 20
+            i1 <- 1 to 20
+            i2 <- 1 to 20
           } yield (i1, i2, Option(value(i1, i2)))
           (key, list)
         case OptSetsList(key, firstStart, secondStart, value) =>
           val list = for {
-            i1 <- firstStart to 20
-            i2 <- secondStart to 20
+            i1 <- 1 to 20
+            i2 <- 1 to 20
           } yield (i1, i2, value(i1, i2))
           (key, list)
       }
@@ -34,17 +34,47 @@ object Confirm {
       mapping2     <- SetsCol.setsCol
     } yield {
       val confirmList = for ((i1, i2, v) <- data) yield {
-        val (key2, v2_1, v2_2) = mapping2 match {
+        val (key2, v2_1, v2_2, v2_3, v2_4) = mapping2 match {
           case CommonSetsList(key, firstStart, secondStart, value) =>
-            (key, Option(value(v, i1)), Option(value(v, i2)))
+            val (v1, v2) =
+              if (v > firstStart)
+                (Option(value(v, i1)), Option(value(v, i2)))
+              else
+                (Option.empty, Option.empty)
+
+            val (v3, v4) =
+              if (v > secondStart)
+                (Option(value(i1, v)), Option(value(i2, v)))
+              else
+                (Option.empty, Option.empty)
+
+            (key, v1, v2, v3, v4)
+
           case OptSetsList(key, firstStart, secondStart, value) =>
-            (key, value(v, i1), value(v, i2))
+            val (v1, v2) =
+              if (v > firstStart)
+                (value(v, i1), value(v, i2))
+              else
+                (Option.empty, Option.empty)
+
+            val (v3, v4) =
+              if (v > secondStart)
+                (value(i1, v), value(i2, v))
+              else
+                (Option.empty, Option.empty)
+
+            (key, v1, v2, v3, v4)
         }
 
-        Option(i2) == v2_1 || Option(i1) == v2_2
+        val confirm1 = Option(i1) == v2_2 && Option(i2) == v2_1
+        val confirm2 = Option(i1) == v2_4 && Option(i2) == v2_3
+        (confirm1, confirm2)
       }
 
-      if (confirmList.forall(identity)) Option((key1, mapping2.key)) else Option.empty
+      val (confirmList1, confirmList2) = confirmList.unzip
+      val confirm                      = confirmList1.forall(identity) || confirmList2.forall(identity)
+
+      if (confirm) Option((key1, mapping2.key)) else Option.empty
     }
 
     l.to(List).collect { case Some(s) => s }

@@ -54,7 +54,7 @@ object Gen3 {
     }
   }
 
-  def genStr(item: CountPlan, isLimited: Boolean): List[String] = {
+  def genStr(item: CountPlan, isLimited: Boolean): Option[List[String]] = {
     val number1 = SingleNumber(
       outerName = item.firstOuterName,
       outerType = item.firstOuterType,
@@ -69,6 +69,15 @@ object Gen3 {
       innerType = item.secondInnerType,
       start = item.secondStart
     )
+
+    def noNeedGen(singleNumber: SingleNumber): Boolean = {
+      val c1 = singleNumber.outerName == "point" && singleNumber.innerName == "point"
+      val c2 = singleNumber.outerName == "point" && singleNumber.innerName == "unlimited"
+      c1 || c2
+    }
+
+    val need = noNeedGen(number1) || noNeedGen(number2)
+
     val counter = if (isLimited) "Counter.count(() => count)" else "Counter.countOpt(() => count)"
     val str1 = s"""
       ${genSingleNumber("number1", number1, "i1")}
@@ -81,14 +90,18 @@ object Gen3 {
     val str2 = Using.resource(Source.fromString(str1))(r => r.getLines().to(List)).map(_.trim).filterNot(_.isEmpty).map(s => "  " + s)
 
     val list = List("for {", s"  i1 <- ${item.firstStart} to 20", s"  i2 <- ${item.secondStart} to 20", "} yield {") ::: str2.appended("}")
-    list.map(s => "    " + s)
+    Option(list.map(s => "    " + s)).filter(_ => !need)
   }
 
   def genRunner(): Unit = {
     val filesStr = Runner.setsLeftover().map(s => (CountPlans.sum.filter(t => t.set.set == s.set).head, !s.set.contains("unlimited")))
 
-    val list = List("package f07.test", "", "import f07._", "object Test {", "  def main(arr: Array[String]): Unit = {") ::: filesStr
-      .flatMap(s => genStr(s._1, s._2))
+    val lines1 = filesStr.map(s => genStr(s._1, s._2))
+    val lines2 = lines1.collect { case Some(s) => s }
+    println(s"生成数据${lines2.size}条")
+    val lines3 = lines2.flatten
+
+    val list = List("package f07.test", "", "import f07._", "object Test {", "  def main(arr: Array[String]): Unit = {") ::: lines3
       .appended("  }")
       .appended("}")
 
