@@ -103,10 +103,26 @@ object Runner {
                 }
               val str3 = s"$i1,$i2,${v3.getOrElse("unlimited")}"
 
-              (str1, str2, str3)
+              val v4 =
+                try Option(value(i1, i2))
+                catch {
+                  case e: Throwable => Option.empty
+                }
+              val str4 = s"$i1,$i2,${v4.getOrElse("unlimited")}"
+
+              val v5 =
+                try Option(value(i2, i1))
+                catch {
+                  case e: Throwable => Option.empty
+                }
+              val str5 = s"$i1,$i2,${v5.getOrElse("unlimited")}"
+
+              ((str1, str2, str3), (str4, str5))
             }
 
-            val (listStr1, listStr2, listStr3) = list.unzip3
+            val (ll1, ll2)                     = list.unzip
+            val (listStr0, listStr4)           = ll2.unzip
+            val (listStr1, listStr2, listStr3) = ll1.unzip3
             if (eachSet.set == listStr1.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: $key")
               throw new Exception
@@ -117,6 +133,14 @@ object Runner {
             }
             if (eachSet.set == listStr3.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = 1, mappingKey: $key")
+              throw new Exception
+            }
+            if (eachSet.set == listStr0.mkString("|")) {
+              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2, mappingKey: $key")
+              throw new Exception
+            }
+            if (eachSet.set == listStr4.mkString("|")) {
+              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i2, i2 = i1, mappingKey: $key")
               throw new Exception
             }
           case OptSetsList(key, firstStart, secondStart, value) =>
@@ -145,10 +169,26 @@ object Runner {
                 }
               val str3 = s"$i1,$i2,${v3.flatten.getOrElse("unlimited")}"
 
-              (str1, str2, str3)
+              val v4 =
+                try Option(value(i1, i2))
+                catch {
+                  case e: Throwable => Option.empty
+                }
+              val str4 = s"$i1,$i2,${v4.flatten.getOrElse("unlimited")}"
+
+              val v5 =
+                try Option(value(i2, i1))
+                catch {
+                  case e: Throwable => Option.empty
+                }
+              val str5 = s"$i1,$i2,${v5.flatten.getOrElse("unlimited")}"
+
+              ((str1, str2, str3), (str4, str5))
             }
 
-            val (listStr1, listStr2, listStr3) = list.unzip3
+            val (ll1, ll2)                     = list.unzip
+            val (listStr0, listStr4)           = ll2.unzip
+            val (listStr1, listStr2, listStr3) = ll1.unzip3
             if (eachSet.set == listStr1.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: $key")
               throw new Exception
@@ -159,6 +199,14 @@ object Runner {
             }
             if (eachSet.set == listStr3.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = 1, mappingKey: $key")
+              throw new Exception
+            }
+            if (eachSet.set == listStr0.mkString("|")) {
+              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2, mappingKey: $key")
+              throw new Exception
+            }
+            if (eachSet.set == listStr4.mkString("|")) {
+              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i2, i2 = i1, mappingKey: $key")
               throw new Exception
             }
         }
