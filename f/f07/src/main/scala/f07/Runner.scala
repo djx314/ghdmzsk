@@ -216,6 +216,22 @@ object Runner {
     }
   }
 
+  def countTag(tag: String): Int = {
+    val count = SetsCol.setsCol.filter(_.key == tag).head
+    val num = for {
+      i1 <- count.firstStart to 20
+      i2 <- count.secondStart to 20
+    } yield count match {
+      case s: CommonSetsList => s"$i1,$i2,${s.value(i1, i2)}"
+      case s: OptSetsList    => s"$i1,$i2,${s.value(i1, i2).getOrElse("unlimited")}"
+    }
+    val str  = num.mkString("|")
+    val sets = CountSets.sum.filter(_.set == str)
+    val set  = sets.head
+    assert(sets.size == 1)
+    CountPlans.sum.filter(_.set.index == set.index).size
+  }
+
   def main(arr: Array[String]): Unit = {
     println(s"重复的映射：${distinctRunner()}")
     println(s"结果集总数：${CountSets.sum.size}")
@@ -228,6 +244,10 @@ object Runner {
 
     println("互为逆运算的法：")
     println(Confirm.confirm.mkString("\n"))
+
+    println(s"出现次数：加减法：x - 002: (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(Tags.Tag119)} - ${countTag(Tags.Tag002)})")
+    println(s"出现次数：乘除法：084 - x: (${countTag(Tags.Tag084)} - ${countTag(Tags.Tag045)}, ${countTag(Tags.Tag046)})")
+    println(s"出现次数：第三法：067 - 040: (${countTag(Tags.Tag067)} - ${countTag(Tags.Tag040)})")
 
     // Gen3.genRunner()
   }

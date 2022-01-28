@@ -2,9 +2,11 @@ package f07
 
 sealed trait SetsList {
   def key: String
+  def firstStart: Int
+  def secondStart: Int
 }
-case class CommonSetsList(override val key: String, firstStart: Int, secondStart: Int, value: (Int, Int) => Int)      extends SetsList
-case class OptSetsList(override val key: String, firstStart: Int, secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList
+case class CommonSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Int)      extends SetsList
+case class OptSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList
 
 trait SetsColAbs {
   def setsCol: Vector[SetsList]            = setsList
