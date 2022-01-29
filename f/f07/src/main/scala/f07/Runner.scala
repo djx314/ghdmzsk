@@ -41,29 +41,23 @@ object Runner {
     cols.groupBy(s => s._2).filter(_._2.size > 1).map(_._2.map(_._1).to(List)).to(List)
   }
 
-  val col = for {
+  val col1 = for {
     each <- SetsCol.setsCol
-  } yield each match {
-    case CommonSetsList(key, firstStart, secondStart, value) =>
-      val list = for {
-        i1 <- firstStart to 20
-        i2 <- secondStart to 20
-      } yield s"$i1,$i2,${value(i1, i2)}"
-      (key, list)
-    case OptSetsList(key, firstStart, secondStart, value) =>
-      val list = for {
-        i1 <- firstStart to 20
-        i2 <- secondStart to 20
-      } yield s"$i1,$i2,${value(i1, i2).getOrElse("unlimited")}"
-      (key, list)
+  } yield {
+    val list = for {
+      i1 <- each.firstStart to 20
+      i2 <- each.secondStart to 20
+    } yield s"$i1,$i2,${each.count(i1, i2).getOrElse("unlimited")}"
+    (each.key, list.to(List))
   }
+  val col = col1.to(List)
 
   def setsLeftover(): List[CountSet] = {
     val countSets = col.map(_._2.mkString("|"))
     CountSets.sum.filterNot(s => countSets.exists(t => t == s.set))
   }
 
-  def colLeftover(): Vector[String] = {
+  def colLeftover(): List[String] = {
     val countSets = col.map(s => (s._1, s._2.mkString("|")))
     countSets.filterNot(s => CountSets.sum.exists(t => t.set == s._2)).map(_._1)
   }
@@ -216,6 +210,19 @@ object Runner {
     }
   }
 
+  def countTag(tag: String): Int = {
+    val count = SetsCol.setsCol.filter(_.key == tag).head
+    val num = for {
+      i1 <- count.firstStart to 20
+      i2 <- count.secondStart to 20
+    } yield s"$i1,$i2,${count.count(i1, i2).getOrElse("unlimited")}"
+    val str  = num.mkString("|")
+    val sets = CountSets.sum.filter(_.set == str)
+    val set  = sets.head
+    assert(sets.size == 1)
+    CountPlans.sum.filter(_.set.index == set.index).size
+  }
+
   def main(arr: Array[String]): Unit = {
     println(s"重复的映射：${distinctRunner()}")
     println(s"结果集总数：${CountSets.sum.size}")
@@ -224,10 +231,17 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
+    // 可立刻替换的映射
     printlnSingleResult()
 
     println("互为逆运算的法：")
-    println(Confirm.confirm.mkString("\n"))
+    println(Confirm(SetsCol.setsCol).confirm.mkString("\n"))
+
+    println(
+      s"出现次数：加减法：(007, 030, 119) - 002 == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(Tags.Tag119)}) - ${countTag(Tags.Tag002)}"
+    )
+    println(s"出现次数：乘除法：084 - (045, 046) == ${countTag(Tags.Tag084)} - (${countTag(Tags.Tag045)}, ${countTag(Tags.Tag046)})")
+    println(s"出现次数：第三法：067 - 040 == ${countTag(Tags.Tag067)} - ${countTag(Tags.Tag040)}")
 
     // Gen3.genRunner()
   }
