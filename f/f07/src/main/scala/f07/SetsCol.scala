@@ -4,9 +4,14 @@ sealed trait SetsList {
   def key: String
   def firstStart: Int
   def secondStart: Int
+  def count(i1: Int, i2: Int): Option[Int]
 }
-case class CommonSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Int)      extends SetsList
-case class OptSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList
+case class CommonSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Int) extends SetsList {
+  override def count(i1: Int, i2: Int): Option[Int] = Option(value(i1, i2))
+}
+case class OptSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList {
+  override def count(i1: Int, i2: Int): Option[Int] = value(i1, i2)
+}
 
 trait SetsColAbs {
   def setsCol: Vector[SetsList]            = setsList
