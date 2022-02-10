@@ -238,12 +238,14 @@ object Runner {
     println(Confirm(SetsCol.setsCol).confirm.mkString("\n"))
 
     println(
-      s"出现次数：加减法：(007, 030, 119) - 002 == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(Tags.Tag119)}) - ${countTag(Tags.Tag002)}"
+      s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
+        Tags.Tag119
+      )}) - (${countTag(Tags.Tag002)}, ${countTag(Tags.Tag226)})"
     )
     println(s"出现次数：乘除法：084 - (045, 046) == ${countTag(Tags.Tag084)} - (${countTag(Tags.Tag045)}, ${countTag(Tags.Tag046)})")
     println(s"出现次数：第三法：067 - 040 == ${countTag(Tags.Tag067)} - ${countTag(Tags.Tag040)}")
 
-    // Gen3.genRunner()
+    Gen3.genRunner()
   }
 
 }

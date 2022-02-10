@@ -10,6 +10,7 @@ object F extends SetsColAbs {
 
     // 反
     Tags.Tag002.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 >= 0) i1 - i2 else 0)
+    Tags.Tag226.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 - i1 >= 0) i2 - i1 else 0)
   }
 
   {
