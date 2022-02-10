@@ -11,10 +11,15 @@ object Gen3 {
   val T             = "t"
   val U             = "u"
   val V             = "v"
+  val W             = "w"
+  val X             = "x"
+  val Y             = "y"
+  val Z             = "z"
   val baseName      = Vector(S, T, U, V)
   val UnlimitedType = "unlimited"
   val PointType     = "point"
   val ValueType     = "value"
+  val ZeroType      = "zero"
 
   case class SingleNumber(outerName: String, outerType: String, innerName: String, innerType: String, start: Int)
 
@@ -35,6 +40,10 @@ object Gen3 {
               lazy val $varName: Number1 = Number1${singleNumber.outerName.toUpperCase}(() => inner_$varName)
               lazy val inner_$varName: Number1 = Fusion.number1${singleNumber.innerName}Gen($value, $varName)
               """
+          case ZeroType =>
+            s"""
+              val $varName: Number1 = Number1${singleNumber.outerName.toUpperCase}(() => Number1${singleNumber.innerName.toUpperCase})
+              """
         }
       case ValueType =>
         singleNumber.innerType match {
@@ -50,6 +59,10 @@ object Gen3 {
             lazy val $varName: Number1 = Fusion.number1${singleNumber.outerName}Gen($value, inner_$varName)
             lazy val inner_$varName: Number1 = Fusion.number1${singleNumber.innerName}Gen($value, $varName)
             """
+          case ZeroType =>
+            s"""
+              val $varName: Number1 = Fusion.number1${singleNumber.outerName}Gen($value, Number1${singleNumber.innerName.toUpperCase})
+              """
         }
     }
   }
