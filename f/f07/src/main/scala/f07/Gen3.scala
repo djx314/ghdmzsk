@@ -59,7 +59,7 @@ object Gen3 {
             """
           case ZeroType =>
             s"""
-              val $varName: Number1 = Fusion.number1${singleNumber.outerName.toUpperCase}Gen($value, Number1${singleNumber.innerName.toUpperCase})
+              val $varName: Number1 = Fusion.number1${singleNumber.outerName}Gen($value, Number1${singleNumber.innerName.toUpperCase})
               """
         }
     }
