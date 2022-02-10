@@ -9,8 +9,11 @@ object Counter {
       }
     value match {
       case Some(Number1S(tail)) => count(tail) + 1
-      case Some(Number1X)       => 0
+      case Some(Number1T(tail)) => count(tail) + 1
+      case Some(Number1U(tail)) => count(tail) + 1
+      case Some(Number1V(tail)) => count(tail) + 1
       case Some(Number1W)       => 0
+      case Some(Number1X)       => 0
       case None                 => 0
     }
   }
