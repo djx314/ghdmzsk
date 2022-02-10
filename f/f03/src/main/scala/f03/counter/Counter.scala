@@ -14,6 +14,8 @@ object Counter {
       case Some(Number1V(tail)) => count(tail) + 1
       case Some(Number1W)       => 0
       case Some(Number1X)       => 0
+      case Some(Number1Y(tail)) => count(tail) + 1
+      case Some(Number1Z(tail)) => count(tail) + 1
       case None                 => 0
     }
   }

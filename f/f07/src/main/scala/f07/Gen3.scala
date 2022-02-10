@@ -13,6 +13,8 @@ object Gen3 {
   val V             = "v"
   val W             = "w"
   val X             = "x"
+  val Y             = "y"
+  val Z             = "z"
   val baseName      = Vector(S, T, U, V)
   val UnlimitedType = "unlimited"
   val PointType     = "point"

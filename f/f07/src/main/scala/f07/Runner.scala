@@ -235,7 +235,12 @@ object Runner {
     printlnSingleResult()
 
     println("互为逆运算的法：")
-    println(Confirm(SetsCol.setsCol).confirm.mkString("\n"))
+    val setColToCount = Confirm(SetsCol.setsCol).confirm
+      .map(st => (for (i1 <- (1 to 20).to(List); i2 <- (1 to 20).to(List)) yield (st._1.count(i1, i2), st._2.count(i1, i2)), st))
+      .groupBy(_._1)
+      .to(Vector)
+      .map(_._2.head._2)
+    println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
 
     println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(

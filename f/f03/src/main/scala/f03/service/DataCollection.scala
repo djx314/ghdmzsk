@@ -12,7 +12,9 @@ trait DataCollection {
   val V             = "v"
   val W             = "w"
   val X             = "x"
-  val baseName      = Vector(S, T, U, V)
+  val Y             = "y"
+  val Z             = "z"
+  val baseName      = Vector(S, T, U, V, Y, Z)
   val UnlimitedType = "unlimited"
   val PointType     = "point"
   val ValueType     = "value"
@@ -76,6 +78,8 @@ class DataCollectionImpl extends DataCollection {
     case T => Fusion.number1tGen(count, zero)
     case U => Fusion.number1uGen(count, zero)
     case V => Fusion.number1vGen(count, zero)
+    case Y => Fusion.number1yGen(count, zero)
+    case Z => Fusion.number1zGen(count, zero)
   }
   def numberZero(nType: String): Number1 = nType match {
     case S => Fusion.number1s
@@ -84,6 +88,8 @@ class DataCollectionImpl extends DataCollection {
     case V => Fusion.number1v
     case W => Fusion.number1w
     case X => Fusion.number1x
+    case Y => Fusion.number1y
+    case Z => Fusion.number1z
   }
 
   override def genSingleNumber(countPlan: SingleNumber, value: Int): Number1 = {

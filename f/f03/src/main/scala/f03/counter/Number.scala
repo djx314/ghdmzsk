@@ -21,6 +21,9 @@ case object Number1W extends Number1 {
 case object Number1X extends Number1 {
   override def method1(number1: Number1): Number1 = Number1X
 }
-
-/*sealed trait Number2
-case class Number2S(tail: () => Number2) extends Number2*/
+case class Number1Y(tail: () => Number1) extends Number1 {
+  override def method1(number1: Number1): Number1 = number1
+}
+case class Number1Z(tail: () => Number1) extends Number1 {
+  override def method1(number1: Number1): Number1 = Number1X
+}
