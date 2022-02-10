@@ -6,6 +6,8 @@ object Fusion {
   lazy val number1t: Number1 = Number1T(() => number1t)
   lazy val number1u: Number1 = Number1U(() => number1u)
   lazy val number1v: Number1 = Number1V(() => number1v)
+  lazy val number1w: Number1 = Number1W
+  lazy val number1x: Number1 = Number1X
 
   def number1sGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => number1sGen(n - 1, zero)) else zero
   def number1tGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1T(() => number1tGen(n - 1, zero)) else zero

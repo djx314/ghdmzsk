@@ -10,10 +10,13 @@ trait DataCollection {
   val T             = "t"
   val U             = "u"
   val V             = "v"
+  val W             = "w"
+  val X             = "x"
   val baseName      = Vector(S, T, U, V)
   val UnlimitedType = "unlimited"
   val PointType     = "point"
   val ValueType     = "value"
+  val ZeroType      = "zero"
 
   def allCountPlan: Vector[CountPlanRow]
 
@@ -42,8 +45,14 @@ class DataCollectionImpl extends DataCollection {
     SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = innerType, start = start)
   }
 
+  val zeroRows: Vector[SingleNumber] = for {
+    outerType <- Vector(PointType, ValueType)
+    outerName <- baseName
+    innerName <- Vector(W, X)
+  } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = ZeroType, start = 0)
+
   override val allCountPlan: Vector[CountPlanRow] = {
-    val allNumber = unlimitedRows.appendedAll(otherRows)
+    val allNumber = unlimitedRows.appendedAll(otherRows).appendedAll(zeroRows)
     for {
       firstNumber  <- allNumber
       secondNumber <- allNumber
@@ -73,6 +82,8 @@ class DataCollectionImpl extends DataCollection {
     case T => Fusion.number1t
     case U => Fusion.number1u
     case V => Fusion.number1v
+    case W => Fusion.number1w
+    case X => Fusion.number1x
   }
 
   override def genSingleNumber(countPlan: SingleNumber, value: Int): Number1 = {
@@ -90,6 +101,8 @@ class DataCollectionImpl extends DataCollection {
             lazy val outer: Number1 = numberGen(countPlan.outerName, 1, inner)
             lazy val inner: Number1 = numberGen(countPlan.innerName, value, outer)
             outer
+          case ZeroType =>
+            numberGen(countPlan.outerName, 1, numberZero(countPlan.innerName))
         }
       case ValueType =>
         countPlan.innerType match {
@@ -103,11 +116,14 @@ class DataCollectionImpl extends DataCollection {
             lazy val outer: Number1 = numberGen(countPlan.outerName, value, inner)
             lazy val inner: Number1 = numberGen(countPlan.innerName, value, outer)
             outer
+          case ZeroType =>
+            numberGen(countPlan.outerName, value, numberZero(countPlan.innerName))
         }
     }
   }
 
-  override def genString(result: List[CountResult]): String =     result.map(s => s"${s.i1},${s.i2},${s.result.map(_.toString).getOrElse(UnlimitedType)}").mkString("|")
+  override def genString(result: List[CountResult]): String =
+    result.map(s => s"${s.i1},${s.i2},${s.result.map(_.toString).getOrElse(UnlimitedType)}").mkString("|")
 
   override def fromString(str: String): List[CountResult] = {
     def splitToList(str: String)(c: Char) = str.split(c).to(List).map(_.trim).filterNot(_.isEmpty)
