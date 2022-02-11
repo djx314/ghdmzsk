@@ -303,11 +303,11 @@ object Runner {
     // Gen3.genRunner()
 
     // 可立刻替换的映射
-    var count = 284
+    /*var count = 284
     for (each <- printlnSingleResult()) {
       println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value((i1: Int, i2: Int) => ${each._1})")
       count += 1
-    }
+    }*/
 
     /*println("互为逆运算的法：")
     val setColToCount = Confirm(SetsCol.setsCol).confirm
