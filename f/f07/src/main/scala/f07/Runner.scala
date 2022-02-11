@@ -2,7 +2,7 @@ package f07
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
-import scala.util.Using
+import scala.util.{Try, Using}
 
 object Runner {
 
@@ -62,10 +62,11 @@ object Runner {
     countSets.filterNot(s => CountSets.sum.exists(t => t.set == s._2)).map(_._1)
   }
 
-  def printlnSingleResult(): Unit = {
+  def printlnSingleResult(): List[(String, Int, Int, (Int, Int) => Option[Int])] = {
     try {
-      val sets     = col.map(s => (s._1, s._2.mkString("|")))
-      val leftSets = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
+      val sets                                                           = col.map(s => (s._1, s._2.mkString("|")))
+      val leftSets                                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
+      var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
       for {
         eachSet   <- leftSets
         setsCount <- SetsCol.setsCol
@@ -119,23 +120,53 @@ object Runner {
             val (listStr1, listStr2, listStr3) = ll1.unzip3
             if (eachSet.set == listStr1.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(1, i2)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(1, i2)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr2.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = 1, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(i1, 1)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(i1, 1)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr3.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = 1, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(1, 1)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(1, 1)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr0.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(i1, i2)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(i1, i2)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr4.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i2, i2 = i1, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(i2, i1)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(i2, i1)
+              )
+              // throw new Exception
             }
           case OptSetsList(key, firstStart, secondStart, value) =>
             val list = for {
@@ -185,28 +216,66 @@ object Runner {
             val (listStr1, listStr2, listStr3) = ll1.unzip3
             if (eachSet.set == listStr1.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(1, i2)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(1, i2)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr2.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = 1, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(i1, 1)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(i1, 1)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr3.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = 1, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(1, 1)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(1, 1)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr0.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(i1, i2)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(i1, i2)
+              )
+              // throw new Exception
             }
             if (eachSet.set == listStr4.mkString("|")) {
               println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i2, i2 = i1, mappingKey: $key")
-              throw new Exception
+              countSets = countSets.appended(
+                s"getSet(Tags.${setsCount.key}).count(i2, i1)",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                (i1, i2) => setsCount.count(i2, i1)
+              )
+              // throw new Exception
             }
         }
       }
+      countSets
+        .map(s => (s, Try(for (i1 <- s._2 to 20; i2 <- s._3 to 20) yield (i1, i2, s._4(i1, i2))).toOption))
+        .collect { case (a, Some(b)) => (a, b) }
+        .groupBy(s => s._2.to(List))
+        .map(_._2.head._1)
+        .to(List)
     } catch {
       case e: Throwable =>
+        e.printStackTrace()
+        List.empty
     }
   }
 
@@ -231,26 +300,30 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
-    // 可立刻替换的映射
-    printlnSingleResult()
+    // Gen3.genRunner()
 
-    println("互为逆运算的法：")
+    // 可立刻替换的映射
+    var count = 284
+    for (each <- printlnSingleResult()) {
+      println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value((i1: Int, i2: Int) => ${each._1})")
+      count += 1
+    }
+
+    /*println("互为逆运算的法：")
     val setColToCount = Confirm(SetsCol.setsCol).confirm
       .map(st => (for (i1 <- (1 to 20).to(List); i2 <- (1 to 20).to(List)) yield (st._1.count(i1, i2), st._2.count(i1, i2)), st))
       .groupBy(_._1)
       .to(Vector)
       .map(_._2.head._2)
-    println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
+    println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))*/
 
-    println(
+    /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
         Tags.Tag119
       )}) - (${countTag(Tags.Tag002)}, ${countTag(Tags.Tag226)})"
     )
     println(s"出现次数：乘除法：084 - (045, 046) == ${countTag(Tags.Tag084)} - (${countTag(Tags.Tag045)}, ${countTag(Tags.Tag046)})")
-    println(s"出现次数：第三法：067 - 040 == ${countTag(Tags.Tag067)} - ${countTag(Tags.Tag040)}")
-
-    // Gen3.genRunner()
+    println(s"出现次数：第三法：067 - 040 == ${countTag(Tags.Tag067)} - ${countTag(Tags.Tag040)}")*/
   }
 
 }
