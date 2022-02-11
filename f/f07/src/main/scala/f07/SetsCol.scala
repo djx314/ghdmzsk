@@ -504,5 +504,17 @@ object SetsCol extends SetsColAbs {
   Tags.Tag464.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) Option.empty else Option(1))
   Tags.Tag465.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) Option.empty else Option(i1))
   Tags.Tag466.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 <= 1) Option.empty else Option(i1 - 2))
+  Tags.Tag467.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 <= 1) Option.empty else Option(i1 - 1))
+  Tags.Tag468.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option(i1) else Option(1))
+  Tags.Tag469.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) i1 * 2 else 1)
+  Tags.Tag470.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(0))
+  Tags.Tag471.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) i1 * 2 else i1)
+  Tags.Tag472.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 > 0 && i2 == 0) Option.empty else Option(i1))
+  Tags.Tag473.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) i1 * 2 else if (i1 == 0) 0 else if (i1 == 1) 2 else 3)
+  Tags.Tag474.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(1))
+  Tags.Tag475.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 <= 1 || i2 == 0) i1 else 2)
+  Tags.Tag476.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) i1 * 2 else i1 + 1)
+  Tags.Tag477.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(2))
+  Tags.Tag478.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(i1 + 1))
 
 }
