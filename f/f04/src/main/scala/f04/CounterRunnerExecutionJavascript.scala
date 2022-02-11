@@ -80,7 +80,7 @@ object CounterRunnerExecutionJavascript {
               startEle.innerText = "开始计算"
               autoExecuteMessageDiv.append(startEle)
 
-              val plan = reverseUrl.counterExecutionPlan(50)
+              val plan = reverseUrl.counterExecutionPlan(200)
               def request =
                 RequestUtils.ajaxJson[ResultSet[Int]](
                   JQueryAjaxSettings(url = plan.url, method = plan.method, timeout = Option(1000000))
@@ -90,7 +90,7 @@ object CounterRunnerExecutionJavascript {
                 for {
                   data      <- request
                   appendEle <- Future(ele)
-                  _         <- Future(appendEle.innerText = s"完成一组（最多 50 个）数据的计算，剩余项 ${data.data} 条")
+                  _         <- Future(appendEle.innerText = s"完成一组（最多 200 个）数据的计算，剩余项 ${data.data} 条")
                   _         <- Future(autoExecuteMessageDiv.append(appendEle))
                   next      <- if (stop) Future.successful("计算已停止") else if (data.data > 0) action else Future.successful("所有计算任务执行完毕")
                 } yield next
