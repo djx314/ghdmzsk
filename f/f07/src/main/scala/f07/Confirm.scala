@@ -1,6 +1,6 @@
 package f07
 
-case class Confirm(setsCol: Vector[SetsList]) {
+case class Confirm(setsCol: Vector[SetsList], reverse: Vector[SetsList]) {
 
   def confirm: List[(SetsList, SetsList)] = {
     val dataCol = for {
@@ -17,7 +17,7 @@ case class Confirm(setsCol: Vector[SetsList]) {
 
     val l = for {
       (mapping1, data) <- dataCol1
-      mapping2         <- setsCol
+      mapping2         <- reverse
     } yield {
       val confirmList = for ((i1, i2, v) <- data) yield {
         val (v2_1, v2_2, v2_3, v2_4) = {

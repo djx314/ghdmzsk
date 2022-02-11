@@ -10,6 +10,10 @@ object Fusion {
   lazy val number1x: Number1 = Number1X
   lazy val number1y: Number1 = Number1Y(() => number1y)
   lazy val number1z: Number1 = Number1Z(() => number1z)
+  lazy val number1a: Number1 = Number1A
+  lazy val number1b: Number1 = Number1B
+  lazy val number1c: Number1 = Number1C(() => number1c)
+  lazy val number1d: Number1 = Number1D(() => number1d)
 
   def number1sGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => number1sGen(n - 1, zero)) else zero
   def number1tGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1T(() => number1tGen(n - 1, zero)) else zero
@@ -17,6 +21,8 @@ object Fusion {
   def number1vGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1V(() => number1vGen(n - 1, zero)) else zero
   def number1yGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1Y(() => number1yGen(n - 1, zero)) else zero
   def number1zGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1Z(() => number1zGen(n - 1, zero)) else zero
+  def number1cGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1C(() => number1cGen(n - 1, zero)) else zero
+  def number1dGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1D(() => number1dGen(n - 1, zero)) else zero
 
 }
 
@@ -36,6 +42,10 @@ object Counter {
       case Some(Number1X)       => 0
       case Some(Number1Y(tail)) => count(tail) + 1
       case Some(Number1Z(tail)) => count(tail) + 1
+      case Some(Number1A)       => 0
+      case Some(Number1B)       => 0
+      case Some(Number1C(tail)) => count(tail) + 1
+      case Some(Number1D(tail)) => count(tail) + 1
       case None                 => 0
     }
   }

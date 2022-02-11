@@ -27,3 +27,15 @@ case class Number1Y(tail: () => Number1) extends Number1 {
 case class Number1Z(tail: () => Number1) extends Number1 {
   override def method1(number1: Number1): Number1 = Number1X
 }
+case object Number1A extends Number1 {
+  override def method1(number1: Number1): Number1 = Number1S(() => number1)
+}
+case object Number1B extends Number1 {
+  override def method1(number1: Number1): Number1 = Number1S(() => Number1X)
+}
+case class Number1C(tail: () => Number1) extends Number1 {
+  override def method1(number1: Number1): Number1 = Number1S(() => number1)
+}
+case class Number1D(tail: () => Number1) extends Number1 {
+  override def method1(number1: Number1): Number1 = Number1S(() => Number1X)
+}

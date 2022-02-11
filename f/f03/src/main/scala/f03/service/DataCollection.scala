@@ -14,7 +14,11 @@ trait DataCollection {
   val X             = "x"
   val Y             = "y"
   val Z             = "z"
-  val baseName      = Vector(S, T, U, V, Y, Z)
+  val A             = "a"
+  val B             = "b"
+  val C             = "c"
+  val D             = "d"
+  val baseName      = Vector(S, T, U, V, Y, Z, C, D)
   val UnlimitedType = "unlimited"
   val PointType     = "point"
   val ValueType     = "value"
@@ -50,7 +54,7 @@ class DataCollectionImpl extends DataCollection {
   val zeroRows: Vector[SingleNumber] = for {
     outerType <- Vector(PointType, ValueType)
     outerName <- baseName
-    innerName <- Vector(W, X)
+    innerName <- Vector(W, X, A, B)
   } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = ZeroType, start = 0)
 
   override val allCountPlan: Vector[CountPlanRow] = {
@@ -80,6 +84,8 @@ class DataCollectionImpl extends DataCollection {
     case V => Fusion.number1vGen(count, zero)
     case Y => Fusion.number1yGen(count, zero)
     case Z => Fusion.number1zGen(count, zero)
+    case C => Fusion.number1cGen(count, zero)
+    case D => Fusion.number1dGen(count, zero)
   }
   def numberZero(nType: String): Number1 = nType match {
     case S => Fusion.number1s
@@ -90,6 +96,10 @@ class DataCollectionImpl extends DataCollection {
     case X => Fusion.number1x
     case Y => Fusion.number1y
     case Z => Fusion.number1z
+    case A => Fusion.number1a
+    case B => Fusion.number1b
+    case C => Fusion.number1c
+    case D => Fusion.number1d
   }
 
   override def genSingleNumber(countPlan: SingleNumber, value: Int): Number1 = {
