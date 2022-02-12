@@ -134,18 +134,6 @@ object Test {
     } yield {
       lazy val number1: Number1 = Number1U(() => inner_number1)
       lazy val inner_number1: Number1 = Number1C(() => number1)
-      val number2: Number1 = Fusion.number1uGen(i2, Number1A)
-      def count = number1.method1(number2)
-      def r1 = Counter.countOpt(() => count)
-      val r2 = true
-      assert(true == r2)
-    }
-    for {
-      i1 <- 0 to 20
-      i2 <- 0 to 20
-    } yield {
-      lazy val number1: Number1 = Number1U(() => inner_number1)
-      lazy val inner_number1: Number1 = Number1C(() => number1)
       val number2: Number1 = Fusion.number1uGen(i2, Number1X)
       def count = number1.method1(number2)
       def r1 = Counter.count(() => count)
@@ -7008,17 +6996,6 @@ object Test {
       lazy val inner_number2: Number1 = Fusion.number1zGen(i2, number2)
       def count = number1.method1(number2)
       def r1 = Counter.count(() => count)
-      val r2 = true
-      assert(true == r2)
-    }
-    for {
-      i1 <- 0 to 20
-      i2 <- 0 to 20
-    } yield {
-      val number1: Number1 = Fusion.number1uGen(i1, Number1W)
-      val number2 = Number1S(() => Fusion.number1c)
-      def count = number1.method1(number2)
-      def r1 = Counter.countOpt(() => count)
       val r2 = true
       assert(true == r2)
     }
