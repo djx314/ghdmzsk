@@ -244,7 +244,7 @@ object Runner {
     // Gen3.genRunner()
 
     // 可立刻替换的映射
-    var count = 682
+    var count = 690
     for (each <- printlnSingleResult()) {
       println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
       count += 1

@@ -734,5 +734,13 @@ object SetsCol extends SetsColAbs {
   Tags.Tag679.firstart(0).secondStart(0).value(Tags.Tag576, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag680.firstart(1).secondStart(0).value(Tags.Tag618, (i1: Int, i2: Int) => (i1, i2 + 1))
   Tags.Tag681.firstart(0).secondStart(0).value(Tags.Tag570, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag682.firstart(0).secondStart(0).value(Tags.Tag644, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag683.firstart(0).secondStart(0).value(Tags.Tag646, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag684.firstart(0).secondStart(0).value(Tags.Tag641, (i1: Int, i2: Int) => (1, i2))
+  Tags.Tag685.firstart(0).secondStart(0).value(Tags.Tag656, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag686.firstart(0).secondStart(1).value(Tags.Tag668, (i1: Int, i2: Int) => (i1, i2 + 1))
+  Tags.Tag687.firstart(0).secondStart(0).value(Tags.Tag667, (i1: Int, i2: Int) => (i2, i1))
+  Tags.Tag688.firstart(0).secondStart(0).value(Tags.Tag645, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag689.firstart(0).secondStart(0).value(Tags.Tag668, (i1: Int, i2: Int) => (i1, i2 + 1))
 
 }
