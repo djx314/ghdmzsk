@@ -101,12 +101,27 @@ object Runner {
             }
           val str5 = s"$i1,$i2,${v5.getOrElse("unlimited")}"
 
-          ((str1, str2, str3), (str4, str5))
+          val v6 =
+            try setsCount.count(i1 + 1, i2)
+            catch {
+              case e: Throwable => Option.empty
+            }
+          val str6 = s"$i1,$i2,${v6.getOrElse("unlimited")}"
+
+          val v7 =
+            try setsCount.count(i1, i2 + 1)
+            catch {
+              case e: Throwable => Option.empty
+            }
+          val str7 = s"$i1,$i2,${v7.getOrElse("unlimited")}"
+
+          ((str1, str2, str3), (str4, str5, str6), str7)
         }
 
-        val (ll1, ll2)                     = list.unzip
-        val (listStr0, listStr4)           = ll2.unzip
+        val (ll1, ll2, ll3)                = list.unzip3
         val (listStr1, listStr2, listStr3) = ll1.unzip3
+        val (listStr0, listStr4, listStr5) = ll2.unzip3
+        val listStr6                       = ll3
         if (eachSet.set == listStr1.mkString("|")) {
           println(
             s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: ${setsCount.key}"
@@ -167,6 +182,30 @@ object Runner {
           )
           // throw new Exception
         }
+        if (eachSet.set == listStr5.mkString("|")) {
+          println(
+            s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1 + 1, i2 = i2, mappingKey: ${setsCount.key}"
+          )
+          countSets = countSets.appended(
+            s"Tags.${setsCount.key}, (i1: Int, i2: Int) => (i1 + 1, i2)",
+            eachSet.firstStart,
+            eachSet.secondStart,
+            (i1, i2) => setsCount.count(i1 + 1, i2)
+          )
+          // throw new Exception
+        }
+        if (eachSet.set == listStr6.mkString("|")) {
+          println(
+            s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2 + 1, mappingKey: ${setsCount.key}"
+          )
+          countSets = countSets.appended(
+            s"Tags.${setsCount.key}, (i1: Int, i2: Int) => (i1, i2 + 1)",
+            eachSet.firstStart,
+            eachSet.secondStart,
+            (i1, i2) => setsCount.count(i1, i2 + 1)
+          )
+          // throw new Exception
+        }
       }
       countSets
         .map(s => (s, Try(for (i1 <- s._2 to 20; i2 <- s._3 to 20) yield (i1, i2, s._4(i1, i2))).toOption))
@@ -205,11 +244,11 @@ object Runner {
     // Gen3.genRunner()
 
     // 可立刻替换的映射
-    /*var count = 479
+    var count = 682
     for (each <- printlnSingleResult()) {
       println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
       count += 1
-    }*/
+    }
 
     /*println("互为逆运算的法：")
     val cols = SetsCol.setsCol
