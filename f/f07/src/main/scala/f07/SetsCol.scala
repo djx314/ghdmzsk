@@ -610,5 +610,8 @@ object SetsCol extends SetsColAbs {
   Tags.Tag555.firstart(0).secondStart(1).value(Tags.Tag003, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag556.firstart(0).secondStart(1).value(Tags.Tag065, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag557.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i2 == 1) Option(3) else Option((1 / i2) * i2 + i2 + 2))
+  Tags.Tag558.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 % 2 == 0 || i2 == 0) i2 + i2 / 2 + 1 else i2 + i2 / 2 + 2)
+  Tags.Tag559.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i2 % 2 == 0 || i2 == 0) i2 + i2 / 2 + 1 else i2 + i2 / 2 + 2)
+  Tags.Tag560.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 2 else 0)
 
 }
