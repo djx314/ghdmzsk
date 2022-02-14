@@ -70,40 +70,43 @@ object Runner {
       ((i1, i2) => (i1, 0), "(i1: Int, i2: Int) => (i1, 0)", "i1 = i1, i2 = 0"),
       ((i1, i2) => (0, 0), "(i1: Int, i2: Int) => (0, 0)", "i1 = 0, i2 = 0"),
       ((i1, i2) => (i1, i2), "(i1: Int, i2: Int) => (i1, i2)", "i1 = i1, i2 = i2"),
-      ((i1, i2) => (i2, i1), "(i1: Int, i2: Int) => (i2, i1)", "i1 = i2, i2 = i1")
+      ((i1, i2) => (i2, i1), "(i1: Int, i2: Int) => (i2, i1)", "i1 = i2, i2 = i1"),
+      ((i1, i2) => (i1, i2 + 1), "(i1: Int, i2: Int) => (i1, i2 + 1)", "i1 = i1, i2 = i2 + 1"),
+      ((i1, i2) => (i1 + 1, i2), "(i1: Int, i2: Int) => (i1 + 1, i2)", "i1 = i1 + 1, i2 = i2"),
+      ((i1, i2) => (i2, i1 + 1), "(i1: Int, i2: Int) => (i2, i1 + 1)", "i1 = i2, i2 = i1 + 1"),
+      ((i1, i2) => (i2 + 1, i1), "(i1: Int, i2: Int) => (i2 + 1, i1)", "i1 = i2 + 1, i2 = i1")
     )
 
     for {
-      eachSet   <- leftSets
-      setsCount <- SetsCol.setsCol
+      eachSet     <- leftSets
+      setsCount   <- SetsCol.setsCol
+      eachMapping <- mapping
     } {
-      for (eachMapping <- mapping) yield {
-        val list = for {
-          i1 <- eachSet.firstStart to 20
-          i2 <- eachSet.secondStart to 20
-        } yield {
-          val (v1, v2) = eachMapping._1(i1, i2)
-          val t1 =
-            try setsCount.count(v1, v2)
-            catch {
-              case e: Throwable => Option.empty
-            }
-          s"$i1,$i2,${t1.getOrElse("unlimited")}"
-        }
-        if (eachSet.set == list.mkString("|")) {
-          println(
-            s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._3}, mappingKey: ${setsCount.key}"
-          )
-          countSets = countSets.appended(
-            s"Tags.${setsCount.key}, ${eachMapping._2}",
-            eachSet.firstStart,
-            eachSet.secondStart,
-            { (i1: Int, i2: Int) =>
-              val (n1, n2) = eachMapping._1(i1, i2)
-              setsCount.count(n1, n2)
-            }
-          )
-        }
+      val list = for {
+        i1 <- eachSet.firstStart to 20
+        i2 <- eachSet.secondStart to 20
+      } yield {
+        val (v1, v2) = eachMapping._1(i1, i2)
+        val t1 =
+          try setsCount.count(v1, v2)
+          catch {
+            case e: Throwable => Option.empty
+          }
+        s"$i1,$i2,${t1.getOrElse("unlimited")}"
+      }
+      if (eachSet.set == list.mkString("|")) {
+        println(
+          s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._3}, mappingKey: ${setsCount.key}"
+        )
+        countSets = countSets.appended(
+          s"Tags.${setsCount.key}, ${eachMapping._2}",
+          eachSet.firstStart,
+          eachSet.secondStart,
+          { (i1: Int, i2: Int) =>
+            val (n1, n2) = eachMapping._1(i1, i2)
+            setsCount.count(n1, n2)
+          }
+        )
       }
     }
 
@@ -139,7 +142,7 @@ object Runner {
     // Gen3.genRunner()
 
     // 可立刻替换的映射
-    var count = 692
+    var count = SetsCol.setsCol.size + 1
     for (each <- printlnSingleResult()) {
       println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
       count += 1
