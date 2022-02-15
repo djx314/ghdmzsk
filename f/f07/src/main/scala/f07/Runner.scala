@@ -146,11 +146,11 @@ object Runner {
     Gen4.printlnSingleResult()
 
     // 可立刻替换的映射
-    /*var count = SetsCol.setsCol.size + 1
+    var count = SetsCol.setsCol.size + 1
     for (each <- printlnSingleResult()) {
       println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
       count += 1
-    }*/
+    }
 
     /*println("互为逆运算的法：")
     val cols = SetsCol.setsCol
