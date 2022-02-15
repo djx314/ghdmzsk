@@ -38,9 +38,9 @@ object Gen4 {
         s"$i1,$i2,${t1.getOrElse("unlimited")}"
       }
       if (eachSet.set == list.mkString("|")) {
-        println(
+        /*println(
           s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._2}, mappingKey: ${setsCount.key}"
-        )
+        )*/
         countSets = countSets.appended(
           s"Tags.${setsCount.key}, ${eachMapping._2}",
           eachSet.firstStart,
