@@ -152,7 +152,7 @@ object Runner {
       count += 1
     }
 
-    /*println("互为逆运算的法：")
+    println("互为逆运算的法：")
     val cols = SetsCol.setsCol
       .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
       .groupBy(_._2.to(List))
@@ -163,7 +163,7 @@ object Runner {
       .groupBy(_._1)
       .to(Vector)
       .map(_._2.head._2)
-    println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))*/
+    println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
