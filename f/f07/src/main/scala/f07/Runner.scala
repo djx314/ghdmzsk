@@ -55,7 +55,7 @@ object Runner {
 
   def printlnSingleResult(): List[(String, Int, Int, (Int, Int) => Option[Int])] = {
     val sets                                                           = col.map(s => (s._1, s._2.mkString("|")))
-    val leftSets                                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
+    val leftSets: List[CountSet]                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
     var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
 
     val mapping: List[((Int, Int) => (Int, Int), String, String)] = List(
@@ -141,14 +141,16 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
-    // Gen3.genRunner()
+    Gen3.genRunner()
+
+    Gen4.printlnSingleResult()
 
     // 可立刻替换的映射
-    var count = SetsCol.setsCol.size + 1
+    /*var count = SetsCol.setsCol.size + 1
     for (each <- printlnSingleResult()) {
       println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
       count += 1
-    }
+    }*/
 
     /*println("互为逆运算的法：")
     val cols = SetsCol.setsCol

@@ -12,7 +12,12 @@ case class CommonSetsList(override val key: String, override val firstStart: Int
 case class OptSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList {
   override def count(i1: Int, i2: Int): Option[Int] = value(i1, i2)
 }
-trait LinkSetsList extends SetsList {
+trait MapParameterSetsList extends SetsList {
+  def mapParameter(i1: Int, i2: Int): (Int, Int)
+  def linkKey: String
+}
+trait MapResultSetsList extends SetsList {
+  def mapResult(i1: Option[Int]): Option[Int]
   def linkKey: String
 }
 
@@ -32,14 +37,27 @@ trait SetsColAbs {
     def value(v: (Int, Int) => Option[Int]): Unit = setsList = setsList.appended(OptSetsList(key = second.key, firstStart = second.firstStart, secondStart = second.secondStart, value = v))
   }
   protected implicit class extract5(second: SecondStart) {
-    def value(linkKey1: String, v: (Int, Int) => (Int, Int)): Unit = setsList = setsList.appended(new LinkSetsList {
-      override def linkKey: String  = linkKey1
-      override def key: String      = second.key
-      override def firstStart: Int  = second.firstStart
-      override def secondStart: Int = second.secondStart
+    def value(linkKey1: String, v: (Int, Int) => (Int, Int)): Unit = setsList = setsList.appended(new MapParameterSetsList {
+      override def mapParameter(i1: Int, i2: Int): (Int, Int) = v(i1, i2)
+      override def linkKey: String                            = linkKey1
+      override def key: String                                = second.key
+      override def firstStart: Int                            = second.firstStart
+      override def secondStart: Int                           = second.secondStart
       override def count(i1: Int, i2: Int): Option[Int] = {
-        val (v1, v2) = v(i1, i2)
+        val (v1, v2) = mapParameter(i1, i2)
         getSet(linkKey1).count(v1, v2)
+      }
+    })
+  }
+  protected implicit class extract6(second: SecondStart) {
+    def mapResult(linkKey1: String, v: Option[Int] => Option[Int]): Unit = setsList = setsList.appended(new MapResultSetsList { self =>
+      override def mapResult(i1: Option[Int]): Option[Int] = v(i1)
+      override def linkKey: String                         = linkKey1
+      override def key: String                             = second.key
+      override def firstStart: Int                         = second.firstStart
+      override def secondStart: Int                        = second.secondStart
+      override def count(i1: Int, i2: Int): Option[Int] = {
+        self.mapResult(getSet(linkKey1).count(i1, i2))
       }
     })
   }
@@ -825,5 +843,30 @@ object SetsCol extends SetsColAbs {
   Tags.Tag770.firstart(1).secondStart(0).value(Tags.Tag722, (i1: Int, i2: Int) => (i1 + 1, i2 + 1))
   Tags.Tag771.firstart(0).secondStart(0).value(Tags.Tag741, (i1: Int, i2: Int) => (i1, 1))
   Tags.Tag772.firstart(0).secondStart(0).value(Tags.Tag722, (i1: Int, i2: Int) => (i1 + 1, i2 + 1))
+  Tags.Tag773.firstart(0).secondStart(0).value(Tags.Tag768, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag774.firstart(0).secondStart(0).value(Tags.Tag770, (i1: Int, i2: Int) => (i1, 1))
+  Tags.Tag775.firstart(0).secondStart(0).mapResult(Tags.Tag060, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag776.firstart(0).secondStart(1).mapResult(Tags.Tag696, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag777.firstart(0).secondStart(0).mapResult(Tags.Tag696, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag778.firstart(0).secondStart(1).mapResult(Tags.Tag703, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag779.firstart(0).secondStart(0).mapResult(Tags.Tag293, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag780.firstart(0).secondStart(0).mapResult(Tags.Tag044, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag781.firstart(0).secondStart(0).mapResult(Tags.Tag723, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag782.firstart(0).secondStart(1).mapResult(Tags.Tag008, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag783.firstart(0).secondStart(0).mapResult(Tags.Tag698, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag784.firstart(0).secondStart(0).mapResult(Tags.Tag703, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag785.firstart(0).secondStart(1).mapResult(Tags.Tag698, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag786.firstart(1).secondStart(1).mapResult(Tags.Tag008, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag787.firstart(0).secondStart(1).mapResult(Tags.Tag004, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag788.firstart(1).secondStart(1).mapResult(Tags.Tag004, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag789.firstart(0).secondStart(0).mapResult(Tags.Tag008, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag790.firstart(0).secondStart(0).mapResult(Tags.Tag715, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag791.firstart(0).secondStart(0).mapResult(Tags.Tag004, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag792.firstart(1).secondStart(0).mapResult(Tags.Tag101, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag793.firstart(0).secondStart(0).mapResult(Tags.Tag147, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag794.firstart(0).secondStart(0).mapResult(Tags.Tag103, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag795.firstart(1).secondStart(0).mapResult(Tags.Tag008, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag796.firstart(1).secondStart(0).mapResult(Tags.Tag004, (i1: Option[Int]) => i1.map(b => 1))
+  Tags.Tag797.firstart(0).secondStart(0).mapResult(Tags.Tag229, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
 
 }
