@@ -184,8 +184,8 @@ object Runner {
       for {
         _ <- a
         _ <- b
-        d <- c
-      } yield d,
+        _ <- c
+      } yield 1,
       Duration.Inf
     )
 
