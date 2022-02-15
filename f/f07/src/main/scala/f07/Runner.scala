@@ -2,7 +2,8 @@ package f07
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
-import scala.concurrent.{blocking, ExecutionContext, Future}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{blocking, Await, ExecutionContext, Future}
 import scala.util.{Try, Using}
 
 object Runner {
@@ -144,14 +145,15 @@ object Runner {
 
     Gen3.genRunner()
 
-    Future {
+    import ExecutionContext.Implicits.global
+    val a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
-    }(ExecutionContext.global)
+    }
 
     // 可立刻替换的映射
-    Future {
+    val b = Future {
       blocking {
         var count = SetsCol.setsCol.size + 1
         for (each <- printlnSingleResult()) {
@@ -159,9 +161,9 @@ object Runner {
           count += 1
         }
       }
-    }(ExecutionContext.global)
+    }
 
-    Future {
+    val c = Future {
       blocking {
         val cols = SetsCol.setsCol
           .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
@@ -176,7 +178,16 @@ object Runner {
         println("互为逆运算的法：")
         println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
       }
-    }(ExecutionContext.global)
+    }
+
+    Await.result(
+      for {
+        _ <- a
+        _ <- b
+        d <- c
+      } yield d,
+      Duration.Inf
+    )
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
