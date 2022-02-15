@@ -13,10 +13,12 @@ object Gen4 {
     var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
 
     val mapping: List[(Option[Int] => Option[Int], String)] = List(
-      (i1 => i1.map(b => 1), "(i1: Option[Int]) => i1.map(b => 1)"),
-      (i1 => i1.map(b => 0), "(i1: Option[Int]) => i1.map(b => 0)"),
+      /*(i1 => i1.map(b => 1), "(i1: Option[Int]) => i1.map(b => 1)"),
+      (i1 => i1.map(b => 0), "(i1: Option[Int]) => i1.map(b => 0)"),*/
       (i1 => i1.map(b => b + 1), "(i1: Option[Int]) => i1.map(b => b + 1)"),
-      (i1 => i1.map(b => b - 1).filter(_ >= 0), "(i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0)")
+      (i1 => i1.map(b => b - 1).filter(_ >= 0), "(i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0)"),
+      (i1 => i1.map(b => b * 2), "(i1: Option[Int]) => i1.map(b => b * 2)"),
+      (i1 => i1.map(b => b / 2), "(i1: Option[Int]) => i1.map(b => b / 2)")
     )
 
     for {
