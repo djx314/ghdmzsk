@@ -1117,5 +1117,9 @@ object SetsCol extends SetsColAbs {
   Tags.Tag1044.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 1 else i1 * 2 + 1)
   Tags.Tag1045.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 1 else if (i1 == 0) 1 else 2)
   Tags.Tag1046.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option(i1 * 2 + 1) else if (i1 == 0) Option(1) else if (i1 == 1) Option(3) else Option.empty)
+  Tags.Tag1047.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1)
+  Tags.Tag1048.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 1 else if (i2 == 0) 2 else 1)
+  Tags.Tag1049.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1)
+  Tags.Tag1050.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 1 else if (i2 == 0) 0 else if (i1 == 0) 2 else 1)
 
 }

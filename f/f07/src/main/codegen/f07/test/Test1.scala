@@ -421,6 +421,7 @@ object Test1 {
       val r2 = true
       assert(true == r2)
     }*/
+    /*printWriter.println(s"====$getBB====")
     for {
       i1 <- 0 to 20
       i2 <- 0 to 20
@@ -429,9 +430,11 @@ object Test1 {
       val number2 = Fusion.number1uGen(i2, Fusion.number1t)
       def count = number1.method1(number2)
       def r1 = Counter.count(() => count)
+      printWriter.println(i1,i2,r1)
       val r2 = true
       assert(true == r2)
     }
+    printWriter.println(s"====$getBB====")
     for {
       i1 <- 0 to 20
       i2 <- 0 to 20
@@ -440,9 +443,11 @@ object Test1 {
       val number2 = Fusion.number1zGen(i2, Fusion.number1d)
       def count = number1.method1(number2)
       def r1 = Counter.count(() => count)
+      printWriter.println(i1,i2,r1)
       val r2 = true
       assert(true == r2)
     }
+    printWriter.println(s"====$getBB====")
     for {
       i1 <- 0 to 20
       i2 <- 1 to 20
@@ -452,9 +457,11 @@ object Test1 {
       lazy val inner_number2: Number1 = Fusion.number1zGen(i2, number2)
       def count = number1.method1(number2)
       def r1 = Counter.count(() => count)
+      printWriter.println(i1,i2,r1)
       val r2 = true
       assert(true == r2)
     }
+    printWriter.println(s"====$getBB====")
     for {
       i1 <- 0 to 20
       i2 <- 0 to 20
@@ -464,9 +471,10 @@ object Test1 {
       lazy val inner_number2: Number1 = Fusion.number1dGen(i2, number2)
       def count = number1.method1(number2)
       def r1 = Counter.count(() => count)
+      printWriter.println(i1,i2,r1)
       val r2 = true
       assert(true == r2)
-    }
+    }*/
     for {
       i1 <- 0 to 20
       i2 <- 0 to 20
