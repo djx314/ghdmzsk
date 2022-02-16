@@ -78,7 +78,10 @@ object Runner {
       ((i1, i2) => (i2, i1 + 1), "(i1: Int, i2: Int) => (i2, i1 + 1)", "i1 = i2, i2 = i1 + 1"),
       ((i1, i2) => (i2 + 1, i1), "(i1: Int, i2: Int) => (i2 + 1, i1)", "i1 = i2 + 1, i2 = i1"),
       ((i1, i2) => (i1 + 1, i2 + 1), "(i1: Int, i2: Int) => (i1 + 1, i2 + 1)", "i1 = i1 + 1, i2 = i2 + 1"),
-      ((i1, i2) => (i2 + 1, i1 + 1), "(i1: Int, i2: Int) => (i2 + 1, i1 + 1)", "i1 = i2 + 1, i2 = i1 + 1")
+      ((i1, i2) => (i2 + 1, i1 + 1), "(i1: Int, i2: Int) => (i2 + 1, i1 + 1)", "i1 = i2 + 1, i2 = i1 + 1"),
+      ((i1, i2) => (i1 + i2, i2), "(i1: Int, i2: Int) => (i1 + i2, i2)", "i1 = i1 + i2, i2 = i2"),
+      ((i1, i2) => (i1, i1 + i2), "(i1: Int, i2: Int) => (i1, i1 + i2)", "i1 = i1, i2 = i1 + i2"),
+      ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2")
     )
 
     for {
@@ -99,9 +102,9 @@ object Runner {
         s"$i1,$i2,${t1.getOrElse("unlimited")}"
       }
       if (eachSet.set == list.mkString("|")) {
-        /*println(
+        println(
           s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._3}, mappingKey: ${setsCount.key}"
-        )*/
+        )
         countSets = countSets.appended(
           s"Tags.${setsCount.key}, ${eachMapping._2}",
           eachSet.firstStart,
@@ -143,9 +146,10 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
-    Gen3.genRunner()
+    // 不要开启
+    // Gen3.genRunner()
 
-    import ExecutionContext.Implicits.global
+    /*import ExecutionContext.Implicits.global
     val a = Future {
       blocking {
         Gen4.printlnSingleResult()
@@ -187,7 +191,7 @@ object Runner {
         _ <- c
       } yield 1,
       Duration.Inf
-    )
+    )*/
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
