@@ -115,7 +115,7 @@ object Test1 {
       val r2 = true
       assert(true == r2)
     }*/
-    printWriter.println(s"====$getBB====")
+    /*printWriter.println(s"====$getBB====")
     for {
       i1 <- 0 to 20
       i2 <- 1 to 20
@@ -209,7 +209,7 @@ object Test1 {
       printWriter.println(i1,i2,r1)
       val r2 = true
       assert(true == r2)
-    }
+    }*/
     for {
       i1 <- 0 to 20
       i2 <- 0 to 20
