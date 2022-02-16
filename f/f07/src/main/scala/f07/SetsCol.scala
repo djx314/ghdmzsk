@@ -1047,5 +1047,17 @@ object SetsCol extends SetsColAbs {
   Tags.Tag974.firstart(1).secondStart(0).mapResult(Tags.Tag262, (i1: Option[Int]) => i1.map(b => b * 2))
   Tags.Tag975.firstart(0).secondStart(0).mapResult(Tags.Tag827, (i1: Option[Int]) => i1.map(b => b + 1))
   Tags.Tag976.firstart(1).secondStart(0).mapResult(Tags.Tag838, (i1: Option[Int]) => i1.map(b => b * 2))
+  Tags.Tag977.firstart(0).secondStart(0).mapResult(Tags.Tag966, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag978.firstart(0).secondStart(0).mapResult(Tags.Tag954, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag979.firstart(0).secondStart(0).mapResult(Tags.Tag944, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag980.firstart(0).secondStart(0).mapResult(Tags.Tag969, (i1: Option[Int]) => i1.map(b => b + 1))
+  Tags.Tag981.firstart(0).secondStart(1).mapResult(Tags.Tag954, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag982.firstart(0).secondStart(0).mapResult(Tags.Tag964, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag983.firstart(1).secondStart(0).mapResult(Tags.Tag948, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag984.firstart(1).secondStart(0).mapResult(Tags.Tag969, (i1: Option[Int]) => i1.map(b => b + 1))
+  Tags.Tag985.firstart(0).secondStart(0).mapResult(Tags.Tag967, (i1: Option[Int]) => i1.map(b => b + 1))
+  Tags.Tag986.firstart(0).secondStart(0).mapResult(Tags.Tag959, (i1: Option[Int]) => i1.map(b => b + 1))
+  Tags.Tag987.firstart(0).secondStart(0).mapResult(Tags.Tag971, (i1: Option[Int]) => i1.map(b => b + 1))
+  Tags.Tag988.firstart(0).secondStart(0).value(Tags.Tag860, (i1: Int, i2: Int) => (i2, i1))
 
 }
