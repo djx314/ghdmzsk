@@ -146,7 +146,7 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
-    Gen3.genRunner()
+    // Gen3.genRunner()
 
     import ExecutionContext.Implicits.global
     val a = Future {
