@@ -149,7 +149,7 @@ object Runner {
     // 不要开启
     // Gen3.genRunner()
 
-    /*import ExecutionContext.Implicits.global
+    import ExecutionContext.Implicits.global
     val a = Future {
       blocking {
         Gen4.printlnSingleResult()
@@ -191,7 +191,7 @@ object Runner {
         _ <- c
       } yield 1,
       Duration.Inf
-    )*/
+    )
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
