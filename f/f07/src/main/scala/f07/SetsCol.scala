@@ -14,10 +14,15 @@ case class OptSetsList(override val key: String, override val firstStart: Int, o
 }
 trait MapParameterSetsList extends SetsList {
   def mapParameter(i1: Int, i2: Int): (Int, Int)
+  def countWithSetList(setList: SetsList, i1: Int, i2: Int): Option[Int] = {
+    val (v1, v2) = mapParameter(i1, i2)
+    setList.count(v1, v2)
+  }
   def linkKey: String
 }
 trait MapResultSetsList extends SetsList {
   def mapResult(i1: Option[Int]): Option[Int]
+  def countWithSetList(setList: SetsList, i1: Int, i2: Int): Option[Int] = mapResult(setList.count(i1, i2))
   def linkKey: String
 }
 
@@ -43,10 +48,7 @@ trait SetsColAbs {
       override def key: String                                = second.key
       override def firstStart: Int                            = second.firstStart
       override def secondStart: Int                           = second.secondStart
-      override def count(i1: Int, i2: Int): Option[Int] = {
-        val (v1, v2) = mapParameter(i1, i2)
-        getSet(linkKey1).count(v1, v2)
-      }
+      override def count(i1: Int, i2: Int): Option[Int]       = countWithSetList(getSet(linkKey1), i1, i2)
     })
   }
   protected implicit class extract6(second: SecondStart) {
@@ -56,9 +58,7 @@ trait SetsColAbs {
       override def key: String                             = second.key
       override def firstStart: Int                         = second.firstStart
       override def secondStart: Int                        = second.secondStart
-      override def count(i1: Int, i2: Int): Option[Int] = {
-        self.mapResult(getSet(linkKey1).count(i1, i2))
-      }
+      override def count(i1: Int, i2: Int): Option[Int]    = countWithSetList(getSet(linkKey1), i1, i2)
     })
   }
   protected implicit class extract3(key: String) {
@@ -1208,5 +1208,8 @@ object SetsCol extends SetsColAbs {
   Tags.Tag1135.firstart(0).secondStart(0).value(Tags.Tag1054, (i1: Int, i2: Int) => (i2 + 1, i1))
   Tags.Tag1136.firstart(0).secondStart(0).value(Tags.Tag1052, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag1137.firstart(1).secondStart(0).value(Tags.Tag1054, (i1: Int, i2: Int) => (i2 + 1, i1))
+  Tags.Tag1138.firstart(0).secondStart(0).mapResult(Tags.Tag1136, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag1139.firstart(0).secondStart(0).mapResult(Tags.Tag1135, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag1140.firstart(1).secondStart(0).mapResult(Tags.Tag1135, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
 
 }

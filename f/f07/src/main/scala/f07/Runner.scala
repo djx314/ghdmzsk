@@ -5,6 +5,7 @@ import java.nio.file.{Files, Paths}
 import scala.concurrent.duration.Duration
 import scala.concurrent.{blocking, Await, ExecutionContext, Future}
 import scala.util.{Try, Using}
+import ExecutionContext.Implicits.global
 
 object Runner {
 
@@ -55,7 +56,7 @@ object Runner {
     countSets.filterNot(s => CountSets.sum.exists(t => t.set == s._2)).map(_._1)
   }
 
-  def printlnSingleResult(): List[(String, Int, Int, (Int, Int) => Option[Int])] = {
+  def printlnSingleResult(): Future[List[(String, Int, Int, (Int, Int) => Option[Int])]] = {
     val sets                                                           = col.map(s => (s._1, s._2.mkString("|")))
     val leftSets: List[CountSet]                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
     var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
@@ -84,45 +85,70 @@ object Runner {
       ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2")
     )
 
-    for {
-      eachSet     <- leftSets
-      setsCount   <- SetsCol.setsCol
-      eachMapping <- mapping
-    } {
-      val list = for {
-        i1 <- eachSet.firstStart to 20
-        i2 <- eachSet.secondStart to 20
-      } yield {
-        val (v1, v2) = eachMapping._1(i1, i2)
-        val t1 =
-          try setsCount.count(v1, v2)
-          catch {
-            case e: Throwable => Option.empty
+    val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
+      blocking {
+        for {
+          eachSet     <- eachSet1
+          setsCount   <- SetsCol.setsCol
+          eachMapping <- mapping
+        } yield {
+          val list = for {
+            i1 <- eachSet.firstStart to 20
+            i2 <- eachSet.secondStart to 20
+          } yield {
+            val (v1, v2) = eachMapping._1(i1, i2)
+            val t1 =
+              try setsCount.count(v1, v2)
+              catch {
+                case e: Throwable => Option.empty
+              }
+            s"$i1,$i2,${t1.getOrElse("unlimited")}"
           }
-        s"$i1,$i2,${t1.getOrElse("unlimited")}"
-      }
-      if (eachSet.set == list.mkString("|")) {
-        /*println(
-          s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._3}, mappingKey: ${setsCount.key}"
-        )*/
-        countSets = countSets.appended(
-          s"Tags.${setsCount.key}, ${eachMapping._2}",
-          eachSet.firstStart,
-          eachSet.secondStart,
-          { (i1: Int, i2: Int) =>
-            val (n1, n2) = eachMapping._1(i1, i2)
-            setsCount.count(n1, n2)
-          }
-        )
+          if (eachSet.set == list.mkString("|")) {
+            println(
+              s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._3}, mappingKey: ${setsCount.key}"
+            )
+            /*countSets = countSets.appended(
+            s"Tags.${setsCount.key}, ${eachMapping._2}",
+            eachSet.firstStart,
+            eachSet.secondStart,
+            { (i1: Int, i2: Int) =>
+              val (n1, n2) = eachMapping._1(i1, i2)
+              setsCount.count(n1, n2)
+            }
+          )*/
+            Option(
+              (
+                s"Tags.${setsCount.key}, ${eachMapping._2}",
+                eachSet.firstStart,
+                eachSet.secondStart,
+                { (i1: Int, i2: Int) =>
+                  val (n1, n2) = eachMapping._1(i1, i2)
+                  setsCount.count(n1, n2)
+                }
+              )
+            )
+          } else Option.empty
+        }
       }
     }
 
-    countSets
+    val exec = for (i <- Future.sequence(futureSeq)) yield i.to(List).flatten.collect { case Some(s) => s }
+
+    for (countS <- exec) yield {
+      countS
+        .map(s => (s, Try(for (i1 <- s._2 to 20; i2 <- s._3 to 20) yield (i1, i2, s._4(i1, i2))).toOption))
+        .collect { case (a, Some(b)) => (a, b) }
+        .groupBy(s => s._2.to(List))
+        .map(_._2.head._1)
+        .to(List)
+    }
+    /*countSets
       .map(s => (s, Try(for (i1 <- s._2 to 20; i2 <- s._3 to 20) yield (i1, i2, s._4(i1, i2))).toOption))
       .collect { case (a, Some(b)) => (a, b) }
       .groupBy(s => s._2.to(List))
       .map(_._2.head._1)
-      .to(List)
+      .to(List)*/
   }
 
   def countTag(tag: String): Int = {
@@ -148,8 +174,7 @@ object Runner {
 
     // Gen3.genRunner()
 
-    import ExecutionContext.Implicits.global
-    val a = Future {
+    /*val a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
@@ -159,9 +184,11 @@ object Runner {
     val b = Future {
       blocking {
         var count = SetsCol.setsCol.size + 1
-        for (each <- printlnSingleResult()) {
-          println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
-          count += 1
+        for (each1 <- printlnSingleResult()) {
+          for (each <- each1) {
+            println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
+            count += 1
+          }
         }
       }
     }
@@ -190,7 +217,7 @@ object Runner {
         _ <- c
       } yield 1,
       Duration.Inf
-    )
+    )*/
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
