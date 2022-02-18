@@ -14,6 +14,8 @@ object Fusion {
   lazy val number1b: Number1 = Number1B
   lazy val number1c: Number1 = Number1C(() => number1c)
   lazy val number1d: Number1 = Number1D(() => number1d)
+  lazy val number1e: Number1 = Number1E(() => number1e)
+  lazy val number1f: Number1 = Number1F(() => number1f)
 
   def number1sGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => number1sGen(n - 1, zero)) else zero
   def number1tGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1T(() => number1tGen(n - 1, zero)) else zero
@@ -23,5 +25,7 @@ object Fusion {
   def number1zGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1Z(() => number1zGen(n - 1, zero)) else zero
   def number1cGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1C(() => number1cGen(n - 1, zero)) else zero
   def number1dGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1D(() => number1dGen(n - 1, zero)) else zero
+  def number1eGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1E(() => number1eGen(n - 1, zero)) else zero
+  def number1fGen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1F(() => number1fGen(n - 1, zero)) else zero
 
 }
