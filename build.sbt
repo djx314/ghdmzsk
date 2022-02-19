@@ -19,11 +19,11 @@ val a02    = project in aRoot / "a02"
 val a02_01 = project in aRoot / "a02-01"
 val a02_02 = project in aRoot / "a02-02"
 
-val b01 = project in bRoot / "b01"
-val b02 = project in bRoot / "b02"
-val b03 = project in bRoot / "b03"
+val b01    = project in bRoot / "b01"
+val b02    = project in bRoot / "b02"
+val b03    = project in bRoot / "b03"
 val b03_01 = project in bRoot / "b03-01"
-val b04 = project in bRoot / "b04"
+val b04    = project in bRoot / "b04"
 
 val c01 = project in cRoot / "c01"
 val c02 = project in cRoot / "c02"
@@ -64,6 +64,7 @@ lazy val f06 = crossProject(JSPlatform, JVMPlatform)
     )
   )
 val f07 = project in fRoot / "f07"
+val f08 = project in fRoot / "f08"
 
 val f_codegen_path = fRoot / "f_codegen"
 val f_codegen      = project in f_codegen_path

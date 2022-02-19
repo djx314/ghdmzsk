@@ -181,30 +181,30 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
+    // Gen1.genSetsRunner()
+
     // Gen3.genRunner()
 
     // Gen5.printlnSingleResult()
 
-    val a = Future {
+    def a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
     }
 
     // 可立刻替换的映射
-    val b = Future {
+    def b = Future {
       blocking {
-        var count = Runner.getCount
         for (each1 <- printlnSingleResult()) {
           for (each <- each1) {
-            println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
-            count += 1
+            println(s"Tags.Tag${Runner.getCount}.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
           }
         }
       }
     }
 
-    val c = Future {
+    def c = Future {
       blocking {
         val cols = SetsCol.setsCol
           .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
@@ -221,14 +221,14 @@ object Runner {
       }
     }
 
-    Await.result(
+    /*Await.result(
       for {
         _ <- a
         _ <- b
         _ <- c
       } yield 1,
       Duration.Inf
-    )
+    )*/
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
