@@ -34,12 +34,12 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
       )
       val sumStr  = set.grouped(20).map(t => s"List(${t.map(r => s"b.countSet${r.id}").mkString(",")})").mkString(" ::: ")
       val strPre1 = s"  val sum: List[CountSet] = $sumStr"
-      val str2 = "package f07" :: "trait CountSets {" :: str1
+      val str2 = "package f07" :: "trait CountSetsImpl {" :: str1
         .to(List)
         .map(s => "  " + s)
-        .appendedAll(List("}", "", "object CountSets {", "object b extends CountSets", strPre1, "}"))
+        .appendedAll(List("}", "", "object CountSetsImpl {", "object b extends CountSetsImpl", strPre1, "}"))
       val path  = Paths.get("..", "f07", "src", "main", "codegen", "f07")
-      val path1 = path.resolve("CountSets.scala")
+      val path1 = path.resolve("CountSetsImpl.scala")
       for {
         _         <- blocking.effectBlocking(Files.createDirectories(path))
         printlner <- ZIO.effect(ZManaged.fromAutoCloseable(ZIO.effect(new PrintWriter(path1.toFile))))
@@ -49,7 +49,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
 
     def printlnPlan(plans: Seq[CountPlanRow], index: Int): CTask[Unit] = {
       val str1 = plans.map(p =>
-        s"val plan${p.id} = CountPlan(index = ${p.id}, firstOuterName = \"${p.firstOuterName}\", firstOuterType = \"${p.firstOuterType}\", firstInnerName = \"${p.firstInnerName}\", firstInnerType = \"${p.firstInnerType}\", firstStart = ${p.firstStart}, secondOuterName = \"${p.secondOuterName}\", secondOuterType = \"${p.secondOuterType}\", secondInnerName = \"${p.secondInnerName}\", secondInnerType = \"${p.secondInnerType}\", secondStart = ${p.secondStart}, set = CountSets.b.countSet${p.counterResultId
+        s"val plan${p.id} = CountPlan(index = ${p.id}, firstOuterName = \"${p.firstOuterName}\", firstOuterType = \"${p.firstOuterType}\", firstInnerName = \"${p.firstInnerName}\", firstInnerType = \"${p.firstInnerType}\", firstStart = ${p.firstStart}, secondOuterName = \"${p.secondOuterName}\", secondOuterType = \"${p.secondOuterType}\", secondInnerName = \"${p.secondInnerName}\", secondInnerType = \"${p.secondInnerType}\", secondStart = ${p.secondStart}, set = CountSetsImpl.b.countSet${p.counterResultId
           .getOrElse("未有值")})"
       )
       val str2 = s"  val sum: List[CountPlan] = List(${plans.map(s => s"plan${s.id}").mkString(",")})"
@@ -67,19 +67,30 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
     }
 
     def printlnPlan1(indexSeq: List[Int]): CTask[Unit] = {
+      val path   = Paths.get("..", "f07", "src", "main", "codegen", "f07")
       val str1   = "package f07"
       val str1_1 = "import f07.codegen.impl._"
       val str2   = s"object CountPlans {"
-      val str3 =
-        s"  val sum: List[CountPlan] = ${indexSeq.grouped(20).grouped(20).map(s => s.map(t => t.map(u => s"CountPlans$u.sum").mkString("(", ":::", ")")).mkString("(", " ::: ", ")")).mkString(" ::: ")}"
-      val str4  = List(str1, str1_1, str2, str3, "}")
-      val path  = Paths.get("..", "f07", "src", "main", "codegen", "f07")
+      val fileSeq = for ((seq, index) <- indexSeq.grouped(50).zipWithIndex) yield {
+        val path1 = path.resolve("codegen").resolve("impl").resolve(s"CountPlanSums$index.scala")
+        val str3 =
+          s"  val sum: List[CountPlan] = ${seq.grouped(20).grouped(20).map(s => s.map(t => t.map(u => s"CountPlans$u.sum").mkString("(", ":::", ")")).mkString("(", " ::: ", ")")).mkString(" ::: ")}"
+        (List(str1, str1_1, s"object CountPlanSums$index {", str3, "}"), path1)
+      }
+      val strList1 =
+        s"  val sum: List[CountPlan] = ${indexSeq.grouped(50).zipWithIndex.map(_._2).grouped(20).map(t => t.map(s => s"CountPlanSums$s.sum").mkString("(", " ::: ", ")")).mkString(" ::: ")}"
+
+      val str4  = List(str1, str1_1, str2, strList1, "}")
       val path1 = path.resolve("CountPlans.scala")
-      for {
-        _         <- blocking.effectBlocking(Files.createDirectories(path))
-        printlner <- ZIO.effect(ZManaged.fromAutoCloseable(ZIO.effect(new PrintWriter(path1.toFile))))
-        s         <- printlner.use(p => blocking.effectBlocking(str4.foreach(p.println)))
-      } yield s
+      val seq   = ((str4, path1)) +: fileSeq.to(List)
+      val action = seq.map { case (lines, path2) =>
+        for {
+          _         <- blocking.effectBlocking(Files.createDirectories(path))
+          printlner <- ZIO.effect(ZManaged.fromAutoCloseable(ZIO.effect(new PrintWriter(path2.toFile))))
+          s         <- printlner.use(p => blocking.effectBlocking(lines.foreach(p.println)))
+        } yield s
+      }
+      ZIO.collectAllPar(action).unit
     }
 
     for {
