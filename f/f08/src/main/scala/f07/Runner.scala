@@ -174,7 +174,7 @@ object Runner {
   }
 
   def main(arr: Array[String]): Unit = {
-    println(s"重复的映射：${distinctRunner()}")
+    println(s"重复的映射：${distinctRunner().sortBy(_(1)).mkString("\n")}")
     println(s"结果集总数：${CountSets.sum.size}")
     println(s"映射结果总数：${SetsCol.setsCol.size}")
     println(s"未映射结果集数量：${setsLeftover().size}")
