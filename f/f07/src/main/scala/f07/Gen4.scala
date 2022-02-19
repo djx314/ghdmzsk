@@ -71,7 +71,7 @@ object Gen4 {
           .map(_._2.head._1)
           .to(List)
 
-    var count = SetsCol.setsCol.size + 1
+    var count = Runner.getCount
     for (o <- output) {
       for (each <- o) {
         println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).mapResult(${each._1})")

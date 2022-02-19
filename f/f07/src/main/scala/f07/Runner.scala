@@ -164,6 +164,15 @@ object Runner {
     CountPlans.sum.filter(_.set.index == set.index).size
   }
 
+  var count = SetsCol.setsCol.size + 1
+  def getCount: Int = {
+    this.synchronized {
+      val c = count
+      count += 1
+      c
+    }
+  }
+
   def main(arr: Array[String]): Unit = {
     println(s"重复的映射：${distinctRunner()}")
     println(s"结果集总数：${CountSets.sum.size}")
@@ -174,7 +183,9 @@ object Runner {
 
     // Gen3.genRunner()
 
-    /*val a = Future {
+    // Gen5.printlnSingleResult()
+
+    val a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
@@ -183,7 +194,7 @@ object Runner {
     // 可立刻替换的映射
     val b = Future {
       blocking {
-        var count = SetsCol.setsCol.size + 1
+        var count = Runner.getCount
         for (each1 <- printlnSingleResult()) {
           for (each <- each1) {
             println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
@@ -217,7 +228,7 @@ object Runner {
         _ <- c
       } yield 1,
       Duration.Inf
-    )*/
+    )
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
@@ -227,5 +238,3 @@ object Runner {
     println(s"出现次数：乘除法：084 - (045, 046) == ${countTag(Tags.Tag084)} - (${countTag(Tags.Tag045)}, ${countTag(Tags.Tag046)})")
     println(s"出现次数：第三法：067 - 040 == ${countTag(Tags.Tag067)} - ${countTag(Tags.Tag040)}")*/
   }
-
-}
