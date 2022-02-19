@@ -9,7 +9,7 @@ import ExecutionContext.Implicits.global
 
 object Runner {
 
-  val path = Paths.get(".", "f", "f07", "src", "main", "codegen", "f07")
+  val path = Paths.get(".", "f", "f07", "src", "main", "codegen", "f08")
 
   def genTagsRunner(): Unit = {
     val lines = for (i <- 1 to 500) yield {

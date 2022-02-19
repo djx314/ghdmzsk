@@ -6,10 +6,16 @@ sealed trait SetsList {
   def secondStart: Int
   def count(i1: Int, i2: Int): Option[Int]
 }
-case class CommonSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Int) extends SetsList {
+case class CommonSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Int)
+    extends SetsList {
   override def count(i1: Int, i2: Int): Option[Int] = Option(value(i1, i2))
 }
-case class OptSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Option[Int]) extends SetsList {
+case class OptSetsList(
+  override val key: String,
+  override val firstStart: Int,
+  override val secondStart: Int,
+  value: (Int, Int) => Option[Int]
+) extends SetsList {
   override def count(i1: Int, i2: Int): Option[Int] = value(i1, i2)
 }
 trait MapParameterSetsList extends SetsList {
@@ -36,10 +42,12 @@ trait SetsColAbs {
   case class SecondStart(key: String, firstStart: Int, secondStart: Int)
 
   protected implicit class extract1(second: SecondStart) {
-    def value(v: (Int, Int) => Int): Unit = setsList = setsList.appended(CommonSetsList(key = second.key, firstStart = second.firstStart, secondStart = second.secondStart, value = v))
+    def value(v: (Int, Int) => Int): Unit = setsList =
+      setsList.appended(CommonSetsList(key = second.key, firstStart = second.firstStart, secondStart = second.secondStart, value = v))
   }
   protected implicit class extract2(second: SecondStart) {
-    def value(v: (Int, Int) => Option[Int]): Unit = setsList = setsList.appended(OptSetsList(key = second.key, firstStart = second.firstStart, secondStart = second.secondStart, value = v))
+    def value(v: (Int, Int) => Option[Int]): Unit = setsList =
+      setsList.appended(OptSetsList(key = second.key, firstStart = second.firstStart, secondStart = second.secondStart, value = v))
   }
   protected implicit class extract5(second: SecondStart) {
     def value(linkKey1: String, v: (Int, Int) => (Int, Int)): Unit = setsList = setsList.appended(new MapParameterSetsList {
@@ -114,8 +122,18 @@ object SetsCol extends SetsColAbs {
   Tags.Tag041.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) else i1 / (i2 + 1) + 1)
   Tags.Tag042.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 / (i1 + 1) + 1 else i2 / (i1 + 1))
   Tags.Tag043.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i2 / (i1 + 1) + 1)
-  Tags.Tag044.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 / i2 - 1) else Option(i1 / i2))
-  Tags.Tag045.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 / i2) else Option(i1 / i2 + 1))
+  Tags.Tag044
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 / i2 - 1) else Option(i1 / i2)
+    )
+  Tags.Tag045
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 / i2) else Option(i1 / i2 + 1)
+    )
   Tags.Tag046.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i2 / i1))
   Tags.Tag047.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i2 / i1 + 1))
   Tags.Tag048.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i2 + 1)
@@ -141,17 +159,46 @@ object SetsCol extends SetsColAbs {
   Tags.Tag068.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else 1)
   Tags.Tag069.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i1)
   Tags.Tag070.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i1 + 1)
-  Tags.Tag071.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2 - 1) else Option(2 * i1 + i1 / i2))
-  Tags.Tag072.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2) else Option(2 * i1 + i1 / i2 + 1))
+  Tags.Tag071
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0) Option(0)
+      else if (i2 == 0) Option.empty
+      else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2 - 1)
+      else Option(2 * i1 + i1 / i2)
+    )
+  Tags.Tag072
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0) Option(0)
+      else if (i2 == 0) Option.empty
+      else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2)
+      else Option(2 * i1 + i1 / i2 + 1)
+    )
   Tags.Tag073.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(2 * i2 + i2 / i1 + 1))
   Tags.Tag074.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(2 * i2 + i2 / i1 + 2))
   Tags.Tag075.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 != 0 && i2 == 0) 1 else 2 * i1)
   Tags.Tag076.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else 2 * i2 + 1)
   Tags.Tag077.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i1 - i1 / (i2 + 1))
-  Tags.Tag078.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) 2 * i1 - i1 / (i2 + 1) else 2 * i1 - i1 / (i2 + 1) - 1)
+  Tags.Tag078
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) 2 * i1 - i1 / (i2 + 1) else 2 * i1 - i1 / (i2 + 1) - 1)
   Tags.Tag079.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i2 - (i2 + 1) / (i1 + 1) + 1)
-  Tags.Tag080.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2 - 1) else Option(i1 + i1 / i2))
-  Tags.Tag081.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1))
+  Tags.Tag080
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2 - 1) else Option(i1 + i1 / i2)
+    )
+  Tags.Tag081
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1)
+    )
   Tags.Tag082.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i2 + i2 / i1))
   Tags.Tag083.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i2 + i2 / i1 + 1))
   Tags.Tag084.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i1 * i2)
@@ -172,10 +219,16 @@ object SetsCol extends SetsColAbs {
   Tags.Tag099.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(1) else Option.empty)
   Tags.Tag100.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 1 else if (i1 == 1) 2 else 3)
   Tags.Tag101.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 == 1) 1 else 2)
-  Tags.Tag102.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else if (i1 != 0 && i2 == 0) Option(1) else Option.empty)
+  Tags.Tag102
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else if (i1 != 0 && i2 == 0) Option(1) else Option.empty)
   Tags.Tag103.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else Option.empty)
   Tags.Tag104.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(i2) else Option.empty)
-  Tags.Tag105.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 - i2 / (i1 + 1) else i2 - i2 / (i1 + 1) + 1)
+  Tags.Tag105
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 - i2 / (i1 + 1) else i2 - i2 / (i1 + 1) + 1)
   Tags.Tag106.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i1 == 1) Option(2) else Option(1))
   Tags.Tag107.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i1 == 1) Option(1) else Option(0))
   Tags.Tag108.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 != 0 && i2 == 0) Option(0) else Option.empty)
@@ -183,8 +236,14 @@ object SetsCol extends SetsColAbs {
   Tags.Tag110.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 2 else 1)
   Tags.Tag111.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 3 else if (i1 == 1) 2 else 1)
   Tags.Tag112.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 2 else if (i1 == 1) 1 else 0)
-  Tags.Tag113.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i2 == 0) Option(0) else Option.empty)
-  Tags.Tag114.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 + i2 / (i1 + 1) + 1 else i2 + i2 / (i1 + 1))
+  Tags.Tag113
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i2 == 0) Option(0) else Option.empty)
+  Tags.Tag114
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 + i2 / (i1 + 1) + 1 else i2 + i2 / (i1 + 1))
   Tags.Tag115.firstart(1).secondStart(1).value((i1: Int, i2: Int) => Option.empty)
   Tags.Tag116.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 + 1)
   Tags.Tag117.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else Option(3))
@@ -218,14 +277,34 @@ object SetsCol extends SetsColAbs {
   Tags.Tag145.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 * (i2 / i1) + i2 + 1)
   Tags.Tag146.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 1) 2 else 3)
   Tags.Tag147.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 1) 1 else 2)
-  Tags.Tag148.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + i2 + ((i2 + 1) / (2 * i1)) * i1 else i1 + i2 + ((i2 + 1) / (2 * i1)) * i1)
-  Tags.Tag149.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + ((i2 + 1) / (2 * i1)) * i1 else i1 + ((i2 + 1) / (2 * i1)) * i1)
+  Tags.Tag148
+    .firstart(1)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + i2 + ((i2 + 1) / (2 * i1)) * i1 else i1 + i2 + ((i2 + 1) / (2 * i1)) * i1
+    )
+  Tags.Tag149
+    .firstart(1)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + ((i2 + 1) / (2 * i1)) * i1 else i1 + ((i2 + 1) / (2 * i1)) * i1
+    )
   Tags.Tag150.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 1) 2 else 1)
   Tags.Tag151.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 1) 1 else 0)
   Tags.Tag152.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i2 + i2 / i1 * i1)
   Tags.Tag153.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i2 / i1 * i1)
-  Tags.Tag154.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if ((i2 + 1) % (2 * i1) <= i1) i2 + ((i2 + 1) / (2 * i1)) * i1 else (i2 + 1) % (2 * i1) - i1 + i2 + ((i2 + 1) / (2 * i1)) * i1)
-  Tags.Tag155.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if ((i2 + 1) % (2 * i1) <= i1) ((i2 + 1) / (2 * i1)) * i1 else (i2 + 1) % (2 * i1) - i1 + ((i2 + 1) / (2 * i1)) * i1)
+  Tags.Tag154
+    .firstart(1)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if ((i2 + 1) % (2 * i1) <= i1) i2 + ((i2 + 1) / (2 * i1)) * i1 else (i2 + 1) % (2 * i1) - i1 + i2 + ((i2 + 1) / (2 * i1)) * i1
+    )
+  Tags.Tag155
+    .firstart(1)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if ((i2 + 1) % (2 * i1) <= i1) ((i2 + 1) / (2 * i1)) * i1 else (i2 + 1) % (2 * i1) - i1 + ((i2 + 1) / (2 * i1)) * i1
+    )
   Tags.Tag156.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i1 + 3)
   Tags.Tag157.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i1 + 2)
   Tags.Tag158.firstart(0).secondStart(1).value((i1: Int, i2: Int) => i1)
@@ -274,20 +353,47 @@ object SetsCol extends SetsColAbs {
   Tags.Tag201.firstart(0).secondStart(0).value((i1: Int, i2: Int) => (i2 + 1) * (i1 + 1))
   Tags.Tag202.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i1 + 2)
   Tags.Tag203.firstart(0).secondStart(0).value((i1: Int, i2: Int) => 2 * i2 - i2 / (i1 + 1))
-  Tags.Tag204.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) - i2)
-  Tags.Tag205.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) else (i1 / (i2 * 2)) * i2 + i2)
-  Tags.Tag206.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 else (i1 / i2) * i2)
-  Tags.Tag207.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + i1 else (i1 / i2) * i2 + i1)
+  Tags.Tag204
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) - i2)
+  Tags.Tag205
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) else (i1 / (i2 * 2)) * i2 + i2)
+  Tags.Tag206
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 else (i1 / i2) * i2)
+  Tags.Tag207
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + i1 else (i1 / i2) * i2 + i1)
   Tags.Tag208.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 else (i1 / i2) * i2 + i2)
   Tags.Tag209.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 + i1 else (i1 / i2) * i2 + i2 + i1)
   Tags.Tag210.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i1 / (i2 + 1) * i2 + i1 % (i2 + 1))
   Tags.Tag211.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i2 / (i1 + 1) * i1 + i2 % (i1 + 1))
-  Tags.Tag212.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1)
+  Tags.Tag212
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1)
   Tags.Tag213.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 != 0 && i2 == 0) 1 else i1)
-  Tags.Tag214.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2)
-  Tags.Tag215.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 else (i1 / (i2 * 2)) * i2 + i1 + i2)
-  Tags.Tag216.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 2 * i1 else (i1 / i2) * i2 + 2 * i1)
-  Tags.Tag217.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 else (i1 / i2) * i2 + i2 + 2 * i1)
+  Tags.Tag214
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2)
+  Tags.Tag215
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 else (i1 / (i2 * 2)) * i2 + i1 + i2)
+  Tags.Tag216
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 2 * i1 else (i1 / i2) * i2 + 2 * i1)
+  Tags.Tag217
+    .firstart(0)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 else (i1 / i2) * i2 + i2 + 2 * i1)
   Tags.Tag218.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i1 / (i2 + 1) + i1)
   Tags.Tag219.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) + i1 else i1 / (i2 + 1) + i1 + 1)
   Tags.Tag220.firstart(0).secondStart(0).value((i1: Int, i2: Int) => i2 / (i1 + 1) + i2 + 1)
@@ -321,7 +427,10 @@ object SetsCol extends SetsColAbs {
   Tags.Tag248.firstart(1).secondStart(1).value((i1: Int, i2: Int) => i2)
   Tags.Tag249.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else Option(0))
   Tags.Tag250.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 + 1 else i1)
-  Tags.Tag251.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2)
+  Tags.Tag251
+    .firstart(1)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2)
   Tags.Tag252.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + i1 else (i1 / i2) * i2 + i1)
   Tags.Tag253.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option.empty else Option(i1 * 2))
   Tags.Tag254.firstart(1).secondStart(1).value((i1: Int, i2: Int) => i1 * 2)
@@ -329,7 +438,10 @@ object SetsCol extends SetsColAbs {
   Tags.Tag256.firstart(1).secondStart(1).value((i1: Int, i2: Int) => i1)
   Tags.Tag257.firstart(1).secondStart(1).value((i1: Int, i2: Int) => i2 + 1)
   Tags.Tag258.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 + i1 else (i1 / i2) * i2 + i2 + i1)
-  Tags.Tag259.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 else (i1 / i2) * i2 + i2 + 2 * i1)
+  Tags.Tag259
+    .firstart(1)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) => if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 else (i1 / i2) * i2 + i2 + 2 * i1)
   Tags.Tag260.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else Option(i1))
   Tags.Tag261.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else Option(1))
   Tags.Tag262.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) i1 else 1)
@@ -337,12 +449,20 @@ object SetsCol extends SetsColAbs {
   Tags.Tag264.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option.empty else Option(i1))
   Tags.Tag265.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 / (i2 + 1) + i1)
   Tags.Tag266.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 1 else i1)
-  Tags.Tag267.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2 - 1) else Option(i1 + i1 / i2))
+  Tags.Tag267
+    .firstart(1)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2 - 1) else Option(i1 + i1 / i2))
   Tags.Tag268.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2)
   Tags.Tag269.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option.empty else Option(i1 * 2))
   Tags.Tag270.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 * 2 - i1 / (i2 + 1))
   Tags.Tag271.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 != 0 && i2 == 0) 1 else 2 * i1)
-  Tags.Tag272.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2 - 1) else Option(2 * i1 + i1 / i2))
+  Tags.Tag272
+    .firstart(1)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(2 * i1 + i1 / i2 - 1) else Option(2 * i1 + i1 / i2)
+    )
   Tags.Tag273.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 * 2)
   Tags.Tag274.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 * i2 + i1)
   Tags.Tag275.firstart(1).secondStart(0).value((i1: Int, i2: Int) => i1 * i2 + i1 * 2)
@@ -353,7 +473,12 @@ object SetsCol extends SetsColAbs {
   Tags.Tag280.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option(i2 * 2 + 1) else Option.empty)
   Tags.Tag281.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 1) Option.empty else Option(2))
   Tags.Tag282.firstart(1).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 1) Option.empty else Option(3))
-  Tags.Tag283.firstart(1).secondStart(1).value((i1: Int, i2: Int) => if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + i2 + ((i2 + 1) / (2 * i1)) * i1 else i1 + i2 + ((i2 + 1) / (2 * i1)) * i1)
+  Tags.Tag283
+    .firstart(1)
+    .secondStart(1)
+    .value((i1: Int, i2: Int) =>
+      if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + i2 + ((i2 + 1) / (2 * i1)) * i1 else i1 + i2 + ((i2 + 1) / (2 * i1)) * i1
+    )
   Tags.Tag284.firstart(1).secondStart(0).value(Tags.Tag018, (i1: Int, i2: Int) => (i1, i2))
   Tags.Tag285.firstart(1).secondStart(0).value(Tags.Tag066, (i1: Int, i2: Int) => (i1, i2))
   Tags.Tag286.firstart(0).secondStart(0).value(Tags.Tag031, (i1: Int, i2: Int) => (i2, i1))
@@ -522,9 +647,15 @@ object SetsCol extends SetsColAbs {
   Tags.Tag449.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option(i1 - 1) else Option.empty)
   Tags.Tag450.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i1 + i2 - 1))
   Tags.Tag451.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else Option(i1 + i2 - 1))
-  Tags.Tag452.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(i1 - 1) else Option(0))
+  Tags.Tag452
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(i1 - 1) else Option(0))
   Tags.Tag453.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) Option.empty else Option(0))
-  Tags.Tag454.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(0) else Option(i1 - 1))
+  Tags.Tag454
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(0) else Option(i1 - 1))
   Tags.Tag455.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) Option.empty else Option(i1 - 1))
   Tags.Tag456.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option(i1 - i2 - 1) else Option.empty)
   Tags.Tag457.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option(i1 - 1) else Option.empty)
@@ -548,7 +679,10 @@ object SetsCol extends SetsColAbs {
   Tags.Tag475.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 <= 1 || i2 == 0) i1 else 2)
   Tags.Tag476.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) i1 * 2 else i1 + 1)
   Tags.Tag477.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(2))
-  Tags.Tag478.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(i1 + 1))
+  Tags.Tag478
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(i1 + 1))
   Tags.Tag479.firstart(0).secondStart(1).value(Tags.Tag022, (i1: Int, i2: Int) => (i1, 1))
   Tags.Tag480.firstart(1).secondStart(0).value(Tags.Tag081, (i1: Int, i2: Int) => (i1, i2))
   Tags.Tag481.firstart(1).secondStart(0).value(Tags.Tag013, (i1: Int, i2: Int) => (i1, i2))
@@ -627,7 +761,10 @@ object SetsCol extends SetsColAbs {
   Tags.Tag554.firstart(0).secondStart(0).value(Tags.Tag102, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag555.firstart(0).secondStart(1).value(Tags.Tag003, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag556.firstart(0).secondStart(1).value(Tags.Tag065, (i1: Int, i2: Int) => (i2, i1))
-  Tags.Tag557.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i2 == 1) Option(3) else Option((1 / i2) * i2 + i2 + 2))
+  Tags.Tag557
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i2 == 1) Option(3) else Option((1 / i2) * i2 + i2 + 2))
   Tags.Tag558.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 % 2 == 0 || i2 == 0) i2 + i2 / 2 + 1 else i2 + i2 / 2 + 2)
   Tags.Tag559.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i2 % 2 == 0 || i2 == 0) i2 + i2 / 2 + 1 else i2 + i2 / 2 + 2)
   Tags.Tag560.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 2 else 0)
@@ -1064,7 +1201,10 @@ object SetsCol extends SetsColAbs {
   Tags.Tag991.firstart(0).secondStart(0).value(Tags.Tag980, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag992.firstart(0).secondStart(0).value(Tags.Tag978, (i1: Int, i2: Int) => (i2, i1))
   Tags.Tag993.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(2) else Option(3))
-  Tags.Tag994.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) Option.empty else if (i1 == 1) Option(6) else Option(5))
+  Tags.Tag994
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) Option.empty else if (i1 == 1) Option(6) else Option(5))
   Tags.Tag995.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(3) else Option(2))
   Tags.Tag996.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) Option(1) else Option(2))
   Tags.Tag997.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else Option(3))
@@ -1073,32 +1213,69 @@ object SetsCol extends SetsColAbs {
   Tags.Tag1000.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 == 0) Option(4) else Option(3))
   Tags.Tag1001.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 2 else if (i1 == 0) i2 * 2 + 2 else i2 + 1)
   Tags.Tag1002.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 2 else if (i1 == 0) i2 + 2 else i2)
-  Tags.Tag1003.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(4) else Option(2))
-  Tags.Tag1004.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i2 == 0) Option(1) else Option(2))
+  Tags.Tag1003
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(4) else Option(2))
+  Tags.Tag1004
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i2 == 0) Option(1) else Option(2))
   Tags.Tag1005.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 2 else if (i1 == 0) i2 + 2 else i2 + 1)
   Tags.Tag1006.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else Option(3))
-  Tags.Tag1007.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(4) else Option(3))
-  Tags.Tag1008.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i2 == 0) Option(3) else Option(1))
-  Tags.Tag1009.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i2 == 0) Option(3) else Option(2))
+  Tags.Tag1007
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(4) else Option(3))
+  Tags.Tag1008
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i2 == 0) Option(3) else Option(1))
+  Tags.Tag1009
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i2 == 0) Option(3) else Option(2))
   Tags.Tag1010.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 == 0) Option(2) else Option(3))
-  Tags.Tag1011.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 == 0) Option(1) else Option(2))
+  Tags.Tag1011
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0 && i2 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 == 0) Option(1) else Option(2)
+    )
   Tags.Tag1012.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) 1 else i2 - 1)
   Tags.Tag1013.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) i2 else if (i2 == 0) 0 else i2 + 1)
   Tags.Tag1014.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 1 else if (i1 == 0) 1 else i2)
-  Tags.Tag1015.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(1) else Option(2))
+  Tags.Tag1015
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(1) else Option(2))
   Tags.Tag1016.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else 1)
   Tags.Tag1017.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) i2 else if (i2 == 0) 0 else 2)
   Tags.Tag1018.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) i2 else if (i2 == 0) 1 else 2)
-  Tags.Tag1019.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else if (i1 == 0) Option.empty else Option(i2 + 1))
-  Tags.Tag1020.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else if (i1 == 0) Option.empty else if (i2 == 0) Option(1) else Option(2))
+  Tags.Tag1019
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(0) else if (i1 == 0) Option.empty else Option(i2 + 1))
+  Tags.Tag1020
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) =>
+      if (i1 == 0 && i2 == 0) Option(0) else if (i1 == 0) Option.empty else if (i2 == 0) Option(1) else Option(2)
+    )
   Tags.Tag1021.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 == 0) i2 else 2)
   Tags.Tag1022.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 == 1) 1 else if (i2 == 0) i1 else 3)
   Tags.Tag1023.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) i1 else 2)
   Tags.Tag1024.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 + 2 else i1)
   Tags.Tag1025.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 == 0 || i2 == 0) 1 else 2)
-  Tags.Tag1026.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 == 0) Option(2) else if (i1 == 1) Option(3) else Option(4))
+  Tags.Tag1026
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i2 == 0) Option.empty else if (i1 == 0) Option(2) else if (i1 == 1) Option(3) else Option(4))
   Tags.Tag1027.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) i1 else if (i1 == 0) 1 else if (i1 == 1) 2 else 3)
-  Tags.Tag1028.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 else if (i2 == 0) 2 else 1)
+  Tags.Tag1028
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 else if (i2 == 0) 2 else 1)
   Tags.Tag1029.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) i1 else if (i1 == 0) 1 else 2)
   Tags.Tag1030.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 1 else if (i1 == 1) 2 else 4)
   Tags.Tag1031.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 <= 1) 1 else 3)
@@ -1110,13 +1287,28 @@ object SetsCol extends SetsColAbs {
   Tags.Tag1037.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) i2 else if (i2 == 0) 2 else 1)
   Tags.Tag1038.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(i2) else if (i2 == 0) Option.empty else Option(2))
   Tags.Tag1039.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) Option(i1 + i2 + 1) else Option.empty)
-  Tags.Tag1040.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option(2) else Option.empty)
-  Tags.Tag1041.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option.empty else Option(1))
-  Tags.Tag1042.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option(2) else Option(1))
-  Tags.Tag1043.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option.empty else Option(2))
+  Tags.Tag1040
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option(2) else Option.empty)
+  Tags.Tag1041
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option.empty else Option(1))
+  Tags.Tag1042
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option(2) else Option(1))
+  Tags.Tag1043
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i1 == 0) Option(i2 + 1) else if (i2 == 0) Option.empty else Option(2))
   Tags.Tag1044.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 1 else i1 * 2 + 1)
   Tags.Tag1045.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) 1 else if (i1 == 0) 1 else 2)
-  Tags.Tag1046.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i2 == 0) Option(i1 * 2 + 1) else if (i1 == 0) Option(1) else if (i1 == 1) Option(3) else Option.empty)
+  Tags.Tag1046
+    .firstart(0)
+    .secondStart(0)
+    .value((i1: Int, i2: Int) => if (i2 == 0) Option(i1 * 2 + 1) else if (i1 == 0) Option(1) else if (i1 == 1) Option(3) else Option.empty)
   Tags.Tag1047.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1)
   Tags.Tag1048.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 1 else if (i2 == 0) 2 else 1)
   Tags.Tag1049.firstart(0).secondStart(1).value((i1: Int, i2: Int) => if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1)
