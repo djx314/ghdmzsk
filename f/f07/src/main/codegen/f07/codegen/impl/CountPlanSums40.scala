@@ -1,0 +1,5 @@
+package f07
+import f07.codegen.impl._
+object CountPlanSums40 {
+  val sum: List[CountPlan] = ((CountPlans2000.sum:::CountPlans2001.sum:::CountPlans2002.sum:::CountPlans2003.sum:::CountPlans2004.sum:::CountPlans2005.sum:::CountPlans2006.sum:::CountPlans2007.sum:::CountPlans2008.sum:::CountPlans2009.sum:::CountPlans2010.sum:::CountPlans2011.sum:::CountPlans2012.sum:::CountPlans2013.sum:::CountPlans2014.sum:::CountPlans2015.sum:::CountPlans2016.sum:::CountPlans2017.sum:::CountPlans2018.sum:::CountPlans2019.sum) ::: (CountPlans2020.sum:::CountPlans2021.sum:::CountPlans2022.sum:::CountPlans2023.sum:::CountPlans2024.sum:::CountPlans2025.sum:::CountPlans2026.sum:::CountPlans2027.sum:::CountPlans2028.sum:::CountPlans2029.sum:::CountPlans2030.sum:::CountPlans2031.sum:::CountPlans2032.sum:::CountPlans2033.sum:::CountPlans2034.sum:::CountPlans2035.sum:::CountPlans2036.sum:::CountPlans2037.sum:::CountPlans2038.sum:::CountPlans2039.sum) ::: (CountPlans2040.sum:::CountPlans2041.sum:::CountPlans2042.sum:::CountPlans2043.sum:::CountPlans2044.sum:::CountPlans2045.sum:::CountPlans2046.sum:::CountPlans2047.sum:::CountPlans2048.sum:::CountPlans2049.sum))
+}

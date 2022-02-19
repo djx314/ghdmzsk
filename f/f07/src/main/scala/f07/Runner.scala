@@ -2,7 +2,10 @@ package f07
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{blocking, Await, ExecutionContext, Future}
 import scala.util.{Try, Using}
+import ExecutionContext.Implicits.global
 
 object Runner {
 
@@ -23,20 +26,11 @@ object Runner {
 
   def distinctRunner(): List[List[String]] = {
     val cols = for (each <- SetsCol.setsCol) yield {
-      each match {
-        case CommonSetsList(key, firstStart, secondStart, value) =>
-          val list = for {
-            i1 <- firstStart to 20
-            i2 <- secondStart to 20
-          } yield Option(value(i1, i2))
-          (key, (firstStart, secondStart, list.to(List)))
-        case OptSetsList(key, firstStart, secondStart, value) =>
-          val list = for {
-            i1 <- firstStart to 20
-            i2 <- secondStart to 20
-          } yield value(i1, i2)
-          (key, (firstStart, secondStart, list.to(List)))
-      }
+      val list = for {
+        i1 <- each.firstStart to 20
+        i2 <- each.secondStart to 20
+      } yield each.count(i1, i2)
+      (each.key, (each.firstStart, each.secondStart, list.to(List)))
     }
     cols.groupBy(s => s._2).filter(_._2.size > 1).map(_._2.map(_._1).to(List)).to(List)
   }
@@ -62,221 +56,99 @@ object Runner {
     countSets.filterNot(s => CountSets.sum.exists(t => t.set == s._2)).map(_._1)
   }
 
-  def printlnSingleResult(): List[(String, Int, Int, (Int, Int) => Option[Int])] = {
-    try {
-      val sets                                                           = col.map(s => (s._1, s._2.mkString("|")))
-      val leftSets                                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
-      var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
-      for {
-        eachSet   <- leftSets
-        setsCount <- SetsCol.setsCol
-      } {
-        setsCount match {
-          case CommonSetsList(key, firstStart, secondStart, value) =>
-            val list = for {
-              i1 <- eachSet.firstStart to 20
-              i2 <- eachSet.secondStart to 20
-            } yield {
-              val v1 =
-                try Option(value(1, i2))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str1 = s"$i1,$i2,${v1.getOrElse("unlimited")}"
+  def printlnSingleResult(): Future[List[(String, Int, Int, (Int, Int) => Option[Int])]] = {
+    val sets                                                           = col.map(s => (s._1, s._2.mkString("|")))
+    val leftSets: List[CountSet]                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
+    var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
 
-              val v2 =
-                try Option(value(i1, 1))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str2 = s"$i1,$i2,${v2.getOrElse("unlimited")}"
+    val mapping: List[((Int, Int) => (Int, Int), String, String)] = List(
+      ((i1, i2) => (1, i2), "(i1: Int, i2: Int) => (1, i2)", "i1 = 1, i2 = i2"),
+      ((i1, i2) => (i2, 1), "(i1: Int, i2: Int) => (i2, 1)", "i1 = i2, i2 = 1"),
+      ((i1, i2) => (1, i1), "(i1: Int, i2: Int) => (1, i1)", "i1 = 1, i2 = i1"),
+      ((i1, i2) => (i1, 1), "(i1: Int, i2: Int) => (i1, 1)", "i1 = i1, i2 = 1"),
+      ((i1, i2) => (1, 1), "(i1: Int, i2: Int) => (1, 1)", "i1 = 1, i2 = 1"),
+      ((i1, i2) => (0, i2), "(i1: Int, i2: Int) => (0, i2)", "i1 = 0, i2 = i2"),
+      ((i1, i2) => (i2, 0), "(i1: Int, i2: Int) => (i2, 0)", "i1 = i2, i2 = 0"),
+      ((i1, i2) => (0, i1), "(i1: Int, i2: Int) => (0, i1)", "i1 = 0, i2 = i1"),
+      ((i1, i2) => (i1, 0), "(i1: Int, i2: Int) => (i1, 0)", "i1 = i1, i2 = 0"),
+      ((i1, i2) => (0, 0), "(i1: Int, i2: Int) => (0, 0)", "i1 = 0, i2 = 0"),
+      ((i1, i2) => (i1, i2), "(i1: Int, i2: Int) => (i1, i2)", "i1 = i1, i2 = i2"),
+      ((i1, i2) => (i2, i1), "(i1: Int, i2: Int) => (i2, i1)", "i1 = i2, i2 = i1"),
+      ((i1, i2) => (i1, i2 + 1), "(i1: Int, i2: Int) => (i1, i2 + 1)", "i1 = i1, i2 = i2 + 1"),
+      ((i1, i2) => (i1 + 1, i2), "(i1: Int, i2: Int) => (i1 + 1, i2)", "i1 = i1 + 1, i2 = i2"),
+      ((i1, i2) => (i2, i1 + 1), "(i1: Int, i2: Int) => (i2, i1 + 1)", "i1 = i2, i2 = i1 + 1"),
+      ((i1, i2) => (i2 + 1, i1), "(i1: Int, i2: Int) => (i2 + 1, i1)", "i1 = i2 + 1, i2 = i1"),
+      ((i1, i2) => (i1 + 1, i2 + 1), "(i1: Int, i2: Int) => (i1 + 1, i2 + 1)", "i1 = i1 + 1, i2 = i2 + 1"),
+      ((i1, i2) => (i2 + 1, i1 + 1), "(i1: Int, i2: Int) => (i2 + 1, i1 + 1)", "i1 = i2 + 1, i2 = i1 + 1"),
+      ((i1, i2) => (i1 + i2, i2), "(i1: Int, i2: Int) => (i1 + i2, i2)", "i1 = i1 + i2, i2 = i2"),
+      ((i1, i2) => (i1, i1 + i2), "(i1: Int, i2: Int) => (i1, i1 + i2)", "i1 = i1, i2 = i1 + i2"),
+      ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2")
+    )
 
-              val v3 =
-                try Option(value(1, 1))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str3 = s"$i1,$i2,${v3.getOrElse("unlimited")}"
-
-              val v4 =
-                try Option(value(i1, i2))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str4 = s"$i1,$i2,${v4.getOrElse("unlimited")}"
-
-              val v5 =
-                try Option(value(i2, i1))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str5 = s"$i1,$i2,${v5.getOrElse("unlimited")}"
-
-              ((str1, str2, str3), (str4, str5))
+    val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
+      blocking {
+        for {
+          eachSet     <- eachSet1
+          setsCount   <- SetsCol.setsCol
+          eachMapping <- mapping
+        } yield {
+          val list = for {
+            i1 <- eachSet.firstStart to 20
+            i2 <- eachSet.secondStart to 20
+          } yield {
+            val (v1, v2) = eachMapping._1(i1, i2)
+            val t1 =
+              try setsCount.count(v1, v2)
+              catch {
+                case e: Throwable => Option.empty
+              }
+            s"$i1,$i2,${t1.getOrElse("unlimited")}"
+          }
+          if (eachSet.set == list.mkString("|")) {
+            /*println(
+              s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._3}, mappingKey: ${setsCount.key}"
+            )*/
+            /*countSets = countSets.appended(
+            s"Tags.${setsCount.key}, ${eachMapping._2}",
+            eachSet.firstStart,
+            eachSet.secondStart,
+            { (i1: Int, i2: Int) =>
+              val (n1, n2) = eachMapping._1(i1, i2)
+              setsCount.count(n1, n2)
             }
-
-            val (ll1, ll2)                     = list.unzip
-            val (listStr0, listStr4)           = ll2.unzip
-            val (listStr1, listStr2, listStr3) = ll1.unzip3
-            if (eachSet.set == listStr1.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(1, i2)",
+          )*/
+            Option(
+              (
+                s"Tags.${setsCount.key}, ${eachMapping._2}",
                 eachSet.firstStart,
                 eachSet.secondStart,
-                (i1, i2) => setsCount.count(1, i2)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr2.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = 1, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(i1, 1)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(i1, 1)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr3.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = 1, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(1, 1)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(1, 1)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr0.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(i1, i2)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(i1, i2)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr4.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i2, i2 = i1, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(i2, i1)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(i2, i1)
-              )
-              // throw new Exception
-            }
-          case OptSetsList(key, firstStart, secondStart, value) =>
-            val list = for {
-              i1 <- eachSet.firstStart to 20
-              i2 <- eachSet.secondStart to 20
-            } yield {
-              val v1 =
-                try Option(value(1, i2))
-                catch {
-                  case e: Throwable => Option.empty
+                { (i1: Int, i2: Int) =>
+                  val (n1, n2) = eachMapping._1(i1, i2)
+                  setsCount.count(n1, n2)
                 }
-              val str1 = s"$i1,$i2,${v1.flatten.getOrElse("unlimited")}"
-
-              val v2 =
-                try Option(value(i1, 1))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str2 = s"$i1,$i2,${v2.flatten.getOrElse("unlimited")}"
-
-              val v3 =
-                try Option(value(1, 1))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str3 = s"$i1,$i2,${v3.flatten.getOrElse("unlimited")}"
-
-              val v4 =
-                try Option(value(i1, i2))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str4 = s"$i1,$i2,${v4.flatten.getOrElse("unlimited")}"
-
-              val v5 =
-                try Option(value(i2, i1))
-                catch {
-                  case e: Throwable => Option.empty
-                }
-              val str5 = s"$i1,$i2,${v5.flatten.getOrElse("unlimited")}"
-
-              ((str1, str2, str3), (str4, str5))
-            }
-
-            val (ll1, ll2)                     = list.unzip
-            val (listStr0, listStr4)           = ll2.unzip
-            val (listStr1, listStr2, listStr3) = ll1.unzip3
-            if (eachSet.set == listStr1.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = i2, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(1, i2)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(1, i2)
               )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr2.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = 1, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(i1, 1)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(i1, 1)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr3.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = 1, i2 = 1, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(1, 1)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(1, 1)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr0.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i1, i2 = i2, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(i1, i2)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(i1, i2)
-              )
-              // throw new Exception
-            }
-            if (eachSet.set == listStr4.mkString("|")) {
-              println(s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, i1 = i2, i2 = i1, mappingKey: $key")
-              countSets = countSets.appended(
-                s"getSet(Tags.${setsCount.key}).count(i2, i1)",
-                eachSet.firstStart,
-                eachSet.secondStart,
-                (i1, i2) => setsCount.count(i2, i1)
-              )
-              // throw new Exception
-            }
+            )
+          } else Option.empty
         }
       }
-      countSets
+    }
+
+    val exec = for (i <- Future.sequence(futureSeq)) yield i.to(List).flatten.collect { case Some(s) => s }
+
+    for (countS <- exec) yield {
+      countS
         .map(s => (s, Try(for (i1 <- s._2 to 20; i2 <- s._3 to 20) yield (i1, i2, s._4(i1, i2))).toOption))
         .collect { case (a, Some(b)) => (a, b) }
         .groupBy(s => s._2.to(List))
         .map(_._2.head._1)
         .to(List)
-    } catch {
-      case e: Throwable =>
-        e.printStackTrace()
-        List.empty
     }
+    /*countSets
+      .map(s => (s, Try(for (i1 <- s._2 to 20; i2 <- s._3 to 20) yield (i1, i2, s._4(i1, i2))).toOption))
+      .collect { case (a, Some(b)) => (a, b) }
+      .groupBy(s => s._2.to(List))
+      .map(_._2.head._1)
+      .to(List)*/
   }
 
   def countTag(tag: String): Int = {
@@ -292,6 +164,15 @@ object Runner {
     CountPlans.sum.filter(_.set.index == set.index).size
   }
 
+  var count = SetsCol.setsCol.size + 1
+  def getCount: Int = {
+    this.synchronized {
+      val c = count
+      count += 1
+      c
+    }
+  }
+
   def main(arr: Array[String]): Unit = {
     println(s"重复的映射：${distinctRunner()}")
     println(s"结果集总数：${CountSets.sum.size}")
@@ -300,27 +181,54 @@ object Runner {
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
-    Gen3.genRunner()
+    // Gen3.genRunner()
 
-    // 可立刻替换的映射
-    var count = 479
-    for (each <- printlnSingleResult()) {
-      println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value((i1: Int, i2: Int) => ${each._1})")
-      count += 1
+    // Gen5.printlnSingleResult()
+
+    val a = Future {
+      blocking {
+        Gen4.printlnSingleResult()
+      }
     }
 
-    /*println("互为逆运算的法：")
-    val cols = SetsCol.setsCol
-      .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
-      .groupBy(_._2.to(List))
-      .map(_._2.head._1)
-      .to(Vector)
-    val setColToCount = Confirm(cols, SetsCol.setsCol).confirm
-      .map(st => (for (i1 <- (1 to 20).to(List); i2 <- (1 to 20).to(List)) yield (st._1.count(i1, i2), st._2.count(i1, i2)), st))
-      .groupBy(_._1)
-      .to(Vector)
-      .map(_._2.head._2)
-    println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))*/
+    // 可立刻替换的映射
+    val b = Future {
+      blocking {
+        var count = Runner.getCount
+        for (each1 <- printlnSingleResult()) {
+          for (each <- each1) {
+            println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
+            count += 1
+          }
+        }
+      }
+    }
+
+    val c = Future {
+      blocking {
+        val cols = SetsCol.setsCol
+          .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
+          .groupBy(_._2.to(List))
+          .map(_._2.head._1)
+          .to(Vector)
+        val setColToCount = Confirm(cols, SetsCol.setsCol).confirm
+          .map(st => (for (i1 <- (1 to 20).to(List); i2 <- (1 to 20).to(List)) yield (st._1.count(i1, i2), st._2.count(i1, i2)), st))
+          .groupBy(_._1)
+          .to(Vector)
+          .map(_._2.head._2)
+        println("互为逆运算的法：")
+        println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
+      }
+    }
+
+    Await.result(
+      for {
+        _ <- a
+        _ <- b
+        _ <- c
+      } yield 1,
+      Duration.Inf
+    )
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
