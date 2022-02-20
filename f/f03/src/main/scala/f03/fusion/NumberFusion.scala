@@ -9,6 +9,7 @@ import zio._
 import zio.logging._
 
 import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success}
 
 class NumberFusion(
   indexView: IndexView,
@@ -56,10 +57,12 @@ class NumberFusion(
     for (logging <- ZIO.identity[Logging]) yield {
       Runtime.default
         .unsafeRunToFuture(action.provideSome((s: ZEnv) => s ++ logging))
-        .map { _ =>
-          println("11" * 100)
-          println("提交 countPlan 完毕")
-          println("22" * 100)
+        .onComplete {
+          case Success(value) =>
+            println("11" * 100)
+            println("提交 countPlan 完毕")
+            println("22" * 100)
+          case Failure(exception) => exception.printStackTrace()
         }(ExecutionContext.global)
       2L
     }

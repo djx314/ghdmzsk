@@ -66,7 +66,7 @@ class DataCollectionImpl extends DataCollection {
   override val allCountPlan: Vector[CountPlanRow] = {
     val allNumber = unlimitedRows.appendedAll(otherRows).appendedAll(zeroRows).appendedAll(singleZeroRows)
 
-    val n1 = for {
+    /*val n1 = for {
       s <- singleZeroRows
       t <- allNumber
     } yield (s, t)
@@ -89,23 +89,23 @@ class DataCollectionImpl extends DataCollection {
       secondInnerName = secondNumber.innerName,
       secondInnerType = secondNumber.innerType,
       secondStart = secondNumber.start
+    )*/
+    for {
+      firstNumber  <- allNumber
+      secondNumber <- allNumber
+    } yield CountPlanRow(
+      id = -1,
+      firstOuterName = firstNumber.outerName,
+      firstOuterType = firstNumber.outerType,
+      firstInnerName = firstNumber.innerName,
+      firstInnerType = firstNumber.innerType,
+      firstStart = firstNumber.start,
+      secondOuterName = secondNumber.outerName,
+      secondOuterType = secondNumber.outerType,
+      secondInnerName = secondNumber.innerName,
+      secondInnerType = secondNumber.innerType,
+      secondStart = secondNumber.start
     )
-    // for {
-    //   firstNumber  <- allNumber
-    //   secondNumber <- allNumber
-    // } yield CountPlanRow(
-    //   id = -1,
-    //   firstOuterName = firstNumber.outerName,
-    //   firstOuterType = firstNumber.outerType,
-    //   firstInnerName = firstNumber.innerName,
-    //   firstInnerType = firstNumber.innerType,
-    //   firstStart = firstNumber.start,
-    //   secondOuterName = secondNumber.outerName,
-    //   secondOuterType = secondNumber.outerType,
-    //   secondInnerName = secondNumber.innerName,
-    //   secondInnerType = secondNumber.innerType,
-    //   secondStart = secondNumber.start
-    // )
   }
 
   def numberGen(nType: String, count: Int, zero: => Number1): Number1 = nType match {
