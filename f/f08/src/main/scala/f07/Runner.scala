@@ -185,7 +185,7 @@ object Runner {
 
     // Gen3.genRunner()
 
-    /*val d = Future { blocking { Gen5.printlnSingleResult() } }
+    val d = Future { blocking { Gen5.printlnSingleResult() } }
 
     val a = Future {
       blocking {
@@ -229,7 +229,7 @@ object Runner {
         _ <- d.map(_ => println("任务 d 完成"))
       } yield 1,
       Duration.Inf
-    )*/
+    )
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(

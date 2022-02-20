@@ -3,10 +3,11 @@ package f07
 object Gen5 {
 
   def printlnSingleResult(): Unit = {
-    var notConfirm: List[Int] = List.empty
+    var notConfirm: Vector[Int] = Vector.empty
 
-    val sets                     = Runner.col.map(s => (s._1, s._2.mkString("|")))
-    val leftSets: List[CountSet] = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
+    val sets = Runner.col.map(s => (s._1, s._2.mkString("|")))
+    val leftSets: List[CountSet] =
+      CountSets.sum.filter(s => sets.forall(t => t._2 != s.set)).filterNot(t => notConfirm.exists(r => t.index == r)).take(20)
 
     def mapping = {
       val noneMapping = ("Option.empty", (i1: Int, i2: Int) => Option.empty)
@@ -77,7 +78,8 @@ object Gen5 {
           notConfirm = notConfirm.appended(s.index)
         }
     }
-    println(notConfirm)
+    println("修改新的 notConfirm")
+    println(notConfirm.mkString("var notConfirm: Vector[Int] = Vector(", ",", ")"))
 
   }
 
