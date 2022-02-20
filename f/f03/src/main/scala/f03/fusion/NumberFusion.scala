@@ -8,6 +8,8 @@ import sttp.tapir.ztapir._
 import zio._
 import zio.logging._
 
+import scala.concurrent.ExecutionContext
+
 class NumberFusion(
   indexView: IndexView,
   helperView: HelperView,
@@ -51,7 +53,16 @@ class NumberFusion(
       for (_ <- Logging.throwable("提交所有 CountPlan 发生异常", e))
         yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
 
-    action.flatMapError(errorHandle)
+    for (logging <- ZIO.identity[Logging]) yield {
+      Runtime.default
+        .unsafeRunToFuture(action.provideSome((s: ZEnv) => s ++ logging))
+        .map { _ =>
+          println("11" * 100)
+          println("提交 countPlan 完毕")
+          println("22" * 100)
+        }(ExecutionContext.global)
+      2L
+    }
   }
 
   val countCountPlan = numberEndpoint.countCountPlan.zServerLogic { _ =>

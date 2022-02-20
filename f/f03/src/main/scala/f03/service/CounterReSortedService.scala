@@ -84,7 +84,6 @@ class CounterReSortedServiceImpl(db: SlickDB, dataCollection: DataCollection) ex
         col   <- DBIO.sequence(colDBIO)
         count <- ResultSetSort ++= col
       } yield count
-
     }
 
     def action(implicit ec: ExecutionContext) = for {
