@@ -13,7 +13,7 @@ libraryDependencies ++= Dependent.slick
 libraryDependencies ++= Dependent.circe
 libraryDependencies ++= Dependent.zhttp
 libraryDependencies ++= Dependent.mysql
-libraryDependencies += "dev.zio" %% "zio-interop-reactivestreams" % "1.3.9"
+libraryDependencies += Dependent.zioInteropReactivestreams
 
 addCompilerPlugin(Dependent.kindProjector)
 enablePlugins(SbtWeb)

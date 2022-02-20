@@ -185,9 +185,9 @@ object Runner {
 
     // Gen3.genRunner()
 
-    val d = Future { blocking { Gen5.printlnSingleResult() } }
+    def d = Future { blocking { Gen5.printlnSingleResult() } }
 
-    val a = Future {
+    /*val a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
@@ -219,9 +219,9 @@ object Runner {
         println("互为逆运算的法：")
         println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
       }
-    }
+    }*/
 
-    Await.result(
+    /*Await.result(
       for {
         _ <- a.map(_ => println("任务 a 完成"))
         _ <- b.map(_ => println("任务 b 完成"))
@@ -229,7 +229,9 @@ object Runner {
         _ <- d.map(_ => println("任务 d 完成"))
       } yield 1,
       Duration.Inf
-    )
+    )*/
+
+    // Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(

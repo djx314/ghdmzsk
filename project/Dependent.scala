@@ -23,6 +23,7 @@ object Dependent {
     val scalajsStubs   = "1.1.0"
     val zhttp          = "1.0.0.0-RC21"
     val mysql          = "8.0.26"
+    val zioInteropReactivestreams = "1.3.9"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -89,5 +90,7 @@ object Dependent {
   val scalajsStubs = Seq("org.scala-js" %% "scalajs-stubs" % versions.scalajsStubs)
 
   val zhttp = Seq("io.d11" %% "zhttp" % versions.zhttp, "io.d11" %% "zhttp-test" % versions.zhttp % Test)
+
+  val zioInteropReactivestreams= "dev.zio" %% "zio-interop-reactivestreams" % versions.zioInteropReactivestreams
 
 }
