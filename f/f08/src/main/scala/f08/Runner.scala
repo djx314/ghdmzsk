@@ -236,7 +236,7 @@ object Runner {
 
     // Await.result(action2, Duration.Inf)
 
-    // Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
+    Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
