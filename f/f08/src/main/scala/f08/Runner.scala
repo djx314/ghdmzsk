@@ -187,14 +187,14 @@ object Runner {
 
     def d = Future { blocking { Gen5.printlnSingleResult() } }
 
-    /*val a = Future {
+    def a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
     }.flatten
 
     // 可立刻替换的映射
-    val b = Future {
+    def b = Future {
       blocking {
         for (each1 <- printlnSingleResult()) yield {
           for (each <- each1) {
@@ -204,7 +204,7 @@ object Runner {
       }
     }.flatten
 
-    val c = Future {
+    def c = Future {
       blocking {
         val cols = SetsCol.setsCol
           .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
@@ -219,19 +219,24 @@ object Runner {
         println("互为逆运算的法：")
         println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
       }
-    }*/
+    }
 
-    /*Await.result(
+    def action2 = {
+      val a1 = a.map(_ => println("任务 a 完成"))
+      val b1 = b.map(_ => println("任务 b 完成"))
+      val c1 = c.map(_ => println("任务 c 完成"))
+      val d1 = d.map(_ => println("任务 d 完成"))
       for {
-        _ <- a.map(_ => println("任务 a 完成"))
-        _ <- b.map(_ => println("任务 b 完成"))
-        _ <- c.map(_ => println("任务 c 完成"))
-        _ <- d.map(_ => println("任务 d 完成"))
-      } yield 1,
-      Duration.Inf
-    )*/
+        _ <- a1
+        _ <- b1
+        _ <- c1
+        _ <- d1
+      } yield 1
+    }
 
-    Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
+    // Await.result(action2, Duration.Inf)
+
+    // Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
