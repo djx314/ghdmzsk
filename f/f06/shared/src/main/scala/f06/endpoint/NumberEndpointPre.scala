@@ -14,6 +14,9 @@ trait NumberEndpointPre {
   protected val resetAllCountPlanPre =
     root.in("resetAllCountPlan").post.out(jsonBody[ResultSet[Option[Int]]]).errorOut(jsonBody[ResultSet[Unit]])
 
+  protected val insertAllCountPlanPre =
+    root.in("insertAllCountPlan").post.out(jsonBody[ResultSet[Long]]).errorOut(jsonBody[ResultSet[Unit]])
+
   protected val countCountPlanPre =
     root.in("countCountPlan").post.out(jsonBody[ResultSet[PlanCountReview]]).errorOut(jsonBody[ResultSet[Unit]])
 

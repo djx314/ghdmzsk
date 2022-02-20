@@ -47,9 +47,26 @@ object IndexViewJavascript {
           val action =
             for (data <- request)
               yield data.data match {
-                case Some(count) => window.alert(s"重置了${count}条数据")
-                case _           => window.alert(s"没有重置数据")
+                case _ => window.alert(s"重置成功")
               }
+
+          action.onComplete {
+            case Failure(exception) =>
+              window.alert("重置“计算计划”数据发生异常")
+            case _ =>
+          }
+        }
+      )
+    }
+
+    {
+      val insertPlanButton = document.getElementById("insertPlanButton")
+      insertPlanButton.addEventListener(
+        "click",
+        { e: dom.MouseEvent =>
+          val request = RequestUtils.planJson(reverseUrl.insertAllCountPlan)
+
+          val action = for (data <- request) yield window.alert(s"增量添加了${data.data}条数据")
 
           action.onComplete {
             case Failure(exception) =>

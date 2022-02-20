@@ -10,5 +10,6 @@ class NumberEndpoint extends NumberEndpointPre {
   val resetAllCountPlan  = resetAllCountPlanPre
   val countCountPlan     = countCountPlanPre
   val reSortCount        = reSortCountPre
+  val insertAllCountPlan = insertAllCountPlanPre
 
 }

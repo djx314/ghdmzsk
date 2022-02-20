@@ -45,6 +45,15 @@ class NumberFusion(
       action.flatMapError(errorHandle)
     }
 
+  val insertAllCountPlan = numberEndpoint.insertAllCountPlan.zServerLogic { _ =>
+    val action = countPlanService.insertAllDistinct()
+    def errorHandle(e: Throwable) =
+      for (_ <- Logging.throwable("提交所有 CountPlan 发生异常", e))
+        yield ((), StatusCode.InternalServerError, s"发生程序异常，调试信息：${e.getMessage}")
+
+    action.flatMapError(errorHandle)
+  }
+
   val countCountPlan = numberEndpoint.countCountPlan.zServerLogic { _ =>
     val action = countPlanService.count()
     def errorHandle(e: Throwable) =
@@ -68,6 +77,7 @@ class NumberFusion(
     countPlanReviewPage.widen[AppEnv],
     deleteAllCountPlan.widen[AppEnv],
     resetAllCountPlan.widen[AppEnv],
+    insertAllCountPlan.widen[AppEnv],
     countCountPlan.widen[AppEnv],
     reSortCountExecutionPage.widen[AppEnv],
     reSortCount.widen[AppEnv]
@@ -79,6 +89,7 @@ class NumberFusion(
     numberEndpoint.countPlanReviewPage,
     numberEndpoint.deleteAllCountPlan,
     numberEndpoint.resetAllCountPlan,
+    numberEndpoint.insertAllCountPlan,
     numberEndpoint.countCountPlan,
     numberEndpoint.reSortCountExecutionPage,
     numberEndpoint.reSortCountExecutionPage

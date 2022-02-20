@@ -15,5 +15,6 @@ class ReverseRoutes {
   def counterExecutionPlan(count: Int) = requestPlan(counterEndpoint.counterExecutionPlan)(count)
   def reSortCount                      = requestPlan(numberEndpoint.reSortCount)
   def codegen                          = requestPlan(counterEndpoint.codegen)
+  def insertAllCountPlan               = requestPlan(numberEndpoint.insertAllCountPlan)
 
 }

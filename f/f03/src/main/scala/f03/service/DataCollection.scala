@@ -40,7 +40,7 @@ trait DataCollection {
 class DataCollectionImpl extends DataCollection {
 
   val unlimitedRows: Vector[SingleNumber] =
-    for (name <- baseName)
+    for (name <- List(W, X, A, B) ++: baseName)
       yield SingleNumber(outerName = name, outerType = UnlimitedType, innerName = name, innerType = UnlimitedType, start = 0)
 
   val otherRows: Vector[SingleNumber] = for {

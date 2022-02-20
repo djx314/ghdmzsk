@@ -17,8 +17,9 @@ class IndexView(jsDependencies: JsDependencies) {
     body(
       h1(textAlign.center)("计算计划录入"),
       div(textAlign.center)(
-        div(id := "cleanAllPlanButton")(paddingTop := 5, paddingBottom := 5)(button("清空所有计算计划及计算结果")),
-        div(id := "reInputPlanButton")(paddingTop := 5, paddingBottom := 5)(button("录入并覆盖原计算计划，删除不在新计算计划中的项"))
+        div(paddingTop := 5, paddingBottom := 5)(button(id := "cleanAllPlanButton")("清空所有计算计划及计算结果")),
+        div(paddingTop := 5, paddingBottom := 5)(button(id := "reInputPlanButton")("一次录入所有计算计划，不考虑重复，速度快")),
+        div(paddingTop := 5, paddingBottom := 5)(button(id := "insertPlanButton")("增量录入所有计算计划"))
       )
     )
   )

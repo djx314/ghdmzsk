@@ -185,7 +185,7 @@ object Runner {
 
     // Gen3.genRunner()
 
-    // Gen5.printlnSingleResult()
+    Gen5.printlnSingleResult()
 
     def a = Future {
       blocking {
