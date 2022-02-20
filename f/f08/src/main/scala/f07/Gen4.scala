@@ -9,7 +9,7 @@ import ExecutionContext.Implicits.global
 
 object Gen4 {
 
-  def printlnSingleResult(): Unit = {
+  def printlnSingleResult(): Future[Unit] = {
     val sets                                                           = Runner.col.map(s => (s._1, s._2.mkString("|")))
     val leftSets: List[CountSet]                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
     var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
@@ -71,7 +71,7 @@ object Gen4 {
           .map(_._2.head._1)
           .to(List)
 
-    for (o <- output) {
+    for (o <- output) yield {
       for (each <- o) {
         println(s"Tags.Tag${Runner.getCount}.firstart(${each._2}).secondStart(${each._3}).mapResult(${each._1})")
       }

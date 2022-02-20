@@ -185,26 +185,26 @@ object Runner {
 
     // Gen3.genRunner()
 
-    Gen5.printlnSingleResult()
+    val d = Future { blocking { Gen5.printlnSingleResult() } }
 
-    def a = Future {
+    val a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
-    }
+    }.flatten
 
     // 可立刻替换的映射
-    def b = Future {
+    val b = Future {
       blocking {
-        for (each1 <- printlnSingleResult()) {
+        for (each1 <- printlnSingleResult()) yield {
           for (each <- each1) {
             println(s"Tags.Tag${Runner.getCount}.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
           }
         }
       }
-    }
+    }.flatten
 
-    def c = Future {
+    val c = Future {
       blocking {
         val cols = SetsCol.setsCol
           .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
@@ -221,14 +221,15 @@ object Runner {
       }
     }
 
-    /*Await.result(
+    Await.result(
       for {
-        _ <- a
-        _ <- b
-        _ <- c
+        _ <- a.map(_ => println("任务 a 完成"))
+        _ <- b.map(_ => println("任务 b 完成"))
+        _ <- c.map(_ => println("任务 c 完成"))
+        _ <- d.map(_ => println("任务 d 完成"))
       } yield 1,
       Duration.Inf
-    )*/
+    )
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
