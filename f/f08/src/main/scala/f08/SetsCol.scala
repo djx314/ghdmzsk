@@ -1492,8 +1492,8 @@ object SetsCol extends SetsColAbs1 {
 }
 
 abstract trait SetsColAbs1 extends SetsColAbs {
-  Tags.Tag1414.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option.empty else if (i2 == 0) Option(0 * i1 + 0) else Option(0 * i1 + 0 * i2 + 0))
-  Tags.Tag1415.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option.empty else if (i2 == 0) Option(0 * i1 + 0) else Option(0 * i1 + 1 * i2 + 0))
+  Tags.Tag1414.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option.empty else Option(0))
+  Tags.Tag1415.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option.empty else if (i2 == 0) Option(0) else Option(i2))
   Tags.Tag1416.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 2 else if (i2 == 0) 0 * i1 + 0 else 0 * i1 + 0 * i2 + 0)
   Tags.Tag1417.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 0 else if (i2 == 0) 0 * i1 + 0 else 0 * i1 + 1 * i2 + 0)
   Tags.Tag1418.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 2 else if (i2 == 0) 0 * i1 + 0 else 0 * i1 + 1 * i2 + 0)
@@ -1606,7 +1606,7 @@ abstract trait SetsColAbs1 extends SetsColAbs {
   Tags.Tag1525.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 1 else if (i2 == 0) 1 * i1 + -1 else 0 * i1 + 0 * i2 + 1)
   Tags.Tag1526.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 1 else if (i2 == 0) 1 * i1 + -1 else 0 * i1 + 0 * i2 + 0)
   Tags.Tag1527.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option(0 * i2 + 1) else if (i2 == 0) Option.empty else Option(1 * i1 + 0 * i2 + -1))
-  Tags.Tag1528.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 1 else if (i2 == 0) 1 * i1 + -1 else 1 * i1 + 0 * i2 + 0)
+  Tags.Tag1528.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 1 else if (i2 == 0) i1 - 1 else i1)
   Tags.Tag1529.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 == 0) 1 * i2 + 0 else if (i2 == 0) 1 * i1 + 1 else 0 * i1 + 0 * i2 + 0)
   Tags.Tag1530.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 == 0) 0 * i2 + 0 else if (i2 == 0) 0 * i1 + 0 else 1 * i1 + 0 * i2 + 2)
   Tags.Tag1531.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 == 0) 1 * i2 + 0 else if (i2 == 0) 0 * i1 + 0 else 1 * i1 + 0 * i2 + 1)
@@ -1614,5 +1614,6 @@ abstract trait SetsColAbs1 extends SetsColAbs {
   Tags.Tag1533.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 1 else if (i2 == 0) 0 * i1 + 0 else 1 * i1 + 0 * i2 + 2)
   Tags.Tag1534.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 1 * i2 + 1 else if (i2 == 0) 0 * i1 + 0 else 1 * i1 + 0 * i2 + 1)
   Tags.Tag1535.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 1 * i2 + 1 else if (i2 == 0) 1 * i1 + 1 else 0 * i1 + 0 * i2 + 0)
+  Tags.Tag1536.firstart(0).secondStart(0).mapResult(Tags.Tag1446, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
 
 }

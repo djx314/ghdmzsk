@@ -45,6 +45,9 @@ object Gen4 {
             /*println(
               s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._2}, mappingKey: ${setsCount.key}"
             )*/
+            /*println(
+              s"Tags.Tag${Runner.getCount}.firstart(${eachSet.firstStart}).secondStart(${eachSet.secondStart}).mapResult(${s"Tags.${setsCount.key}, ${eachMapping._2}"})"
+            )*/
             Option(
               (
                 s"Tags.${setsCount.key}, ${eachMapping._2}",
