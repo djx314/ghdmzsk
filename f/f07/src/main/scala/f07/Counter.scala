@@ -1,5 +1,6 @@
 package f07
 
+
 trait Number1 {
   def method1(number1: Number1): Number1
 }
@@ -38,4 +39,10 @@ case class Number1C(tail: () => Number1) extends Number1 {
 }
 case class Number1D(tail: () => Number1) extends Number1 {
   override def method1(number1: Number1): Number1 = Number1S(() => Number1X)
+}
+case class Number1E(tail: () => Number1) extends Number1 {
+  override def method1(number1: Number1): Number1 = tail().method1(Number1S(() => number1))
+}
+case class Number1F(tail: () => Number1) extends Number1 {
+  override def method1(number1: Number1): Number1 = number1.method1(Number1S(() => tail()))
 }
