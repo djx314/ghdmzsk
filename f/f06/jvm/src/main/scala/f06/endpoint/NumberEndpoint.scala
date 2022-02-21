@@ -15,6 +15,8 @@ class NumberEndpoint extends NumberEndpointPre {
 
   val resetAllCountPlan = resetAllCountPlanPre.description("重置所有计算计划").tag(JsonTag).appendSuccess.appendErrorMessage
 
+  val insertAllCountPlan = insertAllCountPlanPre.description("增加新增计算计划").tag(JsonTag).appendSuccess.appendErrorMessage
+
   val countCountPlan = countCountPlanPre.description("统计计算计划数量").tag(JsonTag).appendSuccess.appendErrorMessage
 
   val reSortCount = reSortCountPre.description("重排序").tag(JsonTag).appendSuccess.appendErrorMessage

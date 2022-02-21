@@ -197,11 +197,11 @@ object Gen3 {
     println(s"生成数据${lines2.size}条")
     val lines3 = lines2.flatten
 
-    val list = List("package f07.test", "", "import f07._", "object Test {", "  def main(arr: Array[String]): Unit = {") ++: lines3
+    val list = List("package f08.test", "", "import f07._", "object Test {", "  def main(arr: Array[String]): Unit = {") ++: lines3
       .appended("  }")
       .appended("}")
 
-    val path = Paths.get(".", "f", "f07", "src", "main", "codegen", "f07", "test")
+    val path = Paths.get(".", "f", "f08", "src", "main", "codegen", "f08", "test")
 
     Files.createDirectories(path)
     val filePath = path.resolve("Test.scala")

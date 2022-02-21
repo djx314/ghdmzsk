@@ -13,6 +13,7 @@ libraryDependencies ++= Dependent.slick
 libraryDependencies ++= Dependent.circe
 libraryDependencies ++= Dependent.zhttp
 libraryDependencies ++= Dependent.mysql
+libraryDependencies += Dependent.zioInteropReactivestreams
 
 addCompilerPlugin(Dependent.kindProjector)
 enablePlugins(SbtWeb)

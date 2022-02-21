@@ -6,6 +6,7 @@ import zio.logging._
 import f03.slick.model.Tables._
 import f03.slick.model.Tables.profile.api._
 import f06.models.PlanCountReview
+import zio.stream.ZStream
 
 import scala.concurrent.ExecutionContext
 
@@ -14,6 +15,7 @@ trait CountPlanService {
 
   def deleteAll(): CTask[Int]
   def resetAll(): CTask[Option[Int]]
+  def insertAllDistinct(): CTask[Long]
   def count(): CTask[PlanCountReview]
 }
 
@@ -36,6 +38,27 @@ class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanS
     result <- db.run(action.transactionally)
     _      <- log.info(result.map(s => s"重置了${s}条数据").getOrElse("没有重置数据"))
   } yield result
+
+  override def insertAllDistinct(): CTask[Long] = {
+    val stream = ZStream.fromIterable(dCol.allCountPlan)
+    val notExists = for (countPlan <- stream) yield {
+      val filterAction = CountPlan
+        .filter(c =>
+          c.firstStart === countPlan.firstStart && c.secondStart === countPlan.secondStart && c.firstOuterName === countPlan.firstOuterName && c.firstOuterType === countPlan.firstOuterType && c.firstInnerName === countPlan.firstInnerName && c.firstInnerType === countPlan.firstInnerType && c.secondOuterName === countPlan.secondOuterName && c.secondOuterType === countPlan.secondOuterType && c.secondInnerName === countPlan.secondInnerName && c.secondInnerType === countPlan.secondInnerType
+        )
+        .map(_.id)
+        .take(1)
+      val countPlanAction = filterAction.result.headOption
+      val exists          = db.run(countPlanAction).map(_.isDefined)
+      for (e <- exists) yield if (e) Option.empty else Option(countPlan)
+    }
+
+    val insert = for (countPlan <- notExists.mapMPar(20)(s => s).collect { case Some(s) => s }) yield {
+      val insertAction = CountPlan += countPlan
+      db.run(insertAction.transactionally)
+    }
+    insert.mapM(t => t).runCount
+  }
 
   override def count(): CTask[PlanCountReview] = {
     val countPlanAllCountDBIO  = CountPlan.map(_.id).size.result

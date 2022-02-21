@@ -9,7 +9,7 @@ import ExecutionContext.Implicits.global
 
 object Gen4 {
 
-  def printlnSingleResult(): Unit = {
+  def printlnSingleResult(): Future[Unit] = {
     val sets                                                           = Runner.col.map(s => (s._1, s._2.mkString("|")))
     val leftSets: List[CountSet]                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
     var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
@@ -45,6 +45,9 @@ object Gen4 {
             /*println(
               s"可立刻替换的映射：firstStart:${eachSet.firstStart}, secondStart: ${eachSet.secondStart}, ${eachMapping._2}, mappingKey: ${setsCount.key}"
             )*/
+            /*println(
+              s"Tags.Tag${Runner.getCount}.firstart(${eachSet.firstStart}).secondStart(${eachSet.secondStart}).mapResult(${s"Tags.${setsCount.key}, ${eachMapping._2}"})"
+            )*/
             Option(
               (
                 s"Tags.${setsCount.key}, ${eachMapping._2}",
@@ -71,11 +74,9 @@ object Gen4 {
           .map(_._2.head._1)
           .to(List)
 
-    var count = Runner.getCount
-    for (o <- output) {
+    for (o <- output) yield {
       for (each <- o) {
-        println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).mapResult(${each._1})")
-        count += 1
+        println(s"Tags.Tag${Runner.getCount}.firstart(${each._2}).secondStart(${each._3}).mapResult(${each._1})")
       }
     }
   }

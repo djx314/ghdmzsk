@@ -39,6 +39,10 @@ trait DataCollection {
 
 class DataCollectionImpl extends DataCollection {
 
+  val singleZeroRows: Vector[SingleNumber] =
+    for (name <- Vector(W, X, A, B))
+      yield SingleNumber(outerName = name, outerType = UnlimitedType, innerName = name, innerType = UnlimitedType, start = 0)
+
   val unlimitedRows: Vector[SingleNumber] =
     for (name <- baseName)
       yield SingleNumber(outerName = name, outerType = UnlimitedType, innerName = name, innerType = UnlimitedType, start = 0)
@@ -60,7 +64,32 @@ class DataCollectionImpl extends DataCollection {
   } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = ZeroType, start = 0)
 
   override val allCountPlan: Vector[CountPlanRow] = {
-    val allNumber = unlimitedRows.appendedAll(otherRows).appendedAll(zeroRows)
+    val allNumber = unlimitedRows.appendedAll(otherRows).appendedAll(zeroRows).appendedAll(singleZeroRows)
+
+    /*val n1 = for {
+      s <- singleZeroRows
+      t <- allNumber
+    } yield (s, t)
+    val n2 = for {
+      s <- allNumber
+      t <- singleZeroRows
+    } yield (s, t)
+
+    for {
+      (firstNumber, secondNumber) <- n1 ++: n2
+    } yield CountPlanRow(
+      id = -1,
+      firstOuterName = firstNumber.outerName,
+      firstOuterType = firstNumber.outerType,
+      firstInnerName = firstNumber.innerName,
+      firstInnerType = firstNumber.innerType,
+      firstStart = firstNumber.start,
+      secondOuterName = secondNumber.outerName,
+      secondOuterType = secondNumber.outerType,
+      secondInnerName = secondNumber.innerName,
+      secondInnerType = secondNumber.innerType,
+      secondStart = secondNumber.start
+    )*/
     for {
       firstNumber  <- allNumber
       secondNumber <- allNumber

@@ -1,5 +1,7 @@
 package f07
 
+import f08.Gen6
+
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
 import scala.concurrent.duration.Duration
@@ -9,7 +11,7 @@ import ExecutionContext.Implicits.global
 
 object Runner {
 
-  val path = Paths.get(".", "f", "f07", "src", "main", "codegen", "f07")
+  val path = Paths.get(".", "f", "f07", "src", "main", "codegen", "f08")
 
   def genTagsRunner(): Unit = {
     val lines = for (i <- 1 to 500) yield {
@@ -174,37 +176,38 @@ object Runner {
   }
 
   def main(arr: Array[String]): Unit = {
-    println(s"重复的映射：${distinctRunner()}")
+    println(s"重复的映射：${distinctRunner().sortBy(_(1)).mkString("\n")}")
     println(s"结果集总数：${CountSets.sum.size}")
     println(s"映射结果总数：${SetsCol.setsCol.size}")
     println(s"未映射结果集数量：${setsLeftover().size}")
     println(s"无效的映射 key：${colLeftover()}")
     println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
+    // Gen1.genSetsRunner()
+
     // Gen3.genRunner()
 
-    // Gen5.printlnSingleResult()
+    def e = Future { blocking { Gen6.printlnSingleResult() } }
+    def d = Future { blocking { Gen5.printlnSingleResult() } }
 
-    val a = Future {
+    def a = Future {
       blocking {
         Gen4.printlnSingleResult()
       }
-    }
+    }.flatten
 
     // 可立刻替换的映射
-    val b = Future {
+    def b = Future {
       blocking {
-        var count = Runner.getCount
-        for (each1 <- printlnSingleResult()) {
+        for (each1 <- printlnSingleResult()) yield {
           for (each <- each1) {
-            println(s"Tags.Tag$count.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
-            count += 1
+            println(s"Tags.Tag${Runner.getCount}.firstart(${each._2}).secondStart(${each._3}).value(${each._1})")
           }
         }
       }
-    }
+    }.flatten
 
-    val c = Future {
+    def c = Future {
       blocking {
         val cols = SetsCol.setsCol
           .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
@@ -221,14 +224,26 @@ object Runner {
       }
     }
 
-    Await.result(
+    def action2 = {
+      val a1 = a.map(_ => println("任务 a 完成"))
+      val b1 = b.map(_ => println("任务 b 完成"))
+      val c1 = c.map(_ => println("任务 c 完成"))
+      // val d1 = d.map(_ => println("任务 d 完成"))
       for {
-        _ <- a
-        _ <- b
-        _ <- c
-      } yield 1,
-      Duration.Inf
-    )
+        _ <- a1
+        _ <- b1
+        _ <- c1
+        // _ <- d1
+      } yield 1
+    }
+
+    // Await.result(action2, Duration.Inf)
+
+    // Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
+
+    // Await.result(a.map(_ => println("任务 a 完成")), Duration.Inf)
+
+    Await.result(e.map(_ => println("任务 e 完成")), Duration.Inf)
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
