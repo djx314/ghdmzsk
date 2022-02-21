@@ -1914,5 +1914,4 @@ abstract trait SetsColAbs1 extends SetsColAbs {
   Tags.Tag1834.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 == 0) 0 else if (i1 % 2 == 0) i1 - 1 else i1)
   Tags.Tag1835.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 1 else if (i1 % 2 == 0) i1 else i1 + 1)
   Tags.Tag1836.firstart(0).secondStart(1).mapResult(Tags.Tag1801, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
-  Tags.Tag1837.firstart(0).secondStart(1).mapResult(Tags.Tag1813, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
 }
