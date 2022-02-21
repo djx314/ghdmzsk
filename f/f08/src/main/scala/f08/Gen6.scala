@@ -19,31 +19,24 @@ object Gen6 {
     def mapping(firstStart: Int, secondStart: Int) = {
       val noneMapping = SetsColMapping("Option.empty", "Option.empty", isOpt = true, (i1: Int, i2: Int) => Option.empty)
 
-      val l1_pre = for (a <- (-3 to 3).to(Vector)) yield SetsColMapping(s"Option($a)", s"$a", false, (i1: Int, i2: Int) => Option(a))
+      val l1_pre = for (a <- (0 to 7).to(Vector)) yield SetsColMapping(s"Option($a)", s"$a", false, (i1: Int, i2: Int) => Option(a))
 
       val l1   = noneMapping +: l1_pre
       val par1 = ParMapping((i1, i2) => i1 == firstStart && i2 == secondStart, l1, s"i1 == $firstStart && i2 == $secondStart")
 
       val l2_pre = for {
-        a <- (-2 to 2).to(Vector)
-        b <- (-3 to 3).to(Vector)
-      } yield SetsColMapping(s"Option($a * i2 + $b)", s"$a * i2 + $b", false, (i1: Int, i2: Int) => Option(a * i2 + b))
+        a <- (-3 to 3).to(Vector)
+        b <- (-7 to 7).to(Vector)
+        c <- (-3 to 3).to(Vector).filter(s => s != 0)
+      } yield SetsColMapping(s"Option(i2 * $a / $c + $b)", s"i2 * $a / $c + $b", false, (i1: Int, i2: Int) => Option(i2 * a / c + b))
 
       val l2   = noneMapping +: l2_pre
       val par2 = ParMapping((i1, i2) => i1 == firstStart, l2, s"i1 == $firstStart")
 
-      val l3_pre = for {
-        a <- (-2 to 2).to(Vector)
+      val l2_3_Pre = for {
+        a <- (-3 to 3).to(Vector)
         b <- (-3 to 3).to(Vector)
-      } yield SetsColMapping(s"Option($a * i1 + $b)", s"$a * i1 + $b", false, (i1: Int, i2: Int) => Option(a * i1 + b))
-
-      val l3   = noneMapping +: l3_pre
-      val par3 = ParMapping((i1, i2) => i2 == secondStart, l3, s"i2 == $secondStart")
-
-      val l4_pre = for {
-        a <- (-2 to 2).to(Vector)
-        b <- (-2 to 2).to(Vector)
-        c <- (-3 to 3).to(Vector)
+        c <- (-7 to 7).to(Vector)
       } yield SetsColMapping(
         s"Option($a * i1 + $b * i2 + $c)",
         s"$a * i1 + $b * i2 + $c",
@@ -51,12 +44,90 @@ object Gen6 {
         (i1: Int, i2: Int) => Option(a * i1 + b * i2 + c)
       )
 
-      val l4   = noneMapping +: l4_pre
-      val par4 = ParMapping((i1, i2) => i2 % i1 == 0, l4, "i2 % i1 == 0")
-      val par5 = ParMapping((i1, i2) => i2 % i1 > 0, l4, "i2 % i1 > 0")
-      // val par6 = ParMapping((i1, i2) => i1 > i2, l4, "i1 > i2")
+      val l2_2   = noneMapping +: l2_3_Pre
+      val par2_2 = ParMapping((i1, i2) => i1 == firstStart + 1, l2_2, s"i1 == ${firstStart + 1}")
 
-      Vector(par1, par2, par3, par4, par5)
+      val l3_pre = for {
+        a <- (-3 to 3).to(Vector)
+        b <- (-7 to 7).to(Vector)
+        c <- (-3 to 3).to(Vector).filter(s => s != 0)
+      } yield SetsColMapping(s"Option(i1 * $a / $c + $b)", s"i1 * $a / $c + $b", false, (i1: Int, i2: Int) => Option(i1 * a / c + b))
+
+      val l3   = noneMapping +: l3_pre
+      val par3 = ParMapping((i1, i2) => i2 == secondStart, l3, s"i2 == $secondStart")
+
+      val par3_2 = ParMapping((i1, i2) => i2 == secondStart + 1, l2_2, s"i2 == ${secondStart + 1}")
+
+      val l4_pre = for {
+        a <- (-3 to 3).to(Vector)
+        b <- (-3 to 3).to(Vector)
+        d <- (-3 to 3).to(Vector)
+        e <- (-3 to 3).to(Vector).filter(s => s != 0)
+        c <- (-7 to 7).to(Vector)
+      } yield Vector(
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + i2 / i1 * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + i2 / i1 * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + i2 / i1 * d / e + c)
+        ),
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + i1 / i2 * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + i1 / i2 * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + i1 / i2 * d / e + c)
+        ),
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + i1 * i2 * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + i1 * i2 * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + i1 * i2 * d / e + c)
+        ),
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + i1 /(i2 + 1) * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + i1 /(i2 + 1) * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + i1 / (i2 + 1) * d / e + c)
+        ),
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + (i1 + 1)/ i2 * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + (i1 + 1)/ i2 * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + (i1 + 1) / i2 * d / e + c)
+        ),
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + i2 /(i1 + 1) * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + i2 /(i1 + 1) * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + i2 / (i1 + 1) * d / e + c)
+        ),
+        SetsColMapping(
+          s"Option($a * i1 + $b * i2 + (i2 + 1)/ i1 * $d / $e + $c)",
+          s"$a * i1 + $b * i2 + (i2 + 1)/ i1 * $d / $e + $c",
+          false,
+          (i1: Int, i2: Int) => Option(a * i1 + b * i2 + (i2 + 1) / i1 * d / e + c)
+        )
+      )
+
+      /*val l4_pre_1 = for {
+        a <- (-3 to 3).to(Vector)
+        b <- (-3 to 3).to(Vector)
+        d <- (-3 to 3).to(Vector)
+        e <- (-3 to 3).to(Vector).filter(s => s != 0)
+        c <- (-7 to 7).to(Vector)
+      } yield SetsColMapping(
+        s"Option($a * i1 + $b * i2 + i1 * i2 * $d / $e + $c)",
+        s"$a * i1 + $b * i2 + i1 * i2 * $d / $e + $c",
+        false,
+        (i1: Int, i2: Int) => Option(a * i1 + b * i2 + i1 * i2 * d / e + c)
+      )*/
+
+      val l4   = noneMapping +: l4_pre.flatten
+      val par4 = ParMapping((i1, i2) => i2 % (i1 + 1) == 0, l4, "i2 % (i1 + 1) == 0")
+      val par5 = ParMapping((i1, i2) => i2 % (i1 + 1) > 0, l4, "i2 % (i1 + 1) > 0")
+      // val par6 = ParMapping((i1, i2) => i1 < i2, l4, "i1 < i2")
+
+      Vector(par1, /*par2, par2_2, par3, par3_2,*/ par4, par5 /*, par6*/ )
     }
 
     var count1 = 0
@@ -83,11 +154,19 @@ object Gen6 {
             i1 <- s.firstStart to 20
             i2 <- s.secondStart to 20
           } {
+
             val value         = parM(i1, i2)
             val findedMapping = sMapping.find(parMapping => parMapping.par(i1, i2)).get
             val mappingList   = findedMapping.mapping
-            val update        = mappingList.filter(eachMapping => eachMapping.mapping(i1, i2) == value)
+            val update = mappingList.filter(eachMapping =>
+              try { eachMapping.mapping(i1, i2) == value }
+              catch {
+                case e: Exception =>
+                  false
+              }
+            )
             findedMapping.mapping = update
+
           }
 
           val confirm = if (sMapping.map(t => t.mapping.headOption).forall(_.isDefined)) {
@@ -151,8 +230,8 @@ object Gen6 {
       .runCollect
 
     Runtime.default.unsafeRun(outerAction)
-    println("修改新的 notConfirm")
-    println(notConfirm.mkString("var notConfirm: Vector[Int] = Vector(", ",", ")"))
+    // println("修改新的 notConfirm")
+    // println(notConfirm.mkString("var notConfirm: Vector[Int] = Vector(", ",", ")"))
 
   }
 

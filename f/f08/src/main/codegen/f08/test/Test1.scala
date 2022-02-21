@@ -1,7 +1,7 @@
 package f08.test
 
 import f07._
-object Test {
+object Test1 {
   def main(arr: Array[String]): Unit = {
     for {
       i1 <- 0 to 20
@@ -12,8 +12,9 @@ object Test {
       val number2: Number1            = Fusion.number1vGen(i2, Number1B)
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
-      val r2                          = true
-      assert(true == r2)
+      val r2                          = if (i2 % (i1 + 1) == 0) i2 + 2 else i2 + 1
+      println(i1, i2, r1, r2)
+      assert(r1 == r2)
     }
     for {
       i1 <- 0 to 20

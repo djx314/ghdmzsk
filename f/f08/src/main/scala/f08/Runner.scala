@@ -185,7 +185,7 @@ object Runner {
 
     // Gen1.genSetsRunner()
 
-    Gen3.genRunner()
+    // Gen3.genRunner()
 
     def e = Future { blocking { Gen6.printlnSingleResult() } }
     def d = Future { blocking { Gen5.printlnSingleResult() } }
@@ -243,7 +243,7 @@ object Runner {
 
     // Await.result(a.map(_ => println("任务 a 完成")), Duration.Inf)
 
-    // Await.result(e.map(_ => println("任务 e 完成")), Duration.Inf)
+    Await.result(e.map(_ => println("任务 e 完成")), Duration.Inf)
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
