@@ -185,7 +185,7 @@ object Runner {
 
     // Gen1.genSetsRunner()
 
-     Gen3.genRunner()
+    Gen3.genRunner()
 
     def e = Future { blocking { Gen6.printlnSingleResult() } }
     def d = Future { blocking { Gen5.printlnSingleResult() } }
@@ -228,12 +228,12 @@ object Runner {
       val a1 = a.map(_ => println("任务 a 完成"))
       val b1 = b.map(_ => println("任务 b 完成"))
       val c1 = c.map(_ => println("任务 c 完成"))
-      val d1 = d.map(_ => println("任务 d 完成"))
+      // val d1 = d.map(_ => println("任务 d 完成"))
       for {
         _ <- a1
         _ <- b1
         _ <- c1
-        _ <- d1
+        // _ <- d1
       } yield 1
     }
 

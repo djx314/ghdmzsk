@@ -1679,5 +1679,5 @@ abstract trait SetsColAbs1 extends SetsColAbs {
   Tags.Tag1599.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 == 0) 1 * i2 + 0 else if (i2 == 0) 1 * i1 + 0 else if (i1 == i2) -2 * i1 + 2 * i2 + 0 else if (i1 < i2) -1 * i1 + 1 * i2 + 0 else 1 * i1 + -1 * i2 + 0)
   Tags.Tag1600.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 0 * i2 + 1 else if (i2 == 0) 1 * i1 + 0 else if (i1 == i2) 0 * i1 + 2 * i2 + 0 else if (i1 < i2) 2 * i1 + 0 * i2 + 0 else 1 * i1 + 1 * i2 + 0)
   Tags.Tag1601.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) 1 * i2 + 1 else if (i2 == 0) 1 * i1 + 0 else if (i1 == i2) 0 * i1 + 2 * i2 + 1 else if (i1 < i2) 1 * i1 + 1 * i2 + 1 else 1 * i1 + 1 * i2 + 0)
-
+  Tags.Tag1602.firstart(0).secondStart(0).value((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 == 1) i2 * 3 + 3 else i2 * 2 + i2 / i1 + 3)
 }

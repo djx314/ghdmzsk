@@ -52,11 +52,11 @@ object Gen6 {
       )
 
       val l4   = noneMapping +: l4_pre
-      val par4 = ParMapping((i1, i2) => i1 == i2, l4, "i1 == i2")
-      val par5 = ParMapping((i1, i2) => i1 < i2, l4, "i1 < i2")
-      val par6 = ParMapping((i1, i2) => i1 > i2, l4, "i1 > i2")
+      val par4 = ParMapping((i1, i2) => i2 % i1 == 0, l4, "i2 % i1 == 0")
+      val par5 = ParMapping((i1, i2) => i2 % i1 > 0, l4, "i2 % i1 > 0")
+      // val par6 = ParMapping((i1, i2) => i1 > i2, l4, "i1 > i2")
 
-      Vector(par1, par2, par3, par4, par5, par6)
+      Vector(par1, par2, par3, par4, par5)
     }
 
     var count1 = 0
