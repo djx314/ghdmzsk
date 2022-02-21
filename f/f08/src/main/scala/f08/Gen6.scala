@@ -123,11 +123,12 @@ object Gen6 {
       )*/
 
       val l4   = noneMapping +: l4_pre.flatten
-      val par4 = ParMapping((i1, i2) => i2 % i1 == 0, l4, "i2 % i1 == 0")
-      val par5 = ParMapping((i1, i2) => i2 % i1 > 0, l4, "i2 % i1 > 0")
-      // val par6 = ParMapping((i1, i2) => i1 < i2, l4, "i1 < i2")
+      val par4 = ParMapping((i1, i2) => i1 > i2 && i1 % i2 == 0, l4, "i1 > i2 && i1 % i2 == 0")
+      val par5 = ParMapping((i1, i2) => i1 > i2 && i1 % i2 > 0, l4, "i1 > i2 && i1 % i2 > 0")
+      val par6 = ParMapping((i1, i2) => i1 - i2 == 2, l4, "i1 - i2 == 2")
+      val par7 = ParMapping((i1, i2) => true, l4, "i1 - i2 == 2")
 
-      Vector(par1, /*par2, par2_2, par3, par3_2,*/ par2, par4, par5 /*, par6*/ )
+      Vector(par1, /*par2, par2_2, par3, par3_2,*/ par2, par3, par6, par4, par5, par7 /*, par6*/ )
     }
 
     var count1 = 0

@@ -84,7 +84,13 @@ object Runner {
       ((i1, i2) => (i2 + 1, i1 + 1), "(i1: Int, i2: Int) => (i2 + 1, i1 + 1)", "i1 = i2 + 1, i2 = i1 + 1"),
       ((i1, i2) => (i1 + i2, i2), "(i1: Int, i2: Int) => (i1 + i2, i2)", "i1 = i1 + i2, i2 = i2"),
       ((i1, i2) => (i1, i1 + i2), "(i1: Int, i2: Int) => (i1, i1 + i2)", "i1 = i1, i2 = i1 + i2"),
-      ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2")
+      ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2"),
+      ((i1, i2) => (i1 * 2, i2), "(i1: Int, i2: Int) => (i1 * 2, i2)", "i1 = i1 * 2, i2"),
+      ((i1, i2) => (i1, i2 * 2), "(i1: Int, i2: Int) => (i1, i2 * 2)", "i1 = i1, i2 = i2 * 2"),
+      ((i1, i2) => (i1 * 2, i2 * 2), "(i1: Int, i2: Int) => (i1 * 2, i2 * 2)", "i1 = i1 * 2, i2 = i2 * 2"),
+      ((i1, i2) => (i2 * 2, i1), "(i1: Int, i2: Int) => (i2 * 2, i1)", "i1 = i2 * 2, i1"),
+      ((i1, i2) => (i2, i1 * 2), "(i1: Int, i2: Int) => (i2, i1 * 2)", "i1 = i2, i2 = i1 * 2"),
+      ((i1, i2) => (i2 * 2, i1 * 2), "(i1: Int, i2: Int) => (i2 * 2, i1 * 2)", "i1 = i2 * 2, i2 = i1 * 2")
     )
 
     val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
@@ -185,7 +191,7 @@ object Runner {
 
     // Gen1.genSetsRunner()
 
-    // Gen3.genRunner()
+    Gen3.genRunner()
 
     def e = Future { blocking { Gen6.printlnSingleResult() } }
     def d = Future { blocking { Gen5.printlnSingleResult() } }
@@ -237,13 +243,13 @@ object Runner {
       } yield 1
     }
 
-    // Await.result(action2, Duration.Inf)
+    Await.result(action2, Duration.Inf)
 
     // Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
 
     // Await.result(a.map(_ => println("任务 a 完成")), Duration.Inf)
 
-    Await.result(e.map(_ => println("任务 e 完成")), Duration.Inf)
+    // Await.result(e.map(_ => println("任务 e 完成")), Duration.Inf)
 
     /*println(
       s"出现次数：加减法：(007, 030, 119) - (002, 226) == (${countTag(Tags.Tag007)}, ${countTag(Tags.Tag030)}, ${countTag(
