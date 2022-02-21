@@ -84,7 +84,13 @@ object Runner {
       ((i1, i2) => (i2 + 1, i1 + 1), "(i1: Int, i2: Int) => (i2 + 1, i1 + 1)", "i1 = i2 + 1, i2 = i1 + 1"),
       ((i1, i2) => (i1 + i2, i2), "(i1: Int, i2: Int) => (i1 + i2, i2)", "i1 = i1 + i2, i2 = i2"),
       ((i1, i2) => (i1, i1 + i2), "(i1: Int, i2: Int) => (i1, i1 + i2)", "i1 = i1, i2 = i1 + i2"),
-      ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2")
+      ((i1, i2) => (i1 + i2, i1 + i2), "(i1: Int, i2: Int) => (i1 + i2, i1 + i2)", "i1 = i1 + i2, i2 = i1 + i2"),
+      ((i1, i2) => (i1 * 2, i2), "(i1: Int, i2: Int) => (i1 * 2, i2)", "i1 = i1 * 2, i2"),
+      ((i1, i2) => (i1, i2 * 2), "(i1: Int, i2: Int) => (i1, i2 * 2)", "i1 = i1, i2 = i2 * 2"),
+      ((i1, i2) => (i1 * 2, i2 * 2), "(i1: Int, i2: Int) => (i1 * 2, i2 * 2)", "i1 = i1 * 2, i2 = i2 * 2"),
+      ((i1, i2) => (i2 * 2, i1), "(i1: Int, i2: Int) => (i2 * 2, i1)", "i1 = i2 * 2, i1"),
+      ((i1, i2) => (i2, i1 * 2), "(i1: Int, i2: Int) => (i2, i1 * 2)", "i1 = i2, i2 = i1 * 2"),
+      ((i1, i2) => (i2 * 2, i1 * 2), "(i1: Int, i2: Int) => (i2 * 2, i1 * 2)", "i1 = i2 * 2, i2 = i1 * 2")
     )
 
     val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {

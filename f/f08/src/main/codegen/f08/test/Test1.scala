@@ -1,19 +1,18 @@
 package f08.test
 
 import f07._
-object Test {
+object Test1 {
   def main(arr: Array[String]): Unit = {
+    var i = 0
     for {
-      i1 <- 0 to 20
-      i2 <- 0 to 20
+      i1 <- 0 to 500
+      i2 <- 0 to 500
     } yield {
       val number1                     = Fusion.number1uGen(i1, Fusion.number1d)
       lazy val number2: Number1       = Number1U(() => inner_number2)
       lazy val inner_number2: Number1 = Fusion.number1fGen(i2, number2)
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
-      val r2                          = true
-      assert(true == r2)
     }
     for {
       i1 <- 0 to 20
@@ -25,7 +24,7 @@ object Test {
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
       val r2                          = true
-      assert(true == r2)
+      // assert(true == r2)
     }
     for {
       i1 <- 0 to 20
@@ -121,6 +120,7 @@ object Test {
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
       val r2                          = true
+      println(i1, i2, r1)
       assert(true == r2)
     }
     for {
