@@ -22,6 +22,8 @@ object Counter {
       case Some(Number1D(tail)) => count(tail) + 1
       case Some(Number1E(tail)) => count(tail) + 1
       case Some(Number1F(tail)) => count(tail) + 1
+      case Some(Number1G(tail)) => count(tail) + 1
+      case Some(Number1H(tail)) => count(tail) + 1
       case None                 => 0
     }
   }
