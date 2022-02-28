@@ -56,10 +56,8 @@ object Counter {
     }
   }
 
-  def countOpt(number2: () => Number1): Option[Int] = {
-    try Option(count(number2)).filter(_ < 500)
-    catch {
-      case _: StackOverflowError => Option.empty
-    }
+  def countOpt(number2: () => Number1): Option[Int] = try Option(count(number2)).filter(_ < 500)
+  catch {
+    case _: StackOverflowError => Option.empty
   }
 }
