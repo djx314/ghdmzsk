@@ -26,7 +26,8 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
       plan <- CountPlan
       set  <- CountSet if plan.counterResultId === set.id
     } yield (plan, set)
-    val planAndSet = db.run(getIdAction.result)
+    val planAndSet  = db.stream(getIdAction.result, bufferNext = false)
+    val planAndSet1 = db.run(getIdAction.map(_._2).distinctOn(_.id).result)
 
     def printlnSet(set: Seq[CountSetRow]): CTask[Unit] = {
       val str1 = set.map(s =>
@@ -47,7 +48,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
       } yield s
     }
 
-    def printlnPlan(plans: Seq[CountPlanRow], index: Int): CTask[Unit] = {
+    def printlnPlan(plans: Seq[CountPlanRow], index: Long): CTask[Unit] = {
       val str1 = plans.map(p =>
         s"val plan${p.id} = CountPlan(index = ${p.id}, firstOuterName = \"${p.firstOuterName}\", firstOuterType = \"${p.firstOuterType}\", firstInnerName = \"${p.firstInnerName}\", firstInnerType = \"${p.firstInnerType}\", firstStart = ${p.firstStart}, secondOuterName = \"${p.secondOuterName}\", secondOuterType = \"${p.secondOuterType}\", secondInnerName = \"${p.secondInnerName}\", secondInnerType = \"${p.secondInnerType}\", secondStart = ${p.secondStart}, set = CountSetsImpl.b.countSet${p.counterResultId
           .getOrElse("未有值")})"
@@ -66,7 +67,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
       } yield s
     }
 
-    def printlnPlan1(indexSeq: List[Int]): CTask[Unit] = {
+    def printlnPlan1(indexSeq: List[Long]): CTask[Unit] = {
       val path   = Paths.get("..", "f07", "src", "main", "codegen", "f07")
       val str1   = "package f07"
       val str1_1 = "import f07.codegen.impl._"
@@ -93,7 +94,25 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
       ZIO.collectAllPar(action).unit
     }
 
+    val exec1 = for {
+      countSetRow <- planAndSet1
+      l           <- ZIO.effect(countSetRow.to(List))
+      t           <- printlnSet(l)
+    } yield t
+
+    val exec2 = planAndSet.map(_._1).grouped(100).zipWithIndex.mapM(s => printlnPlan(s._1, s._2)).runDrain
+    val exec3 = for {
+      m <- planAndSet.grouped(100).zipWithIndex.map(_._2).runCollect.map(_.to(List))
+      t <- printlnPlan1(m)
+    } yield t
+
     for {
+      _ <- exec1
+      _ <- exec2
+      t <- exec3
+    } yield t
+
+    /*for {
       row <- planAndSet
       (plans, sets) = row.unzip
       s <- printlnSet(sets.distinctBy(_.countSet))
@@ -102,7 +121,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
       actions      = zipCol.map(s => printlnPlan(s._1, s._2))
       r <- ZIO.collectAllPar(actions.to(List))
       t <- printlnPlan1(zipCol.map(_._2).to(List))
-    } yield t
+    } yield t*/
   }
 
 }
