@@ -1,5 +1,0 @@
-package f07
-import f07.codegen.impl._
-object CountPlanSums35 {
-  val sum: List[CountPlan] = ((CountPlans1750.sum:::CountPlans1751.sum:::CountPlans1752.sum:::CountPlans1753.sum:::CountPlans1754.sum:::CountPlans1755.sum:::CountPlans1756.sum:::CountPlans1757.sum:::CountPlans1758.sum:::CountPlans1759.sum:::CountPlans1760.sum:::CountPlans1761.sum:::CountPlans1762.sum:::CountPlans1763.sum:::CountPlans1764.sum:::CountPlans1765.sum:::CountPlans1766.sum:::CountPlans1767.sum:::CountPlans1768.sum:::CountPlans1769.sum) ::: (CountPlans1770.sum:::CountPlans1771.sum:::CountPlans1772.sum:::CountPlans1773.sum:::CountPlans1774.sum:::CountPlans1775.sum:::CountPlans1776.sum:::CountPlans1777.sum:::CountPlans1778.sum:::CountPlans1779.sum:::CountPlans1780.sum:::CountPlans1781.sum:::CountPlans1782.sum:::CountPlans1783.sum:::CountPlans1784.sum:::CountPlans1785.sum:::CountPlans1786.sum:::CountPlans1787.sum:::CountPlans1788.sum:::CountPlans1789.sum) ::: (CountPlans1790.sum:::CountPlans1791.sum:::CountPlans1792.sum:::CountPlans1793.sum:::CountPlans1794.sum:::CountPlans1795.sum:::CountPlans1796.sum:::CountPlans1797.sum:::CountPlans1798.sum:::CountPlans1799.sum))
-}

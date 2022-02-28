@@ -191,7 +191,7 @@ object Runner {
 
     // Gen1.genSetsRunner()
 
-    Gen3.genRunner()
+    // Gen3.genRunner()
 
     def e = Future { blocking { Gen6.printlnSingleResult() } }
     def d = Future { blocking { Gen5.printlnSingleResult() } }
@@ -243,7 +243,7 @@ object Runner {
       } yield 1
     }
 
-    Await.result(action2, Duration.Inf)
+    // Await.result(action2, Duration.Inf)
 
     // Await.result(d.map(_ => println("任务 d 完成")), Duration.Inf)
 

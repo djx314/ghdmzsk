@@ -65,6 +65,7 @@ lazy val f06 = crossProject(JSPlatform, JVMPlatform)
   )
 val f07 = project in fRoot / "f07"
 val f08 = project in fRoot / "f08"
+val f09 = project in fRoot / "f09"
 
 val f_codegen_path = fRoot / "f_codegen"
 val f_codegen      = project in f_codegen_path

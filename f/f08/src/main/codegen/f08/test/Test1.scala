@@ -3,16 +3,26 @@ package f08.test
 import f07._
 object Test1 {
   def main(arr: Array[String]): Unit = {
-    var i = 0
     for {
-      i1 <- 0 to 500
-      i2 <- 0 to 500
+      i1 <- 0 to 20
+      i2 <- 0 to 20
     } yield {
+      case class NumberU(tail: () => Number1) extends Number1 {
+        override def method1(number1: Number1): Number1 = Number1S(() => number1.method1(tail()))
+      }
+      case class NumberD(tail: () => Number1) extends Number1 {
+        override def method1(number1: Number1): Number1 = Number1S(() => Number1X)
+      }
+      case class NumberF(tail: () => Number1) extends Number1 {
+        override def method1(number1: Number1): Number1 = number1.method1(Number1S(() => tail()))
+      }
       val number1                     = Fusion.number1uGen(i1, Fusion.number1d)
       lazy val number2: Number1       = Number1U(() => inner_number2)
       lazy val inner_number2: Number1 = Fusion.number1fGen(i2, number2)
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
+      val r2                          = true
+      assert(true == r2)
     }
     for {
       i1 <- 0 to 20
@@ -24,7 +34,7 @@ object Test1 {
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
       val r2                          = true
-      // assert(true == r2)
+      assert(true == r2)
     }
     for {
       i1 <- 0 to 20
@@ -120,7 +130,6 @@ object Test1 {
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
       val r2                          = true
-      println(i1, i2, r1)
       assert(true == r2)
     }
     for {
@@ -130,56 +139,6 @@ object Test1 {
       val number1                     = Fusion.number1uGen(i1, Fusion.number1d)
       lazy val number2: Number1       = Fusion.number1fGen(i2, inner_number2)
       lazy val inner_number2: Number1 = Fusion.number1vGen(i2, number2)
-      def count                       = number1.method1(number2)
-      def r1                          = Counter.count(() => count)
-      val r2                          = true
-      assert(true == r2)
-    }
-    for {
-      i1 <- 0 to 20
-      i2 <- 0 to 20
-    } yield {
-      lazy val number1: Number1       = Fusion.number1uGen(i1, inner_number1)
-      lazy val inner_number1: Number1 = Number1F(() => number1)
-      val number2                     = Fusion.number1uGen(i2, Fusion.number1t)
-      def count                       = number1.method1(number2)
-      def r1                          = Counter.count(() => count)
-      val r2                          = true
-      assert(true == r2)
-    }
-    for {
-      i1 <- 0 to 20
-      i2 <- 1 to 20
-    } yield {
-      lazy val number1: Number1       = Fusion.number1uGen(i1, inner_number1)
-      lazy val inner_number1: Number1 = Number1F(() => number1)
-      lazy val number2: Number1       = Fusion.number1uGen(i2, inner_number2)
-      lazy val inner_number2: Number1 = Fusion.number1zGen(i2, number2)
-      def count                       = number1.method1(number2)
-      def r1                          = Counter.count(() => count)
-      val r2                          = true
-      assert(true == r2)
-    }
-    for {
-      i1 <- 0 to 20
-      i2 <- 0 to 20
-    } yield {
-      lazy val number1: Number1       = Fusion.number1fGen(i1, inner_number1)
-      lazy val inner_number1: Number1 = Number1U(() => number1)
-      val number2                     = Fusion.number1uGen(i2, Fusion.number1t)
-      def count                       = number1.method1(number2)
-      def r1                          = Counter.count(() => count)
-      val r2                          = true
-      assert(true == r2)
-    }
-    for {
-      i1 <- 0 to 20
-      i2 <- 1 to 20
-    } yield {
-      lazy val number1: Number1       = Fusion.number1fGen(i1, inner_number1)
-      lazy val inner_number1: Number1 = Number1U(() => number1)
-      lazy val number2: Number1       = Fusion.number1uGen(i2, inner_number2)
-      lazy val inner_number2: Number1 = Fusion.number1zGen(i2, number2)
       def count                       = number1.method1(number2)
       def r1                          = Counter.count(() => count)
       val r2                          = true
