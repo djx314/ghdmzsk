@@ -7,6 +7,6 @@ case class PlanCountReview(
   countPlanAllCount: Int,
   finishedCountCount: Int,
   waitForCountCount: Int,
-  countSetCount: Int,
-  reSortedCountSet: Int
+  countSetCount: Int
+  // reSortedCountSet: Int
 )
