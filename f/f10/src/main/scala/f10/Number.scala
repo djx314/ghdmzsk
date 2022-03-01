@@ -26,33 +26,61 @@ object Number {
 
 }
 
-case class MNumber(t: () => MNumber, tag: List[Int] = List.empty) extends Number {
-  self =>
-  override def tail: MNumber = t()
+abstract class MNumber() extends Number {
+  val tag: List[Int]
+  override def tail: MNumber
+  def next(MNumber: => MNumber): MNumber = MNumber.tail
+  def end(number: => Number): Number     = number
+  def method(m: MNumber): Number
+}
 
-  def method(MNumber: MNumber): Number       = pair(tail, MNumber)
-  def pair(m1: MNumber, m2: MNumber): Number = m1.method(m2)
+case class MNumberS(t: () => MNumber) extends MNumber {
+  override val tag: List[Int]             = List(1)
+  override def tail: MNumber              = t()
+  override def method(m: MNumber): Number = end(next(this).method(m))
+}
+
+case class MNumberT(t: () => MNumber) extends MNumber {
+  override val tag: List[Int]             = List(2)
+  override def tail: MNumber              = t()
+  override def method(m: MNumber): Number = end(m.method(next(this)))
 }
 
 object MNumber {
 
-  implicit class MNumberExtra(val m: MNumber) extends AnyVal {
-    def takeTail: MNumber = new MNumber(m.t, 1 :: m.tag) {
-      override def tail: MNumber                          = m.tail.tail
-      override def pair(m1: MNumber, m2: MNumber): Number = m.pair(m1, m2)
+  implicit class MNumberSExtra(val m: MNumberS) extends AnyVal {
+    def takeTail: MNumberS = new MNumberS(m.t) {
+      override val tag: List[Int]                     = m.tag
+      override def next(MNumber: => MNumber): MNumber = super.next(m.next(MNumber))
+      override def end(number: => Number): Number     = m.end(number)
     }
-    def resultPre: MNumber = new MNumber(m.t, 2 :: m.tag) {
-      override def pair(m1: MNumber, m2: MNumber): Number = new Number {
-        override def tail: Number = m.pair(m1, m2)
+    def resultPre: MNumberS = new MNumberS(m.t) {
+      override val tag: List[Int]                     = 3 :: m.tag
+      override def next(MNumber: => MNumber): MNumber = m.next(MNumber)
+      override def end(number: => Number): Number = new Number {
+        override def tail: Number = number
       }
     }
-    def reverse: MNumber = new MNumber(m.t, 3 :: m.tag) {
-      override def pair(m1: MNumber, m2: MNumber): Number = m.pair(m2, m1)
+  }
+
+  implicit class MNumberTExtra(val m: MNumberT) extends AnyVal {
+    def takeTail: MNumberT = new MNumberT(m.t) {
+      override val tag: List[Int]                     = m.tag
+      override def next(MNumber: => MNumber): MNumber = super.next(m.next(MNumber))
+      override def end(number: => Number): Number     = m.end(number)
+    }
+    def resultPre: MNumberT = new MNumberT(m.t) {
+      override val tag: List[Int]                     = 3 :: m.tag
+      override def next(MNumber: => MNumber): MNumber = m.next(MNumber)
+      override def end(number: => Number): Number = new Number {
+        override def tail: Number = number
+      }
     }
   }
 
   def countImpl(m: () => MNumber): Int = {
-    var init: List[Int] = null
+    var init: List[Int] = List.empty
+
     def c(m1: () => MNumber): Int = {
       val num =
         try {
@@ -62,13 +90,13 @@ object MNumber {
         }
       num match {
         case Some(s) =>
-          val dTag = s.tag.distinct
-          if (init == null) {
+          val dTag = s.tag
+          if (init == List.empty) {
             init = dTag
             c(() => s.tail) + 1
-          } else if (init == dTag)
+          } else if (init == dTag) {
             c(() => s.tail) + 1
-          else 0
+          } else 0
         case None => 0
       }
     }
