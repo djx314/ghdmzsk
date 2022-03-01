@@ -20,6 +20,6 @@ trait NumberEndpointPre {
   protected val countCountPlanPre =
     root.in("countCountPlan").post.out(jsonBody[ResultSet[PlanCountReview]]).errorOut(jsonBody[ResultSet[Unit]])
 
-  protected val reSortCountPre = root.in("reSortCount").post.out(jsonBody[ResultSet[Unit]]).errorOut(jsonBody[ResultSet[Unit]])
+  // protected val reSortCountPre = root.in("reSortCount").post.out(jsonBody[ResultSet[Unit]]).errorOut(jsonBody[ResultSet[Unit]])
 
 }

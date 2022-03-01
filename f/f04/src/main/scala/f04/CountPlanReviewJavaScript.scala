@@ -41,7 +41,7 @@ object CountPlanReviewJavaScript {
         finishedCountCount.innerText = s"${planCountReview.finishedCountCount}条"
         waitForCountCount.innerText = s"${planCountReview.waitForCountCount}条"
         countSetCount.innerText = s"${planCountReview.countSetCount}条"
-        reSortedCountSet.innerText = s"${planCountReview.reSortedCountSet}条"
+        reSortedCountSet.innerText = "已取消统计" // s"${planCountReview.reSortedCountSet}条"
       }
 
       button.addEventListener(
