@@ -23,6 +23,7 @@ object Number {
   catch {
     case _: StackOverflowError => Option.empty
   }
+
 }
 
 case class MNumber(t: () => MNumber, tag: List[Int] = List.empty) extends Number {
@@ -36,7 +37,7 @@ case class MNumber(t: () => MNumber, tag: List[Int] = List.empty) extends Number
 object MNumber {
 
   implicit class MNumberExtra(val m: MNumber) extends AnyVal {
-    def takeTail: MNumber = new MNumber(m.t, 1 :: m.tag) {
+    def takeTail: MNumber = new MNumber(m.t().t, 1 :: m.tag) {
       override def pair(m1: MNumber, m2: MNumber): Number = m.pair(m1.tail, m2)
     }
     def resultPre: MNumber = new MNumber(m.t, 2 :: m.tag) {
