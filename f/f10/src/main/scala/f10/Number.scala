@@ -5,7 +5,6 @@ trait Number {
 }
 
 object Number {
-  def zero: Number = zero
 
   def count(number: () => Number): Int = {
     val num =
@@ -22,40 +21,61 @@ object Number {
 
   def countOpt(number: () => Number): Option[Int] = try Option(count(number)).filter(_ < 1024)
   catch {
-    case _: Exception => Option.empty
+    case _: StackOverflowError => Option.empty
   }
 }
 
-abstract class MNumber(t: () => MNumber) extends Number {
+case class MNumber(t: () => MNumber, tag: List[Int] = List.empty) extends Number {
   self =>
-  override def tail: MNumber               = t()
-  def current(number: => MNumber): MNumber = number
-  def result(number: => Number): Number    = number
+  override def tail: MNumber = t()
 
-  def currentTail: MNumber = new MNumber(t) {
-    override def tail: MNumber                        = self.tail
-    override def current(number: => MNumber): MNumber = self.current(number.tail)
-    override def result(number: => Number): Number    = self.result(number)
-    override def method(MNumber: MNumber): Number     = self.method(MNumber)
-  }
-  def resultPre: MNumber = new MNumber(t) {
-    override def tail: MNumber                        = self.tail
-    override def current(number: => MNumber): MNumber = self.current(number)
-    override def result(number: => Number): Number = new Number {
-      override def tail: Number = self.result(number)
+  def method(MNumber: MNumber): Number       = pair(tail, MNumber)
+  def pair(m1: MNumber, m2: MNumber): Number = m1.method(m2)
+}
+
+object MNumber {
+
+  implicit class MNumberExtra(val m: MNumber) extends AnyVal {
+    def takeTail: MNumber = new MNumber(m.t, 1 :: m.tag) {
+      override def pair(m1: MNumber, m2: MNumber): Number = m.pair(m1.tail, m2)
     }
-    override def method(MNumber: MNumber): Number = self.method(MNumber)
+    def resultPre: MNumber = new MNumber(m.t, 2 :: m.tag) {
+      override def pair(m1: MNumber, m2: MNumber): Number = new Number {
+        override def tail: Number = m.pair(m1, m2)
+      }
+    }
+    def reverse: MNumber = new MNumber(m.t, 3 :: m.tag) {
+      override def pair(m1: MNumber, m2: MNumber): Number = m.pair(m2, m1)
+    }
   }
 
-  def method(MNumber: MNumber): Number
-}
+  def countImpl(m: () => MNumber): Int = {
+    var init: List[Int] = null
+    def c(m1: () => MNumber): Int = {
+      val num =
+        try {
+          Option(m1())
+        } catch {
+          case _: Exception => Option.empty
+        }
+      num match {
+        case Some(s) =>
+          val dTag = s.tag.distinct
+          if (init == null) {
+            init = dTag
+            c(() => s.tail) + 1
+          } else if (init == dTag)
+            c(() => s.tail) + 1
+          else 0
+        case None => 0
+      }
+    }
+    c(m)
+  }
 
-case class MNumberS(t: () => MNumber) extends MNumber(t) {
-  def method(MNumber: MNumber): Number = result(current(tail).method(MNumber))
-}
-case class MNumberT(t: () => MNumber) extends MNumber(t) {
-  def method(MNumber: MNumber): Number = result(MNumber.method(current(tail)))
-}
-case class MNumberU(t: () => MNumber) extends MNumber(t) {
-  def method(MNumber: MNumber): Number = result(Number.zero)
+  def count(m: () => MNumber): Int = try countImpl(m)
+  catch {
+    case _: StackOverflowError => 0
+  }
+
 }
