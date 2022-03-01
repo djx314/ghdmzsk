@@ -4,7 +4,7 @@ object Runner {
 
   def main(arr: Array[String]): Unit = {
     {
-      val exec = false
+      val exec = true
       if (exec) {
         def number1Gen(n: Int, zero: => MNumber): MNumber = if (n > 0) MNumber(() => number1Gen(n - 1, zero)).resultPre else zero
         def number2Gen(n: Int, zero: => MNumber): MNumber = if (n > 0) MNumber(() => number2Gen(n - 1, zero)).resultPre else zero
@@ -27,7 +27,7 @@ object Runner {
     }
 
     {
-      val exec = false
+      val exec = true
       if (exec) {
         def number1Gen(n: Int, zero: => MNumber): MNumber = if (n > 0) MNumber(() => number1Gen(n - 1, zero)).reverse else zero
         def number2Gen(n: Int, zero: => MNumber): MNumber = if (n > 0) MNumber(() => number2Gen(n - 1, zero)).reverse else zero
