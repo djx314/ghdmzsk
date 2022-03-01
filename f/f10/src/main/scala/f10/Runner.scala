@@ -140,7 +140,7 @@ object Runner {
           if (n > 0) tran(MNumberT(() => number2Gen(n - 1, { s => tran(s.takeTail) }, zero))) else zero
 
         for {
-          i1 <- 2 to 8
+          i1 <- 1 to 8
           i2 <- 0 to 560
         } yield {
           lazy val number1: MNumber      = number1Gen(i1, MNumber1Zero)
