@@ -29,7 +29,7 @@ object Number {
 abstract class MNumber() extends Number {
   val tag: List[Int]
   override def tail: MNumber
-  def next(MNumber: => MNumber): MNumber = MNumber.tail
+  def next(MNumber: => MNumber): MNumber = MNumber
   def end(number: => Number): Number     = number
   def method(m: MNumber): Number
 }
@@ -51,7 +51,7 @@ object MNumber {
   implicit class MNumberSExtra(val m: MNumberS) extends AnyVal {
     def takeTail: MNumberS = new MNumberS(m.t) {
       override val tag: List[Int]                     = m.tag
-      override def next(MNumber: => MNumber): MNumber = super.next(m.next(MNumber))
+      override def next(MNumber: => MNumber): MNumber = m.next(MNumber.tail)
       override def end(number: => Number): Number     = m.end(number)
     }
     def resultPre: MNumberS = new MNumberS(m.t) {
@@ -66,7 +66,7 @@ object MNumber {
   implicit class MNumberTExtra(val m: MNumberT) extends AnyVal {
     def takeTail: MNumberT = new MNumberT(m.t) {
       override val tag: List[Int]                     = m.tag
-      override def next(MNumber: => MNumber): MNumber = super.next(m.next(MNumber))
+      override def next(MNumber: => MNumber): MNumber = m.next(MNumber.tail)
       override def end(number: => Number): Number     = m.end(number)
     }
     def resultPre: MNumberT = new MNumberT(m.t) {
