@@ -1,4 +1,4 @@
-package f11
+package f11.step1
 
 trait Number1 {
   def length: Number3
