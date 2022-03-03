@@ -10,16 +10,6 @@ case object Number1U extends Number1 {
   def length: Number3 = Number3T
 }
 
-/*trait Number2 {
-  def method2(number1: Number1): Number3
-}
-case class Number2S(tail: Number2) extends Number2 {
-  override def method2(number1: Number1): Number3 = number1.method1(tail)
-}
-case class Number2T(tail: () => Number2) extends Number2 {
-  def method2(number1: Number1): Number3 = Number3S(() => tail().method2(number1))
-}*/
-
 trait Number3 {
   def length: Int
 }
