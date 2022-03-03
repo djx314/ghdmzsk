@@ -14,19 +14,19 @@ trait Number2 {
   def method2(number1: Number1): Number3
 }
 case class Number2S(current: Int, round: Int, step: Int, tail: Int => Number2) extends Number2 {
-  def method2(number1: Number1): Number3 = if (current > 0)
-    number1.method1(Number2S(current - 1, round, step, r => tail(r + step)))
+  def method2(number1: Number1): Number3 = if (current - 1 > 0)
+    number1.method1(Number2S(current - 1, round + step, step, tail))
   else number1.method1(tail(round + step))
 }
-case class Number2T(round: Int, tail: Int => Number2) extends Number2 {
-  def method2(number1: Number1): Number3 = Number3S(() => tail(round).method2(number1))
+case class Number2T(tail: () => Number2) extends Number2 {
+  def method2(number1: Number1): Number3 = Number3S(tail().method2(number1))
 }
 
 trait Number3 {
   def length: Int
 }
-case class Number3S(tail: () => Number3) extends Number3 {
-  def length: Int = tail().length + 1
+case class Number3S(tail: Number3) extends Number3 {
+  def length: Int = tail.length + 1
 }
 case object Number3T extends Number3 {
   def length: Int = 0

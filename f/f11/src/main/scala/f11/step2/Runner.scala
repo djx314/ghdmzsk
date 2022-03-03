@@ -13,8 +13,8 @@ object Runner {
       i2 <- 1 to 120
     } {
       val number1                             = number1Gen(i2, Number1T)
-      lazy val number2Gen: Int => Number2     = round => Number2S(round - 1, round, i1 - 1, number2ZeroGen)
-      lazy val number2ZeroGen: Int => Number2 = round => Number2T(round, number2Gen)
+      lazy val number2Gen: Int => Number2     = round => Number2S(round, round, i1 - 1, number2ZeroGen)
+      lazy val number2ZeroGen: Int => Number2 = round => Number2T(() => number2Gen(round))
       val number2                             = number2Gen(i1 - 1)
 
       println(i1, i2, number1.method1(number2).length, log(i1, i2))
