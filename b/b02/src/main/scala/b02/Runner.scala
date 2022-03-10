@@ -1,5 +1,7 @@
 package b02
 
+import a01._
+
 object Runner {
 
   def genNumber1(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(genNumber1(n - 1, zero)) else zero

@@ -2,6 +2,8 @@ package b04
 
 import scala.util.{Failure, Success}
 
+import a01._
+
 object Runner {
 
   def number1Gen(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(number1Gen(n - 1, zero)) else zero
