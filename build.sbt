@@ -2,7 +2,7 @@ Settings.settings
 
 val rootFile = file(".")
 val aRoot    = rootFile / "a"
-val a1Root    = rootFile / "a1"
+val a1Root   = rootFile / "a1"
 val bRoot    = rootFile / "b"
 val cRoot    = rootFile / "c"
 val dRoot    = rootFile / "d"
@@ -13,12 +13,12 @@ val hRoot    = rootFile / "h"
 val iRoot    = rootFile / "i"
 val jRoot    = rootFile / "j"
 
-
-val a01    = project in aRoot / "a01"
-val a02    = (project in aRoot / "a02").dependsOn(a01)
-val a03    = (project in aRoot / "a03").dependsOn(a01)
-val a04    = (project in aRoot / "a04").dependsOn(a01)
-val a05    = (project in aRoot / "a05").dependsOn(a01)
+val a01 = project in aRoot / "a01"
+val a02 = (project in aRoot / "a02").dependsOn(a01)
+val a03 = (project in aRoot / "a03").dependsOn(a01)
+val a04 = (project in aRoot / "a04").dependsOn(a01)
+val a05 = (project in aRoot / "a05").dependsOn(a01)
+val a06 = project in aRoot / "a06"
 
 val a101_01 = project in a1Root / "a01-01"
 

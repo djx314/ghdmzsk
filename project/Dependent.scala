@@ -13,16 +13,16 @@ object Dependent {
     // val http4s         = "0.23.7"
     val kindProjector = "0.13.2"
     // val macwire        = "2.5.3"
-    val slf4j          = "2.0.0-alpha6"
-    val scalaTags      = "0.11.0"
-    val scalajsJQuery  = "3.2.0"
-    val scalajsDom     = "2.1.0"
-    val jqueryJSSource = "3.6.0"
-    val slick          = "3.4.0-M1"
-    val circe          = "0.15.0-M1"
-    val scalajsStubs   = "1.1.0"
-    val zhttp          = "1.0.0.0-RC21"
-    val mysql          = "8.0.26"
+    val slf4j                     = "2.0.0-alpha6"
+    val scalaTags                 = "0.11.0"
+    val scalajsJQuery             = "3.2.0"
+    val scalajsDom                = "2.1.0"
+    val jqueryJSSource            = "3.6.0"
+    val slick                     = "3.4.0-M1"
+    val circe                     = "0.15.0-M1"
+    val scalajsStubs              = "1.1.0"
+    val zhttp                     = "1.0.0.0-RC21"
+    val mysql                     = "8.0.26"
     val zioInteropReactivestreams = "1.3.9"
   }
 
@@ -91,6 +91,6 @@ object Dependent {
 
   val zhttp = Seq("io.d11" %% "zhttp" % versions.zhttp, "io.d11" %% "zhttp-test" % versions.zhttp % Test)
 
-  val zioInteropReactivestreams= "dev.zio" %% "zio-interop-reactivestreams" % versions.zioInteropReactivestreams
+  val zioInteropReactivestreams = "dev.zio" %% "zio-interop-reactivestreams" % versions.zioInteropReactivestreams
 
 }
