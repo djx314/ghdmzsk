@@ -1,4 +1,4 @@
-package a02
+package a03
 
 import a01._
 
@@ -24,39 +24,44 @@ object Runner {
 
   def main(args: Array[String]): Unit = {
     {
-      val number1          = Number1S(Number1S(Number1S(number1Zero)))
-      val number2: Number2 = Number2S(Number2S(Number2S(Number2S(Number2T))))
-      val number3 =
-        Number3S(
-          Number3S(Number3S(Number3S(Number3S(Number3S(Number3S(Number3T))))))
-        )
+      val number1 = Number1S(Number1S(number1Zero))
+      val number2 = Number2S(Number2S(Number2S(Number2S(Number2S(Number2T)))))
+      val number3 = Number3S(Number3S(Number3S(Number3T)))
       assert(number1.method1(number2) == number3)
     }
     {
-      val number1          = number1Zero
-      val number2: Number2 = Number2S(Number2S(Number2S(Number2S(Number2T))))
-      val number3          = Number3S(Number3S(Number3S(Number3S(Number3T))))
+      val number1 = Number1S(Number1S(Number1S(Number1S(number1Zero))))
+      val number2 = Number2S(Number2T)
+      val number3 = Number3T
       assert(number1.method1(number2) == number3)
     }
     {
       val number1 = Number1S(Number1S(Number1S(number1Zero)))
-      val number3 = Number3S(Number3S(Number3S(Number3T)))
-      assert(number1.method1(Number2T) == number3)
+      val number2 = Number2S(Number2S(Number2S(Number2T)))
+      val number3 = Number3T
+      assert(number1.method1(number2) == number3)
+    }
+    {
+      assert(Number2T.method2(number1Zero) == Number3T)
     }
     {
       for {
         i1 <- 0 to 20
         i2 <- 0 to 20
       } {
-        val number1               = genNumber1(i1)
-        lazy val number2: Number2 = genNumber2(i2)
-        val number3               = number1.method1(number2)
-        val count1                = countNumber1(number1)
-        val count2                = countNumber2(number2)
-        val count3                = countNumber3(number3)
+        val number1 = genNumber1(i1)
+        val number2 = genNumber2(i2)
+        val number3 = number1.method1(number2)
+
+        val count1 = countNumber1(number1)
+        val count2 = countNumber2(number2)
+        val count3 = countNumber3(number3)
+
+        val result1 = if (count2 - count1 >= 0) count2 - count1 else 0
+
         assert(count1 == i1)
         assert(count2 == i2)
-        assert(count1 + count2 == count3)
+        assert(count3 == result1)
       }
     }
   }
