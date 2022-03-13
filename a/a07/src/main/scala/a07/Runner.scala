@@ -1,7 +1,5 @@
 package a07
 
-import scala.io.StdIn
-
 object Runner {
 
   def number2Gen(n: Int): Number2 = if (n > 0) Number2S(number2Gen(n - 1)) else Number2T
@@ -99,9 +97,9 @@ object Runner {
         i1 <- 2 to 10
         i2 <- 1 to 400
       } {
-        val number1: Number1 = number1Gen5(i1)
-        val number2          = number2Gen(i2)
-        val number3          = number1.method1(number2)
+        val number1 = number1Gen5(i1)
+        val number2 = number2Gen(i2)
+        val number3 = number1.method1(number2)
 
         val count1  = count(number3)
         val result1 = log(i1, i2)
