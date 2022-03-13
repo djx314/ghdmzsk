@@ -19,6 +19,7 @@ val a03 = (project in aRoot / "a03").dependsOn(a01)
 val a04 = (project in aRoot / "a04").dependsOn(a01)
 val a05 = (project in aRoot / "a05").dependsOn(a01)
 val a06 = project in aRoot / "a06"
+val a07 = project in aRoot / "a07"
 
 val a101_01 = project in a1Root / "a01-01"
 
