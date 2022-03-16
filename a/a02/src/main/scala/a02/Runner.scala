@@ -1,62 +1,95 @@
 package a02
 
-import a01._
-
 object Runner {
 
-  lazy val number1ZeroPre: Number1 = Number1R(() => number1ZeroPre)
-  lazy val number1Zero: Number1    = Number1T(number1ZeroPre)
+  def number2Gen(n: Int): Number2 = if (n > 0) Number2S(number2Gen(n - 1)) else Number2T
 
-  def genNumber1(n: Int): Number1 = if (n > 0) Number1S(genNumber1(n - 1)) else number1Zero
-  def genNumber2(n: Int): Number2 = if (n > 0) Number2S(genNumber2(n - 1)) else Number2T
-  def countNumber1(number1: Number1): Int = number1 match {
-    case Number1S(tail) => countNumber1(tail) + 1
-    case Number1T(_)    => 0
+  lazy val number1Zero1: Number1 = Number1U(() => number1Zero1)
+  lazy val number1Zero2: Number1 = Number1S(() => number1Zero1)
+
+  def number1Gen1(n: Int): Number1                   = if (n > 0) Number1T(() => number1Gen1(n - 1)) else number1Zero2
+  def number1Gen2(n: Int): Number1                   = if (n > 0) Number1S(() => number1Gen2(n - 1)) else number1Zero2
+  def number1Gen3(n: Int, zero: => Number1): Number1 = if (n > 0) Number1T(() => number1Gen3(n - 1, zero)) else zero
+  def number1Gen4(n: Int, zero: => Number1): Number1 = if (n > 0) Number1S(() => number1Gen4(n - 1, zero)) else zero
+  def number1Gen5(n: Int): Number1 = {
+    def repeat(n1: Int, n2: Int): Number1 = if (n2 > 0) Number1S(() => repeat(n1 + n - 1, n2 - 1)) else Number1T(() => repeat(n1, n1))
+    repeat(0, n)
   }
-  def countNumber2(number2: Number2): Int = number2 match {
-    case Number2S(tail) => countNumber2(tail) + 1
-    case Number2T       => 0
-  }
-  def countNumber3(number3: Number3): Int = number3 match {
-    case Number3S(tail) => countNumber3(tail) + 1
+  def number1Gen6(n: Int): Number1 = if (n > 0) Number1T(() => number1Gen6(n - 1)) else number1Zero1
+  def number1Gen7(n: Int): Number1 = if (n > 0) Number1S(() => number1Gen7(n - 1)) else number1Zero1
+
+  def log(i: Int, n: Int): Int = if (n >= i) log(i, n / i) + 1 else 0
+
+  def count(num: Number3): Int = num match {
+    case Number3S(tail) => count(tail) + 1
     case Number3T       => 0
   }
 
   def main(args: Array[String]): Unit = {
     {
-      val number1          = Number1S(Number1S(Number1S(number1Zero)))
-      val number2: Number2 = Number2S(Number2S(Number2S(Number2S(Number2T))))
-      val number3 =
-        Number3S(
-          Number3S(Number3S(Number3S(Number3S(Number3S(Number3S(Number3T))))))
-        )
-      assert(number1.method1(number2) == number3)
-    }
-    {
-      val number1          = number1Zero
-      val number2: Number2 = Number2S(Number2S(Number2S(Number2S(Number2T))))
-      val number3          = Number3S(Number3S(Number3S(Number3S(Number3T))))
-      assert(number1.method1(number2) == number3)
-    }
-    {
-      val number1 = Number1S(Number1S(Number1S(number1Zero)))
-      val number3 = Number3S(Number3S(Number3S(Number3T)))
-      assert(number1.method1(Number2T) == number3)
+      for {
+        i1 <- 0 to 20
+        i2 <- 0 to 20
+      } {
+        val number1 = number1Gen6(i1)
+        val number2 = number2Gen(i2)
+        val number3 = number2.method2(number1)
+
+        val count1  = count(number3)
+        val result1 = if (i2 == 0) 0 else i1 + i2
+
+        assert(count1 == result1)
+      }
     }
     {
       for {
         i1 <- 0 to 20
         i2 <- 0 to 20
       } {
-        val number1               = genNumber1(i1)
-        lazy val number2: Number2 = genNumber2(i2)
-        val number3               = number1.method1(number2)
-        val count1                = countNumber1(number1)
-        val count2                = countNumber2(number2)
-        val count3                = countNumber3(number3)
-        assert(count1 == i1)
-        assert(count2 == i2)
-        assert(count1 + count2 == count3)
+        val number1 = number1Gen7(i1)
+        val number2 = number2Gen(i2)
+        val number3 = number2.method2(number1)
+
+        val count1  = count(number3)
+        val result1 = if (i2 - i1 >= 0) i2 - i1 else 0
+
+        assert(count1 == result1)
+      }
+    }
+    {
+      for {
+        i1 <- 0 to 20
+        i2 <- 0 to 20
+      } {
+        lazy val number1s: Number1 = number1Gen3(i1, number1t)
+        lazy val number1t: Number1 = Number1S(() => number1s)
+        val number2                = number2Gen(i2)
+        val number3                = number2.method2(number1s)
+
+        val count1  = count(number3)
+        val result1 = i1 * i2
+
+        assert(count1 == result1)
+      }
+    }
+    {
+      for {
+        i1 <- 0 to 20
+        i2 <- 0 to 20
+      } {
+        lazy val number1s: Number1 = number1Gen4(i1, number1t)
+        lazy val number1t: Number1 = Number1T(() => number1s)
+        val number2                = number2Gen(i2)
+        val number3 =
+          try Option(number2.method2(number1t))
+          catch {
+            case _: StackOverflowError => Option.empty
+          }
+
+        val count1  = number3.map(count)
+        val result1 = if (i2 == 0) Option(0) else if (i1 == 0) Option.empty else if (i2 % i1 == 0) Option(i2 / i1) else Option(i2 / i1 + 1)
+
+        assert(count1 == result1)
       }
     }
   }
