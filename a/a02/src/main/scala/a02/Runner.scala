@@ -36,7 +36,7 @@ object Runner {
     {
       for {
         i1 <- 0 to 20
-        i2 <- 1 to 20
+        i2 <- 0 to 20
       } {
         val number1 = number1Gen7(i1)
         val number2 = number2Gen(i2)
@@ -51,7 +51,7 @@ object Runner {
     {
       for {
         i1 <- 0 to 20
-        i2 <- 1 to 20
+        i2 <- 0 to 20
       } {
         lazy val number1s: Number1 = number1Gen3(i1, number1t)
         lazy val number1t: Number1 = Number1S(() => number1s)
@@ -67,7 +67,7 @@ object Runner {
     {
       for {
         i1 <- 1 to 20
-        i2 <- 1 to 20
+        i2 <- 0 to 20
       } {
         lazy val number1s: Number1 = number1Gen4(i1, number1t)
         lazy val number1t: Number1 = Number1T(() => number1s)
