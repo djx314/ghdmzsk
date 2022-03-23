@@ -1,4 +1,4 @@
-package a06
+package a03
 
 trait Number1 {
   def method1(number2: Number2): Number3
