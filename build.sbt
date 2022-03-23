@@ -2,7 +2,7 @@ Settings.settings
 
 val rootFile = file(".")
 val aRoot    = rootFile / "a"
-val a1Root    = rootFile / "a1"
+val a1Root   = rootFile / "a1"
 val bRoot    = rootFile / "b"
 val cRoot    = rootFile / "c"
 val dRoot    = rootFile / "d"
@@ -13,12 +13,9 @@ val hRoot    = rootFile / "h"
 val iRoot    = rootFile / "i"
 val jRoot    = rootFile / "j"
 
-
-val a01    = project in aRoot / "a01"
-val a02    = (project in aRoot / "a02").dependsOn(a01)
-val a03    = (project in aRoot / "a03").dependsOn(a01)
-val a04    = (project in aRoot / "a04").dependsOn(a01)
-val a05    = (project in aRoot / "a05").dependsOn(a01)
+val a01 = project in aRoot / "a01"
+val a02 = project in aRoot / "a02"
+val a03 = project in aRoot / "a03"
 
 val a101_01 = project in a1Root / "a01-01"
 
@@ -46,7 +43,7 @@ val e05    = (project in eRoot / "e05").dependsOn(e01)
 val e06    = (project in eRoot / "e06").dependsOn(e01)
 
 val f01      = (project in fRoot / "f01").dependsOn(a03)
-val f02      = (project in fRoot / "f02").dependsOn(b01, a04)
+val f02      = (project in fRoot / "f02").dependsOn(b01)
 lazy val f03 = (project in fRoot / "f03").settings(scalaJSProjects := Seq(f04)).dependsOn(f06.jvm)
 lazy val f04 = (project in fRoot / "f04").dependsOn(f06.js)
 val f05      = project in fRoot / "f05"
