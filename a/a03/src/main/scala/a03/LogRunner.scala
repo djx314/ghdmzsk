@@ -47,17 +47,15 @@ trait LogRunnerImplement {
     case Number3T       => 0
   }
 
-  def exec: Unit = {
-    for (i2 <- 0 to 2000) yield {
-      val number2 = number2Gen(i2)
-      val number3 = number2.method2(number1)
+  def exec: Unit = for (i2 <- 0 to 2000) yield {
+    val number2 = number2Gen(i2)
+    val number3 = number2.method2(number1)
 
-      val count1  = count(number3)
-      val result1 = log(num, i2)
+    val count1  = count(number3)
+    val result1 = log(num, i2)
 
-      println(num, i2, count1, result1)
-      assert(count1 == result1)
-    }
+    println(num, i2, count1, result1)
+    assert(count1 == result1)
   }
 
 }
