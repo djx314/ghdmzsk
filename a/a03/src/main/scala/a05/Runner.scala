@@ -13,23 +13,23 @@ object Runner extends App {
   lazy val number1Zero: Number1 = Number1T(number1.tail2)
 
   // wip
-  def number2(number: => Number1S): Number1S = {
-    lazy val n1: Number1S      = numberGen(Number1T(n2))
-    lazy val n2: () => Number1 = number2(number).tail2
+  def number2(number: => Number1S): () => Number1S = {
+    lazy val n1: () => Number1S = () => numberGen(Number1T(n2))
+    lazy val n2: () => Number1  = () => number2(number)().tail2()
     n1
   }
-  lazy val number2X: Number1S = number2(number2X)
+  def number2X: () => Number1S = number2(number2X())
 
-  var i            = 0
-  var num: Number1 = number2X
+  var i                  = 0
+  var num: () => Number1 = number2X
 
-  while (i < 10000) {
-    num match {
+  while (i < 300) {
+    num() match {
       case Number1S(tail, tail2) =>
         i += 1
-        num = tail()
+        num = tail
       case Number1T(tail) =>
-        num = tail()
+        num = tail
         println(i)
     }
   }
