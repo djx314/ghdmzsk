@@ -48,9 +48,7 @@ trait PowRunnerImplement {
   }
 
   def exec: Unit = {
-    for {
-      i2 <- 0 to 6
-    } yield {
+    for (i2 <- 0 to 6) yield {
       val number2 = number2Gen(i2)
       val number3 = number2.method2(number1)
 
