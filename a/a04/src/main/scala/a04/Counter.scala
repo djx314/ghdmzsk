@@ -7,5 +7,5 @@ case object Number1T               extends Number1
 
 trait Number2
 
-case class Number2S(tail1: Number1, tail2: Number1 => Number2, var tail3: Number2) extends Number2
-case object Number2T                                                               extends Number2
+case class Number2S(tail1: Number1, tail2Zero: Number2, tail2: () => Number2) extends Number2
+case class Number2T(var tail: Number2)                                        extends Number2
