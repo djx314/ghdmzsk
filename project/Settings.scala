@@ -4,7 +4,7 @@ import org.scalafmt.sbt.ScalafmtPlugin.autoImport.{scalafmtOnCompile, scalafmtSb
 
 object Settings {
 
-  val setting1 = scalaVersion      := "2.13.6"
+  val setting1 = scalaVersion      := "2.13.8"
   val setting2 = scalafmtOnCompile := true
 
   val setting3 = scalaVersion      := "3.1.0"
