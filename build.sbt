@@ -3,6 +3,7 @@ Settings.settings
 val rootFile = file(".")
 val aRoot    = rootFile / "a"
 val a1Root   = rootFile / "a1"
+val a2Root   = rootFile / "a2"
 val bRoot    = rootFile / "b"
 val cRoot    = rootFile / "c"
 val dRoot    = rootFile / "d"
@@ -17,6 +18,11 @@ val a01 = project in aRoot / "a01"
 val a02 = project in aRoot / "a02"
 val a03 = project in aRoot / "a03"
 val a04 = project in aRoot / "a04"
+
+val an01 = project in a2Root / "a01"
+val an02 = project in a2Root / "a02"
+val an03 = project in a2Root / "a03"
+val an04 = project in a2Root / "a04"
 
 val a101_01 = project in a1Root / "a01-01"
 
