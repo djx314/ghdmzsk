@@ -1,5 +1,5 @@
 Settings.settings
-name := "b03"
+name := "b04"
 
 javaOptions += "-Xss10m"
 run / fork := true

@@ -5,6 +5,7 @@ val aRoot    = rootFile / "a"
 val a1Root   = rootFile / "a1"
 val a2Root   = rootFile / "a2"
 val bRoot    = rootFile / "b"
+val bnRoot    = rootFile / "b1"
 val cRoot    = rootFile / "c"
 val dRoot    = rootFile / "d"
 val eRoot    = rootFile / "e"
@@ -16,9 +17,12 @@ val jRoot    = rootFile / "j"
 
 val a01 = project in aRoot / "a01"
 val a02 = project in aRoot / "a02"
-val a03 = project in aRoot / "a03"
-val a04 = project in aRoot / "a04"
-val a05 = project in aRoot / "a05"
+
+val b01 = project in bRoot / "b01"
+val b02 = project in bRoot / "b02"
+val b03 = project in bRoot / "b03"
+val b04 = project in bRoot / "b04"
+val b05 = project in bRoot / "b05"
 
 val an01 = project in a2Root / "a01"
 val an02 = project in a2Root / "a02"
@@ -30,9 +34,9 @@ val a101_01 = project in a1Root / "a01-01"
 val a102_01 = project in a1Root / "a02-01"
 val a102_02 = project in a1Root / "a02-02"
 
-val b01    = project in bRoot / "b01"
-val b03    = project in bRoot / "b03"
-val b03_01 = project in bRoot / "b03-01"
+val bn01    = project in bnRoot / "b01"
+val bn03    = project in bnRoot / "b03"
+val bn03_01 = project in bnRoot / "b03-01"
 
 val c01 = project in cRoot / "c01"
 val c02 = project in cRoot / "c02"
@@ -50,7 +54,7 @@ val e04    = (project in eRoot / "e04").dependsOn(e01)
 val e05    = (project in eRoot / "e05").dependsOn(e01)
 val e06    = (project in eRoot / "e06").dependsOn(e01)
 
-val f01      = (project in fRoot / "f01").dependsOn(a03)
+val f01      = (project in fRoot / "f01").dependsOn(b03)
 val f02      = (project in fRoot / "f02").dependsOn(b01)
 lazy val f03 = (project in fRoot / "f03").settings(scalaJSProjects := Seq(f04)).dependsOn(f06.jvm)
 lazy val f04 = (project in fRoot / "f04").dependsOn(f06.js)
