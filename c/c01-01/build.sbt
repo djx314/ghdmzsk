@@ -1,2 +1,2 @@
 Settings.settings
-name := "i01"
+name := "c01-01"
