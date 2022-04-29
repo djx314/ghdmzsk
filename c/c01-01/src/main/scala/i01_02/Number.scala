@@ -3,34 +3,52 @@ package i01_02
 import scala.io.Source
 import scala.util.Using
 
-trait Number1 {
-  def method1(yaya1: Yaya1): String
+trait Number1_1 {
+  def method1(num2: Number2): Number3_2
 }
-case class Number1S(text: String, tail: Number1, head: Number2) extends Number1 {
-  override def method1(yaya1: Yaya1): String = yaya1.method1(head, text)
-}
-case object Number1T extends Number1 {
-  override def method1(yaya1: Yaya1): String = ""
+case class Number1_1S(text: String, tail2: Number1_2) extends Number1_1 {
+  override def method1(num2: Number2): Number3_2 = num2.method3(tail2, text)
 }
 
+trait Number1_2 {
+  def method2(num2: Number2): Number3_2
+}
+case class Number1_2S(tail2: Number1_2, tail1: Number1_1) extends Number1_2 {
+  override def method2(num2: Number2): Number3_2 = Number3_2S(tail2.method2(num2), tail1.method1(num2))
+}
+case class Number1_2T(text: String) extends Number1_2 {
+  override def method2(num2: Number2): Number3_2 = Number3_2U(text)
+}
+
+// ====
 trait Number2 {
-  def method2(yaya1: Yaya1): String
+  def method3(num1: Number1_2, text: String): Number3_2
 }
-case class Number2S(tail: Number2, head: Number1) extends Number2 {
-  override def method2(yaya1: Yaya1): String = s"${tail.method2(yaya1)}${head.method1(yaya1)}\n"
+case class Number2S(tail: Number2) extends Number2 {
+  override def method3(num1: Number1_2, text: String): Number3_2 = Number3_2T(s"<$text>", Number3_1S(s"</$text>", tail.method3(num1, text)))
 }
-case class Number2T(text: String) extends Number2 {
-  override def method2(yaya1: Yaya1): String = text
+case class Number2T(tail: () => Number2) extends Number2 {
+  override def method3(num1: Number1_2, text: String): Number3_2 = num1.method2(tail())
 }
 
-trait Yaya1 {
-  def method1(number2: Number2, text: String): String
+// ====
+trait Number3_1 {
+  def text1: String
 }
-case class Yaya1T(tail1: () => Yaya1) extends Yaya1 {
-  override def method1(number2: Number2, text: String): String = {
-    val t = number2.method2(tail1())
-    val u = Using.resource(Source.fromString(t))(n => n.getLines().to(List).map(p => "  " + p))
-    val i = if (u.isEmpty) "" else s"\n${u.mkString("\n")}\n"
-    s"<$text>$i</$text>"
-  }
+case class Number3_1S(text: String, tail: Number3_2) extends Number3_1 {
+  def text1: String =
+    Using.resource(Source.fromString(tail.text2))(t => t.getLines().to(List).map(r => "  " + r).mkString("\n")) + "\n" + text
+}
+
+trait Number3_2 {
+  def text2: String
+}
+case class Number3_2S(tail2_1: Number3_2, tail2_2: Number3_2) extends Number3_2 {
+  def text2: String = tail2_1.text2 + tail2_2.text2
+}
+case class Number3_2T(text: String, tail: Number3_1) extends Number3_2 {
+  def text2: String = "\n" + text + tail.text1
+}
+case class Number3_2U(text: String) extends Number3_2 {
+  def text2: String = if (text.isEmpty) text else s"\n$text"
 }

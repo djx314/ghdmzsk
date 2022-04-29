@@ -2,30 +2,28 @@ package i01_02
 
 object Runner {
 
-  lazy val yaya1: Yaya1 = Yaya1T(() => yaya1)
+  lazy val yaya1: Number2     = Number2S(yaya1Zero)
+  lazy val yaya1Zero: Number2 = Number2T(() => yaya1)
 
-  val num1 = Number1S(
+  val num1 = Number1_1S(
     "html",
-    Number1T,
-    Number2S(
-      Number2S(
-        Number2T(""),
-        Number1S(
+    Number1_2S(
+      Number1_2S(
+        Number1_2T(""),
+        Number1_1S(
           "head",
-          Number1T,
-          Number2S(Number2S(Number2T(""), Number1S("title", Number1T, Number2T(""))), Number1S("meta", Number1T, Number2T("")))
+          Number1_2S(Number1_2S(Number1_2T(""), Number1_1S("title", Number1_2T(""))), Number1_1S("meta", Number1_2T("")))
         )
       ),
-      Number1S(
+      Number1_1S(
         "body",
-        Number1T,
-        Number2S(Number2S(Number2T(""), Number1S("div", Number1T, Number2T("雷真"))), Number1S("div", Number1T, Number2T("夜夜")))
+        Number1_2S(Number1_2S(Number1_2T(""), Number1_1S("div", Number1_2T("雷真"))), Number1_1S("div", Number1_2T("夜夜")))
       )
     )
   )
 
   def main(arr: Array[String]): Unit = {
-    println(num1.method1(yaya1))
+    println(num1.method1(yaya1).text2)
   }
 
 }
