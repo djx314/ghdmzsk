@@ -5,19 +5,22 @@ object Runner {
   lazy val yaya1: Number2     = Number2S(yaya1Zero)
   lazy val yaya1Zero: Number2 = Number2T(() => yaya1)
 
+  val emptyText: Number1_2         = Number1_2T("")
+  def text(str: String): Number1_2 = if (str.isEmpty) emptyText else Number1_2T(s"\n$str")
+
   val num1 = Number1_1S(
     "html",
     Number1_2S(
       Number1_2S(
-        Number1_2T(""),
+        emptyText,
         Number1_1S(
           "head",
-          Number1_2S(Number1_2S(Number1_2T(""), Number1_1S("title", Number1_2T(""))), Number1_1S("meta", Number1_2T("")))
+          Number1_2S(Number1_2S(emptyText, Number1_1S("title", emptyText)), Number1_1S("meta", emptyText))
         )
       ),
       Number1_1S(
         "body",
-        Number1_2S(Number1_2S(Number1_2T(""), Number1_1S("div", Number1_2T("雷真"))), Number1_1S("div", Number1_2T("夜夜")))
+        Number1_2S(Number1_2S(Number1_2T(""), Number1_1S("div", text("雷真"))), Number1_1S("div", text("夜夜")))
       )
     )
   )
