@@ -20,7 +20,7 @@ object Runner {
       ),
       Number1_1S(
         "body",
-        Number1_2S(Number1_2S(Number1_2T(""), Number1_1S("div", text("雷真"))), Number1_1S("div", text("夜夜")))
+        Number1_2S(Number1_2S(emptyText, Number1_1S("div", text("雷真"))), Number1_1S("div", text("夜夜")))
       )
     )
   )
