@@ -9,10 +9,12 @@ import sttp.tapir.client.sttp.SttpClientInterpreter
 
 trait ReverseRoutesUtils {
   class FillParameter[I, Poly](val value: I)
+  object FillParameter {
+    implicit def fillLiteral[T, U](t: T): FillParameter[T, U] = new FillParameter(t)
+  }
 
   object FillParameterPoly1 {
-    implicit def fill: FillParameter[Unit, FillParameterPoly1.type]              = new FillParameter(())
-    implicit def fillLiteral[T](t: T): FillParameter[T, FillParameterPoly1.type] = new FillParameter(t)
+    implicit def fill: FillParameter[Unit, FillParameterPoly1.type] = new FillParameter(())
   }
 
   def toUri[I, E, O, R](
