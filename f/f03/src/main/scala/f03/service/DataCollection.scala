@@ -1,12 +1,11 @@
 package f03.service
 
-import f03.counter.{Counter, Fusion, Number1}
 import f03.slick.model.Tables._
 
-case class CountResult(i1: Int, i2: Int, result: Option[Int])
+// case class CountResult(i1: Int, i2: Int, result: Option[Int])
 
 trait DataCollection {
-  val S             = "s"
+  /*val S             = "s"
   val T             = "t"
   val U             = "u"
   val V             = "v"
@@ -16,7 +15,6 @@ trait DataCollection {
   val Z             = "z"
   val baseName      = Vector(S, T, U, V, W, Y)
   val zeroName      = Vector(X, Z)
-  val UnlimitedType = "unlimited"
   val PointType     = "point"
   val ValueType     = "value"
   val ZeroType      = "zero"
@@ -38,22 +36,23 @@ trait DataCollection {
     case X => Fusion.number1x
     case Y => Fusion.number1y
     case Z => Fusion.number1z
-  }
+  }*/
 
   def allCountPlan: Vector[CountPlanRow]
+  def genString(result: List[(Int, Int, Option[Int])]): String
+  val UnlimitedType = "unlimited"
 
-  case class SingleNumber(outerName: String, outerType: String, innerName: String, innerType: String, start: Int)
+  /*case class SingleNumber(outerName: String, outerType: String, innerName: String, innerType: String, start: Int)
 
-  def genString(result: List[CountResult]): String
   def fromString(str: String): List[CountResult]
 
   def countNumber(countPlan: CountPlanRow, firstValue: Int, secoundValue: Int): CountResult
-  def genSingleNumber(countPlan: SingleNumber, value: Int): Number1
+  def genSingleNumber(countPlan: SingleNumber, value: Int): Number1*/
 }
 
 class DataCollectionImpl extends DataCollection {
 
-  val singleZeroRows: Vector[SingleNumber] =
+  /*val singleZeroRows: Vector[SingleNumber] =
     for (name <- zeroName)
       yield SingleNumber(outerName = name, outerType = UnlimitedType, innerName = name, innerType = UnlimitedType, start = 0)
 
@@ -75,54 +74,25 @@ class DataCollectionImpl extends DataCollection {
     outerType <- Vector(PointType, ValueType)
     outerName <- baseName
     innerName <- zeroName
-  } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = ZeroType, start = 0)
+  } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = ZeroType, start = 0)*/
 
   override val allCountPlan: Vector[CountPlanRow] = {
-    val allNumber = unlimitedRows.appendedAll(otherRows).appendedAll(zeroRows).appendedAll(singleZeroRows)
-
-    /*val n1 = for {
-      s <- singleZeroRows
-      t <- allNumber
-    } yield (s, t)
-    val n2 = for {
-      s <- allNumber
-      t <- singleZeroRows
-    } yield (s, t)
-
+    val col = ('a' to 's').to(Vector)
     for {
-      (firstNumber, secondNumber) <- n1 ++: n2
+      f    <- col
+      s    <- col
+      t    <- col
+      four <- col
     } yield CountPlanRow(
       id = -1,
-      firstOuterName = firstNumber.outerName,
-      firstOuterType = firstNumber.outerType,
-      firstInnerName = firstNumber.innerName,
-      firstInnerType = firstNumber.innerType,
-      firstStart = firstNumber.start,
-      secondOuterName = secondNumber.outerName,
-      secondOuterType = secondNumber.outerType,
-      secondInnerName = secondNumber.innerName,
-      secondInnerType = secondNumber.innerType,
-      secondStart = secondNumber.start
-    )*/
-    for {
-      firstNumber  <- allNumber
-      secondNumber <- allNumber
-    } yield CountPlanRow(
-      id = -1,
-      firstOuterName = firstNumber.outerName,
-      firstOuterType = firstNumber.outerType,
-      firstInnerName = firstNumber.innerName,
-      firstInnerType = firstNumber.innerType,
-      firstStart = firstNumber.start,
-      secondOuterName = secondNumber.outerName,
-      secondOuterType = secondNumber.outerType,
-      secondInnerName = secondNumber.innerName,
-      secondInnerType = secondNumber.innerType,
-      secondStart = secondNumber.start
+      planInfo = f.toString + s.toString + t.toString + four.toString
     )
   }
 
-  override def genSingleNumber(countPlan: SingleNumber, value: Int): Number1 = {
+  override def genString(result: List[(Int, Int, Option[Int])]): String =
+    result.map(s => s"${s._1},${s._2},${s._3.map(_.toString).getOrElse(UnlimitedType)}").mkString("|")
+
+  /*override def genSingleNumber(countPlan: SingleNumber, value: Int): Number1 = {
     countPlan.outerType match {
       case UnlimitedType => numberZero(countPlan.outerName)
       case PointType =>
@@ -158,8 +128,7 @@ class DataCollectionImpl extends DataCollection {
     }
   }
 
-  override def genString(result: List[CountResult]): String =
-    result.map(s => s"${s.i1},${s.i2},${s.result.map(_.toString).getOrElse(UnlimitedType)}").mkString("|")
+
 
   override def fromString(str: String): List[CountResult] = {
     def splitToList(str: String)(c: Char) = str.split(c).to(List).map(_.trim).filterNot(_.isEmpty)
@@ -197,6 +166,6 @@ class DataCollectionImpl extends DataCollection {
     )
     def exec = firstNumber.method1(secondNumber)
     CountResult(i1 = firstValue, i2 = secoundValue, result = Counter.countOpt(() => exec))
-  }
+  }*/
 
 }

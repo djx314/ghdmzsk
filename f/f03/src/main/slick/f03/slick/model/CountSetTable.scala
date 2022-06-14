@@ -11,29 +11,23 @@ trait CountSetTable {
   /** Entity class storing rows of table CountSet
    *  @param id Database column id SqlType(INT), AutoInc, PrimaryKey
    *  @param countSet Database column count_set SqlType(TEXT)
-   *  @param secondStart Database column second_start SqlType(INT)
-   *  @param firstStart Database column first_start SqlType(INT)
    *  @param isLimited Database column is_limited SqlType(BIT) */
-  case class CountSetRow(id: Int, countSet: String, secondStart: Int, firstStart: Int, isLimited: Boolean)
+  case class CountSetRow(id: Int, countSet: String, isLimited: Boolean)
   /** GetResult implicit for fetching CountSetRow objects using plain SQL queries */
   implicit def GetResultCountSetRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Boolean]): GR[CountSetRow] = GR{
     prs => import prs._
-    CountSetRow.tupled((<<[Int], <<[String], <<[Int], <<[Int], <<[Boolean]))
+    CountSetRow.tupled((<<[Int], <<[String], <<[Boolean]))
   }
   /** Table description of table count_set. Objects of this class serve as prototypes for rows in queries. */
   class CountSet(_tableTag: Tag) extends profile.api.Table[CountSetRow](_tableTag, Some("numberdatabase"), "count_set") {
-    def * = (id, countSet, secondStart, firstStart, isLimited).<>(CountSetRow.tupled, CountSetRow.unapply)
+    def * = (id, countSet, isLimited).<>(CountSetRow.tupled, CountSetRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(countSet), Rep.Some(secondStart), Rep.Some(firstStart), Rep.Some(isLimited))).shaped.<>({r=>import r._; _1.map(_=> CountSetRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(countSet), Rep.Some(isLimited))).shaped.<>({r=>import r._; _1.map(_=> CountSetRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(INT), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
     /** Database column count_set SqlType(TEXT) */
     val countSet: Rep[String] = column[String]("count_set")
-    /** Database column second_start SqlType(INT) */
-    val secondStart: Rep[Int] = column[Int]("second_start")
-    /** Database column first_start SqlType(INT) */
-    val firstStart: Rep[Int] = column[Int]("first_start")
     /** Database column is_limited SqlType(BIT) */
     val isLimited: Rep[Boolean] = column[Boolean]("is_limited")
   }

@@ -87,9 +87,12 @@ val f12 = project in fRoot / "f12"
 val f13 = project in fRoot / "f13"
 
 val f_codegen_path = fRoot / "f_codegen"
-val f_codegen      = project in f_codegen_path
+val f_codegen_project      = project in f_codegen_path
 
-addCommandAlias("f_codegen", s"f_codegen/runMain f_codegen.Runner ${f_codegen_path.getAbsolutePath}")
+// addCommandAlias("f_codegen", s"f_codegen_project/runMain f_codegen.Runner ${f_codegen_path.getAbsolutePath}")
+
+val f_codegen = inputKey[Unit]("f_codegen")
+f_codegen := (f_codegen_project / runMain).partialInput(" f_codegen.Runner").partialInput(s" ${f_codegen_path.getAbsolutePath}")
 
 val g01 = project in gRoot / "g01"
 val g02 = project in gRoot / "g02"

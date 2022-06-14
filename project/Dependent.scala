@@ -4,26 +4,28 @@ import sbt.Keys._
 object Dependent {
 
   object versions {
-    val catsEffect = "3.3.4"
-    val sttp       = "3.3.18"
-    val zio        = "1.0.13"
+    val catsEffect = "3.3.12"
+    val sttp       = "3.6.2"
+    val zio        = "1.0.15"
     val zioLogging = "0.5.14"
-    val tapir      = "0.20.0-M5"
-    val distage    = "1.0.8"
+    val tapir      = "1.0.0"
+    val distage    = "1.1.0-M4"
     // val http4s         = "0.23.7"
     val kindProjector = "0.13.2"
     // val macwire        = "2.5.3"
-    val slf4j                     = "2.0.0-alpha6"
-    val scalaTags                 = "0.11.0"
-    val scalajsJQuery             = "3.2.0"
+    val slf4j                     = "2.0.0-alpha7"
+    val scalaTags                 = "0.11.1"
+    val scalajsJQuery             = "3.6.0"
+    val udashJQuery = "3.2.0"
     val scalajsDom                = "2.1.0"
     val jqueryJSSource            = "3.6.0"
     val slick                     = "3.4.0-M1"
     val circe                     = "0.15.0-M1"
     val scalajsStubs              = "1.1.0"
-    val zhttp                     = "1.0.0.0-RC21"
-    val mysql                     = "8.0.26"
-    val zioInteropReactivestreams = "1.3.9"
+    val zhttp                     = "1.0.0.0-RC29"
+    val mysql                     = "8.0.29"
+    val zioInteropReactivestreams = "1.3.12"
+    val circeYaml = "0.2.1"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -38,10 +40,11 @@ object Dependent {
   val zioLogging = Seq("dev.zio" %% "zio-logging" % versions.zioLogging)
 
   val tapir = Seq(
-    "com.softwaremill.sttp.tapir" %% "tapir-zio"                % versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server"    % versions.tapir,
+    "com.softwaremill.sttp.tapir" %% "tapir-zio1"                % versions.tapir,
+    "com.softwaremill.sttp.tapir" %% "tapir-zio1-http-server"    % versions.tapir,
     "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs"       % versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-openapi-circe-yaml" % versions.tapir,
+    "com.softwaremill.sttp.apispec" %% "openapi-circe-yaml"      % versions.circeYaml,
+    "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % versions.tapir,
     "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui"         % versions.tapir,
     "com.softwaremill.sttp.tapir" %% "tapir-redoc"              % versions.tapir
   )

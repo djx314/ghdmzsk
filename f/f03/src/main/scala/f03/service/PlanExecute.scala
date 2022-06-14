@@ -1,5 +1,6 @@
 package f03.service
 
+import e01.NumberGen
 import f03.mainapp.MainApp
 import f03.slick.model.Tables._
 import zio._
@@ -9,21 +10,23 @@ trait PlanExecute {
   type CTask[T]   = RIO[MainApp.AppEnv, T]
   type CStream[T] = ZStream[MainApp.AppEnv, Throwable, T]
 
-  def countNumberCollection(countPlan: CountPlanRow): CStream[CountResult]
+  def countNumberCollection(countPlan: CountPlanRow): CStream[(Int, Int, Option[Int])]
   def countNumberToString(countPlan: CountPlanRow): CTask[CountSetRow]
 }
 
 class PlanExecuteImpl(dataCollection: DataCollection) extends PlanExecute {
 
-  override def countNumberCollection(countPlan: CountPlanRow): CStream[CountResult] = {
-    val param1 = ZStream.fromIterable(countPlan.firstStart to 20)
-    val param2 = ZStream.fromIterable(countPlan.secondStart to 20)
+  override def countNumberCollection(countPlan: CountPlanRow): CStream[(Int, Int, Option[Int])] = {
+    val param1 = ZStream.fromIterable(1 to 20)
+    val param2 = ZStream.fromIterable(1 to 20)
     for {
       i1 <- param1
       i2 <- param2
-      action = blocking.effectBlocking(dataCollection.countNumber(countPlan, i1, i2))
+      action = blocking.effectBlocking(
+        NumberGen.executeCount(countPlan.planInfo(0), countPlan.planInfo(1), i1, countPlan.planInfo(2), countPlan.planInfo(3), i2)
+      )
       r <- ZStream.fromEffect(action)
-    } yield r
+    } yield (i1, i2, r)
   }
 
   override def countNumberToString(countPlan: CountPlanRow): CTask[CountSetRow] = {
@@ -36,9 +39,7 @@ class PlanExecuteImpl(dataCollection: DataCollection) extends PlanExecute {
     } yield CountSetRow(
       id = -1,
       countSet = str,
-      isLimited = col.forall(_.result.isDefined),
-      firstStart = countPlan.firstStart,
-      secondStart = countPlan.secondStart
+      isLimited = col.forall(_._3.isDefined)
     )
   }
 

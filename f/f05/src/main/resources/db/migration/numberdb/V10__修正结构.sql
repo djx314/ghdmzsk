@@ -1,0 +1,9 @@
+alter table count_plan drop column first_outer_name;
+alter table count_plan drop column first_outer_type;
+alter table count_plan drop column first_inner_name;
+alter table count_plan drop column first_inner_type;
+alter table count_plan drop column first_start;
+alter table count_plan drop column second_outer_name;
+alter table count_plan drop column second_outer_type;
+alter table count_plan drop column second_inner_name;
+alter table count_plan drop column second_start;

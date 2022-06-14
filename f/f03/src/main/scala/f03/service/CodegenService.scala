@@ -30,9 +30,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
     val planAndSet1 = db.run(getIdAction.map(_._2).distinctOn(_.id).result)
 
     def printlnSet(set: Seq[CountSetRow]): CTask[Unit] = {
-      val str1 = set.map(s =>
-        s"val countSet${s.id}: CountSet = CountSet(index = ${s.id}, firstStart = ${s.firstStart}, secondStart = ${s.secondStart}, set = \"${s.countSet}\")"
-      )
+      val str1    = set.map(s => s"val countSet${s.id}: CountSet = CountSet(index = ${s.id}, set = \"${s.countSet}\")")
       val sumStr  = set.grouped(20).map(t => s"List(${t.map(r => s"b.countSet${r.id}").mkString(",")})").mkString(" ::: ")
       val strPre1 = s"  val sum: List[CountSet] = $sumStr"
       val str2 = "package f07" :: "trait CountSetsImpl {" :: str1
@@ -50,8 +48,7 @@ class CodegenServiceImpl(db: SlickDB, dataCollection: DataCollection) extends Co
 
     def printlnPlan(plans: Seq[CountPlanRow], index: Long): CTask[Unit] = {
       val str1 = plans.map(p =>
-        s"val plan${p.id} = CountPlan(index = ${p.id}, firstOuterName = \"${p.firstOuterName}\", firstOuterType = \"${p.firstOuterType}\", firstInnerName = \"${p.firstInnerName}\", firstInnerType = \"${p.firstInnerType}\", firstStart = ${p.firstStart}, secondOuterName = \"${p.secondOuterName}\", secondOuterType = \"${p.secondOuterType}\", secondInnerName = \"${p.secondInnerName}\", secondInnerType = \"${p.secondInnerType}\", secondStart = ${p.secondStart}, set = CountSetsImpl.b.countSet${p.counterResultId
-          .getOrElse("未有值")})"
+        s"val plan${p.id} = CountPlan(index = ${p.id}, planInfo = \"${p.planInfo}\", set = CountSetsImpl.b.countSet${p.counterResultId.getOrElse("未有值")})"
       )
       val str2 = s"  val sum: List[CountPlan] = List(${plans.map(s => s"plan${s.id}").mkString(",")})"
       val str3 = "package f07.codegen.impl" :: "import f07._" :: s"object CountPlans$index {" :: str1

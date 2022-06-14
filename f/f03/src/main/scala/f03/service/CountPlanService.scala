@@ -45,12 +45,7 @@ class CountPlanServiceImpl(db: SlickDB, dCol: DataCollection) extends CountPlanS
   override def insertAllDistinct(): CTask[Long] = {
     val stream = ZStream.fromIterable(dCol.allCountPlan)
     val notExists = for (countPlan <- stream) yield {
-      val filterAction = CountPlan
-        .filter(c =>
-          c.firstStart === countPlan.firstStart && c.secondStart === countPlan.secondStart && c.firstOuterName === countPlan.firstOuterName && c.firstOuterType === countPlan.firstOuterType && c.firstInnerName === countPlan.firstInnerName && c.firstInnerType === countPlan.firstInnerType && c.secondOuterName === countPlan.secondOuterName && c.secondOuterType === countPlan.secondOuterType && c.secondInnerName === countPlan.secondInnerName && c.secondInnerType === countPlan.secondInnerType
-        )
-        .map(_.id)
-        .take(1)
+      val filterAction    = CountPlan.filter(c => c.planInfo === countPlan.planInfo).map(_.id).take(1)
       val countPlanAction = filterAction.result.headOption
       val exists          = db.run(countPlanAction).map(_.isDefined)
       for (e <- exists) yield if (e) Option.empty else Option(countPlan)

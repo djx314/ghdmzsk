@@ -2,7 +2,7 @@ package f03.mainapp
 
 import f03.fusion.{CounterFusion, NumberFusion}
 import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
-import sttp.tapir.openapi.circe.yaml._
+import sttp.apispec.openapi.circe.yaml._
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.swagger.SwaggerUI
 import sttp.tapir._
@@ -10,7 +10,7 @@ import zhttp.http.{Http, Request, Response}
 import zio._
 
 trait AppRoutes[R] {
-  def app: Http[R, Throwable, Request, Response[R, Throwable]]
+  def app: Http[R, Throwable, Request, Response]
 }
 
 class AppRoutesImpl(numberFusion: NumberFusion, counterFusion: CounterFusion) extends AppRoutes[MainApp.AppEnv] {
