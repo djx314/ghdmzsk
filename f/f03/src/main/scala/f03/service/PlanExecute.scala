@@ -17,8 +17,8 @@ trait PlanExecute {
 class PlanExecuteImpl(dataCollection: DataCollection) extends PlanExecute {
 
   override def countNumberCollection(countPlan: CountPlanRow): CStream[(Int, Int, Option[Int])] = {
-    val param1 = ZStream.fromIterable(0 to 20)
-    val param2 = ZStream.fromIterable(0 to 20)
+    val param1 = ZStream.fromIterable(0 to 15)
+    val param2 = ZStream.fromIterable(0 to 15)
     for {
       i1 <- param1
       i2 <- param2

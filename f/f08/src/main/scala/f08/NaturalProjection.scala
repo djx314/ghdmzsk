@@ -40,19 +40,19 @@ trait NaturalProjectionAbs {
   protected implicit class extract2(key: String) {
     def setValue(v: (Int, Int) => Option[Int]): Unit = setsList = setsList.appended(OptSetsList(key = key, value = v))
   }
-  protected implicit class extract5(key: String) {
+  protected implicit class extract5(key1: String) {
     def setValue(linkKey1: String, v: (Int, Int) => (Int, Int)): Unit = setsList = setsList.appended(new MapParameterSetsList {
       override def mapParameter(i1: Int, i2: Int): (Int, Int) = v(i1, i2)
       override def linkKey: String                            = linkKey1
-      override def key: String                                = key
+      override def key: String                                = key1
       override def count(i1: Int, i2: Int): Option[Int]       = countWithSetList(getSet(linkKey1), i1, i2)
     })
   }
-  protected implicit class extract6(key: String) {
+  protected implicit class extract6(key1: String) {
     def mapResult(linkKey1: String, v: Option[Int] => Option[Int]): Unit = setsList = setsList.appended(new MapResultSetsList { self =>
       override def mapResult(i1: Option[Int]): Option[Int] = v(i1)
       override def linkKey: String                         = linkKey1
-      override def key: String                             = key
+      override def key: String                             = key1
       override def count(i1: Int, i2: Int): Option[Int]    = countWithSetList(getSet(linkKey1), i1, i2)
     })
   }
@@ -1516,7 +1516,7 @@ object NaturalProjection extends NaturalProjectionAbs1 {
   Tags.Tag1413.setValue((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option.empty else if (i1 == 0) Option(3) else Option(0))
 }
 
-abstract trait NaturalProjectionAbs1 extends NaturalProjectionAbs {
+trait NaturalProjectionAbs1 extends NaturalProjectionAbs {
   Tags.Tag1414.setValue((i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option.empty else Option(0))
   Tags.Tag1415.setValue((i1: Int, i2: Int) =>
     if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option.empty else if (i2 == 0) Option(0) else Option(i2)

@@ -1,7 +1,7 @@
 Settings.settings
 name := "f03"
 
-reStart / javaOptions += "-Xss600k"
+reStart / javaOptions += "-Xss1024k"
 
 libraryDependencies ++= Dependent.tapir
 libraryDependencies ++= Dependent.zioLogging

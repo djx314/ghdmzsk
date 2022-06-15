@@ -120,7 +120,7 @@ object NumberGen {
       catch {
         case _: StackOverflowError => Option.empty
       }
-    r.filter(_ < 2000)
+    r.filter(_ < 1200)
   }
 
 }
