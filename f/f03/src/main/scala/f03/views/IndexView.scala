@@ -4,8 +4,11 @@ import scalatags.Text.all._
 
 class IndexView(jsDependencies: JsDependencies) {
 
+  private val pageTitle = tag("title")
+
   def view = "<!DOCTYPE html>" + html(
     head(
+      pageTitle("计算计划录入"),
       jsDependencies.jquery,
       jsDependencies.main(),
       script(`type` := "text/javascript")("""
