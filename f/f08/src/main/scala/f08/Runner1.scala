@@ -33,7 +33,7 @@ object Runner1 {
       Try(str.mkString("|")).map(t => (setList.key, t)).toOption
     }
 
-    def dataMap: Map[String, String] = dataCol.collect { case Some(s) => s }.groupBy(_._2).map(s => (s._2.head._1, s._1))
+    def dataMap: Vector[(String, String)] = dataCol.collect { case Some(s) => s }.groupBy(_._2).map(s => (s._2.map(_._1).min, s._1)).to(Vector).sortBy(_._1)
 
     Future(
       blocking {
