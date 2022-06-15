@@ -1,5 +1,6 @@
 package f03.service
 
+import e01._
 import f03.slick.model.Tables._
 
 // case class CountResult(i1: Int, i2: Int, result: Option[Int])
@@ -75,6 +76,68 @@ class DataCollectionImpl extends DataCollection {
     outerName <- baseName
     innerName <- zeroName
   } yield SingleNumber(outerName = outerName, outerType = outerType, innerName = innerName, innerType = ZeroType, start = 0)*/
+
+  def countNumberDifferent: Vector[(Char, Char)] = {
+    def numCol = for {
+      i1 <- 'a' to 's'
+      i2 <- 'a' to 's'
+    } yield ((i1, i2), tagNum(i1, i2))
+
+    def tagNum(v1: Char, v2: Char): String = {
+      var str                     = ""
+      var needStop                = false
+      var len: Int                = 80
+      var countNum: () => Number1 = NumberGen.genNumber(v1, v2, 10)
+      while (len > 0 && !needStop) {
+        try {
+          val next = countNum()
+          next match {
+            case Number1S =>
+              str += "s"
+              needStop = true
+            case Number1T =>
+              str += "t"
+              needStop = true
+            case Number1U =>
+              str += "u"
+              needStop = true
+            case Number1V =>
+              str += "v"
+              needStop = true
+            case Number1W =>
+              str += "w"
+              needStop = true
+            case Number1X =>
+              str += "x"
+              needStop = true
+            case Number1Y(tail) =>
+              countNum = tail
+              str += "y"
+              len -= 1
+            case Number1Z(tail) =>
+              countNum = tail
+              str += "z"
+              len -= 1
+            case Number1A(tail) =>
+              countNum = tail
+              str += "a"
+              len -= 1
+            case Number1B(tail) =>
+              countNum = tail
+              str += "b"
+              len -= 1
+          }
+        } catch {
+          case _: Throwable =>
+            str += "e"
+            needStop = true
+        }
+      }
+      str
+    }
+
+    numCol.groupBy(_._2).map(_._2.head._1).to(Vector)
+  }
 
   override val allCountPlan: Vector[CountPlanRow] = {
     val col = ('a' to 's').to(Vector)
