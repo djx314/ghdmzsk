@@ -52,27 +52,32 @@ object NumberGen {
 
   def numberGen19(number: () => Number1, n: Int): () => Number1 = () => throw EndException()
 
-  val partGen: List[(Char, (() => Number1, Int) => () => Number1)] = List(
+  val partGen1: List[(Char, (() => Number1, Int) => () => Number1)] = List(
     ('a', numberGen1 _),
     ('b', numberGen2 _),
     ('c', numberGen3 _),
     ('d', numberGen4 _),
     ('e', numberGen5 _),
     ('f', numberGen6 _),
-    ('g', numberGen7 _),
     ('h', numberGen8 _),
     ('i', numberGen9 _),
-    ('j', numberGen10 _),
     ('k', numberGen11 _),
     ('l', numberGen12 _),
-    ('m', numberGen13 _),
     ('n', numberGen14 _),
     ('o', numberGen15 _),
-    ('p', numberGen16 _),
     ('q', numberGen17 _),
     ('r', numberGen18 _),
     ('s', numberGen19 _)
   )
+
+  val partGen2: List[(Char, (() => Number1, Int) => () => Number1)] = List(
+    ('g', numberGen7 _),
+    ('j', numberGen10 _),
+    ('m', numberGen13 _),
+    ('p', numberGen16 _)
+  )
+
+  val partGen: List[(Char, (() => Number1, Int) => () => Number1)] = partGen1 ::: partGen2
 
   val parGenMap: Map[Char, (() => Number1, Int) => () => Number1] = partGen.to(Map)
 

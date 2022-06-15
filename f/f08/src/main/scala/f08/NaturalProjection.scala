@@ -3134,14 +3134,12 @@ trait NaturalProjectionAbs1 extends NaturalProjectionAbs {
     else 2 * i1 + 0 * i2 + i1 * i2 * -3 / -3 + 0
   )
   Tags.Tag1673.setValue((i1: Int, i2: Int) =>
-    if (i1 == 0 && i2 == 0) 0
-    else if (i1 == 0) i2 * 0 / -3 + 0
-    else if (i1 == 1) -3 * i1 + 1 * i2 + 3
-    else if (i2 == 0) i1 * -3 / -3 + -1
-    else if (i2 == 1) 2 * i1 + -3 * i2 + 2
-    else if (i1 == i2) -2 * i1 + 3 * i2 + i1 * i2 * -3 / -3 + -1
-    else if (i1 > i2) 1 * i1 + 0 * i2 + i1 * i2 * -3 / -3 + -1
-    else 1 * i1 + 0 * i2 + i1 * i2 * -3 / -3 + -1
+    if (i1 == 0) 0
+    else if (i1 == 1) -3 * i1 + i2 + 3
+    else if (i2 == 0) i1 - 1
+    else if (i2 == 1) 2 * i1 - 3 * i2 + 2
+    else if (i1 == i2) -2 * i1 + 3 * i2 + i1 * i2 - 1
+    else i1 + i1 * i2 - 1
   )
   Tags.Tag1674.setValue((i1: Int, i2: Int) =>
     if (i1 == 0 && i2 == 0) 1
