@@ -1,6 +1,5 @@
 package f07
 
-import f08.Gen6
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
@@ -93,7 +92,7 @@ object Runner {
       ((i1, i2) => (i2 * 2, i1 * 2), "(i1: Int, i2: Int) => (i2 * 2, i1 * 2)", "i1 = i2 * 2, i2 = i1 * 2")
     )
 
-    val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
+    /*val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
       blocking {
         for {
           eachSet     <- eachSet1
@@ -157,7 +156,7 @@ object Runner {
       .groupBy(s => s._2.to(List))
       .map(_._2.head._1)
       .to(List)*/
-  }
+  }*/
 
   def countTag(tag: String): Int = {
     val count = SetsCol.setsCol.filter(_.key == tag).head
@@ -193,7 +192,7 @@ object Runner {
 
     // Gen3.genRunner()
 
-    def e = Future { blocking { Gen6.printlnSingleResult() } }
+    /*def e = Future { blocking { Gen6.printlnSingleResult() } }
     def d = Future { blocking { Gen5.printlnSingleResult() } }
 
     def a = Future {
@@ -211,7 +210,7 @@ object Runner {
           }
         }
       }
-    }.flatten
+    }.flatten*/
 
     def c = Future {
       blocking {
