@@ -1,5 +1,4 @@
-package f07
-
+package f08
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
@@ -26,7 +25,7 @@ object Runner {
   }
 
   def distinctRunner(): List[List[String]] = {
-    val cols = for (each <- SetsCol.setsCol) yield {
+    val cols = for (each <- f07.SetsCol.setsCol) yield {
       val list = for {
         i1 <- each.firstStart to 20
         i2 <- each.secondStart to 20
@@ -37,7 +36,7 @@ object Runner {
   }
 
   val col1 = for {
-    each <- SetsCol.setsCol
+    each <- f07.SetsCol.setsCol
   } yield {
     val list = for {
       i1 <- each.firstStart to 20
@@ -47,7 +46,7 @@ object Runner {
   }
   val col = col1.to(List)
 
-  def setsLeftover(): List[CountSet] = {
+  def setsLeftover(): List[f07.CountSet] = {
     val countSets = col.map(_._2.mkString("|"))
     CountSets.sum.filterNot(s => countSets.exists(t => t == s.set))
   }
@@ -57,9 +56,9 @@ object Runner {
     countSets.filterNot(s => CountSets.sum.exists(t => t.set == s._2)).map(_._1)
   }
 
-  def printlnSingleResult(): Future[List[(String, Int, Int, (Int, Int) => Option[Int])]] = {
+  /*def printlnSingleResult(): Future[List[(String, Int, Int, (Int, Int) => Option[Int])]] = {
     val sets                                                           = col.map(s => (s._1, s._2.mkString("|")))
-    val leftSets: List[CountSet]                                       = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
+    val leftSets: List[f07.CountSet]                                   = CountSets.sum.filter(s => sets.forall(t => t._2 != s.set))
     var countSets: List[(String, Int, Int, (Int, Int) => Option[Int])] = List.empty
 
     val mapping: List[((Int, Int) => (Int, Int), String, String)] = List(
@@ -92,7 +91,7 @@ object Runner {
       ((i1, i2) => (i2 * 2, i1 * 2), "(i1: Int, i2: Int) => (i2 * 2, i1 * 2)", "i1 = i2 * 2, i2 = i1 * 2")
     )
 
-    /*val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
+    val futureSeq = for (eachSet1 <- leftSets.grouped(leftSets.size / 20)) yield Future {
       blocking {
         for {
           eachSet     <- eachSet1
@@ -159,7 +158,7 @@ object Runner {
   }*/
 
   def countTag(tag: String): Int = {
-    val count = SetsCol.setsCol.filter(_.key == tag).head
+    val count = f07.SetsCol.setsCol.filter(_.key == tag).head
     val num = for {
       i1 <- count.firstStart to 20
       i2 <- count.secondStart to 20
@@ -168,10 +167,11 @@ object Runner {
     val sets = CountSets.sum.filter(_.set == str)
     val set  = sets.head
     assert(sets.size == 1)
-    CountPlans.sum.filter(_.set.index == set.index).size
+    f07.CountPlans.sum.filter(_.set.index == set.index).size
   }
 
-  var count = SetsCol.setsCol.size + 1
+  var count = f07.SetsCol.setsCol.size + 1
+
   def getCount: Int = {
     this.synchronized {
       val c = count
@@ -180,13 +180,13 @@ object Runner {
     }
   }
 
-  def main(arr: Array[String]): Unit = {
+  def main1(arr: Array[String]): Unit = {
     println(s"重复的映射：${distinctRunner().sortBy(_(1)).mkString("\n")}")
     println(s"结果集总数：${CountSets.sum.size}")
-    println(s"映射结果总数：${SetsCol.setsCol.size}")
+    println(s"映射结果总数：${f07.SetsCol.setsCol.size}")
     println(s"未映射结果集数量：${setsLeftover().size}")
     println(s"无效的映射 key：${colLeftover()}")
-    println(s"重复的映射 key：${SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
+    println(s"重复的映射 key：${f07.SetsCol.setsCol.map(_.key).groupBy(identity).filter(_._2.size > 1).map(_._1)}")
 
     // Gen1.genSetsRunner()
 
@@ -212,35 +212,37 @@ object Runner {
       }
     }.flatten*/
 
-    def c = Future {
-      blocking {
-        val cols = SetsCol.setsCol
-          .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
-          .groupBy(_._2.to(List))
-          .map(_._2.head._1)
-          .to(Vector)
-        val setColToCount = Confirm(cols, SetsCol.setsCol).confirm
-          .map(st => (for (i1 <- (1 to 20).to(List); i2 <- (1 to 20).to(List)) yield (st._1.count(i1, i2), st._2.count(i1, i2)), st))
-          .groupBy(_._1)
-          .to(Vector)
-          .map(_._2.head._2)
-        println("互为逆运算的法：")
-        println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
+    /*def c = Future {
+        blocking {
+          val cols = f07.SetsCol.setsCol
+            .map(s => (s, for (i1 <- 1 to 20; i2 <- 1 to 20) yield s.count(i1, i2)))
+            .groupBy(_._2.to(List))
+            .map(_._2.head._1)
+            .to(Vector)
+          val setColToCount = f07
+            .Confirm(cols, f07.SetsCol.setsCol)
+            .confirm
+            .map(st => (for (i1 <- (1 to 20).to(List); i2 <- (1 to 20).to(List)) yield (st._1.count(i1, i2), st._2.count(i1, i2)), st))
+            .groupBy(_._1)
+            .to(Vector)
+            .map(_._2.head._2)
+          println("互为逆运算的法：")
+          println(setColToCount.map(s => (s._1.key, s._2.key)).mkString("\n"))
+        }
       }
-    }
 
-    def action2 = {
-      val a1 = a.map(_ => println("任务 a 完成"))
-      val b1 = b.map(_ => println("任务 b 完成"))
-      val c1 = c.map(_ => println("任务 c 完成"))
-      // val d1 = d.map(_ => println("任务 d 完成"))
-      for {
-        _ <- a1
-        _ <- b1
-        _ <- c1
-        // _ <- d1
-      } yield 1
-    }
+      def action2 = {
+        // val a1 = a.map(_ => println("任务 a 完成"))
+        // val b1 = b.map(_ => println("任务 b 完成"))
+        val c1 = c.map(_ => println("任务 c 完成"))
+        // val d1 = d.map(_ => println("任务 d 完成"))
+        for {
+          // _ <- a1
+          // _ <- b1
+          _ <- c1
+          // _ <- d1
+        } yield 1
+      }*/
 
     // Await.result(action2, Duration.Inf)
 
