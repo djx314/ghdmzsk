@@ -3870,4 +3870,6 @@ trait NaturalProjectionAbs1 extends NaturalProjectionAbs {
   Tags.Tag1837.mapResult(Tags.Tag1801, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
   Tags.Tag1838.mapResult(Tags.Tag1793, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
   Tags.Tag1839.mapResult(Tags.Tag1793, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+  Tags.Tag1840.setValue((i1: Int, i2: Int) => if (i2 == 0) 0 else i2 + 3)
+  Tags.Tag1841.setValue((i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 > i2) i1 + i2 - 1 else 2 * i1 - 1)
 }

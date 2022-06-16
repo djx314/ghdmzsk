@@ -19,18 +19,30 @@ object Runner1 {
 
   def projectionSourceData =
     Using.resource(Source.fromResource("f08/data/projection_data.txt", classOf[Runner1.type].getClassLoader))(source =>
-      source.getLines().to(List).map(_.trim).filter(s => !s.isBlank).map { s =>
-        val t = s.split('=')
-        (t(0), t(1))
-      }
+      source
+        .getLines()
+        .to(LazyList)
+        .map(_.trim)
+        .filter(s => !s.isBlank)
+        .map { s =>
+          val t = s.split('=')
+          (t(0), t(1))
+        }
+        .to(List)
     )
 
   def countSetData =
     Using.resource(Source.fromResource("f08/data/countSet_data.txt", classOf[Runner1.type].getClassLoader))(source =>
-      source.getLines().to(List).map(_.trim).filter(s => !s.isBlank).map { s =>
-        val t = s.split('=')
-        (t(0).toInt, t(1))
-      }
+      source
+        .getLines()
+        .to(LazyList)
+        .map(_.trim)
+        .filter(s => !s.isBlank)
+        .map { s =>
+          val t = s.split('=')
+          (t(0).toInt, t(1))
+        }
+        .to(List)
     )
 
   def writeNeedCountSets: Future[Unit] = {
@@ -58,7 +70,7 @@ object Runner1 {
 
     def countSetsLeaf = {
       val subStr = sumNameString
-      LazyList.from(CountPlans.sum).filter(s => subStr.exists(t => t == s.planInfo)).map(_.set).to(Set)
+      LazyList.from(CountSets.sum) // .filter(s => subStr.exists(t => t == s.planInfo)).map(_.set).to(Set)
     }
 
     Future(
@@ -97,7 +109,7 @@ object Runner1 {
     def dataMap(countSets: List[(Int, String)]): Vector[(String, String)] =
       dataCol
         .collect { case Some(s) => s }
-        .filter(t => countSets.exists(u => u._2 == t._2))
+        // .filter(t => countSets.exists(u => u._2 == t._2))
         .groupBy(_._2)
         .map(s => (s._2.map(_._1).min, s._1))
         .to(Vector)
@@ -117,7 +129,7 @@ object Runner1 {
 
   def main(arr: Array[String]): Unit = {
     {
-      // Await.result(writeNeedCountSets, Duration.Inf)
+      Await.result(writeNeedCountSets, Duration.Inf)
     }
 
     {

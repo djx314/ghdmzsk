@@ -161,13 +161,13 @@ object Runner2 {
     }
 
     {
-      /*val aa = Await.result(printlnCol(677), Duration.Inf)
+      /*val aa = Await.result(printlnCol(675), Duration.Inf)
       aa.foreach(s => println(s"${s._1}, ${s._2} = ${s._3}"))*/
     }
 
     {
-      val aa = Await.result(reverseCount, Duration.Inf)
-      println(aa)
+      /*val aa = Await.result(reverseCount, Duration.Inf)
+      println(aa)*/
     }
   }
 
