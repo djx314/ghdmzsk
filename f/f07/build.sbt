@@ -1,7 +1,7 @@
 Settings.settings
 name         := "ghdmzsk-f07_01"
 organization := "org.scalax.ghdmzsk"
-version      := "0.0.1-SNAPSHOT"
+version      := "0.0.3"
 
 Compile / packageDoc / publishArtifact := false
 

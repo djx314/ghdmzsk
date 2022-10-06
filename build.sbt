@@ -86,8 +86,8 @@ val f11 = project in fRoot / "f11"
 val f12 = project in fRoot / "f12"
 val f13 = project in fRoot / "f13"
 
-val f_codegen_path = fRoot / "f_codegen"
-val f_codegen_project      = project in f_codegen_path
+val f_codegen_path    = fRoot / "f_codegen"
+val f_codegen_project = project in f_codegen_path
 
 // addCommandAlias("f_codegen", s"f_codegen_project/runMain f_codegen.Runner ${f_codegen_path.getAbsolutePath}")
 
@@ -99,7 +99,6 @@ f08 / count := {
   (f08 / Compile / runMain).partialInput(" f08.Runner1").evaluated
   (f08 / Compile / runMain).partialInput(" f08.Runner2").evaluated
 }
-
 
 val g01 = project in gRoot / "g01"
 val g02 = project in gRoot / "g02"

@@ -5,6 +5,16 @@ sealed trait SetsList {
   def firstStart: Int
   def secondStart: Int
   def count(i1: Int, i2: Int): Option[Int]
+
+  def genData(max: Int): List[(Int, Int, Option[Int])] = {
+    val col = for (i1 <- firstStart to max; i2 <- secondStart to max) yield (i1, i2, count(i1, i2))
+    col.to(List)
+  }
+
+  def genString(max: Int): String = {
+    val data = for ((i1, i2, data) <- genData(max)) yield s"$i1,$i2,${data.map(_.toString).getOrElse("unlimited")}"
+    data.mkString("|")
+  }
 }
 case class CommonSetsList(override val key: String, override val firstStart: Int, override val secondStart: Int, value: (Int, Int) => Int) extends SetsList {
   override def count(i1: Int, i2: Int): Option[Int] = Option(value(i1, i2))
@@ -1917,4 +1927,8 @@ abstract trait SetsColAbs1 extends SetsColAbs {
   Tags.Tag1837.firstart(0).secondStart(0).mapResult(Tags.Tag1801, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
   Tags.Tag1838.firstart(0).secondStart(0).mapResult(Tags.Tag1793, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
   Tags.Tag1839.firstart(0).secondStart(1).mapResult(Tags.Tag1793, (i1: Option[Int]) => i1.map(b => b - 1).filter(_ >= 0))
+}
+
+object SetColInstance {
+  lazy val list: Vector[SetsList] = SetsCol.setsCol
 }

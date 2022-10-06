@@ -16,7 +16,7 @@ object Dependent {
     val slf4j                     = "2.0.0-alpha7"
     val scalaTags                 = "0.11.1"
     val scalajsJQuery             = "3.6.0"
-    val udashJQuery = "3.2.0"
+    val udashJQuery               = "3.2.0"
     val scalajsDom                = "2.1.0"
     val jqueryJSSource            = "3.6.0"
     val slick                     = "3.4.0-M1"
@@ -25,7 +25,7 @@ object Dependent {
     val zhttp                     = "1.0.0.0-RC29"
     val mysql                     = "8.0.29"
     val zioInteropReactivestreams = "1.3.12"
-    val circeYaml = "0.2.1"
+    val circeYaml                 = "0.2.1"
   }
 
   val catsEffect = Seq("org.typelevel" %% "cats-effect" % versions.catsEffect)
@@ -40,13 +40,13 @@ object Dependent {
   val zioLogging = Seq("dev.zio" %% "zio-logging" % versions.zioLogging)
 
   val tapir = Seq(
-    "com.softwaremill.sttp.tapir" %% "tapir-zio1"                % versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-zio1-http-server"    % versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs"       % versions.tapir,
+    "com.softwaremill.sttp.tapir"   %% "tapir-zio1"              % versions.tapir,
+    "com.softwaremill.sttp.tapir"   %% "tapir-zio1-http-server"  % versions.tapir,
+    "com.softwaremill.sttp.tapir"   %% "tapir-openapi-docs"      % versions.tapir,
     "com.softwaremill.sttp.apispec" %% "openapi-circe-yaml"      % versions.circeYaml,
-    "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui"         % versions.tapir,
-    "com.softwaremill.sttp.tapir" %% "tapir-redoc"              % versions.tapir
+    "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui-bundle" % versions.tapir,
+    "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui"        % versions.tapir,
+    "com.softwaremill.sttp.tapir"   %% "tapir-redoc"             % versions.tapir
   )
 
   val tapirSttp = Seq(

@@ -153,6 +153,7 @@ object Runner2 {
       val a = Await.result(confirmAllExists, Duration.Inf)
       println(a.map(_._1))
       println(a.size)
+      println(projectionSourceValues.size)
     }
 
     {
