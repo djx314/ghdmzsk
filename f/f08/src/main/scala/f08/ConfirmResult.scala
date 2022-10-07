@@ -87,8 +87,8 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag005, countSetKey = 594, c = (i1: Int, i2: Int) => 3))
   add(CusPlan(key = Tags.Tag006, countSetKey = 595, c = (i1: Int, i2: Int) => i2 * 2))
   add(CusPlan(key = Tags.Tag007, countSetKey = 596, c = (i1: Int, i2: Int) => if (i2 == 0) Option(0) else Option.empty))
-  add(SimpleMapPlan(key = Tags.Tag008, countSetKey = 597, setColKey = Tags.Tag189))
-  add(SimpleMapPlan(key = Tags.Tag009, countSetKey = 598, setColKey = Tags.Tag003))
+  add(CusPlan(key = Tags.Tag008, countSetKey = 597, c = (i1: Int, i2: Int) => i2 * 2 + 2))
+  add(CusPlan(key = Tags.Tag009, countSetKey = 598, c = (i1: Int, i2: Int) => i2 * 2 + 1))
   add(SimpleMapPlan(key = Tags.Tag010, countSetKey = 599, setColKey = Tags.Tag049))
   add(SimpleMapPlan(key = Tags.Tag011, countSetKey = 600, setColKey = Tags.Tag050))
   add(SimpleMapPlan(key = Tags.Tag012, countSetKey = 601, setColKey = Tags.Tag191))
@@ -1893,29 +1893,18 @@ trait ConfirmCol {
     )
   )
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag536,
       countSetKey = 708,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1246"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1246")
+      c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) i1 - 1 else if (i1 <= i2) i1 * 2 - 2 else NotImplemented
     )
   )
-  add(
-    MapPlan(
-      key = Tags.Tag537,
-      countSetKey = 972,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag340"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag578"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag120"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1612=reverse")
-    )
-  )
+  add(CusPlan(key = Tags.Tag537, countSetKey = 972, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 + 3))
+
+  /** (i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 > 0 && i2 == 0) i1 + 3 else if (i1 == 0 && i2 > 0) i1 + (i1 + i2 - 1) / i2
+    * else if (i1 > 0 && i2 > 0 && i1 == i2) i2 + 3 else if (i1 > 0 && i2 > 0 && i1 > i2) i1 + 3 else if (i1 > 0 && i2 > 0 && i1 < i2) i1 +
+    * i1 / i2 + 3 else ???
+    */
 
 }
 
