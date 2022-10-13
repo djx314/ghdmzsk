@@ -1881,17 +1881,13 @@ trait ConfirmCol {
     )
   )
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag535,
       countSetKey = 676,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1546")
+      c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) i1 - 1 else if (i1 <= i2) i1 * 2 - 1 else NotImplemented
     )
   )
+
   add(
     CusPlan(
       key = Tags.Tag536,
