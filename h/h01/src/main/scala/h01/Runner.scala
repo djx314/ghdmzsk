@@ -9,8 +9,8 @@ object Runner {
         case _: StackOverflowError => Option.empty
       }
     value match {
-      case Some(Number2S(tail)) => count(tail) + 1
-      case None                 => 0
+      case Some(Number2(tail)) => count(tail) + 1
+      case None                => 0
     }
   }
 
