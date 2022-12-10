@@ -10,7 +10,8 @@ object Runner {
       case _: StackOverflowError =>
     }
 
-    Number.当前状态
+    val state = Number.当前状态
+    state
   }
 
   lazy val number1v: Number = Number.V(() => number1v)

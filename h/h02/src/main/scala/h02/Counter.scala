@@ -4,12 +4,13 @@ trait Number extends ((() => Number) => Number)
 
 object Number {
 
-  var 当前状态: Int = null.asInstanceOf[Int]
+  private var innerState: Int = null.asInstanceOf[Int]
+  def 当前状态: Int               = innerState
   def 更新状态: Unit = this.synchronized {
-    当前状态 = 当前状态 + 1
+    innerState = innerState + 1
   }
   def 重置状态: Unit = this.synchronized {
-    当前状态 = 0
+    innerState = 0
   }
 
   val S: Number = (tail: () => Number) =>
