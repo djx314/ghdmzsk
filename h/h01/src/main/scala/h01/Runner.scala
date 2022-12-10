@@ -2,15 +2,15 @@ package h01
 
 object Runner {
 
-  def count(number2: () => Number2): Int = {
+  def count(number3: () => Number3): Int = {
     val value =
-      try Option(number2())
+      try Option(number3())
       catch {
         case _: StackOverflowError => Option.empty
       }
     value match {
-      case Some(Number2(tail)) => count(tail) + 1
-      case None                => 0
+      case Some(Number3S(tail)) => count(tail) + 1
+      case None                 => 0
     }
   }
 
