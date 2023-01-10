@@ -1,4 +1,4 @@
-package h01
+package h02
 
 trait Number extends ((() => Number) => Number)
 
