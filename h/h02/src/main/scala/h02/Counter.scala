@@ -4,15 +4,6 @@ trait Number extends ((() => Number) => Number)
 
 object Number {
 
-  private var innerState: Int = null.asInstanceOf[Int]
-  def 当前状态: Int               = innerState
-  def 更新状态: Unit = this.synchronized {
-    innerState = innerState + 1
-  }
-  def 重置状态: Unit = this.synchronized {
-    innerState = 0
-  }
-
   val S: Number = (tail: () => Number) =>
     (number: () => Number) => {
       def tail1   = tail()
@@ -41,9 +32,12 @@ object Number {
       number1(() => tail1)
     }
 
-  val Append: Number = (v: () => Number) => {
-    更新状态
-    v()
+  val Identity: Number = (v: () => Number) => v()
+
+  val Append: Number = (v: () => Number) => NumberPositive(v)
+
+  case class NumberPositive(tail: () => Number) extends Number {
+    override def apply(t: () => Number): Number = Identity(t)
   }
 
 }

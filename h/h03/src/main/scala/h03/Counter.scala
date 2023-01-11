@@ -4,11 +4,6 @@ trait Number extends ((() => Number) => Number)
 
 object Number {
 
-  private var state: Option[Int] = Option.empty
-  private def updateState: Unit  = state = for (t <- state) yield t + 1
-  def resetState: Unit           = state = Option(0)
-  def currentState: Int          = state.get
-
   def apply(num: (() => Number) => Number): Number = new Number {
     override def apply(n: () => Number): Number = num(n)
   }
@@ -22,9 +17,10 @@ object Number {
   val Number3Positive: Number = Number(tail => Number(number1 => Number(number2 => Append(() => tail.apply()(number1)(number2)))))
   val Number3Zero: Number     = Number(tail => Number(number1 => Number(number2 => number2.apply()(number1)(tail))))
 
-  val Append: Number = Number { tail =>
-    updateState
-    tail.apply()
+  val Append: Number = Number(tail => NumberPositive(tail))
+
+  case class NumberPositive(tail: () => Number) extends Number {
+    override def apply(f: () => Number): Number = Number1Zero(f)
   }
 
 }

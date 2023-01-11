@@ -1,13 +1,12 @@
 package h03
 
+import h03.Number.NumberPositive
+
 object Runner {
 
-  def count(number: () => Number): Int = {
-    Number.resetState
-    number()
-    val v = Number.currentState
-    Number.resetState
-    v
+  def count(number: () => Number): Int = number() match {
+    case NumberPositive(tail) => count(tail) + 1
+    case _                    => 0
   }
 
   def number1Gen(n: Int): Number                  = if (n > 0) Number.Number1Positive(() => number1Gen(n - 1)) else Number.Number1Zero
