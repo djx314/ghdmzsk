@@ -1,13 +1,12 @@
-package h03
+package h03.test02
+
+import h03.test02.Number.NumberPositive
 
 object Runner {
 
-  def count(number: () => Number): Int = {
-    Number.resetState
-    number()
-    val v = Number.currentState
-    Number.resetState
-    v
+  def count(number: () => Number): Int = number() match {
+    case NumberPositive(tail) => count(tail) + 1
+    case _                    => 0
   }
 
   def number1Gen(n: Int): Number                  = if (n > 0) Number.Number1Positive(() => number1Gen(n - 1)) else Number.Number1Zero
@@ -17,9 +16,9 @@ object Runner {
   def main(arr: Array[String]): Unit = {
     locally {
       for {
-        i1 <- 0 to 20
-        i2 <- 0 to 20
-        i3 <- 0 to 20
+        i1 <- 0 to 200
+        i2 <- 1 to 8
+        i3 <- 1 to 8
       } {
         val number1: Number              = number1Gen(i1)
         lazy val number2Positive: Number = number2Gen(i2, number2Zero)
@@ -27,10 +26,14 @@ object Runner {
         lazy val number3Positive: Number = number3Gen(i3, number3Zero)
         lazy val number3Zero: Number     = Number.Number3Zero(() => number3Positive)
 
-        def r           = number1(() => number2Positive)(() => number3Positive)
-        val result: Int = count(() => r)
-        println(i1, i2, i3, i1 * i2 * i3, result)
-        assert(i1 * i2 * i3 == result)
+        def r1            = number2Positive(() => number3Positive)(() => number1)
+        def r2            = number3Positive(() => number1)(() => number2Positive)
+        val result1: Int  = count(() => r1)
+        val result2: Int  = count(() => r2)
+        val countInt: Int = i1 / (i2 * i3)
+        println(i1, i2, i3, countInt, result1, countInt == result1)
+        assert(countInt == result1)
+        assert(countInt == result2)
       }
     }
   }

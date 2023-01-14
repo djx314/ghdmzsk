@@ -3,15 +3,16 @@ package h02
 object Runner {
 
   def count(number: () => Number): Int = {
-    Number.重置状态
-
-    try number()
-    catch {
-      case _: StackOverflowError =>
+    val opt =
+      try Option(number())
+      catch {
+        case _: StackOverflowError =>
+          Option.empty
+      }
+    opt match {
+      case Some(Number.NumberPositive(tail)) => count(tail) + 1
+      case _                                 => 0
     }
-
-    val state = Number.当前状态
-    state
   }
 
   lazy val number1v: Number = Number.V(() => number1v)
