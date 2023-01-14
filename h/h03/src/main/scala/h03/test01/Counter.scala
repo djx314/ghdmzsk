@@ -17,10 +17,8 @@ object Number {
   val Number3Positive: Number = Number(tail => Number(number1 => Number(number2 => NumberPositive(() => tail.apply()(number1)(number2)))))
   val Number3Zero: Number     = Number(tail => Number(number1 => Number(number2 => number2.apply()(number1)(tail))))
 
-  // val Append: Number = Number(tail => NumberPositive(tail))
-
   case class NumberPositive(tail: () => Number) extends Number {
-    override def apply(f: () => Number): Number = Number1Zero(f)
+    override def apply(f: () => Number): Number = throw new Exception
   }
 
 }
