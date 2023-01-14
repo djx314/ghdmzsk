@@ -43,7 +43,7 @@ val bn03_01 = project in bnRoot / "b03-01"
 val cn01 = project in cnRoot / "c01"
 val cn02 = project in cnRoot / "c02"
 
-val d01 = project in dRoot / "d01"
+val d01 = project in dRoot / "d01"1
 val d02 = project in dRoot / "d02"
 val d03 = project in dRoot / "d03"
 
