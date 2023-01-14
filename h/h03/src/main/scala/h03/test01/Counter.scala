@@ -1,4 +1,4 @@
-package h03
+package h03.test01
 
 trait Number extends ((() => Number) => Number)
 
@@ -14,10 +14,10 @@ object Number {
   val Number2Positive: Number = Number(tail => Number(number1 => Number(number3 => number3.apply()(number1)(tail))))
   val Number2Zero: Number     = Number(tail => Number(number1 => Number(number3 => number1.apply()(tail)(number3))))
 
-  val Number3Positive: Number = Number(tail => Number(number1 => Number(number2 => Append(() => tail.apply()(number1)(number2)))))
+  val Number3Positive: Number = Number(tail => Number(number1 => Number(number2 => NumberPositive(() => tail.apply()(number1)(number2)))))
   val Number3Zero: Number     = Number(tail => Number(number1 => Number(number2 => number2.apply()(number1)(tail))))
 
-  val Append: Number = Number(tail => NumberPositive(tail))
+  // val Append: Number = Number(tail => NumberPositive(tail))
 
   case class NumberPositive(tail: () => Number) extends Number {
     override def apply(f: () => Number): Number = Number1Zero(f)
