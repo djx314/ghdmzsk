@@ -1,5 +1,5 @@
 Settings.settings
 name := "h03"
 
-javaOptions += "-Xss600k"
+javaOptions += "-Xss100m"
 run / fork := true
