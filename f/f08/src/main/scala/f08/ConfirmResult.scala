@@ -1838,6 +1838,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
     )
   )
+
   add(
     MapPlan(
       key = Tags.Tag531,
@@ -1850,18 +1851,15 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495=reverse")
     )
   )
+
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag532,
       countSetKey = 1009,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      c = (i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) 0 else if (i1 <= i2) i1 - 1 else NotImplemented
     )
   )
+
   add(
     CusPlan(
       key = Tags.Tag533,
@@ -1894,6 +1892,7 @@ trait ConfirmCol {
       c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) i1 - 1 else if (i1 <= i2) i1 * 2 - 2 else NotImplemented
     )
   )
+
   add(CusPlan(key = Tags.Tag537, countSetKey = 972, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 + 3))
 
   def aa: (Int, Int) => ConfirmResult = (i1: Int, i2: Int) => {
@@ -1913,14 +1912,19 @@ trait ConfirmCol {
       i1
       // Tag006
       i1 * 3
-    } else if (i1 > 0 && i2 > 0 && i1 > i2) {
-      // Tag259
-      if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
       // Tag1327
       i2 - 1
+    } else if (i1 > 0 && i2 > 0 && i1 > i2) {
+      // Tag1327
+      i2 - 1
+      // Tag259
+      if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
+      NotImplemented
     } else {
       // Tag006
       if (i1 == 0) 0 else i1 * 2 + i2
+      // Tag1327=reverse
+      i1 - 1
     }
   }
 }
