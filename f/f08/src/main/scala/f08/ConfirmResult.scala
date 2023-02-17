@@ -1863,17 +1863,14 @@ trait ConfirmCol {
     )
   )
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag533,
       countSetKey = 923,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag006"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag259"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag006")
+      c = (i1: Int, i2: Int) =>
+        if (i1 == 0 || i2 == 0) 0 else if (i1 <= i2 || i2 == 0) i1 * 2 + i2 else if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
     )
   )
+
   add(
     CusPlan(
       key = Tags.Tag534,
@@ -1910,17 +1907,17 @@ trait ConfirmCol {
       // Tag1166=reverse
       i2 * 2
       // Tag081
-      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1)
+      0
     } else if (i1 > 0 && i2 > 0 && i1 == i2) {
       // Tag1495
       i1
       // Tag006
-      if (i1 == 0) 0 else i1 * 2 + i2
+      i1 * 3
     } else if (i1 > 0 && i2 > 0 && i1 > i2) {
+      // Tag259
+      if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
       // Tag1327
       i2 - 1
-      // Tag259
-      if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 else (i1 / i2) * i2 + i2 + 2 * i1
     } else {
       // Tag006
       if (i1 == 0) 0 else i1 * 2 + i2
