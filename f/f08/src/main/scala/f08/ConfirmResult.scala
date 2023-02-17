@@ -1874,24 +1874,11 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag006")
     )
   )
-  /*add(
+  add(
     CusPlan(
       key = Tags.Tag534,
       countSetKey = 1037,
-      c = aa
-    )
-  )*/
-
-  add(
-    MapPlan(
-      key = Tags.Tag534,
-      countSetKey = 1037,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag1166=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      c = (i1: Int, i2: Int) => if (i2 == 0) 0 else if (i1 == 0) i2 * 2 else if (i1 == i2) i1 else if (i1 > i2) i2 - 1 else NotImplemented
     )
   )
 
@@ -1913,17 +1900,22 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag537, countSetKey = 972, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 + 3))
 
   def aa: (Int, Int) => ConfirmResult = (i1: Int, i2: Int) => {
-    if (i1 == 0 && i2 == 0)
-      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1)
-    else if (i1 > 0 && i2 == 0)
-      if (i2 == 0) Option(0) else if (i1 == 0) Option.empty else if (i2 % i1 == 0) Option(i2 + i2 / i1) else Option(i2 + i2 / i1 + 1)
-    else if (i1 == 0 && i2 > 0)
-      if (i1 == 0) i2 * 2 else 0
-    else if (i1 > 0 && i2 > 0 && i1 == i2)
-      if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option(0 * i2 + 1) else if (i2 == 0) Option.empty else Option(1 * i1 + 0 * i2 + 0)
-    else if (i1 > 0 && i2 > 0 && i1 > i2)
-      if (i2 % (i1 + 1) == 0) i2 / (i1 + 1) * i1 + i2 % (i1 + 1) else i2 / (i1 + 1) * i1 + i2 % (i1 + 1) - 1
-    else Option.empty
+    if (i1 == 0 && i2 == 0) {
+      // Tag081
+      0
+    } else if (i1 > 0 && i2 == 0) {
+      // Tag081=reverse
+      0
+    } else if (i1 == 0 && i2 > 0) {
+      // Tag1166=reverse
+      i2 * 2
+    } else if (i1 > 0 && i2 > 0 && i1 == i2) {
+      // Tag1495
+      i1
+    } else if (i1 > 0 && i2 > 0 && i1 > i2) {
+      // Tag1327
+      i2 - 1
+    } else NotImplemented
   }
 }
 
