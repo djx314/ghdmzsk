@@ -1909,13 +1909,22 @@ trait ConfirmCol {
     } else if (i1 == 0 && i2 > 0) {
       // Tag1166=reverse
       i2 * 2
+      // Tag081
+      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1)
     } else if (i1 > 0 && i2 > 0 && i1 == i2) {
       // Tag1495
       i1
+      // Tag006
+      if (i1 == 0) 0 else i1 * 2 + i2
     } else if (i1 > 0 && i2 > 0 && i1 > i2) {
       // Tag1327
       i2 - 1
-    } else NotImplemented
+      // Tag259
+      if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 else (i1 / i2) * i2 + i2 + 2 * i1
+    } else {
+      // Tag006
+      if (i1 == 0) 0 else i1 * 2 + i2
+    }
   }
 }
 
