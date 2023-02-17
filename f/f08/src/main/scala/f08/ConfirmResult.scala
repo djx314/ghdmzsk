@@ -17,10 +17,16 @@ sealed trait ConfirmPlan {
     val resultSet = countSet.find(_.index == countSetKey).get.set.split('|').to(List)
     val confirmSet = for (t <- resultSet) yield {
       val List(i1, i2, i3) = t.split(',').to(List)
-      count(i1.toInt, i2.toInt) match {
-        case OptResult(u)   => u == i3.toIntOption
+      val u = count(i1.toInt, i2.toInt) match {
+        case OptResult(x) =>
+          if (x != i3.toIntOption) {
+            println(i1, i2, x, i3.toIntOption)
+          }
+          x == i3.toIntOption
         case NotImplemented => true
       }
+      assert(u)
+      u
     }
     confirmSet.forall(identity)
   }
@@ -265,7 +271,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag183, countSetKey = 809, setColKey = Tags.Tag987))
   add(SimpleMapPlan(key = Tags.Tag184, countSetKey = 810, setColKey = Tags.Tag767))
   add(SimpleMapPlan(key = Tags.Tag185, countSetKey = 811, setColKey = Tags.Tag655))
-  add(SimpleMapPlan(key = Tags.Tag186, countSetKey = 812, setColKey = Tags.Tag1557))
+  add(CusPlan(key = Tags.Tag186, countSetKey = 812, c = (i1: Int, i2: Int) => if (i1 <= i2) i2 + 1 else i2))
   add(SimpleMapPlan(key = Tags.Tag187, countSetKey = 813, setColKey = Tags.Tag678))
   add(SimpleMapPlan(key = Tags.Tag188, countSetKey = 814, setColKey = Tags.Tag761))
   add(SimpleMapPlan(key = Tags.Tag189, countSetKey = 815, setColKey = Tags.Tag600))
@@ -1868,6 +1874,14 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag006")
     )
   )
+  /*add(
+    CusPlan(
+      key = Tags.Tag534,
+      countSetKey = 1037,
+      c = aa
+    )
+  )*/
+
   add(
     MapPlan(
       key = Tags.Tag534,
@@ -1880,6 +1894,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
     )
   )
+
   add(
     CusPlan(
       key = Tags.Tag535,
@@ -1897,11 +1912,19 @@ trait ConfirmCol {
   )
   add(CusPlan(key = Tags.Tag537, countSetKey = 972, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 + 3))
 
-  /** (i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else if (i1 > 0 && i2 == 0) i1 + 3 else if (i1 == 0 && i2 > 0) i1 + (i1 + i2 - 1) / i2
-    * else if (i1 > 0 && i2 > 0 && i1 == i2) i2 + 3 else if (i1 > 0 && i2 > 0 && i1 > i2) i1 + 3 else if (i1 > 0 && i2 > 0 && i1 < i2) i1 +
-    * i1 / i2 + 3 else ???
-    */
-
+  def aa: (Int, Int) => ConfirmResult = (i1: Int, i2: Int) => {
+    if (i1 == 0 && i2 == 0)
+      if (i1 == 0) Option(0) else if (i2 == 0) Option.empty else if (i1 % i2 == 0) Option(i1 + i1 / i2) else Option(i1 + i1 / i2 + 1)
+    else if (i1 > 0 && i2 == 0)
+      if (i2 == 0) Option(0) else if (i1 == 0) Option.empty else if (i2 % i1 == 0) Option(i2 + i2 / i1) else Option(i2 + i2 / i1 + 1)
+    else if (i1 == 0 && i2 > 0)
+      if (i1 == 0) i2 * 2 else 0
+    else if (i1 > 0 && i2 > 0 && i1 == i2)
+      if (i1 == 0 && i2 == 0) Option(1) else if (i1 == 0) Option(0 * i2 + 1) else if (i2 == 0) Option.empty else Option(1 * i1 + 0 * i2 + 0)
+    else if (i1 > 0 && i2 > 0 && i1 > i2)
+      if (i2 % (i1 + 1) == 0) i2 / (i1 + 1) * i1 + i2 % (i1 + 1) else i2 / (i1 + 1) * i1 + i2 % (i1 + 1) - 1
+    else Option.empty
+  }
 }
 
 object ConfirmCol {
