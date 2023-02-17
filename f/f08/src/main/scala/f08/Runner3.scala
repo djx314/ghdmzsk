@@ -255,7 +255,7 @@ object Runner3 {
           val a = u.cofirm(CountSets.sum)
           assert(a)
           indexSet = indexSet + u.countSetKey
-          println(a)
+          // println(a)
         }
         println(indexSet)
         println(set2)
