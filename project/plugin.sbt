@@ -1,7 +1,9 @@
-addSbtPlugin("org.scalameta"         % "sbt-scalafmt"             % "2.4.6")
-addSbtPlugin("com.typesafe.play"     % "sbt-twirl"                % "1.6.0-M6")
-addSbtPlugin("io.spray"              % "sbt-revolver"             % "0.9.1")
-addSbtPlugin("org.scala-js"          % "sbt-scalajs"              % "1.8.0")
-addSbtPlugin("com.vmunier"           % "sbt-web-scalajs"          % "1.2.0")
+import djx.sbt.depts.plugins.{PluginsCollection => pluginCol}
+
+addSbtPlugin(pluginCol.`sbt-twirl`)
+addSbtPlugin(pluginCol.`sbt-scalajs-crossproject`)
 addSbtPlugin("io.github.davidmweber" % "flyway-sbt"               % "7.4.0")
-addSbtPlugin("org.portable-scala"    % "sbt-scalajs-crossproject" % "1.0.0")
+addSbtPlugin("com.vmunier"           % "sbt-web-scalajs"          % "1.2.0")
+addSbtPlugin(pluginCol.`sbt-scalajs`)
+addSbtPlugin(pluginCol.`sbt-revolver`)
+addSbtPlugin(pluginCol.`sbt-scalafmt`)

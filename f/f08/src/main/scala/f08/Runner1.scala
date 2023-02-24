@@ -23,7 +23,7 @@ object Runner1 {
         .getLines()
         .to(LazyList)
         .map(_.trim)
-        .filter(s => !s.isBlank)
+        .filter(s => !s.trim.isEmpty)
         .map { s =>
           val t = s.split('=')
           (t(0), t(1))
@@ -37,7 +37,7 @@ object Runner1 {
         .getLines()
         .to(LazyList)
         .map(_.trim)
-        .filter(s => !s.isBlank)
+        .filter(s => !s.trim.isEmpty)
         .map { s =>
           val t = s.split('=')
           (t(0).toInt, t(1))

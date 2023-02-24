@@ -25,7 +25,7 @@ object Runner3 {
     yield key.toInt -> value
 
   def fromMappingFileToMapConfigPre(writeFile: Path): Map[String, String] = Using.resource(Source.fromFile(writeFile.toFile)) { source =>
-    val lines = source.getLines().to(List).filterNot(_.trim.isBlank)
+    val lines = source.getLines().to(List).filterNot(_.trim.isEmpty)
     val col = for (eachLine <- lines) yield {
       eachLine.split('=').to(List) match {
         case List(i1, i2)     => i1 -> i2
@@ -37,7 +37,7 @@ object Runner3 {
 
   def fromFileToMapConfig(writeFile: Path): Map[String, Map[(Int, Int), Option[Int]]] = Using.resource(Source.fromFile(writeFile.toFile)) {
     source =>
-      val lines = source.getLines().to(List).filterNot(_.trim.isBlank)
+      val lines = source.getLines().to(List).filterNot(_.trim.isEmpty)
       val col = for (eachLine <- lines) yield {
         val List(key, value) = eachLine.split('=').to(List)
         val eachMap = for (eachResult <- value.split('|').to(List)) yield {
