@@ -100,7 +100,7 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag012, countSetKey = 601, c = (i1: Int, i2: Int) => i2 + 2))
   add(CusPlan(key = Tags.Tag013, countSetKey = 602, c = (i1: Int, i2: Int) => i2 + 1))
   add(CusPlan(key = Tags.Tag014, countSetKey = 603, c = (i1: Int, i2: Int) => if (i2 == 0) 0 else 1))
-  add(SimpleMapPlan(key = Tags.Tag015, countSetKey = 604, setColKey = Tags.Tag051))
+  add(CusPlan(key = Tags.Tag015, countSetKey = 604, c = (i1: Int, i2: Int) => if (i2 == 0) Option.empty else 1))
   add(SimpleMapPlan(key = Tags.Tag016, countSetKey = 605, setColKey = Tags.Tag198))
   add(SimpleMapPlan(key = Tags.Tag017, countSetKey = 606, setColKey = Tags.Tag052))
   add(SimpleMapPlan(key = Tags.Tag018, countSetKey = 607, setColKey = Tags.Tag502))
@@ -1766,16 +1766,12 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag891")
     )
   )
+
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag525,
       countSetKey = 1056,
-      `i1 = 0 and i2 = 0` = Option("Tag670"),
-      `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      c = (i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i1 >= i2) 0 else NotImplemented
     )
   )
 
@@ -1864,6 +1860,8 @@ trait ConfirmCol {
       0
       // Tag1637
       1
+      // Tag670
+      Option.empty
     } else if (i1 > 0 && i2 == 0) {
       // Tag670
       i1 + 1
@@ -1880,6 +1878,8 @@ trait ConfirmCol {
       0
       // Tag670=reverse
       i2 + 1
+      // Tag670
+      Option.empty
     } else if (i1 > 0 && i2 > 0 && i1 == i2) {
       // Tag006
       i1 * 3
@@ -1887,10 +1887,10 @@ trait ConfirmCol {
       i1
       // Tag1184
       (i1 - 1) / 2
-      // Tag1408
-      // if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0
       // Tag1327
       i2 - 1
+      // Tag1408
+      0
     } else if (i1 > 0 && i2 > 0 && i1 > i2) {
       // Tag259
       // if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
@@ -1905,6 +1905,8 @@ trait ConfirmCol {
       i2
       // Tag1327
       i2 - 1
+      // Tag1408
+      0
     } else {
       // Tag006
       if (i1 == 0) 0 else i1 * 2 + i2
@@ -1919,6 +1921,7 @@ trait ConfirmCol {
       NotImplemented
       // Tag447=reverse
       i2 - 1
+      NotImplemented
     }
   }
 }
