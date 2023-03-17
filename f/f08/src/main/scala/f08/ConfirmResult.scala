@@ -102,7 +102,7 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag014, countSetKey = 603, c = (i1: Int, i2: Int) => if (i2 == 0) 0 else 1))
   add(CusPlan(key = Tags.Tag015, countSetKey = 604, c = (i1: Int, i2: Int) => if (i2 == 0) Option.empty else 1))
   add(CusPlan(key = Tags.Tag016, countSetKey = 605, c = (i1: Int, i2: Int) => if (i2 <= 1) 2 - i2 else 1))
-  add(SimpleMapPlan(key = Tags.Tag017, countSetKey = 606, setColKey = Tags.Tag052))
+  add(CusPlan(key = Tags.Tag017, countSetKey = 606, c = (i1: Int, i2: Int) => if (i2 == 0) Option.empty else 2))
   add(SimpleMapPlan(key = Tags.Tag018, countSetKey = 607, setColKey = Tags.Tag502))
   add(SimpleMapPlan(key = Tags.Tag019, countSetKey = 608, setColKey = Tags.Tag055))
   add(SimpleMapPlan(key = Tags.Tag020, countSetKey = 609, setColKey = Tags.Tag054))
@@ -1732,16 +1732,16 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag120")
     )
   )
+
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag523,
       countSetKey = 1097,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag786"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1293=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag786")
+      c = (i1: Int, i2: Int) =>
+        if (i1 <= i2) 1
+        else if (i2 == 0) 0
+        else if (i1                  % (i2 * 2) <= i2) i1 / (i2 * 2) * i2 + 1
+        else i1 / (i2 * 2) * i2 + i1 % (i2 * 2) - i2 + 1
     )
   )
 
@@ -1842,23 +1842,23 @@ trait ConfirmCol {
 
   def aa: (Int, Int) => ConfirmResult = (i1: Int, i2: Int) => {
     if (i1 == 0 && i2 == 0) {
-      // Tag1637
-      1
       // Tag670
       Option.empty
       // Tag081
       0
+      // Tag1637
+      1
     } else if (i1 > 0 && i2 == 0) {
       // Tag670
       i1 + 1
       // Tag1720
       i1 - 1
-      // Tag081=reverse
-      0
       // Tag1232=reverse
       2
       // Tag121
       if (i1 == 1) 4 else i1 + 2
+      // Tag081=reverse
+      0
     } else if (i1 == 0 && i2 > 0) {
       // Tag1166=reverse
       i2 * 2
@@ -1870,6 +1870,8 @@ trait ConfirmCol {
       Option.empty
       // Tag081
       0
+      // Tag1637
+      1
     } else if (i1 > 0 && i2 > 0 && i1 == i2) {
       // Tag006
       i1 * 3
@@ -1885,6 +1887,8 @@ trait ConfirmCol {
       i1 * 2 + 2
       // Tag1666
       if (i1 == 1) 4 else i1 + 2
+      // Tag786
+      1
     } else if (i1 > 0 && i2 > 0 && i1 > i2) {
       // Tag259
       // if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
@@ -1905,6 +1909,8 @@ trait ConfirmCol {
       i2 + 2
       // Tag925
       i1 + 2
+      // Tag1293=reverse
+      if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + 1 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) - i2 + 1
     } else {
       // Tag006
       if (i1 == 0) 0 else i1 * 2 + i2
@@ -1923,6 +1929,8 @@ trait ConfirmCol {
       i2 * 2 - i2 % i1 + 2
       // Tag1666
       if (i1 == 1) 4 else i1 + 2
+      // Tag786
+      1
     }
   }
 }
