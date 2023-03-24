@@ -104,27 +104,33 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag016, countSetKey = 605, c = (i1: Int, i2: Int) => if (i2 <= 1) 2 - i2 else 1))
   add(CusPlan(key = Tags.Tag017, countSetKey = 606, c = (i1: Int, i2: Int) => if (i2 == 0) Option.empty else 2))
   add(CusPlan(key = Tags.Tag018, countSetKey = 607, c = (i1: Int, i2: Int) => if (i2 == 0) 0 else i2 + 1))
-  add(SimpleMapPlan(key = Tags.Tag019, countSetKey = 608, setColKey = Tags.Tag055))
-  add(SimpleMapPlan(key = Tags.Tag020, countSetKey = 609, setColKey = Tags.Tag054))
-  add(SimpleMapPlan(key = Tags.Tag021, countSetKey = 610, setColKey = Tags.Tag560))
-  add(SimpleMapPlan(key = Tags.Tag022, countSetKey = 611, setColKey = Tags.Tag188))
-  add(SimpleMapPlan(key = Tags.Tag023, countSetKey = 612, setColKey = Tags.Tag056))
-  add(SimpleMapPlan(key = Tags.Tag024, countSetKey = 613, setColKey = Tags.Tag192))
-  add(SimpleMapPlan(key = Tags.Tag025, countSetKey = 614, setColKey = Tags.Tag1183))
-  add(SimpleMapPlan(key = Tags.Tag026, countSetKey = 615, setColKey = Tags.Tag190))
-  add(SimpleMapPlan(key = Tags.Tag027, countSetKey = 616, setColKey = Tags.Tag187))
-  add(SimpleMapPlan(key = Tags.Tag028, countSetKey = 617, setColKey = Tags.Tag157))
-  add(SimpleMapPlan(key = Tags.Tag029, countSetKey = 618, setColKey = Tags.Tag604))
-  add(SimpleMapPlan(key = Tags.Tag030, countSetKey = 619, setColKey = Tags.Tag178))
-  add(SimpleMapPlan(key = Tags.Tag031, countSetKey = 620, setColKey = Tags.Tag1142))
-  add(SimpleMapPlan(key = Tags.Tag032, countSetKey = 621, setColKey = Tags.Tag735))
-  add(SimpleMapPlan(key = Tags.Tag033, countSetKey = 622, setColKey = Tags.Tag064))
-  add(SimpleMapPlan(key = Tags.Tag034, countSetKey = 623, setColKey = Tags.Tag029))
-  add(SimpleMapPlan(key = Tags.Tag035, countSetKey = 624, setColKey = Tags.Tag085))
-  add(SimpleMapPlan(key = Tags.Tag036, countSetKey = 625, setColKey = Tags.Tag897))
-  add(SimpleMapPlan(key = Tags.Tag037, countSetKey = 626, setColKey = Tags.Tag222))
-  add(SimpleMapPlan(key = Tags.Tag038, countSetKey = 627, setColKey = Tags.Tag1150))
-  add(SimpleMapPlan(key = Tags.Tag039, countSetKey = 628, setColKey = Tags.Tag603))
+  add(CusPlan(key = Tags.Tag019, countSetKey = 608, c = (i1: Int, i2: Int) => if (i2 == 0) 1 else 0))
+  add(CusPlan(key = Tags.Tag020, countSetKey = 609, c = (i1: Int, i2: Int) => if (i2 == 0) Option.empty else 0))
+  add(CusPlan(key = Tags.Tag021, countSetKey = 610, c = (i1: Int, i2: Int) => if (i2 == 0) 2 else 0))
+  add(CusPlan(key = Tags.Tag022, countSetKey = 611, c = (i1: Int, i2: Int) => if (i2 == 0) 2 else Option.empty))
+  add(CusPlan(key = Tags.Tag023, countSetKey = 612, c = (i1: Int, i2: Int) => if (i2 == 0) 1 else Option.empty))
+  add(CusPlan(key = Tags.Tag024, countSetKey = 613, c = (i1: Int, i2: Int) => 5))
+  add(CusPlan(key = Tags.Tag025, countSetKey = 614, c = (i1: Int, i2: Int) => i2 * 3))
+  add(CusPlan(key = Tags.Tag026, countSetKey = 615, c = (i1: Int, i2: Int) => i2 * 3 + 2))
+  add(CusPlan(key = Tags.Tag027, countSetKey = 616, c = (i1: Int, i2: Int) => i2 * 3 + 1))
+  add(CusPlan(key = Tags.Tag028, countSetKey = 617, c = (i1: Int, i2: Int) => i1 + 2))
+  add(CusPlan(key = Tags.Tag029, countSetKey = 618, c = (i1: Int, i2: Int) => i1 + 4))
+  add(CusPlan(key = Tags.Tag030, countSetKey = 619, c = (i1: Int, i2: Int) => i1 + 3))
+  add(CusPlan(key = Tags.Tag031, countSetKey = 620, c = (i1: Int, i2: Int) => i1 * i2 + 2 * i2))
+  add(CusPlan(key = Tags.Tag032, countSetKey = 621, c = (i1: Int, i2: Int) => i2 * i1 + 2 * i2 + 2))
+  add(CusPlan(key = Tags.Tag033, countSetKey = 622, c = (i1: Int, i2: Int) => i1 * i2 + 2 * i2 + 1))
+  add(CusPlan(key = Tags.Tag034, countSetKey = 623, c = (i1: Int, i2: Int) => i1 + 1))
+  add(CusPlan(key = Tags.Tag035, countSetKey = 624, c = (i1: Int, i2: Int) => i1 * i2 + i2))
+  add(CusPlan(key = Tags.Tag036, countSetKey = 625, c = (i1: Int, i2: Int) => i1 * i2 + i2 + 2))
+  add(CusPlan(key = Tags.Tag037, countSetKey = 626, c = (i1: Int, i2: Int) => i1 * i2 + i2 + 1))
+  add(CusPlan(key = Tags.Tag038, countSetKey = 627, c = (i1: Int, i2: Int) => i2 * 2 - (i2 + 1) / 2))
+  add(
+    CusPlan(
+      key = Tags.Tag039,
+      countSetKey = 628,
+      c = (i1: Int, i2: Int) => if ((i2 + 1) % 2 == 1) i2 + (i2 + 1) / 2 + 2 else i2 + (i2 + 1) / 2 + 1
+    )
+  )
   add(SimpleMapPlan(key = Tags.Tag040, countSetKey = 629, setColKey = Tags.Tag185))
   add(SimpleMapPlan(key = Tags.Tag041, countSetKey = 630, setColKey = Tags.Tag1165))
   add(SimpleMapPlan(key = Tags.Tag042, countSetKey = 631, setColKey = Tags.Tag665))
@@ -1707,28 +1713,14 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag730")
     )
   )
+
+  add(CusPlan(key = Tags.Tag521, countSetKey = 716, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 < i2) i1 - 1 else i1 * 2 - i2 - 1))
+
   add(
-    MapPlan(
-      key = Tags.Tag521,
-      countSetKey = 716,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1321=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1324"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
-    )
-  )
-  add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag522,
       countSetKey = 967,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag120"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag120"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag120"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag120")
+      c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 == 1) 5 else i1 + 3
     )
   )
 
@@ -1839,15 +1831,6 @@ trait ConfirmCol {
 
   add(CusPlan(key = Tags.Tag537, countSetKey = 972, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 + 3))
 
-  /*
-  `i1 = 0 and i2 = 0` = Option("Tag081"),
-  `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
-  `i1 = 0 and i2 gt 0` = Option("Tag081"),
-  `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag006"),
-  `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag842=reverse"),
-  `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1144")
-   */
-
   def aa: (Int, Int) => ConfirmResult = (i1: Int, i2: Int) => {
     if (i1 == 0 && i2 == 0) {
       // Tag670
@@ -1867,6 +1850,10 @@ trait ConfirmCol {
       i1 + 1
       // Tag081=reverse
       0
+      // Tag120
+      if (i1 == 1) 5 else i1 + 3
+      // Tag1321=reverse
+      if (i1 >= 1) i1 * 2 - 1 else i1
     } else if (i1 == 0 && i2 > 0) {
       // Tag1166=reverse
       i2 * 2
@@ -1899,6 +1886,10 @@ trait ConfirmCol {
       i1 * 3 + 1
       // Tag006
       i1 * 3
+      // Tag120
+      if (i1 == 1) 5 else i1 + 3
+      // Tag1327
+      if (i2 % (i1 + 1) == 0) i2 / (i1 + 1) * i1 + i2 % (i1 + 1) else i2 / (i1 + 1) * i1 + i2 % (i1 + 1) - 1
     } else if (i1 > 0 && i2 > 0 && i1 > i2) {
       // Tag259
       // if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
@@ -1925,6 +1916,10 @@ trait ConfirmCol {
       i1 + i2 + 1
       // Tag842=reverse
       if (i2 % (i1 + 1) == 0) 2 * i2 - i2 / (i1 + 1) + 1 else 2 * i2 - i2 / (i1 + 1)
+      // Tag120
+      if (i1 == 1) 5 else i1 + 3
+      // Tag1324
+      if (i1 - i2 >= 1) i1 * 2 - i2 - 1 else i1
     } else {
       // Tag006
       if (i1 == 0) 0 else i1 * 2 + i2
@@ -1949,6 +1944,10 @@ trait ConfirmCol {
       i1 + i2 + i1 * (i2 / i1) + 1
       // Tag1144
       i1 * (i2 / i1) + 2 * i2
+      // Tag120
+      if (i1 == 1) 5 else i1 + 3
+      // Tag1327=reverse
+      if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1
     }
   }
 }
