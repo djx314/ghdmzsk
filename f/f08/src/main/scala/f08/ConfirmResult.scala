@@ -30,8 +30,8 @@ sealed trait ConfirmPlan {
     }
     confirmSet.forall(identity)
   }
-
 }
+
 case class MapPlan(
   override val key: String,
   override val countSetKey: Int,
@@ -42,7 +42,6 @@ case class MapPlan(
   `i1 gt 0 and i2 gt 0 and i1 gt i2`: Option[String],
   `i1 gt 0 and i2 gt 0 and i1 lt i2`: Option[String]
 ) extends ConfirmPlan {
-
   def resultFromKeyOpt(i1: Int, i2: Int, keyOpt: Option[String]): ConfirmResult = {
     val dOpt = for (currKey <- keyOpt) yield {
       val r = currKey.split('=').to(List) match {
@@ -62,7 +61,6 @@ case class MapPlan(
     else if (i1 > 0 && i2 > 0 && i1 > i2) resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 gt i2`)
     else if (i1 > 0 && i2 > 0 && i1 < i2) resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 lt i2`)
     else throw new Exception("No result")
-
 }
 
 case class SimpleMapPlan(
@@ -131,7 +129,7 @@ trait ConfirmCol {
       c = (i1: Int, i2: Int) => if ((i2 + 1) % 2 == 1) i2 + (i2 + 1) / 2 + 2 else i2 + (i2 + 1) / 2 + 1
     )
   )
-  add(SimpleMapPlan(key = Tags.Tag040, countSetKey = 629, setColKey = Tags.Tag185))
+  add(CusPlan(key = Tags.Tag040, countSetKey = 629, c = (i1: Int, i2: Int) => i2 * 2 - (i2 + 1) / 2 + 1))
   add(SimpleMapPlan(key = Tags.Tag041, countSetKey = 630, setColKey = Tags.Tag1165))
   add(SimpleMapPlan(key = Tags.Tag042, countSetKey = 631, setColKey = Tags.Tag665))
   add(SimpleMapPlan(key = Tags.Tag043, countSetKey = 632, setColKey = Tags.Tag184))
@@ -1701,16 +1699,17 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag739")
     )
   )
+
   add(
-    MapPlan(
+    CusPlan(
       key = Tags.Tag520,
       countSetKey = 1045,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
-      `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag922"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag081=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag730")
+      c = (i1: Int, i2: Int) =>
+        if (i1 == 0) 0
+        else if (i1 > i2) i2 + 1
+        else if (i1 == i2) i1 + 2
+        else if ((i2 + 1)                          % (i1 * 2) <= i1) ((i2 + 1) / (i1 * 2)) * i1 + (i2 + 1)
+        else ((i2 + 1) / (i1 * 2)) * i1 + (i2 + 1) % (i1 * 2) + (i2 + 1) - i1
     )
   )
 
@@ -1854,6 +1853,8 @@ trait ConfirmCol {
       if (i1 == 1) 5 else i1 + 3
       // Tag1321=reverse
       if (i1 >= 1) i1 * 2 - 1 else i1
+      // Tag1637=reverse
+      1
     } else if (i1 == 0 && i2 > 0) {
       // Tag1166=reverse
       i2 * 2
@@ -1890,6 +1891,8 @@ trait ConfirmCol {
       if (i1 == 1) 5 else i1 + 3
       // Tag1327
       if (i2 % (i1 + 1) == 0) i2 / (i1 + 1) * i1 + i2 % (i1 + 1) else i2 / (i1 + 1) * i1 + i2 % (i1 + 1) - 1
+      // Tag922
+      i1 + 2
     } else if (i1 > 0 && i2 > 0 && i1 > i2) {
       // Tag259
       // if (i1 % i2 == 0) i1 * 3 else i1 * 3 + i2 - (i1 % i2)
@@ -1920,6 +1923,8 @@ trait ConfirmCol {
       if (i1 == 1) 5 else i1 + 3
       // Tag1324
       if (i1 - i2 >= 1) i1 * 2 - i2 - 1 else i1
+      // Tag081=reverse
+      i2 + 1
     } else {
       // Tag006
       if (i1 == 0) 0 else i1 * 2 + i2
@@ -1948,6 +1953,9 @@ trait ConfirmCol {
       if (i1 == 1) 5 else i1 + 3
       // Tag1327=reverse
       if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1
+      // Tag730
+      if ((i2 + 1)                               % (i1 * 2) <= i1) ((i2 + 1) / (i1 * 2)) * i1 + (i2 + 1)
+      else ((i2 + 1) / (i1 * 2)) * i1 + (i2 + 1) % (i1 * 2) + (i2 + 1) - i1
     }
   }
 }
