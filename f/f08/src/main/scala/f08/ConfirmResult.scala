@@ -591,7 +591,7 @@ trait ConfirmCol {
       key = Tags.Tag426,
       countSetKey = 797,
       `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag922=reverse"),
@@ -699,7 +699,7 @@ trait ConfirmCol {
       key = Tags.Tag435,
       countSetKey = 724,
       `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag922=reverse"),
@@ -1083,7 +1083,7 @@ trait ConfirmCol {
       key = Tags.Tag467,
       countSetKey = 984,
       `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0` = Option("Tag670"),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 + 1),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1637"),
@@ -1155,7 +1155,7 @@ trait ConfirmCol {
       key = Tags.Tag473,
       countSetKey = 794,
       `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag712"),
@@ -1479,7 +1479,7 @@ trait ConfirmCol {
       key = Tags.Tag500,
       countSetKey = 971,
       `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0` = Option("Tag670"),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 + 1),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag486"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag853=reverse"),
@@ -1709,7 +1709,7 @@ trait ConfirmCol {
       key = Tags.Tag519,
       countSetKey = 763,
       `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag930"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag712"),
@@ -1852,8 +1852,6 @@ trait ConfirmCol {
       // Tag081
       0
     } else if (i1 > 0 && i2 == 0) {
-      // Tag1720
-      i1 - 1
       // Tag1232=reverse
       2
       // Tag121
