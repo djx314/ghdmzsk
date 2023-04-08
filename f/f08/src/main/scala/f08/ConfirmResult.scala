@@ -1,6 +1,7 @@
 package f08
 
 import f07._
+import scala.collection.compat._
 
 sealed trait ConfirmResult
 case class OptResult(r: Option[Int]) extends ConfirmResult
@@ -35,12 +36,18 @@ sealed trait ConfirmPlan {
 case class MapPlan(
   override val key: String,
   override val countSetKey: Int,
-  `i1 = 0 and i2 = 0`: Option[String],
-  `i1 gt 0 and i2 = 0`: Option[String],
-  `i1 = 0 and i2 gt 0`: Option[String],
-  `i1 gt 0 and i2 gt 0 and i1 = i2`: Option[String],
-  `i1 gt 0 and i2 gt 0 and i1 gt i2`: Option[String],
-  `i1 gt 0 and i2 gt 0 and i1 lt i2`: Option[String]
+  `i1 = 0 and i2 = 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 gt 0 and i2 = 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 = 0 and i2 gt 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 gt 0 and i2 gt 0 and i1 = i2`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 gt 0 and i2 gt 0 and i1 gt i2`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 gt 0 and i2 gt 0 and i1 lt i2`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 = 0 and i2 = 0x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
+  `i1 gt 0 and i2 = 0x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
+  `i1 = 0 and i2 gt 0x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
+  `i1 gt 0 and i2 gt 0 and i1 = i2x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
+  `i1 gt 0 and i2 gt 0 and i1 gt i2x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
+  `i1 gt 0 and i2 gt 0 and i1 lt i2x`: Option[(Int, Int) => ConfirmResult] = Option.empty
 ) extends ConfirmPlan {
   def resultFromKeyOpt(i1: Int, i2: Int, keyOpt: Option[String]): ConfirmResult = {
     val dOpt = for (currKey <- keyOpt) yield {
@@ -54,13 +61,19 @@ case class MapPlan(
   }
 
   override def count(i1: Int, i2: Int): ConfirmResult =
-    if (i1 == 0 && i2 == 0) resultFromKeyOpt(i1, i2, `i1 = 0 and i2 = 0`)
-    else if (i1 > 0 && i2 == 0) resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 = 0`)
-    else if (i1 == 0 && i2 > 0) resultFromKeyOpt(i1, i2, `i1 = 0 and i2 gt 0`)
-    else if (i1 > 0 && i2 > 0 && i1 == i2) resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 = i2`)
-    else if (i1 > 0 && i2 > 0 && i1 > i2) resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 gt i2`)
-    else if (i1 > 0 && i2 > 0 && i1 < i2) resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 lt i2`)
+    if (i1 == 0 && i2 == 0) (for (t <- `i1 = 0 and i2 = 0x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 = 0 and i2 = 0`))
+    else if (i1 > 0 && i2 == 0) (for (t <- `i1 gt 0 and i2 = 0x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 = 0`))
+    else if (i1 == 0 && i2 > 0) (for (t <- `i1 = 0 and i2 gt 0x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 = 0 and i2 gt 0`))
+    else if (i1 > 0 && i2 > 0 && i1 == i2)
+      (for (t <- `i1 gt 0 and i2 gt 0 and i1 = i2x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 = i2`))
+    else if (i1 > 0 && i2 > 0 && i1 > i2)
+      (for (t <- `i1 gt 0 and i2 gt 0 and i1 gt i2x`)
+        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 gt i2`))
+    else if (i1 > 0 && i2 > 0 && i1 < i2)
+      (for (t <- `i1 gt 0 and i2 gt 0 and i1 lt i2x`)
+        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 lt i2`))
     else throw new Exception("No result")
+
 }
 
 case class SimpleMapPlan(
@@ -80,6 +93,8 @@ trait ConfirmCol {
   protected var cols: List[ConfirmPlan] = List.empty
 
   def add(plan: ConfirmPlan): Unit = cols = plan :: cols
+
+  import scala.language.implicitConversions
 
   private implicit def cov1(opt: Option[Int]): ConfirmResult = OptResult(opt)
   private implicit def cov2(value: Int): ConfirmResult       = OptResult(Option(value))
@@ -671,7 +686,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag434,
       countSetKey = 1055,
-      `i1 = 0 and i2 = 0` = Option("Tag670"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => Option.empty),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag670"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -767,7 +782,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag442,
       countSetKey = 1051,
-      `i1 = 0 and i2 = 0` = Option("Tag670"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => Option.empty),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag670"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag038"),
@@ -1531,11 +1546,12 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1408")
     )
   )
+
   add(
     MapPlan(
       key = Tags.Tag506,
       countSetKey = 1052,
-      `i1 = 0 and i2 = 0` = Option("Tag670"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => Option.empty),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag670"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1543,6 +1559,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag447=reverse")
     )
   )
+
   add(
     MapPlan(
       key = Tags.Tag507,
