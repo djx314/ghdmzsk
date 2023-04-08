@@ -38,15 +38,15 @@ case class MapPlan(
   override val countSetKey: Int,
   `i1 gt 0 and i2 = 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
   `i1 = 0 and i2 gt 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 gt 0 and i2 gt 0 and i1 = i2`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 gt 0 and i2 gt 0 and i1 gt i2`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 gt 0 and i2 gt 0 and i1 lt i2`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 = 0 and i2 = 0x`: (Int, Int) => ConfirmResult,
-  `i1 gt 0 and i2 = 0x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
-  `i1 = 0 and i2 gt 0x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
-  `i1 gt 0 and i2 gt 0 and i1 = i2x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
-  `i1 gt 0 and i2 gt 0 and i1 gt i2x`: Option[(Int, Int) => ConfirmResult] = Option.empty,
-  `i1 gt 0 and i2 gt 0 and i1 lt i2x`: Option[(Int, Int) => ConfirmResult] = Option.empty
+  `i1 gt 0 and i2 gt 0 and i1 = i2x`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 gt 0 and i2 gt 0 and i1 gt i2x`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 gt 0 and i2 gt 0 and i1 lt i2x`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+  `i1 = 0 and i2 = 0`: (Int, Int) => ConfirmResult,
+  `i1 gt 0 and i2 = 0x`: (Int, Int) => ConfirmResult = null,
+  `i1 = 0 and i2 gt 0x`: (Int, Int) => ConfirmResult = null,
+  `i1 gt 0 and i2 gt 0 and i1 = i2`: (Int, Int) => ConfirmResult = null,
+  `i1 gt 0 and i2 gt 0 and i1 gt i2`: (Int, Int) => ConfirmResult = null,
+  `i1 gt 0 and i2 gt 0 and i1 lt i2`: (Int, Int) => ConfirmResult = null
 ) extends ConfirmPlan {
   def resultFromKeyOpt(i1: Int, i2: Int, keyOpt: Option[String]): ConfirmResult = {
     val dOpt = for (currKey <- keyOpt) yield {
@@ -60,17 +60,20 @@ case class MapPlan(
   }
 
   override def count(i1: Int, i2: Int): ConfirmResult =
-    if (i1 == 0 && i2 == 0) `i1 = 0 and i2 = 0x`.get.apply(i1, i2)
-    else if (i1 > 0 && i2 == 0) (for (t <- `i1 gt 0 and i2 = 0x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 = 0`))
-    else if (i1 == 0 && i2 > 0) (for (t <- `i1 = 0 and i2 gt 0x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 = 0 and i2 gt 0`))
+    if (i1 == 0 && i2 == 0) `i1 = 0 and i2 = 0`.apply(i1, i2)
+    else if (i1 > 0 && i2 == 0)
+      (for (t <- Option(`i1 gt 0 and i2 = 0x`)) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 = 0`))
+    else if (i1 == 0 && i2 > 0)
+      (for (t <- Option(`i1 = 0 and i2 gt 0x`)) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 = 0 and i2 gt 0`))
     else if (i1 > 0 && i2 > 0 && i1 == i2)
-      (for (t <- `i1 gt 0 and i2 gt 0 and i1 = i2x`) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 = i2`))
+      (for (t <- Option(`i1 gt 0 and i2 gt 0 and i1 = i2`))
+        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 = i2x`))
     else if (i1 > 0 && i2 > 0 && i1 > i2)
-      (for (t <- `i1 gt 0 and i2 gt 0 and i1 gt i2x`)
-        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 gt i2`))
+      (for (t <- Option(`i1 gt 0 and i2 gt 0 and i1 gt i2`))
+        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 gt i2x`))
     else if (i1 > 0 && i2 > 0 && i1 < i2)
-      (for (t <- `i1 gt 0 and i2 gt 0 and i1 lt i2x`)
-        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 lt i2`))
+      (for (t <- Option(`i1 gt 0 and i2 gt 0 and i1 lt i2`))
+        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 lt i2x`))
     else throw new Exception("No result")
 
 }
@@ -565,984 +568,984 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag424,
       countSetKey = 873,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1304=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag081")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1304=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag081")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag425,
       countSetKey = 677,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1546")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1546")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag426,
       countSetKey = 797,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 2,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag922=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag864")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag922=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag864")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag427,
       countSetKey = 913,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag215"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag842")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag842"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag215"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag842")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag428,
       countSetKey = 1063,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 = 0 and i2 gt 0x` = Option((i1: Int, i2: Int) => i2 + 1),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1637=reverse")
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => i2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1637=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag429,
       countSetKey = 1001,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1213"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1220=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1220=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1213"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1220=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1220=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag430,
       countSetKey = 973,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1383=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag950"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag930"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag930=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag950"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag930"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag930=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag431,
       countSetKey = 1046,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1495=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag357")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1495=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag357")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag432,
       countSetKey = 934,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag207"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag207"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1495")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag433,
       countSetKey = 1059,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag786=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag869")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag786=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag869")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag434,
       countSetKey = 1055,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 = 0 and i2 gt 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => Option.empty,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag435,
       countSetKey = 724,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 2,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag922=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag922=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1327=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag436,
       countSetKey = 1013,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag447=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag447=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag437,
       countSetKey = 1115,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1495")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag438,
       countSetKey = 1100,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag786"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag908"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag786")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag786"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag908"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag786")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag439,
       countSetKey = 1040,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1546=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag440,
       countSetKey = 1020,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1408")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1408")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag441,
       countSetKey = 966,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag742"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag742"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag742"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag742")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag742"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag742"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag742")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag442,
       countSetKey = 1051,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 = 0 and i2 gt 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag038"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag786=reverse")
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => Option.empty,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag038"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag786=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag443,
       countSetKey = 998,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag444,
       countSetKey = 1104,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1546=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1495=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag445,
       countSetKey = 981,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 - 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1198"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1510"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1198"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1510"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag446,
       countSetKey = 766,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1495=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag152")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag842"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1495=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag152")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag447,
       countSetKey = 793,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag842=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag842=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag448,
       countSetKey = 925,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag209"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1546=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag842"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag209"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1546=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag449,
       countSetKey = 1047,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag450,
       countSetKey = 798,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag081=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag149")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag081=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag149")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag451,
       countSetKey = 1057,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag452,
       countSetKey = 910,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag289"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag842")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag842"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag289"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag842")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag453,
       countSetKey = 778,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1495=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1495=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1495=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag454,
       countSetKey = 788,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1495=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1495=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag455,
       countSetKey = 1032,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1546=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag447=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag447=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag456,
       countSetKey = 1079,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag081")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag081")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag457,
       countSetKey = 974,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag432"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1637")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1637"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1637"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1637")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag458,
       countSetKey = 1017,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag459,
       countSetKey = 980,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag655"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1443"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1443")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1443"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1443")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag460,
       countSetKey = 783,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag842=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag842=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag461,
       countSetKey = 989,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1214=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1214"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1214=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1214=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1214"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1214=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1214=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag462,
       countSetKey = 1075,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => NotImplemented),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag463,
       countSetKey = 1016,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag243"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag243")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag243"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag243")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag464,
       countSetKey = 970,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1383=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag699"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag566"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag699")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag699"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag566"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag699")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag465,
       countSetKey = 985,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1546"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag131")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag842"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag131")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag466,
       countSetKey = 1060,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag153")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag153")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag467,
       countSetKey = 984,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 + 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 + 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag931")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag670"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1637"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag931")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag468,
       countSetKey = 721,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1245"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1245"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1327=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag469,
       countSetKey = 1002,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1337"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1337"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag470,
       countSetKey = 674,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1229"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1546")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1229"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1546")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag471,
       countSetKey = 718,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1327=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag472,
       countSetKey = 773,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
-      `i1 = 0 and i2 gt 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag038"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag786"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag786=reverse")
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 - 1,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag038"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag786"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag786=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag473,
       countSetKey = 794,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 2,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag712"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag710")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag670"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag712"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag710")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag474,
       countSetKey = 975,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1546"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag006"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag506")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag006"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag506")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag475,
       countSetKey = 772,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 - 1,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1510"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1510")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1510"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1510")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag476,
       countSetKey = 711,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => NotImplemented),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1637"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag477,
       countSetKey = 843,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1322=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1047")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag670"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1322=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1047")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag478,
       countSetKey = 1125,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1339=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1408")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1339=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1408")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag479,
       countSetKey = 764,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag853"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1047"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag144")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag853"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1047"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag144")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag480,
       countSetKey = 1048,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag961"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag786=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag903")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag961"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag786=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag903")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag481,
       countSetKey = 784,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag670=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag038"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag786"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag786=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag038"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag786"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag786=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag482,
       countSetKey = 1117,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1348=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1348=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1495")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag483,
       countSetKey = 1029,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 = 0 and i2 gt 0x` = Option((i1: Int, i2: Int) => i2 * 2),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1326")
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => i2 * 2,
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1326")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag484,
       countSetKey = 1022,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag670=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1408")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1408")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag485,
       countSetKey = 932,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1340=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1495")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1340=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1495")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag486,
       countSetKey = 1061,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => NotImplemented),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 2,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0` = Option("Tag1232"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag487,
       countSetKey = 983,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 - 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag447"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag447"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag488,
       countSetKey = 768,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag081=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag522")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag670"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag081=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag522")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag489,
       countSetKey = 1015,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => NotImplemented),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag490,
       countSetKey = 1044,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1495"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag491,
       countSetKey = 695,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1198"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1261"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1198")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1198"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1261"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1198")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag492,
       countSetKey = 675,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 - 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1510"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1546")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1510"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1546")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag493,
       countSetKey = 795,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1047"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag148")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag842"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1047"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag148")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag494,
       countSetKey = 1081,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1315=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag081")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1315=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag081")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag495,
       countSetKey = 968,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1546"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1216"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag006=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1216")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1216"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag006=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1216")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag496,
       countSetKey = 1049,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag786"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag413")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag786"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag413")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag497,
       countSetKey = 712,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => NotImplemented),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1232"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1232"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag498,
       countSetKey = 855,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag853"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag823"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag853")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag853"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag823"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag853")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag499,
       countSetKey = 707,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => NotImplemented),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag500,
       countSetKey = 971,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 + 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 + 1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag486"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag853=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag486")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag486"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag853=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag486")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag501,
       countSetKey = 791,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1236"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1236"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1675"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1236")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1236"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1675"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1236")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag502,
       countSetKey = 717,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => if (i1 >= 1) i1 * 2 - 1 else i1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => if (iii1 >= 1) iii1 * 2 - 1 else iii1,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1327=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag503,
       countSetKey = 840,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag829"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1047")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag670"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag829"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1047")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag504,
       countSetKey = 1085,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag812"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1637=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag812"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1637=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag505,
       countSetKey = 1023,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1408")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1408")
     )
   )
 
@@ -1550,12 +1553,12 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag506,
       countSetKey = 1052,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 = 0 and i2 gt 0x` = Option((i1: Int, i2: Int) => Option.empty),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag447=reverse")
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => Option.empty,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag447=reverse")
     )
   )
 
@@ -1563,156 +1566,156 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag507,
       countSetKey = 978,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1 - 1,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1671"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1671"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag508,
       countSetKey = 1008,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1327=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag509,
       countSetKey = 876,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag845"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag081")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag081"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag845"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag081")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag510,
       countSetKey = 859,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag855"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag670")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag670"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag855"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag670")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag511,
       countSetKey = 1084,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag447=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag447=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag512,
       countSetKey = 976,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0` = Option("Tag1383=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag930"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag930"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag930")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag930"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag930"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag930")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag513,
       countSetKey = 1126,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag206"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1408")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1408"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag206"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1408")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag514,
       countSetKey = 1010,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1327=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1327"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1327=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag515,
       countSetKey = 771,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag842=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1510")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag842=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1510")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag516,
       countSetKey = 699,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1210"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag1510")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1210"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1510")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag517,
       countSetKey = 652,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag340=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag578"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1612"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag120=reverse")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag578"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1612"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag120=reverse")
     )
   )
   add(
     MapPlan(
       key = Tags.Tag518,
       countSetKey = 995,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1546=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option.empty
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1546"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1546=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option.empty
     )
   )
   add(
     MapPlan(
       key = Tags.Tag519,
       countSetKey = 763,
-      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
-      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 2),
+      `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 2,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag930"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag712"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = Option("Tag739")
+      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag930"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag712"),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag739")
     )
   )
 
