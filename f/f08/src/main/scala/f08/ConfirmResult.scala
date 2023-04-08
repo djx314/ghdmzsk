@@ -566,7 +566,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag424,
       countSetKey = 873,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -578,7 +578,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag425,
       countSetKey = 677,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -590,7 +590,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag426,
       countSetKey = 797,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -602,7 +602,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag427,
       countSetKey = 913,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
@@ -614,7 +614,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag428,
       countSetKey = 1063,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag670=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -626,7 +626,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag429,
       countSetKey = 1001,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1213"),
@@ -638,7 +638,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag430,
       countSetKey = 973,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1383=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag950"),
@@ -650,7 +650,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag431,
       countSetKey = 1046,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -662,7 +662,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag432,
       countSetKey = 934,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -674,7 +674,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag433,
       countSetKey = 1059,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -698,7 +698,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag435,
       countSetKey = 724,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -710,7 +710,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag436,
       countSetKey = 1013,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -722,7 +722,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag437,
       countSetKey = 1115,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -734,7 +734,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag438,
       countSetKey = 1100,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag786"),
@@ -746,7 +746,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag439,
       countSetKey = 1040,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1546=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -758,7 +758,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag440,
       countSetKey = 1020,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -770,7 +770,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag441,
       countSetKey = 966,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag742"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag742"),
@@ -794,7 +794,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag443,
       countSetKey = 998,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -806,7 +806,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag444,
       countSetKey = 1104,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1546=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -818,8 +818,8 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag445,
       countSetKey = 981,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1198"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1510"),
@@ -830,7 +830,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag446,
       countSetKey = 766,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
@@ -842,7 +842,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag447,
       countSetKey = 793,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -854,7 +854,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag448,
       countSetKey = 925,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
@@ -866,7 +866,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag449,
       countSetKey = 1047,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -878,7 +878,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag450,
       countSetKey = 798,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -890,7 +890,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag451,
       countSetKey = 1057,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -902,7 +902,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag452,
       countSetKey = 910,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
@@ -914,7 +914,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag453,
       countSetKey = 778,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -926,7 +926,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag454,
       countSetKey = 788,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -938,7 +938,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag455,
       countSetKey = 1032,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1546=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -950,7 +950,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag456,
       countSetKey = 1079,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -962,7 +962,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag457,
       countSetKey = 974,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag432"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1637"),
@@ -974,7 +974,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag458,
       countSetKey = 1017,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
@@ -986,7 +986,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag459,
       countSetKey = 980,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag655"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1443"),
@@ -998,7 +998,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag460,
       countSetKey = 783,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -1010,7 +1010,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag461,
       countSetKey = 989,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1214=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1214"),
@@ -1022,7 +1022,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag462,
       countSetKey = 1075,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option.empty,
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
@@ -1034,7 +1034,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag463,
       countSetKey = 1016,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag243"),
@@ -1046,7 +1046,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag464,
       countSetKey = 970,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1383=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag699"),
@@ -1058,7 +1058,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag465,
       countSetKey = 985,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1546"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
@@ -1070,7 +1070,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag466,
       countSetKey = 1060,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -1082,7 +1082,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag467,
       countSetKey = 984,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag670"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
@@ -1094,7 +1094,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag468,
       countSetKey = 721,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1106,7 +1106,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag469,
       countSetKey = 1002,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1337"),
@@ -1118,7 +1118,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag470,
       countSetKey = 674,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -1130,7 +1130,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag471,
       countSetKey = 718,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1142,8 +1142,8 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag472,
       countSetKey = 773,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
       `i1 = 0 and i2 gt 0` = Option("Tag670"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag038"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag786"),
@@ -1154,7 +1154,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag473,
       countSetKey = 794,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
@@ -1166,7 +1166,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag474,
       countSetKey = 975,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1546"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag006"),
@@ -1178,8 +1178,8 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag475,
       countSetKey = 772,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1510"),
@@ -1190,7 +1190,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag476,
       countSetKey = 711,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option.empty,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
@@ -1202,7 +1202,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag477,
       countSetKey = 843,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
@@ -1214,7 +1214,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag478,
       countSetKey = 1125,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -1226,7 +1226,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag479,
       countSetKey = 764,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag853"),
@@ -1238,7 +1238,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag480,
       countSetKey = 1048,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag961"),
@@ -1250,7 +1250,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag481,
       countSetKey = 784,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag670=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag038"),
@@ -1262,7 +1262,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag482,
       countSetKey = 1117,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -1274,7 +1274,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag483,
       countSetKey = 1029,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1166=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -1286,7 +1286,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag484,
       countSetKey = 1022,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag670=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -1298,7 +1298,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag485,
       countSetKey = 932,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -1322,8 +1322,8 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag487,
       countSetKey = 983,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag447"),
@@ -1334,7 +1334,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag488,
       countSetKey = 768,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
@@ -1346,7 +1346,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag489,
       countSetKey = 1015,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option.empty,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
@@ -1358,7 +1358,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag490,
       countSetKey = 1044,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1495"),
@@ -1370,7 +1370,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag491,
       countSetKey = 695,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1198"),
@@ -1382,8 +1382,8 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag492,
       countSetKey = 675,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option("Tag1510"),
@@ -1394,7 +1394,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag493,
       countSetKey = 795,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1637=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag842"),
@@ -1406,7 +1406,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag494,
       countSetKey = 1081,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -1418,7 +1418,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag495,
       countSetKey = 968,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1546"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1216"),
@@ -1430,7 +1430,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag496,
       countSetKey = 1049,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag786"),
@@ -1442,7 +1442,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag497,
       countSetKey = 712,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option.empty,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
@@ -1454,7 +1454,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag498,
       countSetKey = 855,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag853"),
@@ -1466,7 +1466,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag499,
       countSetKey = 707,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option.empty,
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option.empty,
@@ -1478,7 +1478,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag500,
       countSetKey = 971,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag670"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag486"),
@@ -1490,7 +1490,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag501,
       countSetKey = 791,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1236"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1236"),
@@ -1502,7 +1502,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag502,
       countSetKey = 717,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1321=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1514,7 +1514,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag503,
       countSetKey = 840,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
@@ -1526,7 +1526,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag504,
       countSetKey = 1085,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -1538,7 +1538,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag505,
       countSetKey = 1023,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -1564,8 +1564,8 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag507,
       countSetKey = 978,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
-      `i1 gt 0 and i2 = 0` = Option("Tag1720"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
+      `i1 gt 0 and i2 = 0x` = Option((i1: Int, i2: Int) => i1 - 1),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1671"),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = Option.empty,
@@ -1576,7 +1576,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag508,
       countSetKey = 1008,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1588,7 +1588,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag509,
       countSetKey = 876,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag081"),
@@ -1600,7 +1600,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag510,
       countSetKey = 859,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag670"),
@@ -1612,7 +1612,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag511,
       countSetKey = 1084,
-      `i1 = 0 and i2 = 0` = Option("Tag1637"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 1),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1637"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1624,7 +1624,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag512,
       countSetKey = 976,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1383=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag930"),
@@ -1636,7 +1636,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag513,
       countSetKey = 1126,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1408"),
@@ -1648,7 +1648,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag514,
       countSetKey = 1010,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1327"),
@@ -1660,7 +1660,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag515,
       countSetKey = 771,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -1672,7 +1672,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag516,
       countSetKey = 699,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -1684,7 +1684,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag517,
       countSetKey = 652,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag340=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag578"),
@@ -1696,7 +1696,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag518,
       countSetKey = 995,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag081=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag1720=reverse"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag1546"),
@@ -1708,7 +1708,7 @@ trait ConfirmCol {
     MapPlan(
       key = Tags.Tag519,
       countSetKey = 763,
-      `i1 = 0 and i2 = 0` = Option("Tag081"),
+      `i1 = 0 and i2 = 0x` = Option((i1: Int, i2: Int) => 0),
       `i1 gt 0 and i2 = 0` = Option("Tag1232=reverse"),
       `i1 = 0 and i2 gt 0` = Option("Tag081"),
       `i1 gt 0 and i2 gt 0 and i1 = i2` = Option("Tag930"),
@@ -1849,10 +1849,6 @@ trait ConfirmCol {
 
   def aa: (Int, Int) => ConfirmResult = (i1: Int, i2: Int) => {
     if (i1 == 0 && i2 == 0) {
-      // Tag670
-      Option.empty
-      // Tag1637
-      1
       // Tag081
       0
     } else if (i1 > 0 && i2 == 0) {
