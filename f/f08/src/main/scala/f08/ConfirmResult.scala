@@ -180,7 +180,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag071, countSetKey = 661, setColKey = Tags.Tag1373))
   add(SimpleMapPlan(key = Tags.Tag072, countSetKey = 662, setColKey = Tags.Tag1299))
   add(SimpleMapPlan(key = Tags.Tag073, countSetKey = 663, setColKey = Tags.Tag027))
-  add(SimpleMapPlan(key = Tags.Tag074, countSetKey = 664, setColKey = Tags.Tag1214))
+  add(CusPlan(key = Tags.Tag074, countSetKey = 664, c = (iii1: Int, iii2: Int) => if (iii1 == 0) 0 else (iii1 * 3 - 1) / 2))
   add(SimpleMapPlan(key = Tags.Tag075, countSetKey = 665, setColKey = Tags.Tag1325))
   add(SimpleMapPlan(key = Tags.Tag076, countSetKey = 666, setColKey = Tags.Tag1644))
   add(SimpleMapPlan(key = Tags.Tag077, countSetKey = 667, setColKey = Tags.Tag1662))
@@ -244,7 +244,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag109, countSetKey = 705, setColKey = Tags.Tag797))
   add(SimpleMapPlan(key = Tags.Tag110, countSetKey = 706, setColKey = Tags.Tag1246))
   add(SimpleMapPlan(key = Tags.Tag111, countSetKey = 709, setColKey = Tags.Tag163))
-  add(SimpleMapPlan(key = Tags.Tag112, countSetKey = 710, setColKey = Tags.Tag1337))
+  add(CusPlan(key = Tags.Tag112, countSetKey = 710, c = (iii1: Int, iii2: Int) => if (iii1 == 0) 0 else (iii1 - 1) * (iii2 + 1)))
   add(SimpleMapPlan(key = Tags.Tag113, countSetKey = 713, setColKey = Tags.Tag1626))
   add(SimpleMapPlan(key = Tags.Tag114, countSetKey = 714, setColKey = Tags.Tag1189))
   add(SimpleMapPlan(key = Tags.Tag115, countSetKey = 715, setColKey = Tags.Tag1543))
@@ -317,7 +317,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag182, countSetKey = 808, setColKey = Tags.Tag613))
   add(SimpleMapPlan(key = Tags.Tag183, countSetKey = 809, setColKey = Tags.Tag987))
   add(SimpleMapPlan(key = Tags.Tag184, countSetKey = 810, setColKey = Tags.Tag767))
-  add(SimpleMapPlan(key = Tags.Tag185, countSetKey = 811, setColKey = Tags.Tag655))
+  add(CusPlan(key = Tags.Tag185, countSetKey = 811, c = (iii1: Int, iii2: Int) => if (iii1 < 2) 2 else iii1))
   add(CusPlan(key = Tags.Tag186, countSetKey = 812, c = (i1: Int, i2: Int) => if (i1 <= i2) i2 + 1 else i2))
   add(SimpleMapPlan(key = Tags.Tag187, countSetKey = 813, setColKey = Tags.Tag678))
   add(SimpleMapPlan(key = Tags.Tag188, countSetKey = 814, setColKey = Tags.Tag761))
@@ -340,7 +340,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag205, countSetKey = 831, setColKey = Tags.Tag573))
   add(SimpleMapPlan(key = Tags.Tag206, countSetKey = 832, setColKey = Tags.Tag936))
   add(SimpleMapPlan(key = Tags.Tag207, countSetKey = 833, setColKey = Tags.Tag760))
-  add(SimpleMapPlan(key = Tags.Tag208, countSetKey = 834, setColKey = Tags.Tag432))
+  add(CusPlan(key = Tags.Tag208, countSetKey = 834, c = (i1: Int, i2: Int) => if (i1 == 1) 3 else i1 + 1))
   add(SimpleMapPlan(key = Tags.Tag209, countSetKey = 835, setColKey = Tags.Tag682))
   add(SimpleMapPlan(key = Tags.Tag210, countSetKey = 836, setColKey = Tags.Tag1573))
   add(SimpleMapPlan(key = Tags.Tag211, countSetKey = 837, setColKey = Tags.Tag1437))
@@ -439,7 +439,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag304, countSetKey = 942, setColKey = Tags.Tag057))
   add(SimpleMapPlan(key = Tags.Tag305, countSetKey = 943, setColKey = Tags.Tag716))
   add(SimpleMapPlan(key = Tags.Tag306, countSetKey = 944, setColKey = Tags.Tag652))
-  add(SimpleMapPlan(key = Tags.Tag307, countSetKey = 945, setColKey = Tags.Tag578))
+  add(CusPlan(key = Tags.Tag307, countSetKey = 945, c = (iii1: Int, iii2: Int) => if (iii1 == 0) Option.empty else Option(iii2 + 3)))
   add(SimpleMapPlan(key = Tags.Tag308, countSetKey = 946, setColKey = Tags.Tag913))
   add(SimpleMapPlan(key = Tags.Tag309, countSetKey = 947, setColKey = Tags.Tag107))
   add(SimpleMapPlan(key = Tags.Tag310, countSetKey = 948, setColKey = Tags.Tag046))
@@ -480,7 +480,7 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag345, countSetKey = 1007, setColKey = Tags.Tag1302))
   add(SimpleMapPlan(key = Tags.Tag346, countSetKey = 1011, setColKey = Tags.Tag044))
   add(SimpleMapPlan(key = Tags.Tag347, countSetKey = 1012, setColKey = Tags.Tag1082))
-  add(SimpleMapPlan(key = Tags.Tag348, countSetKey = 1014, setColKey = Tags.Tag243))
+  add(CusPlan(key = Tags.Tag348, countSetKey = 1014, c = (iii1: Int, iii2: Int) => if (iii1 <= 2) 0 else iii1 - 2))
   add(SimpleMapPlan(key = Tags.Tag349, countSetKey = 1018, setColKey = Tags.Tag246))
   add(SimpleMapPlan(key = Tags.Tag350, countSetKey = 1021, setColKey = Tags.Tag021))
   add(SimpleMapPlan(key = Tags.Tag351, countSetKey = 1024, setColKey = Tags.Tag002))
@@ -549,8 +549,8 @@ trait ConfirmCol {
   add(SimpleMapPlan(key = Tags.Tag407, countSetKey = 1109, setColKey = Tags.Tag1599))
   add(SimpleMapPlan(key = Tags.Tag408, countSetKey = 1110, setColKey = Tags.Tag1555))
   add(SimpleMapPlan(key = Tags.Tag409, countSetKey = 1111, setColKey = Tags.Tag241))
-  add(SimpleMapPlan(key = Tags.Tag410, countSetKey = 1112, setColKey = Tags.Tag238))
-  add(SimpleMapPlan(key = Tags.Tag411, countSetKey = 1113, setColKey = Tags.Tag161))
+  add(CusPlan(key = Tags.Tag410, countSetKey = 1112, c = (i1: Int, i2: Int) => if (i1 == 0) i2 else i1 - 1))
+  add(CusPlan(key = Tags.Tag411, countSetKey = 1113, c = (i1: Int, i2: Int) => if (i1 % 2 == 0) i1 / 2 else i1 / 2 + 1))
   add(
     CusPlan(key = Tags.Tag412, countSetKey = 1114, c = (i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) else i1 / (i2 + 1) + 1)
   )
@@ -1052,7 +1052,8 @@ trait ConfirmCol {
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         (iii1: Int, iii2: Int) => if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag289"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
+        if (iii1 == 0) 0 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 else (iii1 / iii2) * iii2 + 2 * iii1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         (iii1: Int, iii2: Int) => if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)
     )
@@ -1120,7 +1121,7 @@ trait ConfirmCol {
       key = Tags.Tag457,
       countSetKey = 974,
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 = 0` = Option("Tag432"),
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => if (iii1 == 1) 3 else iii1 + 1,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) =>
         if (iii1 == 0 && iii2 == 0) 1
@@ -1168,15 +1169,17 @@ trait ConfirmCol {
       key = Tags.Tag459,
       countSetKey = 980,
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 = 0` = Option("Tag655"),
+      `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => if (iii1 < 2) 2 else iii1,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1443"),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` =
+        (iii1: Int, iii2: Int) => if (iii1 == 1 && iii2 == 0) Option.empty else if (iii1 == 1) 2 else if (iii2 == 0) Option.empty else iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 == 0 && iii2 == 0) Option(1)
         else if (iii1 == 0) Option(0 * iii2 + 1)
         else if (iii2 == 0) Option.empty
         else Option(1 * iii1 + 0 * iii2 + 0),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1443")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        (iii1: Int, iii2: Int) => if (iii1 == 1 && iii2 == 0) Option.empty else if (iii1 == 1) 2 else if (iii2 == 0) Option.empty else iii1
     )
   )
   add(
@@ -1204,10 +1207,10 @@ trait ConfirmCol {
       countSetKey = 989,
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 = 0 and i2 gt 0` = Option("Tag1214=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1214"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1214=reverse"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1214=reverse")
+      `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => if (iii2 == 0) 0 else (iii2 * 3 - 1) / 2,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 0 else (iii1 * 3 - 1) / 2,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii2 == 0) 0 else (iii2 * 3 - 1) / 2,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii2 == 0) 0 else (iii2 * 3 - 1) / 2
     )
   )
   add(
@@ -1229,9 +1232,9 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag243"),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 <= 2) 0 else iii1 - 2,
       `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag243")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 <= 2) 0 else iii1 - 2
     )
   )
   add(
@@ -1241,9 +1244,11 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => if (iii2 == 0) iii1 + 2 else if (iii1 == 0) 2 else 1,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag699"),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag566"),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag699")
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) =>
+        if ((iii2 + 1) % iii1 == 0) ((iii2 + 1) / iii1) * iii1 + 2 * (iii2 + 1) else ((iii2 + 1) / iii1) * iii1 + iii1 + 2 * (iii2 + 1),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => iii1 + iii2 * 2 + 2,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
+        if ((iii2 + 1) % iii1 == 0) ((iii2 + 1) / iii1) * iii1 + 2 * (iii2 + 1) else ((iii2 + 1) / iii1) * iii1 + iii1 + 2 * (iii2 + 1)
     )
   )
   add(
@@ -1260,7 +1265,7 @@ trait ConfirmCol {
         else if (iii1 == 0) Option(0 * iii2 + 1)
         else if (iii2 == 0) Option.empty
         else Option(1 * iii1 + 0 * iii2 + 0),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag131")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 + iii1 * (iii2 / iii1)
     )
   )
   add(
@@ -1276,7 +1281,7 @@ trait ConfirmCol {
         else if (iii2 == 0) Option.empty
         else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag153")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii2 / iii1 * iii1
     )
   )
   add(
@@ -1293,10 +1298,10 @@ trait ConfirmCol {
         else if (iii1 == 1) 0 * iii1 + 0 * iii2 + 3
         else if (iii2 == 0) iii1 * -2 / -1 + 1
         else if (iii2 == 1) 1 * iii1 + -2 * iii2 + 3
-        else if (iii1 == iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
-        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
+        else if (iii1 == iii2) -iii1 * 3 + iii2 + iii2 / iii1 * iii1 * 3 + 1
+        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 + 1
         else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag931")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 + iii1 * (iii2 / iii1) + 1
     )
   )
   add(
@@ -1307,7 +1312,8 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1245"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
+        if (iii1 == 0) Option.empty else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + iii1 - 1 else (iii1 / iii2) * iii2 + iii1 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
@@ -1319,7 +1325,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1337"),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 0 else (iii1 - 1) * (iii2 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
@@ -1338,7 +1344,8 @@ trait ConfirmCol {
         else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
         else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
         else 1 * iii1 + 1 * iii2 + 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1229"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (i1: Int, i2: Int) =>
+        if (i1 == 0) Option.empty else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 2 * i1 - 1 else (i1 / i2) * i2 + 2 * i1 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 == 0 && iii2 == 0) 0
         else if (iii1 == 0) 0 * iii2 + 0
@@ -1451,7 +1458,9 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii1 * 2 + 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1322=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
+        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 + 1
+        else (iii1 / (iii2 * 2)) * iii2 + iii1 + iii2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 - iii2 > 0) iii2 * 2 + 1 else iii1 * 2 + 1
     )
   )
@@ -1463,7 +1472,8 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1339=reverse"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
+        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 else (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) - iii2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0
     )
   )
@@ -1476,7 +1486,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else iii1 * 2 + iii2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii1 - iii2 > 0) iii2 * 2 + 1 else iii1 * 2 + 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag144")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 * (iii2 / iii1) + 2 * iii2 + 1
     )
   )
   add(
@@ -1486,9 +1496,11 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag961"),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) iii2 * 2 + 2 else 2,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii1 <= iii2) Option.empty else 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag903")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
+        if ((iii2 + 1)  % (2 * iii1) <= iii1) ((iii2 + 1) / (2 * iii1)) * iii1 + 1
+        else (iii2 + 1) % (2 * iii1) - iii1 + ((iii2 + 1) / (2 * iii1)) * iii1 + 1
     )
   )
   add(
@@ -1714,9 +1726,9 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => iii1,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag1216"),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii1 + iii2 * 2 + iii1 * (iii2 / iii1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii2 == 0) 0 else iii2 * 2 + iii1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag1216")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 + iii2 * 2 + iii1 * (iii2 / iii1)
     )
   )
   add(
@@ -1728,7 +1740,9 @@ trait ConfirmCol {
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 > iii2) Option.empty else 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag413")
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
+        if ((iii2 + 1)  % (2 * iii1) <= iii1) ((iii2 + 1) / (2 * iii1)) * iii1
+        else (iii2 + 1) % (2 * iii1) - iii1 + ((iii2 + 1) / (2 * iii1)) * iii1
     )
   )
   add(
@@ -1906,8 +1920,8 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii1 + 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag845"),
-      // `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 + 1
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
+        if (iii1 == 0) 1 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + iii1 + 1 else (iii1 / iii2) * iii2 + iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 + 1
     )
   )
@@ -1919,7 +1933,8 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii1 * 2 + 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag855"),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        (iii1: Int, iii2: Int) => if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + iii1 + 1 else (iii1 / iii2) * iii2 + iii2 + iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii1 + iii2 + 1
     )
   )
@@ -2019,7 +2034,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => iii2 + 3,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option("Tag578"),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) Option.empty else Option(iii2 + 3),
       `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option("Tag1612"),
       `i1 gt 0 and i2 gt 0 and i1 lt i2x` = Option("Tag120=reverse")
     )
