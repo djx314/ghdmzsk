@@ -36,17 +36,12 @@ sealed trait ConfirmPlan {
 case class MapPlan(
   override val key: String,
   override val countSetKey: Int,
-  `i1 gt 0 and i2 = 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 = 0 and i2 gt 0`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 gt 0 and i2 gt 0 and i1 = i2x`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 gt 0 and i2 gt 0 and i1 gt i2x`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-  `i1 gt 0 and i2 gt 0 and i1 lt i2x`: Option[String] = Option("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
   `i1 = 0 and i2 = 0`: (Int, Int) => ConfirmResult,
-  `i1 gt 0 and i2 = 0x`: (Int, Int) => ConfirmResult = null,
-  `i1 = 0 and i2 gt 0x`: (Int, Int) => ConfirmResult = null,
-  `i1 gt 0 and i2 gt 0 and i1 = i2`: (Int, Int) => ConfirmResult = null,
-  `i1 gt 0 and i2 gt 0 and i1 gt i2`: (Int, Int) => ConfirmResult = null,
-  `i1 gt 0 and i2 gt 0 and i1 lt i2`: (Int, Int) => ConfirmResult = null
+  `i1 gt 0 and i2 = 0x`: (Int, Int) => ConfirmResult,
+  `i1 = 0 and i2 gt 0x`: (Int, Int) => ConfirmResult,
+  `i1 gt 0 and i2 gt 0 and i1 = i2`: (Int, Int) => ConfirmResult,
+  `i1 gt 0 and i2 gt 0 and i1 gt i2`: (Int, Int) => ConfirmResult,
+  `i1 gt 0 and i2 gt 0 and i1 lt i2`: (Int, Int) => ConfirmResult
 ) extends ConfirmPlan {
   def resultFromKeyOpt(i1: Int, i2: Int, keyOpt: Option[String]): ConfirmResult = {
     val dOpt = for (currKey <- keyOpt) yield {
@@ -62,18 +57,18 @@ case class MapPlan(
   override def count(i1: Int, i2: Int): ConfirmResult =
     if (i1 == 0 && i2 == 0) `i1 = 0 and i2 = 0`.apply(i1, i2)
     else if (i1 > 0 && i2 == 0)
-      (for (t <- Option(`i1 gt 0 and i2 = 0x`)) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 = 0`))
+      (for (t <- Option(`i1 gt 0 and i2 = 0x`)) yield t(i1, i2)).get
     else if (i1 == 0 && i2 > 0)
-      (for (t <- Option(`i1 = 0 and i2 gt 0x`)) yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 = 0 and i2 gt 0`))
+      (for (t <- Option(`i1 = 0 and i2 gt 0x`)) yield t(i1, i2)).get
     else if (i1 > 0 && i2 > 0 && i1 == i2)
       (for (t <- Option(`i1 gt 0 and i2 gt 0 and i1 = i2`))
-        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 = i2x`))
+        yield t(i1, i2)).get
     else if (i1 > 0 && i2 > 0 && i1 > i2)
       (for (t <- Option(`i1 gt 0 and i2 gt 0 and i1 gt i2`))
-        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 gt i2x`))
+        yield t(i1, i2)).get
     else if (i1 > 0 && i2 > 0 && i1 < i2)
       (for (t <- Option(`i1 gt 0 and i2 gt 0 and i1 lt i2`))
-        yield t(i1, i2)).getOrElse(resultFromKeyOpt(i1, i2, `i1 gt 0 and i2 gt 0 and i1 lt i2x`))
+        yield t(i1, i2)).get
     else throw new Exception("No result")
 
 }
@@ -639,7 +634,7 @@ trait ConfirmCol {
         else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
         else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
         else 1 * iii1 + 1 * iii2 + 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 == 0 && iii2 == 0) 0
         else if (iii1 == 0) 0 * iii2 + 0
@@ -801,7 +796,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => iii2 - 1
     )
   )
@@ -1159,8 +1154,8 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
   )
@@ -1220,7 +1215,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 1,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
@@ -1233,7 +1228,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 <= 2) 0 else iii1 - 2,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 <= 2) 0 else iii1 - 2
     )
   )
@@ -1326,7 +1321,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 0 else (iii1 - 1) * (iii2 + 1),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
   )
@@ -1365,7 +1360,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
@@ -1441,7 +1436,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 == 0 && iii2 == 0) 1
         else if (iii1 == 0) iii2 * 0 / -3 + 1
@@ -1564,7 +1559,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => Option.empty,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0
     )
   )
@@ -1596,7 +1591,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 2,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => if (iii2 == 0) Option.empty else if (iii1 == 0) 2 else if (iii1 == 1) 2 else 3,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
@@ -1638,8 +1633,8 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
   )
@@ -1760,7 +1755,7 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         (iii1: Int, iii2: Int) => if (iii2 == 0) Option.empty else if (iii1 == 0) 2 else if (iii1 == 1) 2 else 3,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
@@ -1786,8 +1781,8 @@ trait ConfirmCol {
       `i1 = 0 and i2 = 0` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2x` = Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => NotImplemented,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
   )
@@ -1823,7 +1818,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => if (iii1 >= 1) iii1 * 2 - 1 else iii1,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 == iii2 + 1) iii1 else iii1 - 1
     )
   )
@@ -1869,7 +1864,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0
     )
   )
@@ -1903,7 +1898,7 @@ trait ConfirmCol {
         else if (iii1 == iii2) -1 * iii1 + 3 * iii2 + iii1 * iii2 * -3 / -3 + -1
         else if (iii1 > iii2) 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1
         else 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) => NotImplemented
     )
   )
@@ -1991,7 +1986,7 @@ trait ConfirmCol {
       `i1 gt 0 and i2 = 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 = 0 and i2 gt 0x` = (iii1: Int, iii2: Int) => 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = (iii1: Int, iii2: Int) => iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2x` = Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = (iii1: Int, iii2: Int) => NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = (iii1: Int, iii2: Int) =>
         if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
