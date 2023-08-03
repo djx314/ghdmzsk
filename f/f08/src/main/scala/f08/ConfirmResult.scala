@@ -606,7 +606,7 @@ trait ConfirmCol {
     )
   )
 
-  add(
+  /*add(
     MapPlan(
       key = Tags.Tag424,
       countSetKey = 873,
@@ -2089,7 +2089,7 @@ trait ConfirmCol {
         else if ((iii2 + 1) % iii1 == 0) ((iii2 + 1) / iii1 - 1) * iii1 + 2 * (iii2 + 1)
         else ((iii2 + 1) / iii1) * iii1 + 2 * iii2 + 2
     )
-  )
+  )*/
 
   add(
     CusPlan(
