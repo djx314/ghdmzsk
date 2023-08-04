@@ -5,32 +5,26 @@ import f07._
 import scala.language.implicitConversions
 
 trait Expr {
+  self =>
   def renderString: String
+  def +(expr1: Expr): Expr      = Expr(self.renderString + " + " + expr1.renderString)
+  def -(expr1: Expr): Expr      = Expr(self.renderString + " - " + expr1.renderString)
+  def *(expr1: Expr): Expr      = Expr(self.renderString + " * " + expr1.renderString)
+  def /(expr1: Expr): Expr      = Expr(self.renderString + " / " + expr1.renderString)
+  def %(expr1: Expr): Expr      = Expr(self.renderString + " % " + expr1.renderString)
+  def >(expr1: Expr): Expr      = Expr(self.renderString + " - " + expr1.renderString)
+  def <(expr1: Expr): Expr      = Expr(self.renderString + " - " + expr1.renderString)
+  def &&(expr1: Expr): Expr     = Expr(self.renderString + " && " + expr1.renderString)
+  def ===(expr1: Expr): Expr    = Expr(self.renderString + " % " + expr1.renderString)
+  def <=(expr1: Expr): Expr     = Expr(self.renderString + " % " + expr1.renderString)
+  def Else(expr1: Expr): Expr   = Expr(self.renderString + " } Else { " + expr1.renderString)
+  def ElseIf(expr1: Expr): Expr = expr1
+  def apply(u: Expr): Expr      = u
 }
 object Expr {
   def apply(n: String): Expr = new Expr {
     override val renderString: String = n
   }
-
-  class upClass(private val expr: Expr) extends AnyVal {
-    def plusuu(expr1: Expr): Expr              = Expr(expr.renderString + " plusuu " + expr1.renderString)
-    def -(expr1: Expr): Expr                   = Expr(expr.renderString + " - " + expr1.renderString)
-    def *(expr1: Expr): Expr                   = Expr(expr.renderString + " * " + expr1.renderString)
-    def /(expr1: Expr): Expr                   = Expr(expr.renderString + " / " + expr1.renderString)
-    def %(expr1: Expr): Expr                   = Expr(expr.renderString + " % " + expr1.renderString)
-    def &&(expr1: Expr): Expr                  = Expr(expr.renderString + " && " + expr1.renderString)
-    def ===(expr1: Expr): Expr                 = Expr(expr.renderString + " % " + expr1.renderString)
-    def <=(expr1: Expr): Expr                  = Expr(expr.renderString + " % " + expr1.renderString)
-    def Else(expr1: Expr): Expr                = Expr(expr.renderString + " } Else { " + expr1.renderString)
-    def ElseIf(expr1: Expr)(expr2: Expr): Expr = Expr(expr.renderString + " } Else { " + expr1.renderString)
-  }
-
-  implicit def uuExpr1(i: Int): upClass     = new upClass(Expr(i.toString))
-  implicit def uuExpr2(i: Boolean): upClass = new upClass(Expr(i.toString))
-  implicit def uuExpr3(i: Option[Int]): upClass = new upClass(
-    Expr(i.map(t => "Option(" + i.toString + ")").getOrElse("Option.empty"))
-  )
-  implicit def uuExpr4(i: Expr): upClass = new upClass(i)
 
   implicit def uuExpr2_1(i: Int): Expr         = Expr(i.toString)
   implicit def uuExpr2_2(i: Boolean): Expr     = Expr(i.toString)
@@ -60,8 +54,9 @@ object bb {
 
   import innerUtils._
 
-  val iii1: Expr = Expr("iii1")
-  val iii2: Expr = Expr("iii2")
+  val iii1: Expr           = Expr("i1")
+  val iii2: Expr           = Expr("i2")
+  val NotImplemented: Expr = Expr("NotImplemented")
 
   add(
     MapPlanUUUU(
@@ -70,12 +65,12 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If(iii1 % (iii2 * 2) <= iii2) { (iii1 / (iii2 * 2)) * iii2 plusuu iii1 plusuu 1 }
-        Else { (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) plusuu iii1 - iii2 plusuu 1 }
+        If(iii1 % (iii2 * 2) <= iii2)((iii1 / (iii2 * 2)) * iii2 + iii1 + 1)
+        Else((iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 - iii2 + 1)
       ,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + 1
     )
   )
   add(
@@ -86,21 +81,19 @@ object bb {
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        If(iii1 === 0 && iii2 === 0) { 0 }
-        ElseIf(iii1 === 0) { 0 * iii2 plusuu 0 }
-        ElseIf(iii2 === 0) { 1 * iii1 plusuu 0 }
-        ElseIf(iii1 === iii2) { 0 * iii1 plusuu 2 * iii2 plusuu -1 }
-        ElseIf(iii1 < iii2) { 2 * iii1 plusuu 0 * iii2 plusuu -1 }
-        Else { 1 * iii1 plusuu 1 * iii2 plusuu 0 }
+        If(iii1 === 0 && iii2 === 0)(0) ElseIf (iii1 === 0)(0 * iii2 + 0) ElseIf (iii2 === 0)(1 * iii1 + 0)
+        ElseIf(iii1 === iii2)(0 * iii1 + 2 * iii2 + -1)
+        ElseIf(iii1 < iii2)(2 * iii1 + 0 * iii2 + -1)
+        Else(1 * iii1 + 1 * iii2 + 0)
       ,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If(iii1 === 0 && iii2 === 0) { 0 }
-        ElseIf(iii1 === 0) { 0 * iii2 plusuu 0 }
-        ElseIf(iii2 === 0) { 1 * iii1 plusuu 0 }
-        ElseIf(iii1 === iii2) { 0 * iii1 plusuu 2 * iii2 plusuu -1 }
-        ElseIf(iii1 < iii2) { 2 * iii1 plusuu 0 * iii2 plusuu -1 }
-        Else { 1 * iii1 plusuu 1 * iii2 plusuu 0 }
+        If(iii1 === 0 && iii2 === 0)(0)
+        ElseIf(iii1 === 0)(0 * iii2 + 0)
+        ElseIf(iii2 === 0)(1 * iii1 + 0)
+        ElseIf(iii1 === iii2)(0 * iii1 + 2 * iii2 + -1)
+        ElseIf(iii1 < iii2)(2 * iii1 + 0 * iii2 + -1)
+        Else(1 * iii1 + 1 * iii2 + 0)
     )
   )
   /*add(
@@ -110,11 +103,11 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 2,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 plusuu 1) === 0) iii2 / (iii1 plusuu 1) plusuu iii2 Else iii2 / (iii1 plusuu 1) plusuu iii2 plusuu 2,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 + 1) === 0) iii2 / (iii1 + 1) + iii2 Else iii2 / (iii1 + 1) + iii2 + 2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1) % (2 * iii1) <= iii1) (iii2 plusuu 1) % (2 * iii1) plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1 plusuu 1
-        Else iii1 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1 plusuu 1
+        If ((iii2 + 1) % (2 * iii1) <= iii1) (iii2 + 1) % (2 * iii1) + ((iii2 + 1) / (2 * iii1)) * iii1 + 1
+        Else iii1 + ((iii2 + 1) / (2 * iii1)) * iii1 + 1
     )
   )
 
@@ -125,10 +118,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) plusuu iii1 Else (iii1 / (iii2 * 2)) * iii2 plusuu iii1 plusuu iii2,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1)
+        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 Else (iii1 / (iii2 * 2)) * iii2 + iii1 + iii2,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1)
     )
   )
   add(
@@ -137,10 +130,10 @@ object bb {
       countSetKey = 1063,
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
-      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => i2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => i2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 + 1
     )
   )
   add(
@@ -150,9 +143,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * iii2 plusuu 2 * iii1 - iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 * iii2 plusuu iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 * iii2 plusuu iii2 - 1
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * iii2 + 2 * iii1 - iii2 - 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 * iii2 + iii2 - 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 * iii2 + iii2 - 1
     )
   )
   add(
@@ -160,11 +153,11 @@ object bb {
       key = Tags.Tag430,
       countSetKey = 973,
       `i1 = 0 and i2 = 0` = 0,
-      `i1 gt 0 and i2 = 0x` = If (iii2 === 0) iii1 plusuu 2 ElseIf (iii1 === 0) 2 Else 1,
+      `i1 gt 0 and i2 = 0x` = If (iii2 === 0) iii1 + 2 ElseIf (iii1 === 0) 2 Else 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 2,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 plusuu iii2 plusuu iii1 * (iii2 / iii1) plusuu 2,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii2 plusuu iii2 * (iii1 / iii2) plusuu 2
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 2,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 + iii2 + iii1 * (iii2 / iii1) + 2,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii2 + iii2 * (iii1 / iii2) + 2
     )
   )
   add(
@@ -174,11 +167,11 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1)  % (2 * iii1) <= iii1) iii2 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
-        Else (iii2 plusuu 1) % (2 * iii1) - iii1 plusuu iii2 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
+        If ((iii2 + 1)  % (2 * iii1) <= iii1) iii2 + ((iii2 + 1) / (2 * iii1)) * iii1
+        Else (iii2 + 1) % (2 * iii1) - iii1 + iii2 + ((iii2 + 1) / (2 * iii1)) * iii1
     )
   )
   add(
@@ -190,16 +183,16 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0) 0 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu iii1 Else (iii1 / iii2) * iii2 plusuu iii1,
+        If (iii1 === 0) 0 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + iii1 Else (iii1 / iii2) * iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0)
+        Else Option(1 * iii1 + 0 * iii2 + 0)
     )
   )
   add(
@@ -209,9 +202,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 <= iii2) Option.empty Else 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 / iii1 * iii1 plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 / iii1 * iii1 + 1
     )
   )
   add(
@@ -223,9 +216,9 @@ object bb {
       `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
@@ -238,9 +231,9 @@ object bb {
       `i1 gt 0 and i2 = 0x` = 2,
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 plusuu 1) === 0) iii2 / (iii1 plusuu 1) plusuu iii2 Else iii2 / (iii1 plusuu 1) plusuu iii2 plusuu 2,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 + 1) === 0) iii2 / (iii1 + 1) + iii2 Else iii2 / (iii1 + 1) + iii2 + 2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 % (iii2 plusuu 1) === 0) iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) Else iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) - 1
+        If (iii1 % (iii2 + 1) === 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) Else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
   )
   add(
@@ -264,15 +257,15 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0)
+        Else Option(1 * iii1 + 0 * iii2 + 0)
     )
   )
   add(
@@ -284,7 +277,7 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 > iii2) Option.empty Else 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0) 1 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu 1 Else (iii1 / iii2) * iii2 plusuu 1,
+        If (iii1 === 0) 1 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + 1 Else (iii1 / iii2) * iii2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 > iii2) Option.empty Else 1
     )
   )
@@ -296,13 +289,13 @@ object bb {
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+        Else iii2 + iii1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -313,9 +306,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0
     )
   )
   add(
@@ -324,14 +317,14 @@ object bb {
       countSetKey = 966,
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` =
-        If ((1 plusuu 1) % iii1 === 0) ((1 plusuu 1) / iii1) * iii1 plusuu 2 * (1 plusuu 1) Else ((1 plusuu 1) / iii1) * iii1 plusuu iii1 plusuu 2 * (1 plusuu 1),
+        If ((1 + 1) % iii1 === 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) Else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1),
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        If ((1 plusuu 1) % iii1 === 0) ((1 plusuu 1) / iii1) * iii1 plusuu 2 * (1 plusuu 1) Else ((1 plusuu 1) / iii1) * iii1 plusuu iii1 plusuu 2 * (1 plusuu 1),
+        If ((1 + 1) % iii1 === 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) Else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If ((1 plusuu 1) % iii1 === 0) ((1 plusuu 1) / iii1) * iii1 plusuu 2 * (1 plusuu 1) Else ((1 plusuu 1) / iii1) * iii1 plusuu iii1 plusuu 2 * (1 plusuu 1),
+        If ((1 + 1) % iii1 === 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) Else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1),
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((1 plusuu 1) % iii1 === 0) ((1 plusuu 1) / iii1) * iii1 plusuu 2 * (1 plusuu 1) Else ((1 plusuu 1) / iii1) * iii1 plusuu iii1 plusuu 2 * (1 plusuu 1)
+        If ((1 + 1) % iii1 === 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) Else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1)
     )
   )
   add(
@@ -341,7 +334,7 @@ object bb {
       `i1 = 0 and i2 = 0` = Option.empty,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) Option(iii1 plusuu 1) Else Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) Option(iii1 + 1) Else Option.empty,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 <= iii2) Option.empty Else 1
     )
@@ -366,16 +359,16 @@ object bb {
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2
     )
@@ -387,9 +380,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = iii1 - 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) Option.empty Else iii1 * 2 plusuu iii2 - 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) Option.empty Else iii1 * 2 + iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 plusuu 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 plusuu iii2 - 1,
+        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 + 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 + iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -400,9 +393,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 plusuu iii2 / iii1 * iii1
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 + iii2 / iii1 * iii1
     )
   )
   add(
@@ -414,12 +407,12 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 plusuu 1) === 0) iii2 * 2 - iii2 / (iii1 plusuu 1) plusuu 1 Else iii2 * 2 - iii2 / (iii1 plusuu 1),
+        Else iii2 + iii1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 + 1) === 0) iii2 * 2 - iii2 / (iii1 + 1) + 1 Else iii2 * 2 - iii2 / (iii1 + 1),
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -430,15 +423,15 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 plusuu iii1 Else (iii1 / iii2) * iii2 plusuu iii2 plusuu iii1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 + iii1 Else (iii1 / iii2) * iii2 + iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
-        ElseIf (iii2 < iii1) 2 * iii2 plusuu 0 * iii1 plusuu -1
-        Else 1 * iii2 plusuu 1 * iii1 plusuu 0
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
+        ElseIf (iii2 < iii1) 2 * iii2 + 0 * iii1 + -1
+        Else 1 * iii2 + 1 * iii1 + 0
     )
   )
   add(
@@ -448,8 +441,8 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -462,13 +455,13 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 plusuu 1,
+        Else Option(1 * iii1 + 0 * iii2 + 0),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1) % (2 * iii1) <= iii1) (iii2 plusuu 1) % (2 * iii1) plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
-        Else iii1 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
+        If ((iii2 + 1) % (2 * iii1) <= iii1) (iii2 + 1) % (2 * iii1) + ((iii2 + 1) / (2 * iii1)) * iii1
+        Else iii1 + ((iii2 + 1) / (2 * iii1)) * iii1
     )
   )
   add(
@@ -480,11 +473,11 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
@@ -496,10 +489,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0) 0 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu 2 * iii1 Else (iii1 / iii2) * iii2 plusuu 2 * iii1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1)
+        If (iii1 === 0) 0 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 Else (iii1 / iii2) * iii2 + 2 * iii1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1)
     )
   )
   add(
@@ -511,9 +504,9 @@ object bb {
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2
     )
@@ -538,11 +531,11 @@ object bb {
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 - 1
@@ -555,9 +548,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + 1
     )
   )
   add(
@@ -565,35 +558,35 @@ object bb {
       key = Tags.Tag457,
       countSetKey = 974,
       `i1 = 0 and i2 = 0` = 0,
-      `i1 gt 0 and i2 = 0x` = If (iii1 === 1) 3 Else iii1 plusuu 1,
+      `i1 gt 0 and i2 = 0x` = If (iii1 === 1) 3 Else iii1 + 1,
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) 1
-        ElseIf (iii1 === 0) iii2 * 0 / -3 plusuu 1
-        ElseIf (iii1 === 1) 0 * iii1 plusuu 0 * iii2 plusuu 3
-        ElseIf (iii2 === 0) iii1 * -2 / -1 plusuu 1
-        ElseIf (iii2 === 1) 1 * iii1 plusuu -2 * iii2 plusuu 3
-        ElseIf (iii1 === iii2) -3 * iii1 plusuu 1 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -1 plusuu 1
-        ElseIf (iii1 > iii2) 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -3 plusuu 1
-        Else 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * 0 / -3 plusuu 1,
+        ElseIf (iii1 === 0) iii2 * 0 / -3 + 1
+        ElseIf (iii1 === 1) 0 * iii1 + 0 * iii2 + 3
+        ElseIf (iii2 === 0) iii1 * -2 / -1 + 1
+        ElseIf (iii2 === 1) 1 * iii1 + -2 * iii2 + 3
+        ElseIf (iii1 === iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
+        ElseIf (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
+        Else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) 1
-        ElseIf (iii1 === 0) iii2 * 0 / -3 plusuu 1
-        ElseIf (iii1 === 1) 0 * iii1 plusuu 0 * iii2 plusuu 3
-        ElseIf (iii2 === 0) iii1 * -2 / -1 plusuu 1
-        ElseIf (iii2 === 1) 1 * iii1 plusuu -2 * iii2 plusuu 3
-        ElseIf (iii1 === iii2) -3 * iii1 plusuu 1 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -1 plusuu 1
-        ElseIf (iii1 > iii2) 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -3 plusuu 1
-        Else 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * 0 / -3 plusuu 1,
+        ElseIf (iii1 === 0) iii2 * 0 / -3 + 1
+        ElseIf (iii1 === 1) 0 * iii1 + 0 * iii2 + 3
+        ElseIf (iii2 === 0) iii1 * -2 / -1 + 1
+        ElseIf (iii2 === 1) 1 * iii1 + -2 * iii2 + 3
+        ElseIf (iii1 === iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
+        ElseIf (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
+        Else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) 1
-        ElseIf (iii1 === 0) iii2 * 0 / -3 plusuu 1
-        ElseIf (iii1 === 1) 0 * iii1 plusuu 0 * iii2 plusuu 3
-        ElseIf (iii2 === 0) iii1 * -2 / -1 plusuu 1
-        ElseIf (iii2 === 1) 1 * iii1 plusuu -2 * iii2 plusuu 3
-        ElseIf (iii1 === iii2) -3 * iii1 plusuu 1 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -1 plusuu 1
-        ElseIf (iii1 > iii2) 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -3 plusuu 1
-        Else 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * 0 / -3 plusuu 1
+        ElseIf (iii1 === 0) iii2 * 0 / -3 + 1
+        ElseIf (iii1 === 1) 0 * iii1 + 0 * iii2 + 3
+        ElseIf (iii2 === 0) iii1 * -2 / -1 + 1
+        ElseIf (iii2 === 1) 1 * iii1 + -2 * iii2 + 3
+        ElseIf (iii1 === iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
+        ElseIf (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
+        Else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1
     )
   )
   add(
@@ -619,9 +612,9 @@ object bb {
         If (iii1 === 1 && iii2 === 0) Option.empty ElseIf (iii1 === 1) 2 ElseIf (iii2 === 0) Option.empty Else iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 1 && iii2 === 0) Option.empty ElseIf (iii1 === 1) 2 ElseIf (iii2 === 0) Option.empty Else iii1
     )
@@ -635,12 +628,12 @@ object bb {
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 plusuu 1) === 0) iii2 * 2 - iii2 / (iii1 plusuu 1) plusuu 1 Else iii2 * 2 - iii2 / (iii1 plusuu 1),
+        Else iii2 + iii1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 + 1) === 0) iii2 * 2 - iii2 / (iii1 + 1) + 1 Else iii2 * 2 - iii2 / (iii1 + 1),
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -664,7 +657,7 @@ object bb {
       `i1 gt 0 and i2 = 0x` = NotImplemented,
       `i1 = 0 and i2 gt 0x` = 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = NotImplemented,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -685,13 +678,13 @@ object bb {
       key = Tags.Tag464,
       countSetKey = 970,
       `i1 = 0 and i2 = 0` = 0,
-      `i1 gt 0 and i2 = 0x` = If (iii2 === 0) iii1 plusuu 2 ElseIf (iii1 === 0) 2 Else 1,
+      `i1 gt 0 and i2 = 0x` = If (iii2 === 0) iii1 + 2 ElseIf (iii1 === 0) 2 Else 1,
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        If ((iii2 plusuu 1) % iii1 === 0) ((iii2 plusuu 1) / iii1) * iii1 plusuu 2 * (iii2 plusuu 1) Else ((iii2 plusuu 1) / iii1) * iii1 plusuu iii1 plusuu 2 * (iii2 plusuu 1),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 plusuu iii2 * 2 plusuu 2,
+        If ((iii2 + 1) % iii1 === 0) ((iii2 + 1) / iii1) * iii1 + 2 * (iii2 + 1) Else ((iii2 + 1) / iii1) * iii1 + iii1 + 2 * (iii2 + 1),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 + iii2 * 2 + 2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1) % iii1 === 0) ((iii2 plusuu 1) / iii1) * iii1 plusuu 2 * (iii2 plusuu 1) Else ((iii2 plusuu 1) / iii1) * iii1 plusuu iii1 plusuu 2 * (iii2 plusuu 1)
+        If ((iii2 + 1) % iii1 === 0) ((iii2 + 1) / iii1) * iii1 + 2 * (iii2 + 1) Else ((iii2 + 1) / iii1) * iii1 + iii1 + 2 * (iii2 + 1)
     )
   )
   add(
@@ -701,13 +694,13 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = iii1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii1 * (iii2 / iii1)
+        Else Option(1 * iii1 + 0 * iii2 + 0),
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii1 * (iii2 / iii1)
     )
   )
   add(
@@ -719,10 +712,10 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+        Else Option(1 * iii1 + 0 * iii2 + 0),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii2 / iii1 * iii1
     )
   )
@@ -731,19 +724,19 @@ object bb {
       key = Tags.Tag467,
       countSetKey = 984,
       `i1 = 0 and i2 = 0` = 0,
-      `i1 gt 0 and i2 = 0x` = iii1 plusuu 1,
+      `i1 gt 0 and i2 = 0x` = iii1 + 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) 1
-        ElseIf (iii1 === 0) iii2 * 0 / -3 plusuu 1
-        ElseIf (iii1 === 1) 0 * iii1 plusuu 0 * iii2 plusuu 3
-        ElseIf (iii2 === 0) iii1 * -2 / -1 plusuu 1
-        ElseIf (iii2 === 1) 1 * iii1 plusuu -2 * iii2 plusuu 3
-        ElseIf (iii1 === iii2) -iii1 * 3 plusuu iii2 plusuu iii2 / iii1 * iii1 * 3 plusuu 1
-        ElseIf (iii1 > iii2) 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 plusuu 1
-        Else 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * 0 / -3 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii1 * (iii2 / iii1) plusuu 1
+        ElseIf (iii1 === 0) iii2 * 0 / -3 + 1
+        ElseIf (iii1 === 1) 0 * iii1 + 0 * iii2 + 3
+        ElseIf (iii2 === 0) iii1 * -2 / -1 + 1
+        ElseIf (iii2 === 1) 1 * iii1 + -2 * iii2 + 3
+        ElseIf (iii1 === iii2) -iii1 * 3 + iii2 + iii2 / iii1 * iii1 * 3 + 1
+        ElseIf (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 + 1
+        Else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii1 * (iii2 / iii1) + 1
     )
   )
   add(
@@ -755,9 +748,9 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0) Option.empty ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu iii1 - 1 Else (iii1 / iii2) * iii2 plusuu iii1 - 1,
+        If (iii1 === 0) Option.empty ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + iii1 - 1 Else (iii1 / iii2) * iii2 + iii1 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 % (iii2 plusuu 1) === 0) iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) Else iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) - 1
+        If (iii1 % (iii2 + 1) === 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) Else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
   )
   add(
@@ -767,7 +760,7 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 0 Else (iii1 - 1) * (iii2 plusuu 1),
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 0 Else (iii1 - 1) * (iii2 + 1),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
@@ -781,22 +774,22 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) 0 * iii2 plusuu 0
-        ElseIf (iii2 === 0) 1 * iii1 plusuu 0
-        ElseIf (iii1 === iii2) 0 * iii1 plusuu 2 * iii2 plusuu -1
-        ElseIf (iii1 < iii2) 2 * iii1 plusuu 0 * iii2 plusuu -1
-        Else 1 * iii1 plusuu 1 * iii2 plusuu 0,
+        ElseIf (iii1 === 0) 0 * iii2 + 0
+        ElseIf (iii2 === 0) 1 * iii1 + 0
+        ElseIf (iii1 === iii2) 0 * iii1 + 2 * iii2 + -1
+        ElseIf (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
+        Else 1 * iii1 + 1 * iii2 + 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0) Option.empty
-        ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu 2 * iii1 - 1
-        Else (iii1 / iii2) * iii2 plusuu 2 * iii1 - 1,
+        ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 - 1
+        Else (iii1 / iii2) * iii2 + 2 * iii1 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) 0 * iii2 plusuu 0
-        ElseIf (iii2 === 0) 1 * iii1 plusuu 0
-        ElseIf (iii1 === iii2) 0 * iii1 plusuu 2 * iii2 plusuu -1
-        ElseIf (iii1 < iii2) 2 * iii1 plusuu 0 * iii2 plusuu -1
-        Else 1 * iii1 plusuu 1 * iii2 plusuu 0
+        ElseIf (iii1 === 0) 0 * iii2 + 0
+        ElseIf (iii2 === 0) 1 * iii1 + 0
+        ElseIf (iii1 === iii2) 0 * iii1 + 2 * iii2 + -1
+        ElseIf (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
+        Else 1 * iii1 + 1 * iii2 + 0
     )
   )
   add(
@@ -809,7 +802,7 @@ object bb {
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 % (iii2 plusuu 1) === 0) iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) Else iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) - 1
+        If (iii1 % (iii2 + 1) === 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) Else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
   )
   add(
@@ -819,7 +812,7 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = iii1 - 1,
       `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => Option.empty,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) Option(iii1 plusuu 1) Else Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) Option(iii1 + 1) Else Option.empty,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 > iii2) Option.empty Else 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 <= iii2) Option.empty Else 1
     )
@@ -831,11 +824,11 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 2,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 plusuu 1 - iii1 >= 0) iii2 plusuu 1 plusuu iii1 Else iii2 * 2 plusuu 2,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 + 1 - iii1 >= 0) iii2 + 1 + iii1 Else iii2 * 2 + 2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1) % (iii1 * 2) <= iii1) ((iii2 plusuu 1) / (iii1 * 2)) * iii1 plusuu (iii2 plusuu 1) % (iii1 * 2) plusuu iii2 plusuu 1
-        Else ((iii2 plusuu 1) / (iii1 * 2)) * iii1 plusuu iii2 plusuu 1 plusuu iii1
+        If ((iii2 + 1) % (iii1 * 2) <= iii1) ((iii2 + 1) / (iii1 * 2)) * iii1 + (iii2 + 1) % (iii1 * 2) + iii2 + 1
+        Else ((iii2 + 1) / (iii1 * 2)) * iii1 + iii2 + 1 + iii1
     )
   )
   add(
@@ -845,15 +838,15 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = iii1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) 0 Else iii2 * 2 plusuu iii1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) 0 Else iii2 * 2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) 0 * iii2 plusuu 0
-        ElseIf (iii2 === 0) 1 * iii1 plusuu 0
-        ElseIf (iii1 === iii2) 0 * iii1 plusuu 2 * iii2 plusuu -1
-        ElseIf (iii1 < iii2) 2 * iii1 plusuu 0 * iii2 plusuu -1
-        Else 1 * iii1 plusuu 1 * iii2 plusuu 0,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii2 plusuu iii1 * (iii2 / iii1)
+        ElseIf (iii1 === 0) 0 * iii2 + 0
+        ElseIf (iii2 === 0) 1 * iii1 + 0
+        ElseIf (iii1 === iii2) 0 * iii1 + 2 * iii2 + -1
+        ElseIf (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
+        Else 1 * iii1 + 1 * iii2 + 0,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii2 + iii1 * (iii2 / iii1)
     )
   )
   add(
@@ -865,15 +858,15 @@ object bb {
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 plusuu 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 plusuu iii2 - 1,
+        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 + 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 + iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 plusuu 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 plusuu iii2 - 1
+        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 + 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 + iii2 - 1
     )
   )
   add(
@@ -886,13 +879,13 @@ object bb {
       `i1 gt 0 and i2 gt 0 and i1 = i2` = NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) 1
-        ElseIf (iii1 === 0) iii2 * 0 / -3 plusuu 1
-        ElseIf (iii1 === 1) 0 * iii1 plusuu 0 * iii2 plusuu 3
-        ElseIf (iii2 === 0) iii1 * -2 / -1 plusuu 1
-        ElseIf (iii2 === 1) 1 * iii1 plusuu -2 * iii2 plusuu 3
-        ElseIf (iii1 === iii2) -3 * iii1 plusuu 1 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -1 plusuu 1
-        ElseIf (iii1 > iii2) 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * -3 / -3 plusuu 1
-        Else 1 * iii1 plusuu 0 * iii2 plusuu iii2 / iii1 * iii1 * 0 / -3 plusuu 1,
+        ElseIf (iii1 === 0) iii2 * 0 / -3 + 1
+        ElseIf (iii1 === 1) 0 * iii1 + 0 * iii2 + 3
+        ElseIf (iii2 === 0) iii1 * -2 / -1 + 1
+        ElseIf (iii2 === 1) 1 * iii1 + -2 * iii2 + 3
+        ElseIf (iii1 === iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
+        ElseIf (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
+        Else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -903,11 +896,11 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) plusuu iii1 plusuu 1
-        Else (iii1 / (iii2 * 2)) * iii2 plusuu iii1 plusuu iii2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 - iii2 > 0) iii2 * 2 plusuu 1 Else iii1 * 2 plusuu 1
+        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 + 1
+        Else (iii1 / (iii2 * 2)) * iii2 + iii1 + iii2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 - iii2 > 0) iii2 * 2 + 1 Else iii1 * 2 + 1
     )
   )
   add(
@@ -917,10 +910,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 Else (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) - iii2,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0
+        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 Else (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) - iii2,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0
     )
   )
   add(
@@ -930,9 +923,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 Else iii1 * 2 plusuu iii2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 - iii2 > 0) iii2 * 2 plusuu 1 Else iii1 * 2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 * (iii2 / iii1) plusuu 2 * iii2 plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 Else iii1 * 2 + iii2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 - iii2 > 0) iii2 * 2 + 1 Else iii1 * 2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 * (iii2 / iii1) + 2 * iii2 + 1
     )
   )
   add(
@@ -942,11 +935,11 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) iii2 * 2 plusuu 2 Else 2,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) iii2 * 2 + 2 Else 2,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 <= iii2) Option.empty Else 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1)  % (2 * iii1) <= iii1) ((iii2 plusuu 1) / (2 * iii1)) * iii1 plusuu 1
-        Else (iii2 plusuu 1) % (2 * iii1) - iii1 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1 plusuu 1
+        If ((iii2 + 1)  % (2 * iii1) <= iii1) ((iii2 + 1) / (2 * iii1)) * iii1 + 1
+        Else (iii2 + 1) % (2 * iii1) - iii1 + ((iii2 + 1) / (2 * iii1)) * iii1 + 1
     )
   )
   add(
@@ -956,7 +949,7 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = Option.empty,
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) Option(iii1 plusuu 1) Else Option.empty,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii2 === 0) Option(iii1 + 1) Else Option.empty,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 > iii2) Option.empty Else 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 <= iii2) Option.empty Else 1
     )
@@ -970,16 +963,16 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) Else (iii1 / (iii2 * 2)) * iii2 plusuu iii2,
+        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) Else (iii1 / (iii2 * 2)) * iii2 + iii2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0)
+        Else Option(1 * iii1 + 0 * iii2 + 0)
     )
   )
   add(
@@ -991,9 +984,9 @@ object bb {
       `i1 = 0 and i2 gt 0x` = (i1: Int, i2: Int) => i2 * 2,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii2 - iii1 >= 0) iii2 * 2 - iii1 Else iii2
     )
@@ -1005,9 +998,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = Option.empty,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0
     )
   )
   add(
@@ -1019,16 +1012,16 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 plusuu iii1 Else (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) plusuu iii1 - iii2,
+        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 Else (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 - iii2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0)
+        Else Option(1 * iii1 + 0 * iii2 + 0)
     )
   )
   add(
@@ -1039,7 +1032,7 @@ object bb {
       `i1 gt 0 and i2 = 0x` = NotImplemented,
       `i1 = 0 and i2 gt 0x` = If (iii2 === 0) Option.empty ElseIf (iii1 === 0) 2 ElseIf (iii1 === 1) 2 Else 3,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = NotImplemented,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -1052,11 +1045,11 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) Option.empty Else iii1 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
@@ -1068,9 +1061,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 * (iii2 / iii1) plusuu iii2 plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 * (iii2 / iii1) + iii2 + 1
     )
   )
   add(
@@ -1094,9 +1087,9 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) Option(1)
-        ElseIf (iii1 === 0) Option(0 * iii2 plusuu 1)
+        ElseIf (iii1 === 0) Option(0 * iii2 + 1)
         ElseIf (iii2 === 0) Option.empty
-        Else Option(1 * iii1 plusuu 0 * iii2 plusuu 0),
+        Else Option(1 * iii1 + 0 * iii2 + 0),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
@@ -1108,12 +1101,12 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) Option.empty Else iii1 * 2 plusuu iii2 - 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) Option.empty Else iii1 * 2 + iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0) Option.empty
-        ElseIf (iii1 % iii2 === 0) (iii1 / iii2) * iii2 plusuu 2 * iii1 - 1
-        Else (iii1 / iii2) * iii2 plusuu iii2 plusuu 2 * iii1 - 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) Option.empty Else iii1 * 2 plusuu iii2 - 1
+        ElseIf (iii1 % iii2 === 0) (iii1 / iii2) * iii2 + 2 * iii1 - 1
+        Else (iii1 / iii2) * iii2 + iii2 + 2 * iii1 - 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) Option.empty Else iii1 * 2 + iii2 - 1
     )
   )
   add(
@@ -1125,20 +1118,20 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) 0 * iii2 plusuu 0
-        ElseIf (iii2 === 0) 1 * iii1 plusuu 0
-        ElseIf (iii1 === iii2) 0 * iii1 plusuu 2 * iii2 plusuu -1
-        ElseIf (iii1 < iii2) 2 * iii1 plusuu 0 * iii2 plusuu -1
-        Else 1 * iii1 plusuu 1 * iii2 plusuu 0,
+        ElseIf (iii1 === 0) 0 * iii2 + 0
+        ElseIf (iii2 === 0) 1 * iii1 + 0
+        ElseIf (iii1 === iii2) 0 * iii1 + 2 * iii2 + -1
+        ElseIf (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
+        Else 1 * iii1 + 1 * iii2 + 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 plusuu 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 plusuu iii2 - 1,
+        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 + 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 + iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) 0 * iii2 plusuu 0
-        ElseIf (iii2 === 0) 1 * iii1 plusuu 0
-        ElseIf (iii1 === iii2) 0 * iii1 plusuu 2 * iii2 plusuu -1
-        ElseIf (iii1 < iii2) 2 * iii1 plusuu 0 * iii2 plusuu -1
-        Else 1 * iii1 plusuu 1 * iii2 plusuu 0
+        ElseIf (iii1 === 0) 0 * iii2 + 0
+        ElseIf (iii2 === 0) 1 * iii1 + 0
+        ElseIf (iii1 === iii2) 0 * iii1 + 2 * iii2 + -1
+        ElseIf (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
+        Else 1 * iii1 + 1 * iii2 + 0
     )
   )
   add(
@@ -1148,11 +1141,11 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 plusuu 1) === 0) iii1 * 2 - iii1 / (iii2 plusuu 1) plusuu 1 Else iii1 * 2 - iii1 / (iii2 plusuu 1),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 - iii2 > 0) iii2 * 2 plusuu 1 Else iii1 * 2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 % (iii2 + 1) === 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 Else iii1 * 2 - iii1 / (iii2 + 1),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 - iii2 > 0) iii2 * 2 + 1 Else iii1 * 2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1) % (2 * iii1) <= iii1) (iii2 plusuu 1) % (2 * iii1) plusuu iii2 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
-        Else iii1 plusuu iii2 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
+        If ((iii2 + 1) % (2 * iii1) <= iii1) (iii2 + 1) % (2 * iii1) + iii2 + ((iii2 + 1) / (2 * iii1)) * iii1
+        Else iii1 + iii2 + ((iii2 + 1) / (2 * iii1)) * iii1
     )
   )
   add(
@@ -1162,10 +1155,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 plusuu iii1 % (iii2 * 2) plusuu 1 Else (iii1 / (iii2 * 2)) * iii2 plusuu iii2 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu 1
+        If (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + 1 Else (iii1 / (iii2 * 2)) * iii2 + iii2 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + 1
     )
   )
   add(
@@ -1175,9 +1168,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = iii1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu iii2 * 2 plusuu iii1 * (iii2 / iii1),
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 === 0) 0 Else iii2 * 2 plusuu iii1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii2 * 2 plusuu iii1 * (iii2 / iii1)
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + iii2 * 2 + iii1 * (iii2 / iii1),
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 === 0) 0 Else iii2 * 2 + iii1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii2 * 2 + iii1 * (iii2 / iii1)
     )
   )
   add(
@@ -1188,10 +1181,10 @@ object bb {
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 > iii2) Option.empty Else 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If ((iii2 plusuu 1)  % (2 * iii1) <= iii1) ((iii2 plusuu 1) / (2 * iii1)) * iii1
-        Else (iii2 plusuu 1) % (2 * iii1) - iii1 plusuu ((iii2 plusuu 1) / (2 * iii1)) * iii1
+        If ((iii2 + 1)  % (2 * iii1) <= iii1) ((iii2 + 1) / (2 * iii1)) * iii1
+        Else (iii2 + 1) % (2 * iii1) - iii1 + ((iii2 + 1) / (2 * iii1)) * iii1
     )
   )
   add(
@@ -1213,10 +1206,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 Else iii1 * 2 plusuu iii2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 Else iii1 * 2 + iii2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 plusuu 2 * iii1 plusuu 1 Else (iii1 / iii2) * iii2 plusuu iii2 plusuu 2 * iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 Else iii1 * 2 plusuu iii2 plusuu 1
+        If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 + 2 * iii1 + 1 Else (iii1 / iii2) * iii2 + iii2 + 2 * iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 Else iii1 * 2 + iii2 + 1
     )
   )
   add(
@@ -1236,11 +1229,11 @@ object bb {
       key = Tags.Tag500,
       countSetKey = 971,
       `i1 = 0 and i2 = 0` = 0,
-      `i1 gt 0 and i2 = 0x` = iii1 plusuu 1,
+      `i1 gt 0 and i2 = 0x` = iii1 + 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu iii2 * 2 plusuu iii1 * (iii2 / iii1) plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 === 0) 1 Else iii2 * 2 plusuu iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii2 * 2 plusuu iii1 * (iii2 / iii1) plusuu 1
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + iii2 * 2 + iii1 * (iii2 / iii1) + 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 === 0) 1 Else iii2 * 2 + iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii2 * 2 + iii1 * (iii2 / iii1) + 1
     )
   )
   add(
@@ -1264,7 +1257,7 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === iii2 plusuu 1) iii1 Else iii1 - 1
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === iii2 + 1) iii1 Else iii1 - 1
     )
   )
   add(
@@ -1274,10 +1267,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0) 1 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu 2 * iii1 plusuu 1 Else (iii1 / iii2) * iii2 plusuu 2 * iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 - iii2 > 0) iii2 * 2 plusuu 1 Else iii1 * 2 plusuu 1
+        If (iii1 === 0) 1 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 + 1 Else (iii1 / iii2) * iii2 + 2 * iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 - iii2 > 0) iii2 * 2 + 1 Else iii1 * 2 + 1
     )
   )
   add(
@@ -1287,17 +1280,17 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 plusuu 1 Else (iii1 / iii2) * iii2 plusuu iii2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 + 1 Else (iii1 / iii2) * iii2 + iii2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
         If (iii2 === 0 && iii1 === 0) 1
-        ElseIf (iii2 === 0) iii1 * 0 / -3 plusuu 1
-        ElseIf (iii2 === 1) 0 * iii2 plusuu 0 * iii1 plusuu 3
-        ElseIf (iii1 === 0) iii2 * -2 / -1 plusuu 1
-        ElseIf (iii1 === 1) 1 * iii2 plusuu -2 * iii1 plusuu 3
-        ElseIf (iii2 === iii1) -3 * iii2 plusuu 1 * iii1 plusuu iii1 / iii2 * iii2 * -3 / -1 plusuu 1
-        ElseIf (iii2 > iii1) 1 * iii2 plusuu 0 * iii1 plusuu iii1 / iii2 * iii2 * -3 / -3 plusuu 1
-        Else 1 * iii2 plusuu 0 * iii1 plusuu iii1 / iii2 * iii2 * 0 / -3 plusuu 1
+        ElseIf (iii2 === 0) iii1 * 0 / -3 + 1
+        ElseIf (iii2 === 1) 0 * iii2 + 0 * iii1 + 3
+        ElseIf (iii1 === 0) iii2 * -2 / -1 + 1
+        ElseIf (iii1 === 1) 1 * iii2 + -2 * iii1 + 3
+        ElseIf (iii2 === iii1) -3 * iii2 + 1 * iii1 + iii1 / iii2 * iii2 * -3 / -1 + 1
+        ElseIf (iii2 > iii1) 1 * iii2 + 0 * iii1 + iii1 / iii2 * iii2 * -3 / -3 + 1
+        Else 1 * iii2 + 0 * iii1 + iii1 / iii2 * iii2 * 0 / -3 + 1
     )
   )
   add(
@@ -1307,9 +1300,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0
     )
   )
 
@@ -1335,13 +1328,13 @@ object bb {
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) iii2 * 0 / -3 plusuu 0
-        ElseIf (iii1 === 1) -3 * iii1 plusuu 1 * iii2 plusuu 4
-        ElseIf (iii2 === 0) iii1 * -2 / -1 plusuu -1
-        ElseIf (iii2 === 1) 3 * iii1 plusuu -3 * iii2 plusuu 2
-        ElseIf (iii1 === iii2) -1 * iii1 plusuu 3 * iii2 plusuu iii1 * iii2 * -3 / -3 plusuu -1
-        ElseIf (iii1 > iii2) 2 * iii1 plusuu 0 * iii2 plusuu iii1 * iii2 * -3 / -3 plusuu -1
-        Else 2 * iii1 plusuu 0 * iii2 plusuu iii1 * iii2 * -3 / -3 plusuu -1,
+        ElseIf (iii1 === 0) iii2 * 0 / -3 + 0
+        ElseIf (iii1 === 1) -3 * iii1 + 1 * iii2 + 4
+        ElseIf (iii2 === 0) iii1 * -2 / -1 + -1
+        ElseIf (iii2 === 1) 3 * iii1 + -3 * iii2 + 2
+        ElseIf (iii1 === iii2) -1 * iii1 + 3 * iii2 + iii1 * iii2 * -3 / -3 + -1
+        ElseIf (iii1 > iii2) 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1
+        Else 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
@@ -1356,7 +1349,7 @@ object bb {
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 % (iii2 plusuu 1) === 0) iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) Else iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) - 1
+        If (iii1 % (iii2 + 1) === 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) Else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
   )
   add(
@@ -1366,10 +1359,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 === 0) 1 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 plusuu iii1 plusuu 1 Else (iii1 / iii2) * iii2 plusuu iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu 1
+        If (iii1 === 0) 1 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 + iii1 + 1 Else (iii1 / iii2) * iii2 + iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + 1
     )
   )
   add(
@@ -1379,10 +1372,10 @@ object bb {
       `i1 = 0 and i2 = 0` = 1,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 1,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 plusuu 1,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 * 2 + 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 plusuu iii1 plusuu 1 Else (iii1 / iii2) * iii2 plusuu iii2 plusuu iii1 plusuu 1,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii2 plusuu 1
+        If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 + iii1 + 1 Else (iii1 / iii2) * iii2 + iii2 + iii1 + 1,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii2 + 1
     )
   )
   add(
@@ -1402,11 +1395,11 @@ object bb {
       key = Tags.Tag512,
       countSetKey = 976,
       `i1 = 0 and i2 = 0` = 0,
-      `i1 gt 0 and i2 = 0x` = If (iii2 === 0) iii1 plusuu 2 ElseIf (iii1 === 0) 2 Else 1,
+      `i1 gt 0 and i2 = 0x` = If (iii2 === 0) iii1 + 2 ElseIf (iii1 === 0) 2 Else 1,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu iii2 plusuu iii1 * (iii2 / iii1) plusuu 2,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 plusuu iii2 plusuu iii1 * (iii2 / iii1) plusuu 2,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 plusuu iii2 plusuu iii1 * (iii2 / iii1) plusuu 2
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + iii2 + iii1 * (iii2 / iii1) + 2,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = iii1 + iii2 + iii1 * (iii2 / iii1) + 2,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = iii1 + iii2 + iii1 * (iii2 / iii1) + 2
     )
   )
   add(
@@ -1416,9 +1409,9 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii1 === 0) 0 ElseIf (iii1 % iii2 === 0) (iii1 / iii2 - 1) * iii2 Else (iii1 / iii2) * iii2,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 plusuu 1 Else 0
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii1 === 0) 1 ElseIf (iii2 === 0) iii1 + 1 Else 0
     )
   )
   add(
@@ -1431,7 +1424,7 @@ object bb {
       `i1 gt 0 and i2 gt 0 and i1 = i2` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = NotImplemented,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 % (iii2 plusuu 1) === 0) iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) Else iii1 / (iii2 plusuu 1) * iii2 plusuu iii1 % (iii2 plusuu 1) - 1
+        If (iii1 % (iii2 + 1) === 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) Else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1
     )
   )
   add(
@@ -1443,14 +1436,14 @@ object bb {
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 plusuu 1) === 0) iii2 * 2 - iii2 / (iii1 plusuu 1) plusuu 1 Else iii2 * 2 - iii2 / (iii1 plusuu 1),
+        Else iii2 + iii1,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 % (iii1 + 1) === 0) iii2 * 2 - iii2 / (iii1 + 1) + 1 Else iii2 * 2 - iii2 / (iii1 + 1),
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 plusuu 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 plusuu iii2 - 1
+        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 + 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 + iii2 - 1
     )
   )
   add(
@@ -1462,15 +1455,15 @@ object bb {
       `i1 = 0 and i2 gt 0x` = 0,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 plusuu iii1 - 1 Else (iii1 / iii2) * iii2 plusuu iii2 plusuu iii1 - 1,
+        If (iii1 % iii2 === 0) (iii1 / iii2) * iii2 + iii1 - 1 Else (iii1 / iii2) * iii2 + iii2 + iii1 - 1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 plusuu 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 plusuu iii2 - 1
+        If (iii1 === 0 && iii2 === 0) 1 ElseIf (iii1 === 0) iii2 + 1 ElseIf (iii2 === 0) iii1 - 1 Else iii1 + iii2 - 1
     )
   )
   add(
@@ -1479,18 +1472,18 @@ object bb {
       countSetKey = 652,
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 0,
-      `i1 = 0 and i2 gt 0x` = iii2 plusuu 3,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) Option.empty Else Option(iii2 plusuu 3),
+      `i1 = 0 and i2 gt 0x` = iii2 + 3,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = If (iii1 === 0) Option.empty Else Option(iii2 + 3),
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii1 === 0 && iii2 === 0) 0
-        ElseIf (iii1 === 0) 0 * iii2 plusuu 0
-        ElseIf (iii1 === 1) 0 * iii1 plusuu 2 * iii2 plusuu 3
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 3
-        ElseIf (iii2 === 1) 0 * iii1 plusuu 1 * iii2 plusuu 3
-        ElseIf (iii1 === iii2) -1 * iii1 plusuu 2 * iii2 plusuu iii2 / iii1 * -2 / -2 plusuu 3
-        ElseIf (iii1 > iii2) 0 * iii1 plusuu 1 * iii2 plusuu iii2 / iii1 * -2 / -2 plusuu 3
-        Else 0 * iii1 plusuu 1 * iii2 plusuu iii2 / iii1 * -2 / -2 plusuu 3,
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii2 === 1) 5 Else iii2 plusuu 3
+        ElseIf (iii1 === 0) 0 * iii2 + 0
+        ElseIf (iii1 === 1) 0 * iii1 + 2 * iii2 + 3
+        ElseIf (iii2 === 0) 0 * iii1 + 3
+        ElseIf (iii2 === 1) 0 * iii1 + 1 * iii2 + 3
+        ElseIf (iii1 === iii2) -1 * iii1 + 2 * iii2 + iii2 / iii1 * -2 / -2 + 3
+        ElseIf (iii1 > iii2) 0 * iii1 + 1 * iii2 + iii2 / iii1 * -2 / -2 + 3
+        Else 0 * iii1 + 1 * iii2 + iii2 / iii1 * -2 / -2 + 3,
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = If (iii2 === 1) 5 Else iii2 + 3
     )
   )
   add(
@@ -1502,18 +1495,18 @@ object bb {
       `i1 = 0 and i2 gt 0x` = iii2 - 1,
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 gt i2` =
         If (iii2 === 0 && iii1 === 0) 0
-        ElseIf (iii2 === 0) 0 * iii1 plusuu 0
-        ElseIf (iii1 === 0) 1 * iii2 plusuu 0
-        ElseIf (iii2 === iii1) 0 * iii2 plusuu 2 * iii1 plusuu -1
+        ElseIf (iii2 === 0) 0 * iii1 + 0
+        ElseIf (iii1 === 0) 1 * iii2 + 0
+        ElseIf (iii2 === iii1) 0 * iii2 + 2 * iii1 + -1
         ElseIf (iii2 < iii1) 2 * iii2 - 1
-        Else iii2 plusuu iii1,
+        Else iii2 + iii1,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = NotImplemented
     )
   )
@@ -1524,12 +1517,12 @@ object bb {
       `i1 = 0 and i2 = 0` = 0,
       `i1 gt 0 and i2 = 0x` = 2,
       `i1 = 0 and i2 gt 0x` = 0,
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 plusuu iii2 plusuu iii1 * (iii2 / iii1) plusuu 2,
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 plusuu 1 - iii1 >= 0) iii2 plusuu 1 plusuu iii1 Else iii2 * 2 plusuu 2,
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = iii1 + iii2 + iii1 * (iii2 / iii1) + 2,
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = If (iii2 + 1 - iii1 >= 0) iii2 + 1 + iii1 Else iii2 * 2 + 2,
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        If (iii2 plusuu 1 === 0) 0
-        ElseIf ((iii2 plusuu 1) % iii1 === 0) ((iii2 plusuu 1) / iii1 - 1) * iii1 plusuu 2 * (iii2 plusuu 1)
-        Else ((iii2 plusuu 1) / iii1) * iii1 plusuu 2 * iii2 plusuu 2
+        If (iii2 + 1 === 0) 0
+        ElseIf ((iii2 + 1) % iii1 === 0) ((iii2 + 1) / iii1 - 1) * iii1 + 2 * (iii2 + 1)
+        Else ((iii2 + 1) / iii1) * iii1 + 2 * iii2 + 2
     )
   )*/
 }
