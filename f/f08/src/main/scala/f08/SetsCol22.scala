@@ -6,6 +6,11 @@ import scala.language.implicitConversions
 
 object cc {
 
+  def main(arr: Array[String]): Unit = {
+    val a: List[innerUtils.MapPlan] = innerUtils.list
+    println(a.map(_.renderString).mkString("\n\n"))
+  }
+
   object innerUtils {
     var list: List[MapPlan]      = List.empty
     def add(expr: MapPlan): Unit = list = list.appended(expr)
@@ -19,7 +24,15 @@ object cc {
       `i1 gt 0 and i2 gt 0 and i1 = i2`: String,
       `i1 gt 0 and i2 gt 0 and i1 gt i2`: String,
       `i1 gt 0 and i2 gt 0 and i1 lt i2`: String
-    )
+    ) {
+      val expr =
+        s"""if(i1 == 0 && i2 == 0) { ${`i1 = 0 and i2 = 0`} } else if(i1 > 0 && i2 == 0) { ${`i1 gt 0 and i2 = 0x`} } else if(i1 == 0 && i2 > 0) { ${`i1 = 0 and i2 gt 0x`} } else if(i1 > 0 && i2 > 0 && i1 == i2) { ${`i1 gt 0 and i2 gt 0 and i1 = i2`} } else if(i1 > 0 && i2 > 0 && i1 < i2) { ${`i1 gt 0 and i2 gt 0 and i1 lt i2`} } else if(i1 > 0 && i2 > 0 && i1 > i2) { ${`i1 gt 0 and i2 gt 0 and i1 gt i2`} }"""
+
+      def renderString: String =
+        s"""
+           add(CusPlan(key = ${key}, countSetKey = ${countSetKey}, c = (i1: Int, i2: Int) => $expr))
+           """.stripMargin
+    }
   }
 
   import innerUtils._
@@ -31,11 +44,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 + 1
-        else (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 - iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 + 1
+        else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + 1"""
     )
   )
   add(
@@ -45,21 +57,19 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0"""
     )
   )
   add(
@@ -69,12 +79,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """2""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii2 % (iii1 + 1) == 0) iii2 / (iii1 + 1) + iii2 else iii2 / (iii1 + 1) + iii2 + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (2 * iii1) <= iii1) (iii2 + 1) % (2 * iii1) + ((iii2 + 1) / (2 * iii1)) * iii1 + 1
-        else iii1 + ((iii2 + 1) / (2 * iii1)) * iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 % (i1 + 1) == 0) i2 / (i1 + 1) + i2 else i2 / (i1 + 1) + i2 + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + ((i2 + 1) / (2 * i1)) * i1 + 1
+        else i1 + ((i2 + 1) / (2 * i1)) * i1 + 1"""
     )
   )
 
@@ -85,12 +93,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 else (iii1 / (iii2 * 2)) * iii2 + iii1 + iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 else (i1 / (i2 * 2)) * i2 + i1 + i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)"""
     )
   )
   add(
@@ -100,9 +106,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """i2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 + 1"""
     )
   )
   add(
@@ -111,10 +117,10 @@ object cc {
       countSetKey = """1001""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * iii2 + 2 * iii1 - iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii1 * iii2 + iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 * iii2 + iii2 - 1"""
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * i2 + 2 * i1 - i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i1 * i2 + i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 * i2 + i2 - 1"""
     )
   )
   add(
@@ -122,11 +128,11 @@ object cc {
       key = """Tags.Tag430""",
       countSetKey = """973""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii2 == 0) iii1 + 2 else if (iii1 == 0) 2 else 1""",
+      `i1 gt 0 and i2 = 0x` = """if (i2 == 0) i1 + 2 else if (i1 == 0) 2 else 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii1 + iii2 + iii1 * (iii2 / iii1) + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii2 + iii2 * (iii1 / iii2) + 2"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i1 + i2 + i1 * (i2 / i1) + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i2 + i2 * (i1 / i2) + 2"""
     )
   )
   add(
@@ -136,11 +142,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (2 * iii1) <= iii1) iii2 + ((iii2 + 1) / (2 * iii1)) * iii1
-        else (iii2 + 1) % (2 * iii1) - iii1 + iii2 + ((iii2 + 1) / (2 * iii1)) * iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (2 * i1) <= i1) i2 + ((i2 + 1) / (2 * i1)) * i1
+        else (i2 + 1) % (2 * i1) - i1 + i2 + ((i2 + 1) / (2 * i1)) * i1"""
     )
   )
   add(
@@ -150,18 +155,15 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) 0 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + iii1 else (iii1 / iii2) * iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + i1 else (i1 / i2) * i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)"""
     )
   )
   add(
@@ -171,9 +173,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 <= iii2) Option.empty else 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 / iii1 * iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 <= i2) Option.empty else 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 / i1 * i1 + 1"""
     )
   )
   add(
@@ -183,12 +185,11 @@ object cc {
       `i1 = 0 and i2 = 0` = """Option.empty""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -199,11 +200,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """2""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii2 % (iii1 + 1) == 0) iii2 / (iii1 + 1) + iii2 else iii2 / (iii1 + 1) + iii2 + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 % (i1 + 1) == 0) i2 / (i1 + 1) + i2 else i2 / (i1 + 1) + i2 + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1"""
     )
   )
   add(
@@ -213,9 +213,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 - 1"""
     )
   )
   add(
@@ -225,17 +225,15 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)"""
     )
   )
   add(
@@ -245,10 +243,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 > iii2) Option.empty else 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 == 0) 1 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + 1 else (iii1 / iii2) * iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 > iii2) Option.empty else 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 > i2) Option.empty else 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 1 else (i1 / i2) * i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 > i2) Option.empty else 1"""
     )
   )
   add(
@@ -257,15 +254,14 @@ object cc {
       countSetKey = """1040""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 = 0 and i2 gt 0x` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -276,9 +272,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0"""
     )
   )
   add(
@@ -286,15 +282,14 @@ object cc {
       key = """Tags.Tag441""",
       countSetKey = """966""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """
-        if ((1 + 1) % iii1 == 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1)""",
+      `i1 gt 0 and i2 = 0x` = """if ((1 + 1) % i1 == 0) ((1 + 1) / i1) * i1 + 2 * (1 + 1) else ((1 + 1) / i1) * i1 + i1 + 2 * (1 + 1)""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if ((1 + 1) % iii1 == 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if ((1 + 1) % iii1 == 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((1 + 1) % iii1 == 0) ((1 + 1) / iii1) * iii1 + 2 * (1 + 1) else ((1 + 1) / iii1) * iii1 + iii1 + 2 * (1 + 1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` =
+        """if ((1 + 1) % i1 == 0) ((1 + 1) / i1) * i1 + 2 * (1 + 1) else ((1 + 1) / i1) * i1 + i1 + 2 * (1 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if ((1 + 1) % i1 == 0) ((1 + 1) / i1) * i1 + 2 * (1 + 1) else ((1 + 1) / i1) * i1 + i1 + 2 * (1 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if ((1 + 1) % i1 == 0) ((1 + 1) / i1) * i1 + 2 * (1 + 1) else ((1 + 1) / i1) * i1 + i1 + 2 * (1 + 1)"""
     )
   )
   add(
@@ -304,9 +299,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """Option.empty""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii2 == 0) Option(iii1 + 1) else Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 <= iii2) Option.empty else 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0) Option(i1 + 1) else Option.empty""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 <= i2) Option.empty else 1"""
     )
   )
   add(
@@ -316,8 +311,8 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -327,20 +322,18 @@ object cc {
       countSetKey = """1104""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2"""
+      `i1 = 0 and i2 gt 0x` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2"""
     )
   )
   add(
@@ -348,11 +341,11 @@ object cc {
       key = """Tags.Tag445""",
       countSetKey = """981""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 - 1""",
+      `i1 gt 0 and i2 = 0x` = """i1 - 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) Option.empty else iii1 * 2 + iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1 else if (iii1 == 0) iii2 + 1 else if (iii2 == 0) iii1 - 1 else iii1 + iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) Option.empty else i1 * 2 + i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) i2 + 1 else if (i2 == 0) i1 - 1 else i1 + i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -363,10 +356,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 + iii2 / iii1 * iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 + i2 / i1 * i1"""
     )
   )
   add(
@@ -376,15 +368,13 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii2 % (iii1 + 1) == 0) iii2 * 2 - iii2 / (iii1 + 1) + 1 else iii2 * 2 - iii2 / (iii1 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 % (i1 + 1) == 0) i2 * 2 - i2 / (i1 + 1) + 1 else i2 * 2 - i2 / (i1 + 1)""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -395,17 +385,14 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + iii1 else (iii1 / iii2) * iii2 + iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 + 0 * iii1 + -1
-        else 1 * iii2 + 1 * iii1 + 0"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % i2 == 0) (i1 / i2) * i2 + i1 else (i1 / i2) * i2 + i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 + 0 * i1 + -1
+        else 1 * i2 + 1 * i1 + 0"""
     )
   )
   add(
@@ -415,8 +402,8 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -427,15 +414,13 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (2 * iii1) <= iii1) (iii2 + 1) % (2 * iii1) + ((iii2 + 1) / (2 * iii1)) * iii1
-        else iii1 + ((iii2 + 1) / (2 * iii1)) * iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + ((i2 + 1) / (2 * i1)) * i1
+        else i1 + ((i2 + 1) / (2 * i1)) * i1"""
     )
   )
   add(
@@ -445,14 +430,13 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -463,12 +447,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) 0 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 else (iii1 / iii2) * iii2 + 2 * iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 2 * i1 else (i1 / i2) * i2 + 2 * i1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)"""
     )
   )
   add(
@@ -477,14 +459,13 @@ object cc {
       countSetKey = """778""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2"""
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2"""
     )
   )
   add(
@@ -494,8 +475,8 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -505,16 +486,15 @@ object cc {
       countSetKey = """1032""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 - 1"""
+      `i1 = 0 and i2 gt 0x` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 - 1"""
     )
   )
   add(
@@ -524,9 +504,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + 1"""
     )
   )
   add(
@@ -534,35 +514,32 @@ object cc {
       key = """Tags.Tag457""",
       countSetKey = """974""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii1 == 1) 3 else iii1 + 1""",
+      `i1 gt 0 and i2 = 0x` = """if (i1 == 1) 3 else i1 + 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) 1
-        else if (iii1 == 0) iii2 * 0 / -3 + 1
-        else if (iii1 == 1) 0 * iii1 + 0 * iii2 + 3
-        else if (iii2 == 0) iii1 * -2 / -1 + 1
-        else if (iii2 == 1) 1 * iii1 + -2 * iii2 + 3
-        else if (iii1 == iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
-        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
-        else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1
-        else if (iii1 == 0) iii2 * 0 / -3 + 1
-        else if (iii1 == 1) 0 * iii1 + 0 * iii2 + 3
-        else if (iii2 == 0) iii1 * -2 / -1 + 1
-        else if (iii2 == 1) 1 * iii1 + -2 * iii2 + 3
-        else if (iii1 == iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
-        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
-        else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1
-        else if (iii1 == 0) iii2 * 0 / -3 + 1
-        else if (iii1 == 1) 0 * iii1 + 0 * iii2 + 3
-        else if (iii2 == 0) iii1 * -2 / -1 + 1
-        else if (iii2 == 1) 1 * iii1 + -2 * iii2 + 3
-        else if (iii1 == iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
-        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
-        else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) 1
+        else if (i1 == 0) i2 * 0 / -3 + 1
+        else if (i1 == 1) 0 * i1 + 0 * i2 + 3
+        else if (i2 == 0) i1 * -2 / -1 + 1
+        else if (i2 == 1) 1 * i1 + -2 * i2 + 3
+        else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
+        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
+        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) 1
+        else if (i1 == 0) i2 * 0 / -3 + 1
+        else if (i1 == 1) 0 * i1 + 0 * i2 + 3
+        else if (i2 == 0) i1 * -2 / -1 + 1
+        else if (i2 == 1) 1 * i1 + -2 * i2 + 3
+        else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
+        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
+        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) 1
+        else if (i1 == 0) i2 * 0 / -3 + 1
+        else if (i1 == 1) 0 * i1 + 0 * i2 + 3
+        else if (i2 == 0) i1 * -2 / -1 + 1
+        else if (i2 == 1) 1 * i1 + -2 * i2 + 3
+        else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
+        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
+        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1"""
     )
   )
   add(
@@ -582,17 +559,16 @@ object cc {
       key = """Tags.Tag459""",
       countSetKey = """980""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii1 < 2) 2 else iii1""",
+      `i1 gt 0 and i2 = 0x` = """if (i1 < 2) 2 else i1""",
       `i1 = 0 and i2 gt 0x` = """0""",
       `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 == 1 && iii2 == 0) Option.empty else if (iii1 == 1) 2 else if (iii2 == 0) Option.empty else iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
+        """if (i1 == 1 && i2 == 0) Option.empty else if (i1 == 1) 2 else if (i2 == 0) Option.empty else i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` =
-        """        if (iii1 == 1 && iii2 == 0) Option.empty else if (iii1 == 1) 2 else if (iii2 == 0) Option.empty else iii1"""
+        """if (i1 == 1 && i2 == 0) Option.empty else if (i1 == 1) 2 else if (i2 == 0) Option.empty else i1"""
     )
   )
   add(
@@ -601,16 +577,14 @@ object cc {
       countSetKey = """783""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii2 % (iii1 + 1) == 0) iii2 * 2 - iii2 / (iii1 + 1) + 1 else iii2 * 2 - iii2 / (iii1 + 1)""",
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 % (i1 + 1) == 0) i2 * 2 - i2 / (i1 + 1) + 1 else i2 * 2 - i2 / (i1 + 1)""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -620,10 +594,10 @@ object cc {
       countSetKey = """989""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """if (iii2 == 0) 0 else (iii2 * 3 - 1) / 2""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 0 else (iii1 * 3 - 1) / 2""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii2 == 0) 0 else (iii2 * 3 - 1) / 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii2 == 0) 0 else (iii2 * 3 - 1) / 2"""
+      `i1 = 0 and i2 gt 0x` = """if (i2 == 0) 0 else (i2 * 3 - 1) / 2""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 0 else (i1 * 3 - 1) / 2""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 == 0) 0 else (i2 * 3 - 1) / 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i2 == 0) 0 else (i2 * 3 - 1) / 2"""
     )
   )
   add(
@@ -634,7 +608,7 @@ object cc {
       `i1 gt 0 and i2 = 0x` = """NotImplemented""",
       `i1 = 0 and i2 gt 0x` = """1""",
       `i1 gt 0 and i2 gt 0 and i1 = i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -645,9 +619,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 <= 2) 0 else iii1 - 2""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 <= 2) 0 else i1 - 2""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 <= 2) 0 else iii1 - 2"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 <= 2) 0 else i1 - 2"""
     )
   )
   add(
@@ -655,13 +629,13 @@ object cc {
       key = """Tags.Tag464""",
       countSetKey = """970""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii2 == 0) iii1 + 2 else if (iii1 == 0) 2 else 1""",
+      `i1 gt 0 and i2 = 0x` = """if (i2 == 0) i1 + 2 else if (i1 == 0) 2 else 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if ((iii2 + 1) % iii1 == 0) ((iii2 + 1) / iii1) * iii1 + 2 * (iii2 + 1) else ((iii2 + 1) / iii1) * iii1 + iii1 + 2 * (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii1 + iii2 * 2 + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % iii1 == 0) ((iii2 + 1) / iii1) * iii1 + 2 * (iii2 + 1) else ((iii2 + 1) / iii1) * iii1 + iii1 + 2 * (iii2 + 1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` =
+        """if ((i2 + 1) % i1 == 0) ((i2 + 1) / i1) * i1 + 2 * (i2 + 1) else ((i2 + 1) / i1) * i1 + i1 + 2 * (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i1 + i2 * 2 + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if ((i2 + 1) % i1 == 0) ((i2 + 1) / i1) * i1 + 2 * (i2 + 1) else ((i2 + 1) / i1) * i1 + i1 + 2 * (i2 + 1)"""
     )
   )
   add(
@@ -669,16 +643,14 @@ object cc {
       key = """Tags.Tag465""",
       countSetKey = """985""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1""",
+      `i1 gt 0 and i2 = 0x` = """i1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii1 * (iii2 / iii1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i1 * (i2 / i1)"""
     )
   )
   add(
@@ -688,13 +660,12 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 / iii1 * iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 / i1 * i1"""
     )
   )
   add(
@@ -702,19 +673,18 @@ object cc {
       key = """Tags.Tag467""",
       countSetKey = """984""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 + 1""",
+      `i1 gt 0 and i2 = 0x` = """i1 + 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1
-        else if (iii1 == 0) iii2 * 0 / -3 + 1
-        else if (iii1 == 1) 0 * iii1 + 0 * iii2 + 3
-        else if (iii2 == 0) iii1 * -2 / -1 + 1
-        else if (iii2 == 1) 1 * iii1 + -2 * iii2 + 3
-        else if (iii1 == iii2) -iii1 * 3 + iii2 + iii2 / iii1 * iii1 * 3 + 1
-        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 + 1
-        else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii1 * (iii2 / iii1) + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) 1
+        else if (i1 == 0) i2 * 0 / -3 + 1
+        else if (i1 == 1) 0 * i1 + 0 * i2 + 3
+        else if (i2 == 0) i1 * -2 / -1 + 1
+        else if (i2 == 1) 1 * i1 + -2 * i2 + 3
+        else if (i1 == i2) -i1 * 3 + i2 + i2 / i1 * i1 * 3 + 1
+        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 + 1
+        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i1 * (i2 / i1) + 1"""
     )
   )
   add(
@@ -724,11 +694,11 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) Option.empty else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + iii1 - 1 else (iii1 / iii2) * iii2 + iii1 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0) Option.empty else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + i1 - 1 else (i1 / i2) * i2 + i1 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1"""
     )
   )
   add(
@@ -738,7 +708,7 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 0 else (iii1 - 1) * (iii2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 0 else (i1 - 1) * (i2 + 1)""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
@@ -750,24 +720,21 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) Option.empty
-        else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 - 1
-        else (iii1 / iii2) * iii2 + 2 * iii1 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) Option.empty
+        else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 2 * i1 - 1
+        else (i1 / i2) * i2 + 2 * i1 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0"""
     )
   )
   add(
@@ -777,10 +744,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1"""
     )
   )
   add(
@@ -788,11 +755,11 @@ object cc {
       key = """Tags.Tag472""",
       countSetKey = """773""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 - 1""",
+      `i1 gt 0 and i2 = 0x` = """i1 - 1""",
       `i1 = 0 and i2 gt 0x` = """Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii2 == 0) Option(iii1 + 1) else Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 > iii2) Option.empty else 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 <= iii2) Option.empty else 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0) Option(i1 + 1) else Option.empty""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 > i2) Option.empty else 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 <= i2) Option.empty else 1"""
     )
   )
   add(
@@ -802,11 +769,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """2""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii2 + 1 - iii1 >= 0) iii2 + 1 + iii1 else iii2 * 2 + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (iii1 * 2) <= iii1) ((iii2 + 1) / (iii1 * 2)) * iii1 + (iii2 + 1) % (iii1 * 2) + iii2 + 1
-        else ((iii2 + 1) / (iii1 * 2)) * iii1 + iii2 + 1 + iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 + 1 - i1 >= 0) i2 + 1 + i1 else i2 * 2 + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (i1 * 2) <= i1) ((i2 + 1) / (i1 * 2)) * i1 + (i2 + 1) % (i1 * 2) + i2 + 1
+        else ((i2 + 1) / (i1 * 2)) * i1 + i2 + 1 + i1"""
     )
   )
   add(
@@ -814,17 +780,16 @@ object cc {
       key = """Tags.Tag474""",
       countSetKey = """975""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1""",
+      `i1 gt 0 and i2 = 0x` = """i1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii2 == 0) 0 else iii2 * 2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii2 + iii1 * (iii2 / iii1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0) 0 else i2 * 2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i2 + i1 * (i2 / i1)"""
     )
   )
   add(
@@ -832,19 +797,18 @@ object cc {
       key = """Tags.Tag475""",
       countSetKey = """772""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 - 1""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1 else if (iii1 == 0) iii2 + 1 else if (iii2 == 0) iii1 - 1 else iii1 + iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1 else if (iii1 == 0) iii2 + 1 else if (iii2 == 0) iii1 - 1 else iii1 + iii2 - 1"""
+      `i1 gt 0 and i2 = 0x` = """i1 - 1""",
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) i2 + 1 else if (i2 == 0) i1 - 1 else i1 + i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) i2 + 1 else if (i2 == 0) i1 - 1 else i1 + i2 - 1"""
     )
   )
   add(
@@ -855,15 +819,14 @@ object cc {
       `i1 gt 0 and i2 = 0x` = """NotImplemented""",
       `i1 = 0 and i2 gt 0x` = """0""",
       `i1 gt 0 and i2 gt 0 and i1 = i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1
-        else if (iii1 == 0) iii2 * 0 / -3 + 1
-        else if (iii1 == 1) 0 * iii1 + 0 * iii2 + 3
-        else if (iii2 == 0) iii1 * -2 / -1 + 1
-        else if (iii2 == 1) 1 * iii1 + -2 * iii2 + 3
-        else if (iii1 == iii2) -3 * iii1 + 1 * iii2 + iii2 / iii1 * iii1 * -3 / -1 + 1
-        else if (iii1 > iii2) 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * -3 / -3 + 1
-        else 1 * iii1 + 0 * iii2 + iii2 / iii1 * iii1 * 0 / -3 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) 1
+        else if (i1 == 0) i2 * 0 / -3 + 1
+        else if (i1 == 1) 0 * i1 + 0 * i2 + 3
+        else if (i2 == 0) i1 * -2 / -1 + 1
+        else if (i2 == 1) 1 * i1 + -2 * i2 + 3
+        else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
+        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
+        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -874,11 +837,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 + 1
-        else (iii1 / (iii2 * 2)) * iii2 + iii1 + iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 - iii2 > 0) iii2 * 2 + 1 else iii1 * 2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 + 1
+        else (i1 / (i2 * 2)) * i2 + i1 + i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1"""
     )
   )
   add(
@@ -888,10 +850,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 else (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) - iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) - i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0"""
     )
   )
   add(
@@ -901,9 +863,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else iii1 * 2 + iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 - iii2 > 0) iii2 * 2 + 1 else iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 * (iii2 / iii1) + 2 * iii2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else i1 * 2 + i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 * (i2 / i1) + 2 * i2 + 1"""
     )
   )
   add(
@@ -913,11 +875,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) iii2 * 2 + 2 else 2""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 <= iii2) Option.empty else 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (2 * iii1) <= iii1) ((iii2 + 1) / (2 * iii1)) * iii1 + 1
-        else (iii2 + 1) % (2 * iii1) - iii1 + ((iii2 + 1) / (2 * iii1)) * iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) i2 * 2 + 2 else 2""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 <= i2) Option.empty else 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (2 * i1) <= i1) ((i2 + 1) / (2 * i1)) * i1 + 1
+        else (i2 + 1) % (2 * i1) - i1 + ((i2 + 1) / (2 * i1)) * i1 + 1"""
     )
   )
   add(
@@ -926,10 +887,10 @@ object cc {
       countSetKey = """784""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """Option.empty""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii2 == 0) Option(iii1 + 1) else Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 > iii2) Option.empty else 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 <= iii2) Option.empty else 1"""
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0) Option(i1 + 1) else Option.empty""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 > i2) Option.empty else 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 <= i2) Option.empty else 1"""
     )
   )
   add(
@@ -939,18 +900,16 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) else (iii1 / (iii2 * 2)) * iii2 + iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) else (i1 / (i2 * 2)) * i2 + i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)"""
     )
   )
   add(
@@ -960,13 +919,12 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """i2 * 2""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii2 - iii1 >= 0) iii2 * 2 - iii1 else iii2"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i2 - i1 >= 0) i2 * 2 - i1 else i2"""
     )
   )
   add(
@@ -976,9 +934,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """Option.empty""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0"""
     )
   )
   add(
@@ -988,18 +946,16 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 else (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + iii1 - iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)"""
     )
   )
   add(
@@ -1008,9 +964,9 @@ object cc {
       countSetKey = """1061""",
       `i1 = 0 and i2 = 0` = """2""",
       `i1 gt 0 and i2 = 0x` = """NotImplemented""",
-      `i1 = 0 and i2 gt 0x` = """if (iii2 == 0) Option.empty else if (iii1 == 0) 2 else if (iii1 == 1) 2 else 3""",
+      `i1 = 0 and i2 gt 0x` = """if (i2 == 0) Option.empty else if (i1 == 0) 2 else if (i1 == 1) 2 else 3""",
       `i1 gt 0 and i2 gt 0 and i1 = i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -1019,16 +975,15 @@ object cc {
       key = """Tags.Tag487""",
       countSetKey = """983""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 - 1""",
+      `i1 gt 0 and i2 = 0x` = """i1 - 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) Option.empty else iii1 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) Option.empty else i1 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -1039,9 +994,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 * (iii2 / iii1) + iii2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 * (i2 / i1) + i2 + 1"""
     )
   )
   add(
@@ -1063,12 +1018,11 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) Option(1)
-        else if (iii1 == 0) Option(0 * iii2 + 1)
-        else if (iii2 == 0) Option.empty
-        else Option(1 * iii1 + 0 * iii2 + 0)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) Option(1)
+        else if (i1 == 0) Option(0 * i2 + 1)
+        else if (i2 == 0) Option.empty
+        else Option(1 * i1 + 0 * i2 + 0)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -1079,12 +1033,11 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) Option.empty else iii1 * 2 + iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) Option.empty
-        else if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + 2 * iii1 - 1
-        else (iii1 / iii2) * iii2 + iii2 + 2 * iii1 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) Option.empty else iii1 * 2 + iii2 - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) Option.empty else i1 * 2 + i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) Option.empty
+        else if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 - 1
+        else (i1 / i2) * i2 + i2 + 2 * i1 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) Option.empty else i1 * 2 + i2 - 1"""
     )
   )
   add(
@@ -1092,24 +1045,22 @@ object cc {
       key = """Tags.Tag492""",
       countSetKey = """675""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 - 1""",
+      `i1 gt 0 and i2 = 0x` = """i1 - 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1 else if (iii1 == 0) iii2 + 1 else if (iii2 == 0) iii1 - 1 else iii1 + iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) i2 + 1 else if (i2 == 0) i1 - 1 else i1 + i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i2 == 0) 1 * i1 + 0
+        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
+        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
+        else 1 * i1 + 1 * i2 + 0"""
     )
   )
   add(
@@ -1119,12 +1070,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` =
-        """        if (iii1 % (iii2 + 1) == 0) iii1 * 2 - iii1 / (iii2 + 1) + 1 else iii1 * 2 - iii1 / (iii2 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 - iii2 > 0) iii2 * 2 + 1 else iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (2 * iii1) <= iii1) (iii2 + 1) % (2 * iii1) + iii2 + ((iii2 + 1) / (2 * iii1)) * iii1
-        else iii1 + iii2 + ((iii2 + 1) / (2 * iii1)) * iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 % (i2 + 1) == 0) i1 * 2 - i1 / (i2 + 1) + 1 else i1 * 2 - i1 / (i2 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (2 * i1) <= i1) (i2 + 1) % (2 * i1) + i2 + ((i2 + 1) / (2 * i1)) * i1
+        else i1 + i2 + ((i2 + 1) / (2 * i1)) * i1"""
     )
   )
   add(
@@ -1134,10 +1083,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 % (iii2 * 2) <= iii2) (iii1 / (iii2 * 2)) * iii2 + iii1 % (iii2 * 2) + 1 else (iii1 / (iii2 * 2)) * iii2 + iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + 1 else (i1 / (i2 * 2)) * i2 + i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + 1"""
     )
   )
   add(
@@ -1145,11 +1094,11 @@ object cc {
       key = """Tags.Tag495""",
       countSetKey = """968""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1""",
+      `i1 gt 0 and i2 = 0x` = """i1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + iii2 * 2 + iii1 * (iii2 / iii1)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii2 == 0) 0 else iii2 * 2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii2 * 2 + iii1 * (iii2 / iii1)"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + i2 * 2 + i1 * (i2 / i1)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 == 0) 0 else i2 * 2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i2 * 2 + i1 * (i2 / i1)"""
     )
   )
   add(
@@ -1159,11 +1108,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 > iii2) Option.empty else 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if ((iii2 + 1) % (2 * iii1) <= iii1) ((iii2 + 1) / (2 * iii1)) * iii1
-        else (iii2 + 1) % (2 * iii1) - iii1 + ((iii2 + 1) / (2 * iii1)) * iii1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 > i2) Option.empty else 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if ((i2 + 1) % (2 * i1) <= i1) ((i2 + 1) / (2 * i1)) * i1
+        else (i2 + 1) % (2 * i1) - i1 + ((i2 + 1) / (2 * i1)) * i1"""
     )
   )
   add(
@@ -1174,7 +1122,7 @@ object cc {
       `i1 gt 0 and i2 = 0x` = """NotImplemented""",
       `i1 = 0 and i2 gt 0x` = """0""",
       `i1 gt 0 and i2 gt 0 and i1 = i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """        if (iii2 == 0) Option.empty else if (iii1 == 0) 2 else if (iii1 == 1) 2 else 3""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 == 0) Option.empty else if (i1 == 0) 2 else if (i1 == 1) 2 else 3""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -1185,10 +1133,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else iii1 * 2 + iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + 2 * iii1 + 1 else (iii1 / iii2) * iii2 + iii2 + 2 * iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) 1 else iii1 * 2 + iii2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else i1 * 2 + i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % i2 == 0) (i1 / i2) * i2 + 2 * i1 + 1 else (i1 / i2) * i2 + i2 + 2 * i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) 1 else i1 * 2 + i2 + 1"""
     )
   )
   add(
@@ -1208,11 +1155,11 @@ object cc {
       key = """Tags.Tag500""",
       countSetKey = """971""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 + 1""",
+      `i1 gt 0 and i2 = 0x` = """i1 + 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + iii2 * 2 + iii1 * (iii2 / iii1) + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii2 == 0) 1 else iii2 * 2 + iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii2 * 2 + iii1 * (iii2 / iii1) + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + i2 * 2 + i1 * (i2 / i1) + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 == 0) 1 else i2 * 2 + i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i2 * 2 + i1 * (i2 / i1) + 1"""
     )
   )
   add(
@@ -1220,11 +1167,11 @@ object cc {
       key = """Tags.Tag501""",
       countSetKey = """791""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii1 <= 1) 3 else 4""",
+      `i1 gt 0 and i2 = 0x` = """if (i1 <= 1) 3 else 4""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 <= 1) 3 else 4""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 <= 1) 3 else 4""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """4""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 <= 1) 3 else 4"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 <= 1) 3 else 4"""
     )
   )
   add(
@@ -1232,11 +1179,11 @@ object cc {
       key = """Tags.Tag502""",
       countSetKey = """717""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii1 >= 1) iii1 * 2 - 1 else iii1""",
+      `i1 gt 0 and i2 = 0x` = """if (i1 >= 1) i1 * 2 - 1 else i1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == iii2 + 1) iii1 else iii1 - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == i2 + 1) i1 else i1 - 1"""
     )
   )
   add(
@@ -1246,10 +1193,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) 1 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + 2 * iii1 + 1 else (iii1 / iii2) * iii2 + 2 * iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 - iii2 > 0) iii2 * 2 + 1 else iii1 * 2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0) 1 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + 2 * i1 + 1 else (i1 / i2) * i2 + 2 * i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 - i2 > 0) i2 * 2 + 1 else i1 * 2 + 1"""
     )
   )
   add(
@@ -1259,18 +1206,16 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + 1 else (iii1 / iii2) * iii2 + iii2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii2 == 0 && iii1 == 0) 1
-        else if (iii2 == 0) iii1 * 0 / -3 + 1
-        else if (iii2 == 1) 0 * iii2 + 0 * iii1 + 3
-        else if (iii1 == 0) iii2 * -2 / -1 + 1
-        else if (iii1 == 1) 1 * iii2 + -2 * iii1 + 3
-        else if (iii2 == iii1) -3 * iii2 + 1 * iii1 + iii1 / iii2 * iii2 * -3 / -1 + 1
-        else if (iii2 > iii1) 1 * iii2 + 0 * iii1 + iii1 / iii2 * iii2 * -3 / -3 + 1
-        else 1 * iii2 + 0 * iii1 + iii1 / iii2 * iii2 * 0 / -3 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % i2 == 0) (i1 / i2) * i2 + 1 else (i1 / i2) * i2 + i2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i2 == 0 && i1 == 0) 1
+        else if (i2 == 0) i1 * 0 / -3 + 1
+        else if (i2 == 1) 0 * i2 + 0 * i1 + 3
+        else if (i1 == 0) i2 * -2 / -1 + 1
+        else if (i1 == 1) 1 * i2 + -2 * i1 + 3
+        else if (i2 == i1) -3 * i2 + 1 * i1 + i1 / i2 * i2 * -3 / -1 + 1
+        else if (i2 > i1) 1 * i2 + 0 * i1 + i1 / i2 * i2 * -3 / -3 + 1
+        else 1 * i2 + 0 * i1 + i1 / i2 * i2 * 0 / -3 + 1"""
     )
   )
   add(
@@ -1280,9 +1225,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0"""
     )
   )
 
@@ -1293,9 +1238,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """Option.empty""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """Option.empty""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 - 1"""
     )
   )
 
@@ -1304,17 +1249,16 @@ object cc {
       key = """Tags.Tag507""",
       countSetKey = """978""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """iii1 - 1""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) iii2 * 0 / -3 + 0
-        else if (iii1 == 1) -3 * iii1 + 1 * iii2 + 4
-        else if (iii2 == 0) iii1 * -2 / -1 + -1
-        else if (iii2 == 1) 3 * iii1 + -3 * iii2 + 2
-        else if (iii1 == iii2) -1 * iii1 + 3 * iii2 + iii1 * iii2 * -3 / -3 + -1
-        else if (iii1 > iii2) 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1
-        else 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1""",
+      `i1 gt 0 and i2 = 0x` = """i1 - 1""",
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) i2 * 0 / -3 + 0
+        else if (i1 == 1) -3 * i1 + 1 * i2 + 4
+        else if (i2 == 0) i1 * -2 / -1 + -1
+        else if (i2 == 1) 3 * i1 + -3 * i2 + 2
+        else if (i1 == i2) -1 * i1 + 3 * i2 + i1 * i2 * -3 / -3 + -1
+        else if (i1 > i2) 2 * i1 + 0 * i2 + i1 * i2 * -3 / -3 + -1
+        else 2 * i1 + 0 * i2 + i1 * i2 * -3 / -3 + -1""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
@@ -1326,10 +1270,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1"""
     )
   )
   add(
@@ -1339,10 +1283,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0) 1 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 + iii1 + 1 else (iii1 / iii2) * iii2 + iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
+        """if (i1 == 0) 1 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 + i1 + 1 else (i1 / i2) * i2 + i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + 1"""
     )
   )
   add(
@@ -1352,10 +1296,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 * 2 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + iii1 + 1 else (iii1 / iii2) * iii2 + iii2 + iii1 + 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii2 + 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 * 2 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % i2 == 0) (i1 / i2) * i2 + i1 + 1 else (i1 / i2) * i2 + i2 + i1 + 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i2 + 1"""
     )
   )
   add(
@@ -1365,9 +1308,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """1""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii2 - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i2 - 1"""
     )
   )
   add(
@@ -1375,11 +1318,11 @@ object cc {
       key = """Tags.Tag512""",
       countSetKey = """976""",
       `i1 = 0 and i2 = 0` = """0""",
-      `i1 gt 0 and i2 = 0x` = """if (iii2 == 0) iii1 + 2 else if (iii1 == 0) 2 else 1""",
+      `i1 gt 0 and i2 = 0x` = """if (i2 == 0) i1 + 2 else if (i1 == 0) 2 else 1""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + iii2 + iii1 * (iii2 / iii1) + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """iii1 + iii2 + iii1 * (iii2 / iii1) + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """iii1 + iii2 + iii1 * (iii2 / iii1) + 2"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + i2 + i1 * (i2 / i1) + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """i1 + i2 + i1 * (i2 / i1) + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """i1 + i2 + i1 * (i2 / i1) + 2"""
     )
   )
   add(
@@ -1389,10 +1332,9 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 == 0) 0 else if (iii1 % iii2 == 0) (iii1 / iii2 - 1) * iii2 else (iii1 / iii2) * iii2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii1 == 0) 1 else if (iii2 == 0) iii1 + 1 else 0"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0) 0 else if (i1 % i2 == 0) (i1 / i2 - 1) * i2 else (i1 / i2) * i2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0"""
     )
   )
   add(
@@ -1402,10 +1344,10 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i2 - 1""",
       `i1 gt 0 and i2 gt 0 and i1 gt i2` = """NotImplemented""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 % (iii2 + 1) == 0) iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) else iii1 / (iii2 + 1) * iii2 + iii1 % (iii2 + 1) - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) * i2 + i1 % (i2 + 1) else i1 / (i2 + 1) * i2 + i1 % (i2 + 1) - 1"""
     )
   )
   add(
@@ -1414,18 +1356,16 @@ object cc {
       countSetKey = """771""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii2 % (iii1 + 1) == 0) iii2 * 2 - iii2 / (iii1 + 1) + 1 else iii2 * 2 - iii2 / (iii1 + 1)""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1 else if (iii1 == 0) iii2 + 1 else if (iii2 == 0) iii1 - 1 else iii1 + iii2 - 1"""
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 % (i1 + 1) == 0) i2 * 2 - i2 / (i1 + 1) + 1 else i2 * 2 - i2 / (i1 + 1)""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) i2 + 1 else if (i2 == 0) i1 - 1 else i1 + i2 - 1"""
     )
   )
   add(
@@ -1435,17 +1375,15 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` =
-        """        if (iii1 % iii2 == 0) (iii1 / iii2) * iii2 + iii1 - 1 else (iii1 / iii2) * iii2 + iii2 + iii1 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii1 == 0 && iii2 == 0) 1 else if (iii1 == 0) iii2 + 1 else if (iii2 == 0) iii1 - 1 else iii1 + iii2 - 1"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 % i2 == 0) (i1 / i2) * i2 + i1 - 1 else (i1 / i2) * i2 + i2 + i1 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` =
+        """if (i1 == 0 && i2 == 0) 1 else if (i1 == 0) i2 + 1 else if (i2 == 0) i1 - 1 else i1 + i2 - 1"""
     )
   )
   add(
@@ -1454,18 +1392,17 @@ object cc {
       countSetKey = """652""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """iii2 + 3""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (iii1 == 0) Option.empty else Option(iii2 + 3)""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii1 == 1) 0 * iii1 + 2 * iii2 + 3
-        else if (iii2 == 0) 0 * iii1 + 3
-        else if (iii2 == 1) 0 * iii1 + 1 * iii2 + 3
-        else if (iii1 == iii2) -1 * iii1 + 2 * iii2 + iii2 / iii1 * -2 / -2 + 3
-        else if (iii1 > iii2) 0 * iii1 + 1 * iii2 + iii2 / iii1 * -2 / -2 + 3
-        else 0 * iii1 + 1 * iii2 + iii2 / iii1 * -2 / -2 + 3""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (iii2 == 1) 5 else iii2 + 3"""
+      `i1 = 0 and i2 gt 0x` = """i2 + 3""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i1 == 0) Option.empty else Option(i2 + 3)""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i1 == 0 && i2 == 0) 0
+        else if (i1 == 0) 0 * i2 + 0
+        else if (i1 == 1) 0 * i1 + 2 * i2 + 3
+        else if (i2 == 0) 0 * i1 + 3
+        else if (i2 == 1) 0 * i1 + 1 * i2 + 3
+        else if (i1 == i2) -1 * i1 + 2 * i2 + i2 / i1 * -2 / -2 + 3
+        else if (i1 > i2) 0 * i1 + 1 * i2 + i2 / i1 * -2 / -2 + 3
+        else 0 * i1 + 1 * i2 + i2 / i1 * -2 / -2 + 3""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i2 == 1) 5 else i2 + 3"""
     )
   )
   add(
@@ -1474,21 +1411,19 @@ object cc {
       countSetKey = """995""",
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """0""",
-      `i1 = 0 and i2 gt 0x` = """iii2 - 1""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """
-        if (iii2 == 0 && iii1 == 0) 0
-        else if (iii2 == 0) 0 * iii1 + 0
-        else if (iii1 == 0) 1 * iii2 + 0
-        else if (iii2 == iii1) 0 * iii2 + 2 * iii1 + -1
-        else if (iii2 < iii1) 2 * iii2 - 1
-        else iii2 + iii1""",
+      `i1 = 0 and i2 gt 0x` = """i2 - 1""",
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 == 0 && i1 == 0) 0
+        else if (i2 == 0) 0 * i1 + 0
+        else if (i1 == 0) 1 * i2 + 0
+        else if (i2 == i1) 0 * i2 + 2 * i1 + -1
+        else if (i2 < i1) 2 * i2 - 1
+        else i2 + i1""",
       `i1 gt 0 and i2 gt 0 and i1 lt i2` = """NotImplemented"""
     )
   )
@@ -1499,12 +1434,11 @@ object cc {
       `i1 = 0 and i2 = 0` = """0""",
       `i1 gt 0 and i2 = 0x` = """2""",
       `i1 = 0 and i2 gt 0x` = """0""",
-      `i1 gt 0 and i2 gt 0 and i1 = i2` = """iii1 + iii2 + iii1 * (iii2 / iii1) + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (iii2 + 1 - iii1 >= 0) iii2 + 1 + iii1 else iii2 * 2 + 2""",
-      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """
-        if (iii2 + 1 == 0) 0
-        else if ((iii2 + 1) % iii1 == 0) ((iii2 + 1) / iii1 - 1) * iii1 + 2 * (iii2 + 1)
-        else ((iii2 + 1) / iii1) * iii1 + 2 * iii2 + 2"""
+      `i1 gt 0 and i2 gt 0 and i1 = i2` = """i1 + i2 + i1 * (i2 / i1) + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 gt i2` = """if (i2 + 1 - i1 >= 0) i2 + 1 + i1 else i2 * 2 + 2""",
+      `i1 gt 0 and i2 gt 0 and i1 lt i2` = """if (i2 + 1 == 0) 0
+        else if ((i2 + 1) % i1 == 0) ((i2 + 1) / i1 - 1) * i1 + 2 * (i2 + 1)
+        else ((i2 + 1) / i1) * i1 + 2 * i2 + 2"""
     )
   )
 }
