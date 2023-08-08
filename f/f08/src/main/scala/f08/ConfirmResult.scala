@@ -120,7 +120,7 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag056, countSetKey = 645, c = (i1: Int, i2: Int) => if (i2 == 0) 2 else i2 + 1))
   add(CusPlan(key = Tags.Tag057, countSetKey = 646, c = (i1: Int, i2: Int) => if (i2 == 0) 0 else 3))
   add(CusPlan(key = Tags.Tag058, countSetKey = 647, c = (i1: Int, i2: Int) => if (i2 == 0) Option.empty else 3))
-  add(SimpleMapPlan(key = Tags.Tag059, countSetKey = 648, setColKey = Tags.Tag669))
+  add(CusPlan(key = Tags.Tag059, countSetKey = 648, c = (i1: Int, i2: Int) => if (i2 == 0) 2 else 3))
   add(SimpleMapPlan(key = Tags.Tag060, countSetKey = 649, setColKey = Tags.Tag691))
   add(SimpleMapPlan(key = Tags.Tag061, countSetKey = 650, setColKey = Tags.Tag654))
   add(SimpleMapPlan(key = Tags.Tag062, countSetKey = 651, setColKey = Tags.Tag398))
