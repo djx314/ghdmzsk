@@ -444,9 +444,8 @@ trait ConfirmCol {
     CusPlan(
       key = Tags.Tag127,
       countSetKey = 733,
-      c = (iii1: Int, iii2: Int) =>
-        ((ii1: Int, ii2: Int) => ((i1: Int, i2: Int) => if (i1 - i2 > 0) Option.empty else Option(i1 * 2)).apply(ii2 + 1, ii1))
-          .apply(iii1, 1)
+      c =
+        (iii1: Int, iii2: Int) => ((ii1: Int, ii2: Int) => if (ii2 + 1 - ii1 > 0) Option.empty else Option(ii2 * 2 + 1 * 2)).apply(iii1, 1)
     )
   )
   add(SimpleMapPlan(key = Tags.Tag128, countSetKey = 734, setColKey = Tags.Tag177))
