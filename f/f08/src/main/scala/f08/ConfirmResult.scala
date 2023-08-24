@@ -536,19 +536,31 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag158, countSetKey = 770, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else if (i1 == 1) 2 else 3))
   add(CusPlan(key = Tags.Tag159, countSetKey = 774, c = (i1: Int, i2: Int) => if (i2 + 1 - i1 >= 0) i1 + i2 + 1 else i2 * 2 + 2))
   add(CusPlan(key = Tags.Tag160, countSetKey = 775, c = (i1: Int, i2: Int) => if (i1 - i2 > 0) i2 * 2 + 1 else i1 + i2))
-  add(SimpleMapPlan(key = Tags.Tag161, countSetKey = 776, setColKey = Tags.Tag637))
-  add(SimpleMapPlan(key = Tags.Tag162, countSetKey = 777, setColKey = Tags.Tag098))
-  add(SimpleMapPlan(key = Tags.Tag163, countSetKey = 779, setColKey = Tags.Tag621))
-  add(SimpleMapPlan(key = Tags.Tag164, countSetKey = 780, setColKey = Tags.Tag034))
-  add(SimpleMapPlan(key = Tags.Tag165, countSetKey = 781, setColKey = Tags.Tag660))
-  add(SimpleMapPlan(key = Tags.Tag166, countSetKey = 782, setColKey = Tags.Tag015))
-  add(SimpleMapPlan(key = Tags.Tag167, countSetKey = 785, setColKey = Tags.Tag103))
-  add(SimpleMapPlan(key = Tags.Tag168, countSetKey = 786, setColKey = Tags.Tag593))
-  add(SimpleMapPlan(key = Tags.Tag169, countSetKey = 787, setColKey = Tags.Tag079))
-  add(SimpleMapPlan(key = Tags.Tag170, countSetKey = 789, setColKey = Tags.Tag882))
-  add(SimpleMapPlan(key = Tags.Tag171, countSetKey = 790, setColKey = Tags.Tag105))
-  add(SimpleMapPlan(key = Tags.Tag172, countSetKey = 792, setColKey = Tags.Tag173))
-  add(SimpleMapPlan(key = Tags.Tag173, countSetKey = 799, setColKey = Tags.Tag1199))
+  add(CusPlan(key = Tags.Tag161, countSetKey = 776, c = (i1: Int, i2: Int) => if (i1 == 0) 2 else 3))
+  add(CusPlan(key = Tags.Tag162, countSetKey = 777, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else 2))
+  add(CusPlan(key = Tags.Tag163, countSetKey = 779, c = (i1: Int, i2: Int) => if (i1 == 0) i2 + 1 else i2 + 2))
+  add(CusPlan(key = Tags.Tag164, countSetKey = 780, c = (i1: Int, i2: Int) => if (i1 == 0) i2 else i2 + 1))
+  add(CusPlan(key = Tags.Tag165, countSetKey = 781, c = (i1: Int, i2: Int) => if (i1 - i2 > 0) i2 + 2 else i1 + 1))
+  add(CusPlan(key = Tags.Tag166, countSetKey = 782, c = (i1: Int, i2: Int) => if (i1 - i2 > 0) i2 + 1 else i1))
+  add(CusPlan(key = Tags.Tag167, countSetKey = 785, c = (i1: Int, i2: Int) => if (i1 == 0 && i2 == 0) 0 else Option.empty))
+  add(CusPlan(key = Tags.Tag168, countSetKey = 786, c = (i1: Int, i2: Int) => i2 * 2 + 2 - (i2 + 1) / (i1 + 1)))
+  add(CusPlan(key = Tags.Tag169, countSetKey = 787, c = (i1: Int, i2: Int) => 2 * i2 - (i2 + 1) / (i1 + 1) + 1))
+  add(
+    CusPlan(
+      key = Tags.Tag170,
+      countSetKey = 789,
+      c = (i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 - i2 / (i1 + 1) + 1 else i2 - i2 / (i1 + 1) + 2
+    )
+  )
+  add(
+    CusPlan(
+      key = Tags.Tag171,
+      countSetKey = 790,
+      c = (i1: Int, i2: Int) => if (i2 % (i1 + 1) == i1) i2 - i2 / (i1 + 1) else i2 - i2 / (i1 + 1) + 1
+    )
+  )
+  add(CusPlan(key = Tags.Tag172, countSetKey = 792, c = (i1: Int, i2: Int) => if (i1 > 1) 3 else i1 * 2))
+  add(CusPlan(key = Tags.Tag173, countSetKey = 799, c = (i1: Int, i2: Int) => if (i1 == 1) 3 else 2))
   add(SimpleMapPlan(key = Tags.Tag174, countSetKey = 800, setColKey = Tags.Tag932))
   add(SimpleMapPlan(key = Tags.Tag175, countSetKey = 801, setColKey = Tags.Tag1570))
   add(SimpleMapPlan(key = Tags.Tag176, countSetKey = 802, setColKey = Tags.Tag113))
