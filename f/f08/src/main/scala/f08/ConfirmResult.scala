@@ -910,9 +910,19 @@ trait ConfirmCol {
   )
   add(CusPlan(key = Tags.Tag299, countSetKey = 937, c = (i1: Int, i2: Int) => if (i1 - i2 > 0) i2 + 2 else i1))
   add(CusPlan(key = Tags.Tag300, countSetKey = 938, c = (i1: Int, i2: Int) => i2 * 2 + 3))
-  add(CusPlan(key = Tags.Tag301, countSetKey = 939, c = (i1: Int, i2: Int) => 2 * 2 + 4))
-  add(SimpleMapPlan(key = Tags.Tag302, countSetKey = 940, setColKey = Tags.Tag662))
-  add(SimpleMapPlan(key = Tags.Tag303, countSetKey = 941, setColKey = Tags.Tag759))
+  add(CusPlan(key = Tags.Tag301, countSetKey = 939, c = (i1: Int, i2: Int) => 6))
+  add(CusPlan(key = Tags.Tag302, countSetKey = 940, c = (i1: Int, i2: Int) => i2 * 3 + 3))
+  add(
+    CusPlan(
+      key = Tags.Tag303,
+      countSetKey = 941,
+      c = (i1: Int, i2: Int) =>
+        if (1 + 1 == 0) 0
+        else if (i1 == 0) Option.empty
+        else if ((1 + 1) % i1 == 0) 2 * (1 + 1) + (1 + 1) / i1
+        else 2 * (1 + 1) + (1 + 1) / i1 + 1
+    )
+  )
   add(SimpleMapPlan(key = Tags.Tag304, countSetKey = 942, setColKey = Tags.Tag057))
   add(SimpleMapPlan(key = Tags.Tag305, countSetKey = 943, setColKey = Tags.Tag716))
   add(SimpleMapPlan(key = Tags.Tag306, countSetKey = 944, setColKey = Tags.Tag652))
