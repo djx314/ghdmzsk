@@ -33,7 +33,6 @@ sealed trait ConfirmPlan {
   }
 }
 
-
 case class CusPlan(override val key: String, override val countSetKey: Int, c: (Int, Int) => ConfirmResult) extends ConfirmPlan {
   override def count(i1: Int, i2: Int): ConfirmResult = c(i1, i2)
 }
