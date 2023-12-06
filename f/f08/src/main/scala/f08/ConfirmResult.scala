@@ -154,32 +154,8 @@ trait ConfirmCol {
   )
   add(CusPlan(key = Tags.Tag084, countSetKey = 678, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 > i2) i1 + i2 + 1 else i1 * 2 - 1))
   add(CusPlan(key = Tags.Tag085, countSetKey = 679, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 <= i2) i1 * 2 - 1 else i2 * 2 + 2))
-  add(
-    CusPlan(
-      key = Tags.Tag086,
-      countSetKey = 680,
-      c = (iii1: Int, iii2: Int) =>
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) 0 * iii2 + 0
-        else if (iii2 == 0) 1 * iii1 + 0
-        else if (iii1 == iii2) 0 * iii1 + 2 * iii2 + -1
-        else if (iii1 < iii2) 2 * iii1 + 0 * iii2 + -1
-        else 1 * iii1 + 1 * iii2 + 0
-    )
-  )
-  add(
-    CusPlan(
-      key = Tags.Tag087,
-      countSetKey = 681,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 0
-        else if (i1 == 0) 0 * i2 + 0
-        else if (i2 == 0) 0 * i1 + 1
-        else if (i1 == i2) 0 * i1 + 2 * i2 + -1
-        else if (i1 < i2) 2 * i1 + 0 * i2 + -1
-        else 0 * i1 + 2 * i2 + 1
-    )
-  )
+  add(CusPlan(key = Tags.Tag086, countSetKey = 680, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 > i2) i1 + i2 else i1 * 2 - 1))
+  add(CusPlan(key = Tags.Tag087, countSetKey = 681, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 <= i2) i1 * 2 - 1 else i2 * 2 + 1))
   add(CusPlan(key = Tags.Tag088, countSetKey = 682, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else Option.empty))
   add(CusPlan(key = Tags.Tag089, countSetKey = 683, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else 1))
   add(CusPlan(key = Tags.Tag090, countSetKey = 684, c = (i1: Int, i2: Int) => 2 * i1))
@@ -189,7 +165,7 @@ trait ConfirmCol {
       key = Tags.Tag092,
       countSetKey = 686,
       c = (i1: Int, i2: Int) =>
-        if (i1 == 0) 0 else if (i2 == 0) Option.empty else if (i1 % i2 == 0) 2 * i1 + i1 / i2 - 1 else 2 * i1 + i1 / i2
+        if (i1 == 0) 0 else if (i2 == 0) Option.empty else if (i1 % i2 == 0) i1 * 2 + i1 / i2 - 1 else i1 * 2 + i1 / i2
     )
   )
   add(
@@ -205,21 +181,7 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag097, countSetKey = 691, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else 2))
   add(CusPlan(key = Tags.Tag098, countSetKey = 692, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i2))
   add(CusPlan(key = Tags.Tag099, countSetKey = 693, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 * 2 + i2 - 1))
-  add(
-    CusPlan(
-      key = Tags.Tag100,
-      countSetKey = 694,
-      c = (iii1: Int, iii2: Int) =>
-        if (iii1 == 0 && iii2 == 0) 0
-        else if (iii1 == 0) iii2 * 0 / -3 + 0
-        else if (iii1 == 1) -3 * iii1 + 1 * iii2 + 4
-        else if (iii2 == 0) iii1 * -2 / -1 + -1
-        else if (iii2 == 1) 3 * iii1 + -3 * iii2 + 2
-        else if (iii1 == iii2) -1 * iii1 + 3 * iii2 + iii1 * iii2 * -3 / -3 + -1
-        else if (iii1 > iii2) 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1
-        else 2 * iii1 + 0 * iii2 + iii1 * iii2 * -3 / -3 + -1
-    )
-  )
+  add(CusPlan(key = Tags.Tag100, countSetKey = 694, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 * i2 + i1 * 2 - 1))
   add(CusPlan(key = Tags.Tag101, countSetKey = 696, c = (i1: Int, i2: Int) => if (i1 == 0 || i2 == 0) 0 else Option.empty))
   add(CusPlan(key = Tags.Tag102, countSetKey = 697, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 + i2 - 1))
   add(
