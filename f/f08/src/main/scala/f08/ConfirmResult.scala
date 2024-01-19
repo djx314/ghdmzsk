@@ -596,19 +596,7 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag374, countSetKey = 1068, c = (i1: Int, i2: Int) => if (i1 == 0) 2 else if (i1 == 1) 1 else i1 - 2))
   add(CusPlan(key = Tags.Tag375, countSetKey = 1069, c = (i1: Int, i2: Int) => if (i1 - i2 - 1 >= 0) i1 - i2 else i2 - i1 + 1))
   add(CusPlan(key = Tags.Tag376, countSetKey = 1070, c = (i1: Int, i2: Int) => if (i2 - i1 >= 0) i2 - i1 + 1 else 1))
-  add(
-    CusPlan(
-      key = Tags.Tag377,
-      countSetKey = 1071,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 1
-        else if (i1 == 0) 1 * i2 + 1
-        else if (i2 == 0) 1 * i1 + -1
-        else if (i1 == i2) -2 * i1 + 2 * i2 + 1
-        else if (i1 < i2) -1 * i1 + 1 * i2 + 1
-        else 1 * i1 + -1 * i2 + -1
-    )
-  )
+  add(CusPlan(key = Tags.Tag377, countSetKey = 1071, c = (i1: Int, i2: Int) => if (i1 <= i2) i2 - i1 + 1 else i1 - i2 - 1))
   add(CusPlan(key = Tags.Tag378, countSetKey = 1072, c = (i1: Int, i2: Int) => if (i1 == 0) 2 else i1 - 1))
   add(CusPlan(key = Tags.Tag379, countSetKey = 1073, c = (i1: Int, i2: Int) => if (i1 == 0) i2 + 1 else i1 - 1))
   add(CusPlan(key = Tags.Tag380, countSetKey = 1074, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else i1 - 1))
@@ -620,35 +608,9 @@ trait ConfirmCol {
       c = (i1: Int, i2: Int) => if (i1 % (i2 + 1) == 0) i1 / (i2 + 1) + 1 else i1 / (i2 + 1) + 2
     )
   )
-  add(
-    CusPlan(
-      key = Tags.Tag383,
-      countSetKey = 1078,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 1
-        else if (i1 == 0) i2 * 0 / -3 + 1
-        else if (i1 == 1) -1 * i1 + 0 * i2 + 3
-        else if (i2 == 0) i1 * -3 / -3 + -1
-        else if (i2 == 1) 1 * i1 + -3 * i2 + 2
-        else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + -1
-        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + -1
-        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + -1
-    )
-  )
+  add(CusPlan(key = Tags.Tag383, countSetKey = 1078, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else if (i1 == 1) 2 else i1 - 1))
   add(CusPlan(key = Tags.Tag384, countSetKey = 1080, c = (i1: Int, i2: Int) => i1 / (i2 + 1) * i2 + i1 % (i2 + 1) + 1))
-  add(
-    CusPlan(
-      key = Tags.Tag385,
-      countSetKey = 1082,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 1
-        else if (i1 == 0) 0 * i2 + 1
-        else if (i2 == 0) 1 * i1 + -1
-        else if (i1 == i2) -1 * i1 + 2 * i2 + 1
-        else if (i1 < i2) 1 * i1 + 0 * i2 + 1
-        else 1 * i1 + 0 * i2 + -1
-    )
-  )
+  add(CusPlan(key = Tags.Tag385, countSetKey = 1082, c = (i1: Int, i2: Int) => if (i1 <= i2) i1 + 1 else i1 - 1))
   add(
     CusPlan(
       key = Tags.Tag386,
@@ -669,37 +631,11 @@ trait ConfirmCol {
   add(CusPlan(key = Tags.Tag391, countSetKey = 1090, c = (i1: Int, i2: Int) => if (i1 < 2) 1 else Option.empty))
   add(CusPlan(key = Tags.Tag392, countSetKey = 1091, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else (i1 - 1) * i2 + 1))
   add(CusPlan(key = Tags.Tag393, countSetKey = 1092, c = (i1: Int, i2: Int) => if (i1 <= 1) 1 else i1 - 1))
-  add(
-    CusPlan(
-      key = Tags.Tag394,
-      countSetKey = 1093,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 1
-        else if (i1 == 0) i2 * 0 / -3 + 1
-        else if (i1 == 1) -2 * i1 + 0 * i2 + 3
-        else if (i2 == 0) i1 * -3 / -3 + -2
-        else if (i2 == 1) 1 * i1 + -3 * i2 + 1
-        else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + -2
-        else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + -2
-        else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + -2
-    )
-  )
-  add(
-    CusPlan(
-      key = Tags.Tag395,
-      countSetKey = 1094,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 1
-        else if (i1 == 0) 0 * i2 + 1
-        else if (i2 == 0) 0 * i1 + 0
-        else if (i1 == i2) -2 * i1 + 2 * i2 + 1
-        else if (i1 < i2) 0 * i1 + 0 * i2 + 1
-        else 0 * i1 + 0 * i2 + 0
-    )
-  )
-  add(CusPlan(key = Tags.Tag396, countSetKey = 1095, c = (i1: Int, i2: Int) => if (i1 - i2 >= 0) i1 - i2 + 1 else 1))
+  add(CusPlan(key = Tags.Tag394, countSetKey = 1093, c = (i1: Int, i2: Int) => if (i1 <= 1) 1 else i1 - 2))
+  add(CusPlan(key = Tags.Tag395, countSetKey = 1094, c = (i1: Int, i2: Int) => if (i1 <= i2) 1 else 0))
+  add(CusPlan(key = Tags.Tag396, countSetKey = 1095, c = (i1: Int, i2: Int) => if (i1 >= i2) i1 - i2 + 1 else 1))
   add(CusPlan(key = Tags.Tag397, countSetKey = 1096, c = (i1: Int, i2: Int) => i1 / (i2 + 1) + 1))
-  add(CusPlan(key = Tags.Tag398, countSetKey = 1098, c = (i1: Int, i2: Int) => if (i1 - i2 > 0) Option.empty else 1))
+  add(CusPlan(key = Tags.Tag398, countSetKey = 1098, c = (i1: Int, i2: Int) => if (i1 > i2) Option.empty else 1))
   add(
     CusPlan(
       key = Tags.Tag399,
@@ -708,52 +644,16 @@ trait ConfirmCol {
     )
   )
   add(
-    CusPlan(key = Tags.Tag400, countSetKey = 1101, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else if (i2 == 0) 0 else if (i1 == 0) 2 else 1)
+    CusPlan(key = Tags.Tag400, countSetKey = 1101, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else if (i2 == 0) 0 else 1)
   )
   add(CusPlan(key = Tags.Tag401, countSetKey = 1102, c = (i1: Int, i2: Int) => if (i1 - i2 - 1 >= 0) i1 - i2 else 1))
-  add(
-    CusPlan(
-      key = Tags.Tag402,
-      countSetKey = 1103,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 1
-        else if (i1 == 0) 0 * i2 + 1
-        else if (i2 == 0) 1 * i1 + -1
-        else if (i1 == i2) -2 * i1 + 2 * i2 + 1
-        else if (i1 < i2) 0 * i1 + 0 * i2 + 1
-        else 1 * i1 + -1 * i2 + -1
-    )
-  )
+  add(CusPlan(key = Tags.Tag402, countSetKey = 1103, c = (i1: Int, i2: Int) => if (i1 <= i2) 1 else i1 - i2 - 1))
   add(CusPlan(key = Tags.Tag403, countSetKey = 1105, c = (i1: Int, i2: Int) => if (i2 - i1 >= 0) i2 else i1 - 1))
   add(CusPlan(key = Tags.Tag404, countSetKey = 1106, c = (i1: Int, i2: Int) => if (i1 == 0) i2 else i1 + i2 - 1))
   add(CusPlan(key = Tags.Tag405, countSetKey = 1107, c = (i1: Int, i2: Int) => if (i1 == 1) 0 else 1))
   add(CusPlan(key = Tags.Tag406, countSetKey = 1108, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else if (i1 == 1) 0 else i1 - 2))
-  add(
-    CusPlan(
-      key = Tags.Tag407,
-      countSetKey = 1109,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 0
-        else if (i1 == 0) 1 * i2 + 0
-        else if (i2 == 0) 1 * i1 + 0
-        else if (i1 == i2) -2 * i1 + 2 * i2 + 0
-        else if (i1 < i2) -1 * i1 + 1 * i2 + 0
-        else 1 * i1 + -1 * i2 + 0
-    )
-  )
-  add(
-    CusPlan(
-      key = Tags.Tag408,
-      countSetKey = 1110,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) 0
-        else if (i1 == 0) 1 * i2 + 0
-        else if (i2 == 0) 0 * i1 + 1
-        else if (i1 == i2) -2 * i1 + 2 * i2 + 0
-        else if (i1 < i2) -1 * i1 + 1 * i2 + 0
-        else 0 * i1 + 0 * i2 + 1
-    )
-  )
+  add(CusPlan(key = Tags.Tag407, countSetKey = 1109, c = (i1: Int, i2: Int) => if (i1 <= i2) i2 - i1 else i1 - i2))
+  add(CusPlan(key = Tags.Tag408, countSetKey = 1110, c = (i1: Int, i2: Int) => if (i1 <= i2) i2 - i1 else 1))
   add(CusPlan(key = Tags.Tag409, countSetKey = 1111, c = (i1: Int, i2: Int) => if (i1 - i2 - 1 >= 0) i1 - i2 - 1 else i2 - i1))
   add(CusPlan(key = Tags.Tag410, countSetKey = 1112, c = (i1: Int, i2: Int) => if (i1 == 0) i2 else i1 - 1))
   add(CusPlan(key = Tags.Tag411, countSetKey = 1113, c = (i1: Int, i2: Int) => if (i1 % 2 == 0) i1 / 2 else i1 / 2 + 1))
@@ -811,7 +711,7 @@ trait ConfirmCol {
         if (i1 == 0 || i2 == 0) 0
         else if (i1 == i2) i1 * 3
         else if (i1 > i2)
-          if (i2 % (i1 + 1) == 0) 2 * i2 - i2 / (i1 + 1) + 1 else 2 * i2 - i2 / (i1 + 1)
+          if (i2 % (i1 + 1) == 0) i2 * 2 - 1 else i2 * 2
         else
           i1 * (i2 / i1) + 2 * i2
     )
@@ -823,20 +723,11 @@ trait ConfirmCol {
       key = Tags.Tag424,
       countSetKey = 873,
       c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) {
-          1
-        } else if (i1 > 0 && i2 == 0) {
-          0
-        } else if (i1 == 0 && i2 > 0) {
-          1
-        } else if (i1 > 0 && i2 > 0 && i1 == i2) {
-          i1 + 1
-        } else if (i1 > 0 && i2 > 0 && i1 < i2) {
-          i1 + 1
-        } else if (i1 > 0 && i2 > 0 && i1 > i2) {
-          if (i1                         % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 + 1
-          else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2 + 1
-        } else { throw new Exception("not have value") }
+        if (i1 == 0) 1
+        else if (i2 == 0) 0
+        else if (i1 <= i2) i1 + 1
+        else if (i1                    % (i2 * 2) <= i2) (i1 / (i2 * 2)) * i2 + i1 + 1
+        else (i1 / (i2 * 2)) * i2 + i1 % (i2 * 2) + i1 - i2 + 1
     )
   )
 
