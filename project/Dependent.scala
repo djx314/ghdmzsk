@@ -4,15 +4,12 @@ import sbt.Keys._
 object Dependent {
 
   object versions {
-    val catsEffect = "3.3.12"
-    val sttp       = "3.6.2"
-    val zio        = "1.0.15"
-    val zioLogging = "0.5.14"
-    val tapir      = "1.0.0"
-    val distage    = "1.1.0-M4"
-    // val http4s         = "0.23.7"
-    val kindProjector = "0.13.2"
-    // val macwire        = "2.5.3"
+    val catsEffect                = "3.3.12"
+    val sttp                      = "3.6.2"
+    val zio                       = "1.0.15"
+    val zioLogging                = "0.5.14"
+    val tapir                     = "1.0.0"
+    val distage                   = "1.1.0-M4"
     val slf4j                     = "2.0.0-alpha7"
     val scalaTags                 = "0.11.1"
     val scalajsJQuery             = "3.6.0"
@@ -55,22 +52,6 @@ object Dependent {
   )
 
   val distage = Seq("io.7mind.izumi" %% "distage-core" % versions.distage)
-
-  /*val http4s = Seq(
-    "org.http4s" %% "http4s-dsl"          % versions.http4s,
-    "org.http4s" %% "http4s-blaze-server" % versions.http4s,
-    "org.http4s" %% "http4s-blaze-client" % versions.http4s,
-    "org.http4s" %% "http4s-circe"        % versions.http4s
-  )*/
-
-  /*val macwire = Seq(
-    "com.softwaremill.macwire" %% "macros"     % versions.macwire % "provided",
-    "com.softwaremill.macwire" %% "macrosakka" % versions.macwire % "provided",
-    "com.softwaremill.macwire" %% "util"       % versions.macwire,
-    "com.softwaremill.macwire" %% "proxy"      % versions.macwire
-  )*/
-
-  val kindProjector = "org.typelevel" % "kind-projector" % versions.kindProjector cross CrossVersion.full
 
   val slf4j = Seq("org.slf4j" % "slf4j-simple" % versions.slf4j)
 
