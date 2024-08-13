@@ -14,8 +14,8 @@ libraryDependencies ++= Dependent.circe
 libraryDependencies ++= Dependent.zhttp
 libraryDependencies ++= Dependent.mysql
 libraryDependencies += Dependent.zioInteropReactivestreams
+libraryDependencies ++= libScalax.`kind-projector`.value
 
-addCompilerPlugin(Dependent.kindProjector)
 enablePlugins(SbtWeb)
 Assets / pipelineStages := Seq(scalaJSPipeline)
 

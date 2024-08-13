@@ -109,3 +109,8 @@ val h03 = project in hRoot / "h03"
 
 val c01    = project in cRoot / "c01"
 val c01_01 = project in cRoot / "c01-01"
+
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
+// 当前工作
+addCommandAlias("r1", "f08/r1")
