@@ -742,14 +742,22 @@ trait ConfirmCol {
           } /*else if (i2 == 4) {
             i1 + i1 / 2 - (if (i1 % 8 == 0) 1 else 0)
           }*/
-          else if (i1 - i2 == 1) i1 + i2 - 1
-          else if (i1 - i2 == 2) i1 + i2 - 1
-          else if (i1 - i2 == 3) i1 + i2 - 1
-          else if (i1 == i2 * 2 + 1) i1 + i2
-          else if (i1 == i2 * 2 + 2) i1 + i2 + 1
-          else if (i1 == i2 * 2 + 3) i1 + i2 + 2
-          else if (i1 == i2 * 2 + 4) i1 + i2 + 3 - (if (i1 % 3 == 1) 1 else 0)
-          else NotImplemented
+          // else if (i1 <= i2 + 3) i1 * 2 - i2 - 1
+          else if (i1 <= i2 * 2 + 3) {
+            i1 * 2 - i2 - 1
+          } else if (i1 == i2 * 2 + 4) {
+            i1 * 2 - i2 - 1 - (if (i1 % 3 == 1) 1 else 0)
+            i1 * 2 - i2 - 1 - i1 % 3 % 2
+          }
+          // else if (i1 % 2 == 1 && i2 == 2) i1 + i1 / 2
+          else if ((i1 + 1) % i2 == 0) i1 + i1 / 2
+          else if (i2 == 3) {
+            println('=', i1, i2, i1 * 2 - 7, i1 * 2 - i2 * 2 - 1, i1 + i1 / 2, i1 + i1 / 2 - (if (i1 % i2 == 0) 1 else 0))
+            i1 * 2 - 7
+            i1 * 2 - i2 * 2 - 1
+          } else {
+            i1 * 2 - i2 - 1 - i1 % i2
+          }
 
         }
     )
