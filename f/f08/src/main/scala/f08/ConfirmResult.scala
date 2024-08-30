@@ -726,40 +726,12 @@ trait ConfirmCol {
       key = Tags.Tag425,
       countSetKey = 677,
       c = (i1: Int, i2: Int) =>
-        if (i1 == 0)
-          0
+        if (i1 == 0) 0
         else if (i2 == 0)
           0
-        else if (i1 <= i2)
-          i1 * 2 - 1
-        else {
-          if (i1 <= i2 * 2) i1 + i2 - 1
-          else if (i2 == 1) {
-            // i1 + (i1 - 1) / 2
-            i1 + i1 / 2 - (if (i1 % 2 == 0) 1 else 0)
-          } else if (i2 == 2) {
-            i1 + i1 / 2 - (if (i1 % 4 == 0) 1 else 0)
-          } /*else if (i2 == 4) {
-            i1 + i1 / 2 - (if (i1 % 8 == 0) 1 else 0)
-          }*/
-          // else if (i1 <= i2 + 3) i1 * 2 - i2 - 1
-          else if (i1 <= i2 * 2 + 3) {
-            i1 * 2 - i2 - 1
-          } else if (i1 == i2 * 2 + 4) {
-            i1 * 2 - i2 - 1 - (if (i1 % 3 == 1) 1 else 0)
-            i1 * 2 - i2 - 1 - i1 % 3 % 2
-          }
-          // else if (i1 % 2 == 1 && i2 == 2) i1 + i1 / 2
-          else if ((i1 + 1) % i2 == 0) i1 + i1 / 2
-          else if (i2 == 3) {
-            println('=', i1, i2, i1 * 2 - 7, i1 * 2 - i2 * 2 - 1, i1 + i1 / 2, i1 + i1 / 2 - (if (i1 % i2 == 0) 1 else 0))
-            i1 * 2 - 7
-            i1 * 2 - i2 * 2 - 1
-          } else {
-            i1 * 2 - i2 - 1 - i1 % i2
-          }
-
-        }
+        else if (i1 % (i2 * 2) >= i2)
+          i1 + i1 / (i2 * 2) * i2 + i2 - 1
+        else i1 + i1 / (i2 * 2) * i2 + i1 % (i2 * 2) - 1
     )
   )
 
