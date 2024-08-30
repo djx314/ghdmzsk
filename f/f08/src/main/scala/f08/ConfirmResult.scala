@@ -796,13 +796,7 @@ trait ConfirmCol {
     CusPlan(
       key = Tags.Tag434,
       countSetKey = 1055,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0) Option.empty
-        else if (i2 == 0) 0
-        else if (i1 == i2) i2
-        else if (i1 < i2) {
-          NotImplemented
-        } else i2 - 1
+      c = (i1: Int, i2: Int) => if (i1 == 0) Option.empty else if (i2 == 0) 0 else if (i1 <= i2) i2 + i2 / i1 - 1 else i2 - 1
     )
   )
 
