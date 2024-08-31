@@ -23,7 +23,7 @@ sealed trait ConfirmPlan {
           }
           x == i3.toIntOption
         case NotImplemented =>
-          if (countSetKey == 677) {
+          if (countSetKey == 1040) {
             println(i1, i2, '=', i3)
           }
 
@@ -806,13 +806,7 @@ trait ConfirmCol {
     CusPlan(
       key = Tags.Tag436,
       countSetKey = 1013,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0) 0
-        else if (i2 == 0) 0
-        else if (i1 <= i2) i2 - 1
-        else {
-          NotImplemented
-        }
+      c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) 0 else (i1 - 1) / i2 * i2 + i2 - 1
     )
   )
 
@@ -826,19 +820,7 @@ trait ConfirmCol {
     )
   )
 
-  add(
-    CusPlan(
-      key = Tags.Tag439,
-      countSetKey = 1040,
-      c = (i1: Int, i2: Int) =>
-        if (i2 == 0) 0
-        else if (i1 == 0) i2
-        else if (i1 == i2) 0
-        else if (i1 < i2) {
-          NotImplemented
-        } else 0
-    )
-  )
+  add(CusPlan(key = Tags.Tag439, countSetKey = 1040, c = (i1: Int, i2: Int) => if (i1 > i2) 0 else (i2 + 1) / (i1 + 1) - 1))
 
   add(
     CusPlan(
