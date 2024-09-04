@@ -23,7 +23,7 @@ sealed trait ConfirmPlan {
           }
           x == i3.toIntOption
         case NotImplemented =>
-          if (countSetKey == 793) {
+          if (countSetKey == 788) {
             println(i1, i2, '=', i3)
           }
 
@@ -896,17 +896,7 @@ trait ConfirmCol {
   )
 
   add(
-    CusPlan(
-      key = Tags.Tag451,
-      countSetKey = 1057,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0) 0
-        else if (i2 == 0) 0
-        else if (i1 == i2) i1 * 2 - 1
-        else if (i1 < i2) {
-          NotImplemented
-        } else i2 - 1
-    )
+    CusPlan(key = Tags.Tag451, countSetKey = 1057, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) 0 else i2 * 2 - i2 % i1 - 1)
   )
 
   add(
@@ -930,14 +920,7 @@ trait ConfirmCol {
     CusPlan(
       key = Tags.Tag454,
       countSetKey = 788,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0) 0
-        else if (i2 == 0) 0
-        else if (i1 == i2) i2 - 1
-        else if (i1 > i2) i2
-        else if (i1 > 0 && i2 > 0 && i1 < i2) {
-          NotImplemented
-        } else { throw new Exception("not have value") }
+      c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if ((i2 + 1) % (i1 + 1) == 0) i2 - i2 / (i1 + 1) - 1 else i2 - i2 / (i1 + 1)
     )
   )
 
@@ -988,50 +971,7 @@ trait ConfirmCol {
     )
   )
 
-  add(
-    CusPlan(
-      key = Tags.Tag457,
-      countSetKey = 974,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) {
-          0
-        } else if (i1 > 0 && i2 == 0) {
-          if (i1 == 1) 3 else i1 + 1
-        } else if (i1 == 0 && i2 > 0) {
-          0
-        } else if (
-          i1 > 0 && i2 > 0
-          && i1 == i2
-        ) {
-          if (i1 == 0 && i2 == 0) 1
-          else if (i1 == 0) i2 * 0 / -3 + 1
-          else if (i1 == 1) 0 * i1 + 0 * i2 + 3
-          else if (i2 == 0) i1 * -2 / -1 + 1
-          else if (i2 == 1) 1 * i1 + -2 * i2 + 3
-          else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
-          else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
-          else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1
-        } else if (i1 > 0 && i2 > 0 && i1 < i2) {
-          if (i1 == 0 && i2 == 0) 1
-          else if (i1 == 0) i2 * 0 / -3 + 1
-          else if (i1 == 1) 0 * i1 + 0 * i2 + 3
-          else if (i2 == 0) i1 * -2 / -1 + 1
-          else if (i2 == 1) 1 * i1 + -2 * i2 + 3
-          else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
-          else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
-          else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1
-        } else if (i1 > 0 && i2 > 0 && i1 > i2) {
-          if (i1 == 0 && i2 == 0) 1
-          else if (i1 == 0) i2 * 0 / -3 + 1
-          else if (i1 == 1) 0 * i1 + 0 * i2 + 3
-          else if (i2 == 0) i1 * -2 / -1 + 1
-          else if (i2 == 1) 1 * i1 + -2 * i2 + 3
-          else if (i1 == i2) -3 * i1 + 1 * i2 + i2 / i1 * i1 * -3 / -1 + 1
-          else if (i1 > i2) 1 * i1 + 0 * i2 + i2 / i1 * i1 * -3 / -3 + 1
-          else 1 * i1 + 0 * i2 + i2 / i1 * i1 * 0 / -3 + 1
-        } else { throw new Exception("not have value") }
-    )
-  )
+  add(CusPlan(key = Tags.Tag457, countSetKey = 974, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i1 == 1) 3 else i1 + 1))
 
   add(
     CusPlan(
