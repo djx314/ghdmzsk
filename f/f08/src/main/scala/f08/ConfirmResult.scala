@@ -23,7 +23,7 @@ sealed trait ConfirmPlan {
           }
           x == i3.toIntOption
         case NotImplemented =>
-          if (countSetKey == 1002) {
+          if (countSetKey == 1016) {
             println(i1, i2, '=', i3)
           }
 
@@ -1005,31 +1005,7 @@ trait ConfirmCol {
     )
   )
 
-  add(
-    CusPlan(
-      key = Tags.Tag460,
-      countSetKey = 783,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) {
-          0
-        } else if (i1 > 0 && i2 == 0) {
-          0
-        } else if (i1 == 0 && i2 > 0) {
-          i2 - 1
-        } else if (i1 > 0 && i2 > 0 && i1 == i2) {
-          if (i2 == 0 && i1 == 0) 0
-          else if (i2 == 0) 0 * i1 + 0
-          else if (i1 == 0) 1 * i2 + 0
-          else if (i2 == i1) 0 * i2 + 2 * i1 + -1
-          else if (i2 < i1) 2 * i2 - 1
-          else i2 + i1
-        } else if (i1 > 0 && i2 > 0 && i1 < i2) {
-          NotImplemented
-        } else if (i1 > 0 && i2 > 0 && i1 > i2) {
-          if (i2 % (i1 + 1) == 0) i2 * 2 - i2 / (i1 + 1) + 1 else i2 * 2 - i2 / (i1 + 1)
-        } else { throw new Exception("not have value") }
-    )
-  )
+  add(CusPlan(key = Tags.Tag460, countSetKey = 783, c = (i1: Int, i2: Int) => if (i2 == 0) 0 else i2 * 2 - (i2 + 1) / (i1 + 1)))
 
   add(
     CusPlan(
@@ -1055,26 +1031,7 @@ trait ConfirmCol {
     )
   )
 
-  add(
-    CusPlan(
-      key = Tags.Tag462,
-      countSetKey = 1075,
-      c = (i1: Int, i2: Int) =>
-        if (i1 == 0 && i2 == 0) {
-          1
-        } else if (i1 > 0 && i2 == 0) {
-          NotImplemented
-        } else if (i1 == 0 && i2 > 0) {
-          1
-        } else if (i1 > 0 && i2 > 0 && i1 == i2) {
-          NotImplemented
-        } else if (i1 > 0 && i2 > 0 && i1 < i2) {
-          NotImplemented
-        } else if (i1 > 0 && i2 > 0 && i1 > i2) {
-          if (i1 == 0) 1 else if (i2 == 0) i1 + 1 else 0
-        } else { throw new Exception("not have value") }
-    )
-  )
+  add(CusPlan(key = Tags.Tag462, countSetKey = 1075, c = (i1: Int, i2: Int) => if (i1 == 0) 1 else if (i1 == 1) 2 else 0))
 
   add(
     CusPlan(
@@ -2496,13 +2453,7 @@ trait ConfirmCol {
     )
   )
 
-  add(
-    CusPlan(
-      key = Tags.Tag535,
-      countSetKey = 676,
-      c = (i1: Int, i2: Int) => if (i1 == 0) 0 else if (i2 == 0) i1 - 1 else if (i1 <= i2) i1 * 2 - 1 else NotImplemented
-    )
-  )
+  add(CusPlan(key = Tags.Tag535, countSetKey = 676, c = (i1: Int, i2: Int) => if (i1 == 0) 0 else i1 * 2 - i1 / (i2 + 1) - 1))
 
   add(
     CusPlan(
